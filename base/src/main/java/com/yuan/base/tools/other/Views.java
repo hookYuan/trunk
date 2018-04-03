@@ -1,4 +1,4 @@
-package com.yuan.base.common.other;
+package com.yuan.base.tools.other;
 
 import android.app.Activity;
 import android.content.Context;

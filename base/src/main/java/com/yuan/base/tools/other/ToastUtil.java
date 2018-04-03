@@ -1,4 +1,4 @@
-package com.yuan.base.common.log;
+package com.yuan.base.tools.other;
 
 import android.content.Context;
 import android.widget.Toast;

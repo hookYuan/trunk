@@ -3,7 +3,7 @@ package com.yuan.base.tools.okhttp;
 import android.content.Context;
 
 import com.yuan.base.XConfig;
-import com.yuan.base.common.kit.SysTool;
+import com.yuan.base.tools.system.SystemUtil;
 import com.yuan.base.tools.okhttp.okUtil.OKHttpConfig;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class RxHttpClient {
     public OkHttpClient getClient() {
         if (client == null) {
             //设置缓存路径
-            File cacheFile = new File(SysTool.SDcard.getCachPath(mContext), XConfig.NET_CACHE);
+            File cacheFile = new File(SystemUtil.SDcard.getCachPath(mContext), XConfig.NET_CACHE);
             if (cacheFile.getParentFile().exists())
                 cacheFile.mkdirs();
             //设置缓存大小(当先线程的八分之一)

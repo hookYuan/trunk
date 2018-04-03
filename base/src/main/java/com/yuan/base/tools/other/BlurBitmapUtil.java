@@ -1,4 +1,4 @@
-package com.yuan.base.common.kit;
+package com.yuan.base.tools.other;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,8 +9,6 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
-
-import com.yuan.base.common.log.XLog;
 
 /**
  * @author Qiushui
@@ -31,15 +29,15 @@ public class BlurBitmapUtil {
      * @return
      */
     public static Bitmap convertViewToBitmap(View view) {
-        XLog.e("w---"+view.getWidth()+"--h----"+view.getHeight());
+//        XLog.e("w---"+view.getWidth()+"--h----"+view.getHeight());
         Bitmap bitmap= Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
         if(bitmap != null){
-            XLog.e("获取到了bitmap");
+//            XLog.e("获取到了bitmap");
             view.setBackground(new BitmapDrawable(view.getContext().getResources(), blurBitmap(view.getContext(),bitmap,12f)));
         }else {
-            XLog.e("bitmap 为空");
+//            XLog.e("bitmap 为空");
         }
         return bitmap;
     }

@@ -1,4 +1,4 @@
-package com.yuan.base.common.kit;
+package com.yuan.base.tools.system;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,7 +28,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  * 与Android 系统有关的工具类
  */
 
-public class SysTool {
+public class SystemUtil {
 
     /**
      * 和输入有关的工具类
@@ -50,7 +50,7 @@ public class SysTool {
 
     public static class SDcard {
         /**
-         * 根据内存卡路径生成文件
+         * 获取手机外部存储路径
          */
         public static String getCachPath(Context context) {
             String cachePath;
@@ -63,7 +63,6 @@ public class SysTool {
             return cachePath;
         }
     }
-
 
     /**
      * 状态栏透明

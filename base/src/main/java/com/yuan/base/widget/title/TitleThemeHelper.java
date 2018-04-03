@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.yuan.base.R;
-import com.yuan.base.common.kit.Kits;
-import com.yuan.base.common.kit.SysTool;
+import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.system.SystemUtil;
 
 /**
  * Created by YuanYe on 2017/9/1.
@@ -37,7 +37,7 @@ public class TitleThemeHelper<T extends TitleThemeHelper> extends TitleContentHe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //设置悬浮titleBar
             rootView.setTranslationZ(Kits.Dimens.dpToPx(context, floatZ));
-            setStatuBarHeight(SysTool.StatusBarUtil.getStatusBarHeight(context));
+            setStatuBarHeight(SystemUtil.StatusBarUtil.getStatusBarHeight(context));
         }
         //设置状态栏颜色
         setDefaultTheme(ETitleTheme.LIGHT_PRIMARY);

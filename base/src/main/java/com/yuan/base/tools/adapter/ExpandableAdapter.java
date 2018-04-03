@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.R;
-import com.yuan.base.common.other.Views;
+import com.yuan.base.tools.other.Views;
 
 import java.util.ArrayList;
 import java.util.List;

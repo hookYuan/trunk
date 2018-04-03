@@ -7,7 +7,7 @@ package com.yuan.base.tools.okhttp.okUtil.params;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.yuan.base.common.kit.Kits;
+import com.yuan.base.tools.other.Kits;
 import com.yuan.base.tools.okhttp.okUtil.Execute;
 import com.yuan.base.tools.okhttp.okUtil.callback.BaseJsonBack;
 import com.yuan.base.tools.okhttp.okUtil.callback.FileBack;

@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.base.common.kit.SysTool;
+import com.yuan.base.tools.system.SystemUtil;
 import com.yuan.base.common.log.XLog;
 import com.yuan.base.mvp.mvp.IView;
 
@@ -90,7 +90,7 @@ public abstract class BaseFragment extends Fragment implements IView {
 
     @Override
     public void onDestroy() {
-        SysTool.Input.hideSoftInput(mContext);
+        SystemUtil.Input.hideSoftInput(mContext);
         super.onDestroy();
     }
 

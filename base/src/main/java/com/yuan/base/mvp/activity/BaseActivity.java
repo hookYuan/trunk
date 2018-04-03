@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yuan.base.common.kit.SysTool;
+import com.yuan.base.tools.system.SystemUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.yuan.base.mvp.mvp.IView;
 
@@ -37,7 +37,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IView 
 
     @Override
     protected void onDestroy() {
-        SysTool.Input.hideSoftInput(this);
+        SystemUtil.Input.hideSoftInput(this);
         super.onDestroy();
     }
 

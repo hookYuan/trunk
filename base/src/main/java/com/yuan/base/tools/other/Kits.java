@@ -1,4 +1,4 @@
-package com.yuan.base.common.kit;
+package com.yuan.base.tools.other;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
@@ -37,7 +37,6 @@ import java.util.Locale;
  * Created by wanglei on 2016/11/28.
  * 常用工具集合
  */
-
 public class Kits {
 
     public static class Package {
@@ -711,7 +710,7 @@ public class Kits {
          * @return true if the necessary directories have been created or the target directory already exists, false one of
          * the directories can not be created.
          * <ul>
-         * <li>if {@link File#getFolderName(String)} return null, return false</li>
+         * <li>if return null, return false</li>
          * <li>if target directory already exists, return true</li>
          * </ul>
          */

@@ -1,4 +1,4 @@
-package com.yuan.base.common.kit;
+package com.yuan.base.tools.other;
 
 import android.util.Base64;
 
@@ -32,6 +32,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by wanglei on 2016/11/28.
+ * 加密解密
  */
 
 public class Codec {

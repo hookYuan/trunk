@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.R;
-import com.yuan.base.common.kit.SysTool;
+import com.yuan.base.tools.system.SystemUtil;
 import com.yuan.base.mvp.comm.ETitleType;
 import com.yuan.base.widget.title.ETitleTheme;
 import com.yuan.base.widget.title.TitleBar;
@@ -60,7 +60,7 @@ public abstract class TitleFragment extends StatedFragment {
             child = layoutView;
         }
         ((ViewGroup) parent).addView(child, 0);
-        titleBar.setStatuBarHeight(SysTool.StatusBarUtil.getStatusBarHeight(mContext));
+        titleBar.setStatuBarHeight(SystemUtil.StatusBarUtil.getStatusBarHeight(mContext));
         child.setFitsSystemWindows(false); //让padding有效
         child.setPadding(child.getPaddingLeft(), child.getPaddingTop() + getTitleBar().getTitleBarHeight() +
                         getTitleBar().getStatusBarHeight(),

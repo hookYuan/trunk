@@ -1,4 +1,4 @@
-package com.yuan.base.common.other;
+package com.yuan.base.tools.other;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;

@@ -3,7 +3,7 @@ package com.yuan.base.mvp.mvp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yuan.base.common.other.TUtil;
+import com.yuan.base.tools.other.ReflexUtil;
 import com.yuan.base.mvp.activity.ExtraActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,7 +19,7 @@ public abstract class MVPActivity<T extends XPresenter> extends ExtraActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        presenter = TUtil.getT(MVPActivity.this, 0);
+        presenter = ReflexUtil.getT(MVPActivity.this, 0);
         if (presenter != null) {
             presenter.attachView(this);
         }

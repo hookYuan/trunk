@@ -1,4 +1,4 @@
-package com.yuan.base.common.other;
+package com.yuan.base.tools.system;
 
 /**
  * Created by YuanYe on 2017/12/4.

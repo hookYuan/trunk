@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.yuan.base.common.other.TUtil;
+import com.yuan.base.tools.other.ReflexUtil;
 import com.yuan.base.mvp.fragment.LazyFragement;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,7 +20,7 @@ public abstract class MVPFragment<T extends XPresenter> extends LazyFragement {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        presenter = TUtil.getT(MVPFragment.this, 0);
+        presenter = ReflexUtil.getT(MVPFragment.this, 0);
         if (presenter != null) {
             presenter.attachView(this);
         }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.yuan.base.common.log.LogFormat;
-import com.yuan.base.common.other.TUtil;
+import com.yuan.base.tools.other.ReflexUtil;
 
 import java.io.IOException;
 
@@ -80,7 +80,7 @@ public abstract class BaseJsonBack<T> implements Callback {
                  * TODO 把返回结果当做标准Json统一处理,如果返回结果不是标准json,
                  * TODO 请自行重写该方法。(response.body()只能调用一次)
                  */
-                t = TUtil.getT(BaseJsonBack.this, 0);
+                t = ReflexUtil.getT(BaseJsonBack.this, 0);
                 if (t == null) {
                     //不存在泛型的情况,直接返回json
                     e.onNext(response.body().string());
@@ -123,7 +123,7 @@ public abstract class BaseJsonBack<T> implements Callback {
      * @return 传入泛型
      */
     protected Object parseJson(String json) {
-        T entity = (T) new Gson().fromJson(json, TUtil.getT(BaseJsonBack.this, 0).getClass());
+        T entity = (T) new Gson().fromJson(json, ReflexUtil.getT(BaseJsonBack.this, 0).getClass());
         return entity;
     }
 

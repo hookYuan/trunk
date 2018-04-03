@@ -13,7 +13,7 @@ import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.yuan.base.R;
-import com.yuan.base.common.kit.Kits;
+import com.yuan.base.tools.other.Kits;
 
 public class GlideHelper {
 

@@ -2,7 +2,7 @@ package com.yuan.base.tools.okhttp;
 
 import android.content.Context;
 
-import com.yuan.base.common.kit.Kits;
+import com.yuan.base.tools.other.Kits;
 
 import java.io.IOException;
 

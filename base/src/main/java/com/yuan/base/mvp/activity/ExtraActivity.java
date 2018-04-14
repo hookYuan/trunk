@@ -11,8 +11,6 @@ import com.yuan.base.mvp.extend.IRefresh;
 import com.yuan.base.mvp.extend.IStateController;
 import com.yuan.base.mvp.extend.ISwipeBack;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by YuanYe on 2017/7/12.
  * <p>
@@ -29,7 +27,6 @@ public abstract class ExtraActivity extends TitleActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         managerExtra();
-        initData(savedInstanceState);
     }
 
     /**

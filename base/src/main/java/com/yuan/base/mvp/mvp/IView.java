@@ -1,5 +1,6 @@
 package com.yuan.base.mvp.mvp;
 
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 
 /**
@@ -7,6 +8,8 @@ import android.support.annotation.LayoutRes;
  * 该接口主要用于约束Activity和Fragment的基本方法
  */
 public interface IView {
-    @LayoutRes
-    int getLayoutId();
+
+    @LayoutRes int getLayoutId();
+
+    void initData(Bundle savedInstanceState);
 }

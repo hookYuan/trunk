@@ -1,26 +1,25 @@
 package com.yuan.base.mvp.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
+import com.yuan.base.tools.router.JumpHelper;
 import com.yuan.base.tools.system.SystemUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.yuan.base.mvp.mvp.IView;
 
 /**
  * Created by YuanYe on 2017/4/30.
  * Activity的基本类。
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements IView {
+abstract class BaseActivity extends RxAppCompatActivity {
 
     protected BaseActivity mContext;
 
-    public void open(Class clazz) {
-        Intent intent = new Intent(mContext, clazz);
-        startActivity(intent);
+    //实现界面跳转
+    protected void open(Class clazz) {
+        JumpHelper.open(mContext, clazz);
     }
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +39,4 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IView 
         SystemUtil.Input.hideSoftInput(this);
         super.onDestroy();
     }
-
-    protected abstract void initData(Bundle savedInstanceState);
 }

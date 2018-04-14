@@ -29,6 +29,7 @@ import java.util.List;
  * 用于设置Title的文字、点击事件等
  * String -- null ：代表没有
  * int  --  -1: 资源ID代表没有
+ * 默认只支持一个图片或一个文字的点击事件
  */
 public class TitleContentHelper<T extends TitleContentHelper> extends BaseTitle {
 
@@ -39,6 +40,11 @@ public class TitleContentHelper<T extends TitleContentHelper> extends BaseTitle 
 
     protected TitleContentHelper(Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
+        child = (T) this;
+    }
+
+    protected TitleContentHelper(Context _context) {
+        super(_context);
         child = (T) this;
     }
 
@@ -91,7 +97,6 @@ public class TitleContentHelper<T extends TitleContentHelper> extends BaseTitle 
     public T setLeftText(String text, View.OnClickListener listener) {
         return setLeftTextIcon(text, EMPTY_RESOURS_TYPE, listener);
     }
-
 
     /**
      * ------------------------------------中间toolbar按钮设置----------------------------------------

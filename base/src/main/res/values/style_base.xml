@@ -14,16 +14,16 @@
         <item name="android:background">@color/colorDivider</item>
     </style>
 
-    <!--<style name="DialogHelperTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">-->
-    <!--&lt;!&ndash;修改AlertDialog按钮的颜色&ndash;&gt;-->
-    <!--<item name="colorAccent">@color/colorAccent</item>-->
-    <!--&lt;!&ndash;修改AlertDialog标题颜色&ndash;&gt;-->
-    <!--<item name="android:textColor">@color/colorAccent</item>-->
-    <!--&lt;!&ndash;设置Margin&ndash;&gt;-->
-    <!--<item name="android:layout_marginLeft">0dp</item>-->
-    <!--<item name="android:layout_marginRight">0dp</item>-->
-    <!--<item name="android:layout_marginBottom">0dp</item>-->
-    <!--</style>-->
+    <style name="DialogHelperTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <!--修改AlertDialog按钮的颜色-->
+        <item name="colorAccent">@color/colorFont33</item>
+        <!--修改AlertDialog标题颜色-->
+        <item name="android:textColor">@color/colorFont33</item>
+        <!--设置Margin-->
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
 
     <!--简单的类似设置横条主题  支持左边图，中间文字，右边向右的箭头-->
     <style name="simple_setting">
@@ -52,7 +52,6 @@
         <item name="android:paddingLeft">@dimen/size_16</item>
         <item name="android:paddingRight">@dimen/size_16</item>
     </style>
-
 
 
 </resources>

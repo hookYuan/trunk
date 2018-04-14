@@ -19,6 +19,11 @@ public class TitleAnimationHelper<T extends TitleAnimationHelper> extends TitleT
         child = (T) this;
     }
 
+    protected TitleAnimationHelper(Context _context) {
+        super(_context);
+        child = (T) this;
+    }
+
     /**
      * -------------------------------------toolbar平移动画---------------------------------------------
      * TODO 需要在activity初始化完成后调用，rootview.getHeight（）可能为空

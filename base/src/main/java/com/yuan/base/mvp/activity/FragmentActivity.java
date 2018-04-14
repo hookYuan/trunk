@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.yuan.base.mvp.fragment.LazyFragement;
-import com.yuan.base.mvp.comm.ETitleType;
+import com.yuan.base.widget.title.TitleInterface;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * 在initData()中调用 addFragment()初始化
  * 调用showFragment()切换Fragment
  */
-public abstract class FragmentActivity<T extends LazyFragement> extends ExtraActivity {
+public abstract class FragmentActivity extends ExtraActivity {
 
     @IdRes
     private int container; //Fragment需要放置的容器
@@ -61,11 +61,6 @@ public abstract class FragmentActivity<T extends LazyFragement> extends ExtraAct
         }
     }
 
-    @Override
-    public ETitleType showToolBarType() {
-        return ETitleType.NO_TITLE;
-    }
-
     /**
      * 根据下标，设置要展示的Fragment
      *
@@ -87,7 +82,7 @@ public abstract class FragmentActivity<T extends LazyFragement> extends ExtraAct
      * @param container   需要添加的布局ID
      * @param packageName Fragment包全名
      */
-    protected void addFragment(@IdRes int container, Class<T>... packageName) {
+    protected <T extends LazyFragement> void addFragment(@IdRes int container, Class<T>... packageName) {
         addFragment(container, 0, packageName);
     }
 
@@ -96,7 +91,7 @@ public abstract class FragmentActivity<T extends LazyFragement> extends ExtraAct
      *
      * @param showIndex 默认显示的页数
      */
-    protected void addFragment(@IdRes int container, int showIndex, Class<T>... packageName) {
+    protected <T extends LazyFragement> void addFragment(@IdRes int container, int showIndex, Class<T>... packageName) {
         showIndex = showIndex >= packageName.length ? 0 : showIndex;
         this.container = container;
         this.clazzs = packageName;

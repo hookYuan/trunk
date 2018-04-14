@@ -28,7 +28,7 @@ public class GlideHelper {
 
     private static
     @DrawableRes
-    int placeholder = R.drawable.ic_default_empty; //加载前的占位符
+    int placeholder = 0; //加载前的占位符
 
     private GlideHelper() {
 
@@ -113,8 +113,8 @@ public class GlideHelper {
 
 
     public static void load(@Nullable String path, @NonNull final ImageView image
-            ,@NonNull final @DrawableRes
-            int placehol){
+            , @NonNull final @DrawableRes
+                                    int placehol) {
         Glide.with(image.getContext())
                 .load(path == null ? null : path)
                 .crossFade(0)
@@ -134,7 +134,7 @@ public class GlideHelper {
      * @param image
      */
     public static void load(@Nullable String path, @NonNull final ImageView image) {
-        load(path,image,placeholder);
+        load(path, image, placeholder);
     }
 
 

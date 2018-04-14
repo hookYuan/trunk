@@ -50,7 +50,7 @@ public class HRefresh {
         refreshLayout.setEnableHeaderTranslationContent(true);
         refreshLayout.setEnableFooterTranslationContent(true);
         //第一个颜色刷新头部主题色,
-        refreshLayout.setPrimaryColorsId(R.color.colorPrimary,R.color.background);
+//        refreshLayout.setPrimaryColorsId(R.color.colorPrimary,R.color.background);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

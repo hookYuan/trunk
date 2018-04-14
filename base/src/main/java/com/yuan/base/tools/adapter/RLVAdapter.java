@@ -35,6 +35,7 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
     @LayoutRes
     int getItemLayout(ViewGroup parent, int viewType);
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private SparseArray<View> mViews;
@@ -93,7 +94,9 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
     /**
      * item的点击事件
      */
-    public abstract void onItemClick(ViewHolder holder, View view, int position);
+    public void onItemClick(ViewHolder holder, View view, int position) {
+
+    }
 
     @Override
     public void onClick(View view) {

@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.system.SystemUtil;
-import com.yuan.base.common.log.XLog;
 import com.yuan.base.mvp.mvp.IView;
 
 /**
@@ -120,7 +119,7 @@ public abstract class BaseFragment extends Fragment implements IView {
                 child.setArguments(bundle);
             }
         } catch (ClassNotFoundException e) {
-            XLog.e("BaseFragment", packageName + "未找到");
+
         } catch (java.lang.InstantiationException e) {
 
         } catch (IllegalAccessException e) {

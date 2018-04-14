@@ -16,8 +16,13 @@ import android.util.AttributeSet;
  */
 public class TitleBar extends TitleAnimationHelper<TitleBar> {
 
+
     public TitleBar(Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
+    }
+
+    public TitleBar(Context _context) {
+        super(_context);
     }
 
 }

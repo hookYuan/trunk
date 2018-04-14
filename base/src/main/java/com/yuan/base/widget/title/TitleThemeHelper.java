@@ -1,18 +1,28 @@
 package com.yuan.base.widget.title;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.ActionBarOverlayLayout;
+import android.support.v7.widget.ContentFrameLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.yuan.base.R;
+import com.yuan.base.tools.glide.GlideHelper;
 import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.other.ToastUtil;
+import com.yuan.base.tools.system.StatusBarUtil;
 import com.yuan.base.tools.system.SystemUtil;
 
 /**
@@ -23,9 +33,16 @@ public class TitleThemeHelper<T extends TitleThemeHelper> extends TitleContentHe
 
     private T child;
 
+    private ViewGroup viewGroupContent; //内容父布局
 
     protected TitleThemeHelper(Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
+        child = (T) this;
+        init();
+    }
+
+    protected TitleThemeHelper(Context _context) {
+        super(_context);
         child = (T) this;
         init();
     }
@@ -35,44 +52,96 @@ public class TitleThemeHelper<T extends TitleThemeHelper> extends TitleContentHe
      */
     private void init() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //设置悬浮titleBar
             rootView.setTranslationZ(Kits.Dimens.dpToPx(context, floatZ));
-            setStatuBarHeight(SystemUtil.StatusBarUtil.getStatusBarHeight(context));
         }
+        //设置title背景图高度
+        titleStatusBackground.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+                , getStatusBarHeight() + getTitleBarHeight()));
         //设置状态栏颜色
-        setDefaultTheme(ETitleTheme.LIGHT_PRIMARY);
+        setDefaultTheme(new int[]{
+                TitleInterface.STATUS_BAR_FONT_BLACK
+                , TitleInterface.STATUS_BAR_BG_BLACK_TOP
+                , TitleInterface.TITLE_FONT_BLACK
+                , TitleInterface.TITLE_BG_WHITE
+                , TitleInterface.TITLE_CONTENT_TOP
+        });
     }
 
     /**
      * -------------------------------------toolbar默认主题样式组合---------------------------------------------
      **/
-    public T setDefaultTheme(ETitleTheme type) {
-        switch (type) {
-            case LIGHT_PRIMARY:
-                setTitleAndStatusBgColor(ContextCompat.getColor(context, R.color.colorPrimary));
-                setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-                setFontColor(ContextCompat.getColor(context, R.color.white));
-                break;
-            case LIGHT_TRANSPARENT:
-                setTitleAndStatusBgColor(ContextCompat.getColor(context, R.color.transparent));
-                setTitleBarColor(ContextCompat.getColor(context, R.color.transparent));
-                setStatusBarColor(ContextCompat.getColor(context, R.color.transparent));
-                setFontColor(ContextCompat.getColor(context, R.color.white));
-                break;
-            case DARK_PRIMARY:
-                setTitleAndStatusBgColor(ContextCompat.getColor(context, R.color.colorPrimary));
-                setStatusBarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-                setFontColor(ContextCompat.getColor(context, R.color.colorFont33));
-                break;
-            case DARK_TRANSPARENT:
-                setTitleAndStatusBgColor(ContextCompat.getColor(context, R.color.transparent));
-                setTitleBarColor(ContextCompat.getColor(context, R.color.transparent));
-                setStatusBarColor(ContextCompat.getColor(context, R.color.transparent));
-                setFontColor(ContextCompat.getColor(context, R.color.colorFont33));
-                break;
+    public T setDefaultTheme(int... titleType) {
+        for (int type : titleType) {
+            switch (type) {
+                case TitleInterface.STATUS_BAR_FONT_BLACK:
+                    StatusBarUtil.darkMode((Activity) context, true);
+                    break;
+                case TitleInterface.STATUS_BAR_FONT_WHITE:
+                    StatusBarUtil.darkMode((Activity) context, false);
+                    break;
+                case TitleInterface.STATUS_BAR_BG_TRANSPARENT_OVERLAY:
+                    StatusBarUtil.immersive((Activity) context, true);
+                    break;
+                case TitleInterface.STATUS_BAR_BG_BLACK_OVERLAY:
+                    StatusBarUtil.immersive((Activity) context, true, ContextCompat.getColor(context, android.R.color.black));
+                    break;
+                case TitleInterface.STATUS_BAR_BG_WHITE_OVERLAY:
+                    StatusBarUtil.immersive((Activity) context, true, ContextCompat.getColor(context, R.color.white));
+                    break;
+                case TitleInterface.STATUS_BAR_BG_TRANSPARENT_TOP:
+                    StatusBarUtil.immersive((Activity) context, false, ContextCompat.getColor(context, R.color.white));
+                    break;
+                case TitleInterface.STATUS_BAR_BG_BLACK_TOP:
+                    StatusBarUtil.immersive((Activity) context, false, ContextCompat.getColor(context, R.color.white));
+                    break;
+                case TitleInterface.STATUS_BAR_BG_WHITE_TOP:
+                    StatusBarUtil.immersive((Activity) context, false, ContextCompat.getColor(context, R.color.white));
+                    break;
+                case TitleInterface.TITLE_H:
+                    rootView.setVisibility(GONE);
+                    break;
+                case TitleInterface.TITLE_FONT_BLACK:
+                    setFontColor(ContextCompat.getColor(context, R.color.colorFont33));
+                    break;
+                case TitleInterface.TITLE_FONT_WHITE:
+                    setFontColor(ContextCompat.getColor(context, R.color.white));
+                    break;
+                case TitleInterface.TITLE_BG_TRANSPARENT:
+                    setTitleBarColor(ContextCompat.getColor(context, android.R.color.transparent));
+                    break;
+                case TitleInterface.TITLE_BG_BLACK:
+                    setTitleBarColor(ContextCompat.getColor(context, R.color.black));
+                    break;
+                case TitleInterface.TITLE_BG_WHITE:
+                    setTitleBarColor(ContextCompat.getColor(context, R.color.white));
+                    break;
+                case TitleInterface.TITLE_BG_STATUE_HEIGHT:
+                    setStatuBarHeight(StatusBarUtil.getStatusBarHeight(context));
+                    break;
+                case TitleInterface.TITLE_CONTENT_TOP:
+                    if (viewGroupContent == null) {
+                        viewGroupContent = ((Activity) context).findViewById(android.R.id.content);
+                        viewGroupContent.addView(this);
+                    }
+                    ContentFrameLayout.LayoutParams params = (ContentFrameLayout.LayoutParams) viewGroupContent.getChildAt(0).getLayoutParams();
+                    params.topMargin = getTitleBarHeight() + getStatusBarHeight();
+                    viewGroupContent.getChildAt(0).setLayoutParams(params);
+                    break;
+                case TitleInterface.TITLE_CONTENT_OVERLAY:
+                    //默认覆盖
+                    if (viewGroupContent == null) {
+                        viewGroupContent = ((Activity) context).findViewById(android.R.id.content);
+                        viewGroupContent.addView(this);
+                    }
+                    ContentFrameLayout.LayoutParams params2 = (ContentFrameLayout.LayoutParams) viewGroupContent.getChildAt(0).getLayoutParams();
+                    params2.topMargin = 0;
+                    viewGroupContent.getChildAt(0).setLayoutParams(params2);
+                    break;
+            }
         }
         return child;
     }
+
 
     /**
      * -------------------------------------设置toolbar颜色---------------------------------------------
@@ -85,27 +154,52 @@ public class TitleThemeHelper<T extends TitleThemeHelper> extends TitleContentHe
     }
 
     public T setTitleBarColor(@ColorInt int backgroundColor) {
-        if (titleRootView != null) {
-            titleRootView.setBackgroundColor(backgroundColor);
+        if (titleBackground != null && backgroundColor != -1) {
+            titleBackground.setBackgroundColor(backgroundColor);
         }
         return child;
     }
 
     public T setStatusBarColor(@ColorInt int backgroundColor) {
-        if (statusBarView != null && backgroundColor != -1) {
-            statusBarView.setBackgroundColor(backgroundColor);
+        if (statusBackground != null && backgroundColor != -1) {
+            statusBackground.setBackgroundColor(backgroundColor);
         }
         return child;
     }
 
-    public T setTitleAndStatusBgColor(@ColorInt int backgroundColor) {
-        if (rootView != null) {
-            rootView.setBackgroundColor(backgroundColor);
-        }
+    public T setTitleStatusBgImg(@DrawableRes int drawableId) {
+        titleStatusBackground.setBackgroundResource(drawableId);
+        setStatusBarColor(ContextCompat.getColor(context, android.R.color.transparent));
+        setTitleBarColor(ContextCompat.getColor(context, android.R.color.transparent));
         return child;
     }
 
-    //TODO 标题背景可以设置图片
+    public T setTitleStatusBgImg(String imgUrl) {
+        GlideHelper.load(imgUrl, titleStatusBackground);
+        setStatusBarColor(ContextCompat.getColor(context, android.R.color.transparent));
+        setTitleBarColor(ContextCompat.getColor(context, android.R.color.transparent));
+        return child;
+    }
+
+    /**
+     * -------------------------------------设置背景的透明度---------------------------------------------------
+     */
+    public T setTitleBgAlpha(@FloatRange(from = 0.0, to = 1.0) float alpha) {
+        titleBackground.setAlpha(alpha);
+        return child;
+    }
+
+    public T setStatuBgAlpha(@FloatRange(from = 0.0, to = 1.0) float alpha) {
+        statusBackground.setAlpha(alpha);
+        return child;
+    }
+
+    public T setTitleStatusAlpha(@FloatRange(from = 0.0, to = 1.0) float alpha) {
+        setStatusBarColor(ContextCompat.getColor(context, android.R.color.transparent));
+        setTitleBarColor(ContextCompat.getColor(context, android.R.color.transparent));
+        titleStatusBackground.setAlpha(alpha);
+        return child;
+    }
 
     /**
      * -------------------------------------设置toolbar高度---------------------------------------------
@@ -118,13 +212,14 @@ public class TitleThemeHelper<T extends TitleThemeHelper> extends TitleContentHe
         }
         if (height >= 0 && statusBarView != null) {
             statusBarView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            statusBackground.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
         }
         return child;
     }
 
     public T setTitleBarHeight(int height) {
         if (height >= 0 && titleRootView != null) {
-            titleRootView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            titleRootView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
         }
         return child;
     }

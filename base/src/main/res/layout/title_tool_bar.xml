@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_title_bar_status_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        tools:background="@color/orange500" />
 
     <!--模拟状态栏-->
     <RelativeLayout
         android:id="@+id/rl_status"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:layout_height="26dp">
+
+        <ImageView
+            android:id="@+id/iv_status_bg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:background="@color/blue500" />
 
         <View
             android:id="@+id/status_bar"
             android:layout_width="match_parent"
             android:layout_height="0dp"></View>
+
 
     </RelativeLayout>
 
@@ -23,7 +37,15 @@
         android:id="@+id/rl_title_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:minHeight="?attr/actionBarSize">
+        android:layout_below="@+id/rl_status"
+        android:minHeight="?attr/actionBarSize"
+        tools:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/iv_title_bar_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@color/red500" />
 
         <RelativeLayout
             android:id="@+id/rl_left_toolbar"
@@ -33,7 +55,6 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:minHeight="?attr/actionBarSize"
             android:paddingLeft="@dimen/base_margin"
             android:paddingRight="@dimen/base_margin">
 
@@ -59,7 +80,6 @@
             android:layout_toLeftOf="@+id/rl_right_toolbar"
             android:layout_toRightOf="@+id/rl_left_toolbar"
             android:gravity="center"
-            android:minHeight="?attr/actionBarSize"
             android:paddingLeft="@dimen/base_margin"
             android:paddingRight="@dimen/base_margin">
 
@@ -83,7 +103,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:minHeight="?attr/actionBarSize"
             android:paddingLeft="@dimen/base_margin"
             android:paddingRight="@dimen/base_margin">
 
@@ -103,13 +122,15 @@
     <!--titleBar下方的线条-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_title_bar">
+
         <View
             android:id="@+id/title_line"
             android:layout_width="match_parent"
-            android:layout_height="0.6dp"
-            android:background="#999999"
+            android:layout_height="0.8dp"
+            android:background="@color/colorDivider"
             android:visibility="gone"></View>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
 

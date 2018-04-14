@@ -16,8 +16,8 @@ public class HStateController {
      */
     public static void init(StateController view){
         StateController contentLayout =  view;
-        contentLayout.emptyView(View.inflate(view.getContext(), R.layout.status_empty,null));
-        contentLayout.loadingView(View.inflate(view.getContext(), R.layout.status_loading,null));
-        contentLayout.errorView(View.inflate(view.getContext(), R.layout.status_erro,null));
+//        contentLayout.emptyView(View.inflate(view.getContext(), R.layout.status_empty,null));
+//        contentLayout.loadingView(View.inflate(view.getContext(), R.layout.status_loading,null));
+//        contentLayout.errorView(View.inflate(view.getContext(), R.layout.status_erro,null));
     }
 }

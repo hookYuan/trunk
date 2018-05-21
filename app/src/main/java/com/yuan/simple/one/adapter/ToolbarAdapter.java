@@ -1,17 +1,24 @@
 package com.yuan.simple.one.adapter;
 
+import android.app.Activity;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.PopupWindow;
 
 import com.yuan.base.tools.adapter.RLVAdapter;
 import com.yuan.base.tools.system.StatusBarUtil;
+import com.yuan.base.widget.title.OnMenuItemClickListener;
+import com.yuan.base.widget.title.TitleBar;
+import com.yuan.base.widget.title.TitleTheme;
 import com.yuan.simple.R;
 import com.yuan.simple.one.ui.toolbar.ToolbarActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,10 +27,12 @@ import java.util.List;
 public class ToolbarAdapter extends RLVAdapter {
 
     private List<ToolbarAdapter.ToolbarBean> mData;
+    private TitleBar titleBar;
 
-    public ToolbarAdapter(Context context, List<ToolbarAdapter.ToolbarBean> list) {
+    public ToolbarAdapter(Context context, List<ToolbarAdapter.ToolbarBean> list, TitleBar titleBar) {
         super(context);
         this.mData = list;
+        this.titleBar = titleBar;
     }
 
     /**
@@ -45,19 +54,51 @@ public class ToolbarAdapter extends RLVAdapter {
         ToolbarActivity activity = (ToolbarActivity) mContext;
         switch (mData.get(position).getCode()) {
             case 1:
-                StatusBarUtil.darkMode(activity);
+                titleBar.setSystemStatusBarFontBlack();
                 break;
             case 2:
-                StatusBarUtil.darkMode(activity, false);
+                titleBar.setSystemStatusBarFontWhite();
                 break;
             case 3:
-                //设置状态栏颜色为透明
-                StatusBarUtil.immersive(activity, true, ContextCompat.getColor(mContext, R.color.orange500));
+                titleBar.setSystemStatusBarOverlyBg(false, ContextCompat.getColor(mContext, R.color.colorPrimaryDark), 0);
                 break;
             case 4:
-                //设置状态栏颜色为透明
-                StatusBarUtil.immersive(activity, true);
+                titleBar.setSystemStatusBarOverlyBg(true, 0, 0);
                 break;
+            case 5:
+                titleBar.setTitleBarColor(ContextCompat.getColor(mContext, R.color.transparent));
+                break;
+            case 6:
+                titleBar.setTitleBarColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+                break;
+            case 7:
+                titleBar.setCenterText("TitleBar");
+                break;
+            case 8:
+                titleBar.setLeftText("取消");
+                break;
+            case 9:
+                titleBar.setLeftIcon(R.drawable.ic_base_back_black);
+                break;
+            case 10:
+                titleBar.setRightText("菜单");
+                break;
+            case 11:
+                titleBar.setRightIcon(R.drawable.ic_base_menu_more_black);
+                break;
+            case 12:
+                ArrayList<String> menuData = new ArrayList<String>();
+                menuData.add("选项一");
+                menuData.add("选项二");
+                menuData.add("选项三");
+                titleBar.setRightMenu(menuData, new OnMenuItemClickListener() {
+                    @Override
+                    public void onItemClick(PopupWindow popupWindow, AdapterView<?> adapterView, View view, int i) {
+
+                    }
+                });
+                break;
+
         }
     }
 

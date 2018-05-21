@@ -4,7 +4,7 @@ package com.yuan.base.widget.title;
  * Created by YuanYe on 2017/7/13.
  * 配置Title和statusbar显示的样式
  */
-public interface TitleInterface {
+public interface TitleTheme {
     // 系统StatusBar属性
     int STATUS_BAR_FONT_BLACK = 10002;//状态栏黑色字体
     int STATUS_BAR_FONT_WHITE = 10003;//状态栏白色字体

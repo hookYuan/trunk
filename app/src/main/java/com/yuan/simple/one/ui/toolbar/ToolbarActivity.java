@@ -10,10 +10,10 @@ import com.yuan.base.ui.mvp.MvpActivity;
 import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.FrameLayout;
 
 import com.yuan.simple.one.adapter.ToolbarAdapter;
 
@@ -28,25 +28,17 @@ public class ToolbarActivity extends MvpActivity {
 
     private RecyclerView rlvRecycler;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_one_toolbar);
-    }
-
     public void initData(Bundle savedInstanceState) {
         //init title bar.
         TitleBar titleBar = Views.find(mContext, R.id.title_bar);
-        titleBar.setLeftIcon(R.drawable.ic_base_back_white)
-                .setCenterText("标题栏");
 
         List<ToolbarAdapter.ToolbarBean> mData = new ArrayList<>();
-        mData.add(new ToolbarAdapter.ToolbarBean("状态栏黑色文字", 1));
-        mData.add(new ToolbarAdapter.ToolbarBean("状态栏白色文字", 2));
-        mData.add(new ToolbarAdapter.ToolbarBean("状态栏背景色", 3));
-        mData.add(new ToolbarAdapter.ToolbarBean("状态栏透明背景", 4));
+        mData.add(new ToolbarAdapter.ToolbarBean("系统状态栏黑色文字", 1));
+        mData.add(new ToolbarAdapter.ToolbarBean("系统状态栏白色文字", 2));
+        mData.add(new ToolbarAdapter.ToolbarBean("系统状态栏背景色", 3));
+        mData.add(new ToolbarAdapter.ToolbarBean("系统状态栏透明背景", 4));
         mData.add(new ToolbarAdapter.ToolbarBean("Toolbar透明背景", 5));
-        mData.add(new ToolbarAdapter.ToolbarBean("Toolbar图片背景", 6));
+        mData.add(new ToolbarAdapter.ToolbarBean("Toolbar颜色背景", 6));
         mData.add(new ToolbarAdapter.ToolbarBean("Toolbar中间文字", 7));
         mData.add(new ToolbarAdapter.ToolbarBean("Toolbar左边文字", 8));
         mData.add(new ToolbarAdapter.ToolbarBean("Toolbar左边图标", 9));
@@ -59,10 +51,10 @@ public class ToolbarActivity extends MvpActivity {
         //add divider.
         rlvRecycler.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f)
                 , ContextCompat.getColor(mContext, R.color.colorDivider)));
-        rlvRecycler.setAdapter(new ToolbarAdapter(mContext, mData));
+        rlvRecycler.setAdapter(new ToolbarAdapter(mContext, mData, titleBar));
     }
 
     public int getLayoutId() {
-        return 0;
+        return R.layout.act_one_toolbar;
     }
 }

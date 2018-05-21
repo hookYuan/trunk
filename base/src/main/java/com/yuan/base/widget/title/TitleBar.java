@@ -137,7 +137,7 @@ public class TitleBar extends LinearLayout {
         setLeftTextSize(leftSize);
         setCenterTextSize(centerSize);
         setRightTextSize(rightSize);
-
+        //
 
         ta.recycle();
     }
@@ -182,10 +182,10 @@ public class TitleBar extends LinearLayout {
             rootView.setTranslationZ(Kits.Dimens.dpToPx(context, floatZ));
         }
         //设置状态栏颜色
-        setDefaultTheme(new int[]{
-                TitleInterface.STATUS_BAR_FONT_BLACK
-                , TitleInterface.TITLE_FONT_BLACK
-                , TitleInterface.TITLE_BG_WHITE
+        setTheme(new int[]{
+                TitleTheme.STATUS_BAR_FONT_BLACK
+                , TitleTheme.TITLE_FONT_BLACK
+                , TitleTheme.TITLE_BG_WHITE
         });
 
         if (!isInEditMode()) {
@@ -199,14 +199,16 @@ public class TitleBar extends LinearLayout {
     /**
      * ------------------------------------左侧toolbar按钮设置----------------------------------------
      **/
-    private TitleBar setLeftTextIcon(CharSequence text, @DrawableRes int icon) {
-        if (leftTextView != null && !TextUtils.isEmpty(text)) {
+    public TitleBar setLeftTextIcon(CharSequence text, @DrawableRes int icon) {
+        if (leftTextView != null && text != null) {
             leftTextView.setText(text);
         }
-        if (icon != -1) {
+        if (icon != EMPTY_RESOURCES_TYPE) {
             Drawable drawable = getResources().getDrawable(icon);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight()); //设置边界
             leftTextView.setCompoundDrawables(drawable, null, null, null);//画在左边
+        } else {
+            leftTextView.setCompoundDrawables(null, null, null, null);//画在左边
         }
         return this;
     }
@@ -248,7 +250,7 @@ public class TitleBar extends LinearLayout {
      * ------------------------------------中间toolbar按钮设置----------------------------------------
      **/
     public TitleBar setCenterText(CharSequence text) {
-        if (centerTextView != null && !Kits.Empty.check(text)) {
+        if (centerTextView != null && text != null) {
             centerTextView.setText(text);
         }
         return this;
@@ -267,25 +269,21 @@ public class TitleBar extends LinearLayout {
     /**
      * ------------------------------------右侧toolbar按钮设置----------------------------------------
      **/
-    public TitleBar setRightTextIcon(CharSequence text, @DrawableRes int icon, OnClickListener listener) {
-        if (rightTextView != null && !Kits.Empty.check(text)) {
+    public TitleBar setRightTextIcon(CharSequence text, @DrawableRes int icon) {
+        if (rightTextView != null && text != null) {
             rightTextView.setText(text);
         }
         if (icon != EMPTY_RESOURCES_TYPE) {
             Drawable drawable = getResources().getDrawable(icon);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight()); //设置边界
             rightTextView.setCompoundDrawables(drawable, null, null, null);//画在左边
+        } else {
+            rightTextView.setCompoundDrawables(null, null, null, null);
         }
-        if (listener != null) {
-            rightRoot.setOnClickListener(listener);
-        }
+
+
         return this;
     }
-
-    public TitleBar setRightTextIcon(String text, @DrawableRes int icon) {
-        return setRightTextIcon(text, icon, null);
-    }
-
 
     public TitleBar setRightIcon(Drawable icon) {
         if (rightTextView != null && icon != null) {
@@ -299,16 +297,15 @@ public class TitleBar extends LinearLayout {
         return setRightTextIcon(EMPTY_TEXT_TYPE, icon);
     }
 
-    public TitleBar setRightIcon(@DrawableRes int icon, OnClickListener listener) {
-        return setRightTextIcon(EMPTY_TEXT_TYPE, icon, listener);
-    }
-
     public TitleBar setRightText(CharSequence text) {
-        return setRightTextIcon(text, EMPTY_RESOURCES_TYPE, null);
+        return setRightTextIcon(text, EMPTY_RESOURCES_TYPE);
     }
 
-    public TitleBar setRightText(CharSequence text, OnClickListener listener) {
-        return setRightTextIcon(text, EMPTY_RESOURCES_TYPE, listener);
+    public TitleBar setRightOnClick(OnClickListener listener) {
+        if (listener != null) {
+            rightRoot.setOnClickListener(listener);
+        }
+        return this;
     }
 
     public TitleBar setRightClickEnable(boolean clickAble) {
@@ -334,23 +331,13 @@ public class TitleBar extends LinearLayout {
     /**
      * ------------------------------------右侧toolbar的menu菜单按钮设置----------------------------------------
      **/
-    public TitleBar setRightMenu(final String rightText, @DrawableRes int icon, final List<String> popupData, final OnMenuItemClickListener listener) {
-        setRightTextIcon(rightText, icon, new OnClickListener() {
+    public TitleBar setRightMenu(final List<String> popupData, final OnMenuItemClickListener listener) {
+        setRightOnClick(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopMenu(rightTextView, popupData, listener);
             }
         });
-        return this;
-    }
-
-    public TitleBar setRightMenu(String rightText, final List<String> popupData, final OnMenuItemClickListener listener) {
-        setRightMenu(rightText, 0, popupData, listener);
-        return this;
-    }
-
-    public TitleBar setRightMenu(@DrawableRes int icon, final List<String> popupData, final OnMenuItemClickListener listener) {
-        setRightMenu("", icon, popupData, listener);
         return this;
     }
 
@@ -439,72 +426,48 @@ public class TitleBar extends LinearLayout {
      * @param titleType 默认主题泛型
      * @return
      */
-    public TitleBar setDefaultTheme(int... titleType) {
+    public TitleBar setTheme(int... titleType) {
         for (int type : titleType) {
             switch (type) {
-                case TitleInterface.STATUS_BAR_FONT_BLACK:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.darkMode((Activity) context, true);
-                    }
+                case TitleTheme.STATUS_BAR_FONT_BLACK:
                     break;
-                case TitleInterface.STATUS_BAR_FONT_WHITE:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.darkMode((Activity) context, false);
-                    }
+                case TitleTheme.STATUS_BAR_FONT_WHITE:
                     break;
-                case TitleInterface.STATUS_BAR_BG_TRANSPARENT_OVERLAY:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.immersive((Activity) context, true);
-                    }
+                case TitleTheme.STATUS_BAR_BG_TRANSPARENT_OVERLAY:
                     break;
-                case TitleInterface.STATUS_BAR_BG_BLACK_OVERLAY:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.immersive((Activity) context, true, ContextCompat.getColor(context, android.R.color.black));
-                    }
+                case TitleTheme.STATUS_BAR_BG_BLACK_OVERLAY:
                     break;
-                case TitleInterface.STATUS_BAR_BG_WHITE_OVERLAY:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.immersive((Activity) context, true, ContextCompat.getColor(context, R.color.white));
-                    }
+                case TitleTheme.STATUS_BAR_BG_WHITE_OVERLAY:
                     break;
-                case TitleInterface.STATUS_BAR_BG_TRANSPARENT_TOP:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.immersive((Activity) context, false, ContextCompat.getColor(context, R.color.white));
-                    }
+                case TitleTheme.STATUS_BAR_BG_TRANSPARENT_TOP:
                     break;
-                case TitleInterface.STATUS_BAR_BG_BLACK_TOP:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.immersive((Activity) context, false, ContextCompat.getColor(context, R.color.white));
-                    }
+                case TitleTheme.STATUS_BAR_BG_BLACK_TOP:
                     break;
-                case TitleInterface.STATUS_BAR_BG_WHITE_TOP:
-                    if (!isInEditMode()) {
-                        StatusBarUtil.immersive((Activity) context, false, ContextCompat.getColor(context, R.color.white));
-                    }
+                case TitleTheme.STATUS_BAR_BG_WHITE_TOP:
                     break;
-                case TitleInterface.TITLE_H:
+                case TitleTheme.TITLE_H:
                     rootView.setVisibility(GONE);
                     break;
-                case TitleInterface.TITLE_FONT_BLACK:
+                case TitleTheme.TITLE_FONT_BLACK:
                     setLeftTextColor(ContextCompat.getColor(context, R.color.colorFont33));
                     setCenterTextColor(ContextCompat.getColor(context, R.color.colorFont33));
                     setRightTextColor(ContextCompat.getColor(context, R.color.colorFont33));
                     break;
-                case TitleInterface.TITLE_FONT_WHITE:
+                case TitleTheme.TITLE_FONT_WHITE:
                     setLeftTextColor(ContextCompat.getColor(context, R.color.white));
                     setCenterTextColor(ContextCompat.getColor(context, R.color.white));
                     setRightTextColor(ContextCompat.getColor(context, R.color.white));
                     break;
-                case TitleInterface.TITLE_BG_TRANSPARENT:
+                case TitleTheme.TITLE_BG_TRANSPARENT:
                     setTitleBarColor(ContextCompat.getColor(context, android.R.color.transparent));
                     break;
-                case TitleInterface.TITLE_BG_BLACK:
+                case TitleTheme.TITLE_BG_BLACK:
                     setTitleBarColor(ContextCompat.getColor(context, R.color.black));
                     break;
-                case TitleInterface.TITLE_BG_WHITE:
+                case TitleTheme.TITLE_BG_WHITE:
                     setTitleBarColor(ContextCompat.getColor(context, R.color.white));
                     break;
-                case TitleInterface.TITLE_BG_STATUE_HEIGHT:
+                case TitleTheme.TITLE_BG_STATUE_HEIGHT:
                     setStatusBarHeight(StatusBarUtil.getStatusBarHeight(context));
                     break;
             }
@@ -536,7 +499,49 @@ public class TitleBar extends LinearLayout {
     }
 
     /**
-     * 设置TitleBar颜色
+     * 设置系统状态栏字体黑色
+     *
+     * @return
+     */
+    public TitleBar setSystemStatusBarFontBlack() {
+        if (!isInEditMode()) {
+            StatusBarUtil.darkMode((Activity) context, true);
+        }
+        return this;
+    }
+
+    /**
+     * 设置系统状态栏字体白色
+     *
+     * @return
+     */
+    public TitleBar setSystemStatusBarFontWhite() {
+        if (!isInEditMode()) {
+            StatusBarUtil.darkMode((Activity) context, false);
+        }
+        return this;
+    }
+
+    /**
+     * 设置title是否覆盖在内容之上
+     *
+     * @return
+     */
+    public TitleBar setSystemStatusBarOverlyBg(boolean isOverly, @ColorInt int bgColor, @FloatRange(from = 0.0, to = 1.0) float alpha) {
+        if (!isInEditMode()) {
+            if (bgColor != 0 && alpha != 0)
+                StatusBarUtil.immersive((Activity) context, isOverly, bgColor, alpha);
+            else if (bgColor != 0)
+                StatusBarUtil.immersive((Activity) context, isOverly, bgColor);
+            else
+                StatusBarUtil.immersive((Activity) context, isOverly);
+        }
+        return this;
+    }
+
+
+    /**
+     * 设置TitleBar背景颜色
      *
      * @param backgroundColor
      * @return
@@ -598,13 +603,13 @@ public class TitleBar extends LinearLayout {
 
     public TitleBar setCenterTextSize(float size) {
         if (centerTextView != null && size != 0)
-            centerTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,size);
+            centerTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
         return this;
     }
 
     public TitleBar setRightTextSize(float size) {
         if (rightTextView != null && size != 0)
-            rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,size);
+            rightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
         return this;
     }
 

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_title_bar_status_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        tools:background="@color/orange500" />
+
+    <!--模拟状态栏-->
+    <RelativeLayout
+        android:id="@+id/rl_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_status_bg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:background="@color/blue500" />
+
+        <View
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"></View>
+
+    </RelativeLayout>
+
+    <!--titleBar-->
+    <RelativeLayout
+        android:id="@+id/rl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_below="@+id/rl_status"
+        android:minHeight="@dimen/size_50"
+        tools:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/iv_title_bar_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/rl_left_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:maxLength="5"
+                android:paddingLeft="@dimen/base_margin"
+                android:paddingRight="@dimen/base_margin"
+                android:textColor="@color/colorFont33"
+                android:textSize="@dimen/font_16"
+                tools:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_center_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/rl_right_toolbar"
+            android:layout_toRightOf="@+id/rl_left_toolbar"
+            android:gravity="start|center_vertical">
+
+            <TextView
+                android:id="@+id/tv_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLength="22"
+                android:textColor="@color/colorFont33"
+                android:textSize="@dimen/font_18"
+                tools:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_right_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:maxLength="15"
+                android:paddingLeft="@dimen/base_margin"
+                android:paddingRight="@dimen/base_margin"
+                android:textColor="@color/colorFont33"
+                android:textSize="@dimen/font_16"
+                tools:text="" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--titleBar下方的线条-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_title_bar">
+
+        <View
+            android:id="@+id/title_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/colorDivider"
+            android:visibility="visible"></View>
+    </RelativeLayout>
+</RelativeLayout>
+

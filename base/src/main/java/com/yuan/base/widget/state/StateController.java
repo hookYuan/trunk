@@ -16,7 +16,7 @@ import com.yuan.base.R;
 /**
  * Created by wanglei on 2016/1/21.
  * 状态控制切换
- *  使用方法： 初始化各个状态，显示各种状态
+ * 使用方法： 初始化各个状态，显示各种状态
  */
 public class StateController extends FrameLayout {
 
@@ -183,6 +183,11 @@ public class StateController extends FrameLayout {
 
     public View getContentView() {
         return contentView;
+    }
+
+
+    public static void setDefaultView(View loadingView, View errorView, View emptyView) {
+
     }
 
     public StateController loadingView(View loadingView) {

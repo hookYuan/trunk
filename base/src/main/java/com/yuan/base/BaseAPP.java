@@ -12,7 +12,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
  */
 public class BaseAPP extends Application {
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,5 +21,4 @@ public class BaseAPP extends Application {
         }
         ARouter.init(this); // 尽可能早，推荐在Application中初始化
     }
-
 }

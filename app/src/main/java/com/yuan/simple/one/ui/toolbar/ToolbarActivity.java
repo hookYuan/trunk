@@ -3,10 +3,10 @@ package com.yuan.simple.one.ui.toolbar;
 
 import android.os.Bundle;
 
-import com.yuan.base.mvp.activity.TitleActivity;
 import com.yuan.base.tools.adapter.GridDivider;
 import com.yuan.base.tools.other.Kits;
 import com.yuan.base.tools.other.Views;
+import com.yuan.base.ui.mvp.MvpActivity;
 import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * create by Yuan ye.
  * download truck before use this
  */
-public class ToolbarActivity extends TitleActivity {
+public class ToolbarActivity extends MvpActivity {
 
     private RecyclerView rlvRecycler;
 
@@ -38,7 +38,7 @@ public class ToolbarActivity extends TitleActivity {
         //init title bar.
         TitleBar titleBar = Views.find(mContext, R.id.title_bar);
         titleBar.setLeftIcon(R.drawable.ic_base_back_white)
-                .setToolbar("标题栏");
+                .setCenterText("标题栏");
 
         List<ToolbarAdapter.ToolbarBean> mData = new ArrayList<>();
         mData.add(new ToolbarAdapter.ToolbarBean("状态栏黑色文字", 1));

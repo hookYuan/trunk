@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.yuan.base.XConfig;
+import com.yuan.base.TrunkConfig;
 import com.yuan.base.tools.other.Codec;
 import com.yuan.base.tools.other.Kits;
 
@@ -156,7 +156,7 @@ public class DiskCache implements ICache {
     }
 
     private String getCacheDir() {
-        return XConfig.CACHE_DISK_DIR;
+        return TrunkConfig.CACHE_DISK_DIR;
     }
 
 

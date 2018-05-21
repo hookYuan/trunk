@@ -2,7 +2,7 @@ package com.yuan.base.tools.okhttp;
 
 import android.content.Context;
 
-import com.yuan.base.XConfig;
+import com.yuan.base.TrunkConfig;
 import com.yuan.base.tools.system.SystemUtil;
 import com.yuan.base.tools.okhttp.okUtil.OKHttpConfig;
 
@@ -61,11 +61,11 @@ public class RxHttpClient {
     public OkHttpClient getClient() {
         if (client == null) {
             //设置缓存路径
-            File cacheFile = new File(SystemUtil.SDcard.getCachPath(mContext), XConfig.NET_CACHE);
+            File cacheFile = new File(SystemUtil.SDcard.getCachPath(mContext), TrunkConfig.NET_CACHE);
             if (cacheFile.getParentFile().exists())
                 cacheFile.mkdirs();
             //设置缓存大小(当先线程的八分之一)
-            Cache cache = new Cache(cacheFile, XConfig.MAX_DIR_SIZE);
+            Cache cache = new Cache(cacheFile, TrunkConfig.MAX_DIR_SIZE);
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             //失败后是否重新连接

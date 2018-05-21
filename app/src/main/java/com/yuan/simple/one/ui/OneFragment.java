@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.widget.TextView;
 
-import com.yuan.base.mvp.mvp.MVPFragment;
 import com.yuan.base.tools.adapter.GridDivider;
 import com.yuan.base.tools.other.Kits;
 import com.yuan.base.tools.other.Views;
+import com.yuan.base.ui.mvp.MvpFragment;
+import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 import com.yuan.simple.one.adapter.OneListAdapter;
 import com.yuan.simple.one.ui.toolbar.ToolbarActivity;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * Created by YuanYe on 2018/4/13.
  */
 
-public class OneFragment extends MVPFragment {
+public class OneFragment extends MvpFragment {
 
     @Override
     public int getLayoutId() {
@@ -30,14 +31,8 @@ public class OneFragment extends MVPFragment {
     @Override
     public void initData(Bundle savedInstanceState) {
 
-    }
-
-    @Override
-    protected void initData(Bundle savedInstanceState, View parent) {
-        getTitleBar().setToolbar("Trunk事例")
-                .setFontColor(ContextCompat.getColor(mContext, R.color.colorFont33));
-
-        ArrayList<OneListAdapter.OneListBean> mData = new ArrayList<>();
+        ArrayList<OneListAdapter.OneListBean> mData
+                = new ArrayList<>();
         mData.add(new OneListAdapter.OneListBean("toolbar", ToolbarActivity.class));
 
         RecyclerView rlvList = Views.find(mContext, R.id.rlv_list);

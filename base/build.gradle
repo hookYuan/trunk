@@ -1,5 +1,17 @@
 apply plugin: 'com.android.library'
 
+ext.support = '26+'
+ext.glide = '3.6.0'
+ext.okhttp = '3.10.0'
+ext.gson = '2.8.2'
+ext.eventbus = '3.0.0'
+ext.rxandroid = '2.0.1'
+ext.rxlifecycle = '2.1.0'
+ext.rxpermissions = '0.9.5@aar'
+ext.SmartRefreshLayout = '1.0.5.1'
+ext.swipebackhelper = '3.1.2'
+ext.arouter_api = '1.3.1'
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
@@ -10,8 +22,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-        //TODO ARouter需要添加，如需使用，必须在对应module中添加以下代码
-        enforceUniquePackageName = false
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [moduleName: project.getName()]
@@ -27,35 +37,22 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:$support_lib_version"
-    compile "com.android.support:support-v4:$support_lib_version"
-    compile "com.android.support:recyclerview-v7:$support_lib_version"
-    compile "com.android.support:cardview-v7:$support_lib_version"
-    compile "com.android.support:design:$support_lib_version"
-    //Glide
-    compile 'com.github.bumptech.glide:glide:3.6.0'
-    //OKHttp
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    //Gson
-    compile 'com.google.code.gson:gson:2.8.2'
-    //滑动返回Activity
-    compile 'com.jude:swipebackhelper:3.1.2'
-    //下拉刷新库，默认采用该下拉刷新控件
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'//没有使用特殊Header，可以不加这行
-    //alibaba的ARouter,路由，用于跨module通讯
-    compile 'com.alibaba:arouter-api:1.2.4'
-    //EventBus 事务总线机制
-    compile 'org.greenrobot:eventbus:3.0.0'
-    //RxJava 可以配合Retrofit使用
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    //RX生命周期绑定
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.1.0'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.1.0'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
-    //Rx权限申请
-    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
-    //TODO 以下内容为如果module或application需要使用，都应该分别导入
-    annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile "com.android.support:appcompat-v7:$support"
+    compile "com.android.support:support-v4:$support"
+    compile "com.android.support:recyclerview-v7:$support"
+    compile "com.android.support:cardview-v7:$support"
+    compile "com.android.support:design:$support"
+    compile "com.github.bumptech.glide:glide:$glide"
+    compile "com.squareup.okhttp3:okhttp:$okhttp"
+    compile "com.google.code.gson:gson:$gson"
+    compile "org.greenrobot:eventbus:$eventbus"
+    compile "io.reactivex.rxjava2:rxandroid:$rxandroid"
+    compile "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle"
+    compile "com.tbruyelle.rxpermissions2:rxpermissions:$rxpermissions"
+    compile "com.scwang.smartrefresh:SmartRefreshLayout:$SmartRefreshLayout"
+    compile "com.scwang.smartrefresh:SmartRefreshHeader:$SmartRefreshLayout"
+    compile "com.jude:swipebackhelper:$swipebackhelper"
+    compile "com.alibaba:arouter-api:$arouter_api"
 }

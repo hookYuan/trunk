@@ -1,9 +1,11 @@
 package com.yuan.base.tools.okhttp.okUtil.callback;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by YuanYe on 2017/9/13.
@@ -28,9 +31,19 @@ public abstract class FileBack implements Callback {
 
     protected Context mContext; //在ParamsBuilder中传递过来，不为空(用于统一处理提示、dialog等)
 
+    private boolean isSave = true;
+
     public FileBack() {
 
     }
+
+    /**
+     * @param isSave
+     */
+    public FileBack(boolean isSave) {
+        this.isSave = isSave;
+    }
+
     /**
      * @param _saveDir 下载文件保存的路径
      */
@@ -57,21 +70,16 @@ public abstract class FileBack implements Callback {
 
     @Override
     public void onResponse(Call call, Response response) throws IOException {
-        InputStream is = null;
-        byte[] buf = new byte[2048];
-        int len = 0;
-        FileOutputStream fos = null;
-        // 储存下载文件的目录
-        final String savePath = isExistDir(saveDir);
-        try {
-            is = response.body().byteStream();
-            long total = response.body().contentLength();
-            final String fileName = getNameFromUrl(response.request().url().url().getPath()); //文件名
-            File file = new File(savePath, fileName);
-            fos = new FileOutputStream(file);
+        ResponseBody responseBody = response.body();
+        if (!isSave) {
+            byte[] buffer = new byte[2048];
+            int len = 0;
             long sum = 0;
-            while ((len = is.read(buf)) != -1) {
-                fos.write(buf, 0, len);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            long total = responseBody.contentLength();
+            InputStream is = responseBody.byteStream();
+            while ((len = is.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
                 sum += len;
                 final int progress = (int) (sum * 1.0f / total * 100);
                 //切换到主线程
@@ -89,46 +97,82 @@ public abstract class FileBack implements Callback {
                             }
                         });
             }
-            fos.flush();
-            //切换到主线程
-            Observable.create(new ObservableOnSubscribe<Integer>() {
-                @Override
-                public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
-                    e.onNext(0);
-                }
-            }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                    .subscribe(new Consumer<Integer>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
-                            // 下载完成
-                            onDownloadSuccess(savePath + File.separator + fileName);
-                        }
-                    });
-
-        } catch (final Exception ioE) {
-            Observable.create(new ObservableOnSubscribe<Exception>() {
-                @Override
-                public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Exception> e) throws Exception {
-                    e.onNext(ioE);
-                }
-            }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                    .subscribe(new Consumer<Exception>() {
-                        @Override
-                        public void accept(@io.reactivex.annotations.NonNull Exception response) throws Exception {
-                            onDownloadFailed(response);
-                        }
-                    });
-        } finally {
+            bos.close();
+            onDownloadSuccess(bos.toByteArray());
+        } else {
+            InputStream is = null;
+            byte[] buf = new byte[2048];
+            int len = 0;
+            FileOutputStream fos = null;
+            // 储存下载文件的目录
+            final String savePath = isExistDir(saveDir);
             try {
-                if (is != null)
-                    is.close();
-            } catch (IOException e) {
-            }
-            try {
-                if (fos != null)
-                    fos.close();
-            } catch (IOException e) {
+                is = responseBody.byteStream();
+                long total = response.body().contentLength();
+                final String fileName = getNameFromUrl(response.request().url().url().getPath()); //文件名
+                File file = new File(savePath, fileName);
+                fos = new FileOutputStream(file);
+                long sum = 0;
+                while ((len = is.read(buf)) != -1) {
+                    fos.write(buf, 0, len);
+                    sum += len;
+                    final int progress = (int) (sum * 1.0f / total * 100);
+                    //切换到主线程
+                    Observable.create(new ObservableOnSubscribe<Integer>() {
+                        @Override
+                        public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
+                            e.onNext(progress);
+                        }
+                    }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
+                            .subscribe(new Consumer<Integer>() {
+                                @Override
+                                public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
+                                    // 下载中
+                                    onDownloading(response);
+                                }
+                            });
+                }
+                fos.flush();
+                //切换到主线程
+                Observable.create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
+                        e.onNext(0);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
+                        .subscribe(new Consumer<Integer>() {
+                            @Override
+                            public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
+                                // 下载完成
+                                onDownloadSuccess(savePath + File.separator + fileName);
+                            }
+                        });
 
+            } catch (final Exception ioE) {
+                Observable.create(new ObservableOnSubscribe<Exception>() {
+                    @Override
+                    public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Exception> e) throws Exception {
+                        e.onNext(ioE);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
+                        .subscribe(new Consumer<Exception>() {
+                            @Override
+                            public void accept(@io.reactivex.annotations.NonNull Exception response) throws Exception {
+                                onDownloadFailed(response);
+                            }
+                        });
+            } finally {
+                try {
+                    if (is != null)
+                        is.close();
+                } catch (IOException e) {
+                }
+                try {
+                    if (fos != null)
+                        fos.close();
+                } catch (IOException e) {
+
+                }
             }
         }
     }
@@ -159,11 +203,22 @@ public abstract class FileBack implements Callback {
 
     /**
      * 下载成功
+     * 执行在主线程
      */
-    public abstract void onDownloadSuccess(String fileDir);
+    public void onDownloadSuccess(String fileDir) {
+    }
+
+    /**
+     * 当不保存时执行
+     *
+     * @param bytes
+     */
+    public void onDownloadSuccess(byte[] bytes) {
+    }
 
     /**
      * @param progress 下载进度
+     *                 执行在主线程
      */
     public void onDownloading(int progress) {
     }

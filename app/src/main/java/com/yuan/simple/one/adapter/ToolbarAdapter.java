@@ -98,7 +98,6 @@ public class ToolbarAdapter extends RLVAdapter {
                     }
                 });
                 break;
-
         }
     }
 

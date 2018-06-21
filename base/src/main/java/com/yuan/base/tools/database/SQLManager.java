@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +28,8 @@ import java.util.Map;
 
 public class SQLManager {
 
+    private final static String TAG = "SQLManager";
+
     private SQLiteDatabase writDB; //写操作
     private SQLHelper helper;
 
@@ -47,17 +50,18 @@ public class SQLManager {
 
     }
 
+
     /**
      * 创建表
      *
-     * @param tableName            表名
-     * @param map<String1,String2> 字段名集合 String1--字段名，String2--字段类型
-     *                             .默认主键为_id,自增
+     * @param tableName      表名
+     * @param primaryKeyName 自定义主键名称
+     * @param map            表字段
      */
-    public void createTable(String tableName, Map<String, String> map) {
+    public void createTable(String tableName, String primaryKeyName, Map<String, String> map) {
         checkWritDB();
         String sql = "create table if not exists " + tableName + "(";//创建表
-        sql = sql + "_id " + "integer " + " not null primary key autoincrement,";
+        sql = sql + primaryKeyName + " integer " + " not null primary key autoincrement,";
         int i = 0;
         //默认添加主键
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -74,6 +78,21 @@ public class SQLManager {
         errorCode = DBErrorCode.tableCreateSuccess;
     }
 
+    /**
+     * 创建表，默认主键名_id
+     *
+     * @param tableName            表名
+     * @param map<String1,String2> 字段名集合 String1--字段名，String2--字段类型
+     *                             .默认主键为_id,自增
+     */
+    public void createTable(String tableName, Map<String, String> map) {
+        createTable(tableName, "_id", map);
+    }
+
+
+    /**
+     * ************************************插入数据**************************************************
+     */
     /**
      * 批量插入数据
      * 采用事务处理，一次提交，提高数据库读写速度
@@ -113,49 +132,52 @@ public class SQLManager {
         writDB.insert(tableName, null, value);
     }
 
-    public <T> ArrayList<T> queryTableAll(String tableName, Class<T> clazz) {
-        return queryTableAll(tableName, null, clazz);
-    }
+    /**
+     * ************************************查询数据**************************************************
+     */
 
     /**
      * 查询整张表
      *
      * @param tableName 表名
+     */
+    public <T> ArrayList<T> queryTableAll(String tableName, Class<T> clazz) {
+        return query(tableName, null, null, null, null, clazz);
+    }
+
+    /**
+     * 条件查询
+     *
+     * @param tableName     表名
+     * @param columns       要想显示的列，例如 new String[]{"id","body"}
+     * @param selection     where子句，例如 id=?
+     * @param selectionArgs where子句对应的条件值    new String[]{"1"}
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public <T> ArrayList<T> queryCondition(String tableName, String[] columns, String selection,
+                                           String[] selectionArgs, Class<T> clazz) {
+        return query(tableName, columns, selection, selectionArgs, null, clazz);
+    }
+
+    /**
+     * 查询
+     *
+     * @param tableName 表名
      * @param orderBy   排序字段名
      */
-    public <T> ArrayList<T> queryTableAll(String tableName, String orderBy, Class<T> clazz) {
+    public <T> ArrayList<T> query(String tableName, String[] columns, String selection,
+                                  String[] selectionArgs, String orderBy, Class<T> clazz) {
         checkWritDB();
         String orderby = null;
+        ArrayList<T> list = null;
         if (!TextUtils.isEmpty(orderBy)) orderby = orderBy + " desc";
-
-        ArrayList<T> list = new ArrayList<>();
         //查询获得游标
         try {
-            Cursor cursor = writDB.query(tableName, null, null, null, null, null, orderby);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                T t = clazz.newInstance();
-                for (int i = 1; i < cursor.getColumnCount(); i++) {
-                    String content = cursor.getString(i);//获得获取的数据记录第i条字段的内容
-                    String columnName = cursor.getColumnName(i);// 获取数据记录第i条字段名的
-                    Field field = t.getClass().getDeclaredField(columnName);//获取该字段名的Field对象。
-                    field.setAccessible(true);//取消对age属性的修饰符的检查访问，以便为属性赋值
-                    if (field.getType() == String.class) {
-                        field.set(t, content);
-                    } else if (field.getType() == Integer.class || field.getType() == int.class) {
-                        field.set(t, Integer.parseInt(content));
-                    } else if (field.getType() == Float.class || field.getType() == float.class) {
-                        field.set(t, Float.parseFloat(content));
-                    } else if (field.getType() == Double.class || field.getType() == double.class) {
-                        field.set(t, Double.parseDouble(content));
-                    } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
-                        field.set(t, Boolean.parseBoolean(content));
-                    }
-                    field.setAccessible(false);//恢复对age属性的修饰符的检查访问
-                }
-                list.add(t);
-                cursor.moveToNext();
-            }
+            Cursor cursor = writDB.query(tableName, columns, selection, selectionArgs, null, null, orderby);
+            list = handleCursor(cursor, clazz);
+            cursor.close();
             writDB.close();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -171,6 +193,119 @@ public class SQLManager {
             }
         }
         return list;
+    }
+
+    /**
+     * 直接调用SQL语句查询
+     *
+     * @param sql           sql语句
+     * @param selectionArgs 需要替换的参数例如:Cursor c = db.rawQuery("select * from user
+     *                      where username=? and password = ?",
+     *                      new String[]{"用户名","密码"});
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public <T> ArrayList<T> querySQL(String sql, String[] selectionArgs, Class<T> clazz) {
+        checkWritDB();
+        ArrayList<T> list = null;
+        Cursor cursor = writDB.rawQuery(sql, selectionArgs);
+        try {
+            list = handleCursor(cursor, clazz);
+            cursor.close();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 处理游标查询
+     *
+     * @param cursor
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws NoSuchFieldException
+     */
+    private <T> ArrayList<T> handleCursor(Cursor cursor, Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
+        ArrayList<T> list = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            T t = clazz.newInstance();
+            for (int i = 1; i < cursor.getColumnCount(); i++) {
+                String content = cursor.getString(i);//获得获取的数据记录第i条字段的内容
+                String columnName = cursor.getColumnName(i);// 获取数据记录第i条字段名的
+                Field field = t.getClass().getDeclaredField(columnName);//获取该字段名的Field对象。
+                field.setAccessible(true);//取消对age属性的修饰符的检查访问，以便为属性赋值
+                if (field.getType() == String.class) {
+                    field.set(t, content);
+                } else if (field.getType() == Integer.class || field.getType() == int.class) {
+                    field.set(t, Integer.parseInt(content));
+                } else if (field.getType() == Float.class || field.getType() == float.class) {
+                    field.set(t, Float.parseFloat(content));
+                } else if (field.getType() == Double.class || field.getType() == double.class) {
+                    field.set(t, Double.parseDouble(content));
+                } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
+                    field.set(t, Boolean.parseBoolean(content));
+                }
+                field.setAccessible(false);//恢复对age属性的修饰符的检查访问
+            }
+            list.add(t);
+            cursor.moveToNext();
+        }
+        return list;
+    }
+
+    /**
+     * ************************************删除数据**************************************************
+     */
+
+    public void deleteTable(String tableName) {
+        //清空表
+        try {
+            checkWritDB();
+            writDB.execSQL("delete from " + tableName);
+            writDB.close();
+        } catch (Exception e) {
+            Log.i(TAG, e.getMessage());
+        }
+    }
+
+    /**
+     * 按条件删除数据
+     *
+     * @param table       表名
+     * @param whereClause where子句，例如 id=?
+     * @param whereArgs   where子句对应的条件值    new String[]{"1"}
+     */
+    public void delete(String table, String whereClause, String[] whereArgs) {
+        checkWritDB();
+        writDB.delete(table, whereClause, whereArgs);
+        writDB.close();
+    }
+
+    /**
+     * ************************************更新数据**************************************************
+     */
+    /**
+     * 更新数据
+     *
+     * @param table       表名
+     * @param values      需要更新的内容，例如 values.put("price", 10.99);
+     * @param whereClause where子句，例如 id=?
+     * @param whereArgs   where子句对应的条件值    new String[]{"1"}
+     */
+    public void update(String table, ContentValues values, String whereClause, String[] whereArgs) {
+        checkWritDB();
+        writDB.update(table, values, whereClause, whereArgs);
+        writDB.close();
     }
 
     /**

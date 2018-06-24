@@ -1,6 +1,5 @@
 package com.yuan.simple.one.adapter;
 
-import android.app.Activity;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
@@ -11,10 +10,8 @@ import android.widget.AdapterView;
 import android.widget.PopupWindow;
 
 import com.yuan.base.tools.adapter.RLVAdapter;
-import com.yuan.base.tools.system.StatusBarUtil;
 import com.yuan.base.widget.title.OnMenuItemClickListener;
 import com.yuan.base.widget.title.TitleBar;
-import com.yuan.base.widget.title.TitleTheme;
 import com.yuan.simple.R;
 import com.yuan.simple.one.ui.toolbar.ToolbarActivity;
 

@@ -266,7 +266,6 @@ public class SQLManager {
     /**
      * ************************************删除数据**************************************************
      */
-
     public void deleteTable(String tableName) {
         //清空表
         try {

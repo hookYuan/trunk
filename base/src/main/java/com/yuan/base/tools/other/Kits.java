@@ -1146,7 +1146,8 @@ public class Kits {
         }
 
         public static boolean check(String str) {
-            return str == null || "".equals(str);
+            if (TextUtils.isEmpty(str) || "null".equals(str)) return true;
+            return false;
         }
 
     }

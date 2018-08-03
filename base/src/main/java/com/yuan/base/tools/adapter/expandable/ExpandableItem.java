@@ -1,4 +1,4 @@
-package com.yuan.base.tools.adapter;
+package com.yuan.base.tools.adapter.expandable;
 
 /**
  * 作者：yuanYe创建于2016/10/26

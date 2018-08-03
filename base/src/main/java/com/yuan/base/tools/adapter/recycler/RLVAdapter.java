@@ -1,4 +1,4 @@
-package com.yuan.base.tools.adapter;
+package com.yuan.base.tools.adapter.recycler;
 
 import android.content.Context;
 import android.support.annotation.IdRes;

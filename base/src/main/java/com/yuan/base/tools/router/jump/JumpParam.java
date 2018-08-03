@@ -7,11 +7,11 @@ import java.util.HashMap;
 
 /**
  * Created by YuanYe on 2018/5/14.
+ * 用于构建跳转参数
  */
-
 public class JumpParam {
 
-    HashMap<String, Object> attr;
+    private HashMap<String, Object> attr;
     private static JumpParam param;
     private String stringListKey;
     private ArrayList<String> stringList;

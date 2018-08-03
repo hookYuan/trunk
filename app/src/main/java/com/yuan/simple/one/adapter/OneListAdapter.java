@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.base.tools.adapter.RLVAdapter;
+import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.router.jump.JumpHelper;
 
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import java.util.Collections;
  * Created by YuanYe on 2018/7/12.
  * 拼音排序工具类,需要排序中文需要实现IPinyingSort这个接口
  */
-public class PinyinSortUtil {
+public class ChineseSort {
 
     /**
      * 给汉字按照字母排序顺序排序

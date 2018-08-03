@@ -71,7 +71,6 @@ public class TitleBar extends LinearLayout {
 
     protected int floatZ = 4; //悬浮的高度默认悬浮4dp
 
-
     public TitleBar(Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
         this.context = _context;

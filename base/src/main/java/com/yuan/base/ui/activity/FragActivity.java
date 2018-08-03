@@ -2,8 +2,8 @@ package com.yuan.base.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.yuan.base.ui.fragment.ExtraFragment;
 
@@ -18,56 +18,26 @@ import java.util.List;
  * 在initData()中调用 addFragment()初始化
  * 调用showFragment()切换Fragment
  */
-public abstract class FragActivity<T extends ExtraFragment> extends ExtraActivity {
+public abstract class FragActivity<T extends Fragment> extends ExtraActivity {
 
-    @IdRes
-    private int container; //Fragment需要放置的容器
-    private Class[] clazzs;
+    private static final String TAG = "FragActivity";
+
     private int showIndex = 0; //需要默认显示Fragment下标,默认显示第一页
     private List<Fragment> fragments;  //用于放置Fragment
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        fragments = new ArrayList<>();
-        if (clazzs == null || clazzs.length == 0) {
-
-        } else if (savedInstanceState != null) {
-            // 解决重叠问题
-            for (int i = 0; i < clazzs.length; i++) {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(clazzs[i].getName());
-                fragments.add(fragment);
-                if (i == showIndex)
-                    ft.show(fragment);
-                else
-                    ft.hide(fragment);
-            }
-            ft.commit();
-        } else {
-            for (int i = 0; i < clazzs.length; i++) {
-                T fragment = (T) T.newInstance(clazzs[i]);
-                fragments.add(fragment);
-                ft.add(container, fragment, clazzs[i].getName());
-                if (i == showIndex) {
-                    ft.show(fragment);
-                    fragment.setUserVisibleHint(true);
-                } else {
-                    ft.hide(fragment);
-                    fragment.setUserVisibleHint(false);
-                }
-            }
-            ft.commit();
-        }
-    }
 
     /**
      * 根据下标，设置要展示的Fragment
      *
      * @param newIndex 要显示的Fragment的下标
      */
-    protected void showFragment(int newIndex) {
-        if (showIndex == newIndex) return;
+    public void showFragment(int newIndex) {
+        if (showIndex == newIndex)
+            return;
+        if (fragments == null)
+            throw new NullPointerException("请先调用addFragment()方法添加Fragment");
+        if (newIndex >= fragments.size())
+            throw new IndexOutOfBoundsException("下标越界，最大下标为:" + (fragments.size() - 1) + "当前为：" + newIndex);
+
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.show(fragments.get(newIndex))
                 .hide(fragments.get(showIndex))
@@ -94,8 +64,81 @@ public abstract class FragActivity<T extends ExtraFragment> extends ExtraActivit
      */
     protected void addFragment(@IdRes int container, int showIndex, Class<T>... packageName) {
         showIndex = showIndex >= packageName.length ? 0 : showIndex;
-        this.container = container;
-        this.clazzs = packageName;
         this.showIndex = showIndex;
+        if (fragments == null) fragments = new ArrayList<>();
+
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        int index = 0;
+        for (Class<T> t : packageName) {
+            T fragment = newInstance(t, null);
+            fragments.add(fragment);
+            //添加Fragment并添加TAG,便于Activity销毁后查找
+            ft.add(container, fragment, t.getName());
+            if (showIndex == index) {
+                ft.show(fragment);
+                if (fragment instanceof ExtraFragment) fragment.setUserVisibleHint(true);
+            } else {
+                ft.hide(fragment);
+                if (fragment instanceof ExtraFragment) fragment.setUserVisibleHint(false);
+            }
+            index++;
+        }
+        ft.commit();
+    }
+
+
+    protected void addFragment(@IdRes int container, T... frags) {
+        addFragment(container, 0, frags);
+    }
+
+    protected void addFragment(@IdRes int container, int showIndex, T... frags) {
+        showIndex = showIndex >= frags.length ? 0 : showIndex;
+        this.showIndex = showIndex;
+        if (fragments == null) fragments = new ArrayList<>();
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        int index = 0;
+        for (Fragment fragment : frags) {
+            fragments.add(fragment);
+            //添加Fragment并添加TAG,便于Activity销毁后查找
+            ft.add(container, fragment, frags.getClass().getName());
+            if (showIndex == index) {
+                ft.show(fragment);
+                if (fragment instanceof ExtraFragment) fragment.setUserVisibleHint(true);
+            } else {
+                ft.hide(fragment);
+                if (fragment instanceof ExtraFragment) fragment.setUserVisibleHint(false);
+            }
+            index++;
+        }
+        ft.commit();
+    }
+
+
+    /**
+     * 获取Fragment实例
+     *
+     * @param packageName 子类包名
+     * @param bundle      需要传递给Fragment的参数
+     * @return 返回子类对象实例
+     */
+    private T newInstance(Class<T> packageName, Bundle bundle) {
+        T child = null;
+        try {
+            child = (T) Class.forName(packageName.getName()).newInstance();
+            if (bundle != null) {
+                Bundle bundle1 = new Bundle();
+                child.setArguments(bundle1);
+                //建议通过这样的方式给Fragment传值,内存重启前,系统可以帮你保存数据
+                //界面恢复后,不会造成数据的丢失。
+                child.setArguments(bundle);
+            }
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "反射创建Fragment异常：" + e.getMessage());
+        } catch (java.lang.InstantiationException e) {
+            Log.e(TAG, "反射创建Fragment异常：" + e.getMessage());
+        } catch (IllegalAccessException e) {
+            Log.e(TAG, "反射创建Fragment异常：" + e.getMessage());
+        }
+        return child;
     }
 }

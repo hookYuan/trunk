@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
-import com.yuan.base.tools.adapter.GridDivider;
+import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.other.Kits;
 import com.yuan.base.tools.other.Views;
 import com.yuan.base.ui.mvp.MvpFragment;
-import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 import com.yuan.simple.one.adapter.OneListAdapter;
 import com.yuan.simple.one.ui.toolbar.ToolbarActivity;

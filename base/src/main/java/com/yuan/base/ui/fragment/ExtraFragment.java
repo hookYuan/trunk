@@ -28,7 +28,6 @@ public abstract class ExtraFragment extends LazyFragment {
      */
     protected boolean useEvent = false;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,10 +42,8 @@ public abstract class ExtraFragment extends LazyFragment {
      */
     private void initExtra() {
         if (INIT_EVENT_BUS) {
-            if (INIT_EVENT_BUS) {
-                if (useEvent && !EventBus.getDefault().isRegistered(this)) {
-                    EventBus.getDefault().register(this);
-                }
+            if (useEvent && !EventBus.getDefault().isRegistered(this)) {
+                EventBus.getDefault().register(this);
             }
         }
     }
@@ -61,5 +58,9 @@ public abstract class ExtraFragment extends LazyFragment {
 
     protected void setContentView(View contentView) {
         this.contentView = contentView;
+    }
+
+    protected void openEvent() {
+        useEvent = true;
     }
 }

@@ -5,12 +5,13 @@ import android.support.annotation.Nullable;
 
 import com.yuan.base.tools.other.ReflexUtil;
 import com.yuan.base.ui.activity.ExtraActivity;
+import com.yuan.base.ui.activity.FragActivity;
 
 /**
  * Created by YuanYe on 2017/9/19.
  */
 
-public abstract class MvpActivity<T extends MvpPresenter> extends ExtraActivity {
+public abstract class MvpActivity<T extends MvpPresenter> extends FragActivity {
 
     private T presenter;
 

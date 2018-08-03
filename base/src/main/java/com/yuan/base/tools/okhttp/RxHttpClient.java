@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.yuan.base.TrunkConfig;
 import com.yuan.base.tools.system.SystemUtil;
-import com.yuan.base.tools.okhttp.okUtil.OKHttpConfig;
+import com.yuan.base.tools.okhttp.okUtil.OKConfig;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +22,7 @@ import okhttp3.OkHttpClient;
 public class RxHttpClient {
 
     private OkHttpClient client = null;
-    private OKHttpConfig config;
+    private OKConfig config;
     private Context mContext;
 
     private final long CONNECTTIMEOUT = 10 * 1000l; //链接超时，单位：毫秒
@@ -30,7 +30,7 @@ public class RxHttpClient {
 
     public RxHttpClient(Context context) {
         this.mContext = context;
-        this.config = OKHttpConfig.create()
+        this.config = OKConfig.create()
                 .cookie(null)
                 .connectTimeout(CONNECTTIMEOUT)
                 .readTimeoutMills(READTIMEOUT)
@@ -43,11 +43,11 @@ public class RxHttpClient {
      *
      * @param _config
      */
-    public RxHttpClient(Context context,OKHttpConfig _config) {
+    public RxHttpClient(Context context,OKConfig _config) {
         this.mContext = context;
         if (_config == null) {
             //默认设置
-            config = OKHttpConfig.create()
+            config = OKConfig.create()
                     .cookie(null)
                     .connectTimeout(CONNECTTIMEOUT)
                     .readTimeoutMills(READTIMEOUT)

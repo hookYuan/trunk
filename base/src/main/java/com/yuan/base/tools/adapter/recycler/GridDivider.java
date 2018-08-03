@@ -1,4 +1,4 @@
-package com.yuan.base.tools.adapter;
+package com.yuan.base.tools.adapter.recycler;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

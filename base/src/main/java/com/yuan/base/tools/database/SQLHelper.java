@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 /**
  * Created by YuanYe on 2018/1/3.
  * 简化SQL 语句操作
@@ -15,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 6、按id查询数据库
  * 7、模糊查询
  */
-public class SQLHelper extends SQLiteOpenHelper {
+class SQLHelper extends SQLiteOpenHelper {
 
     /**
      * @param context 上下文对象
@@ -70,6 +71,4 @@ public class SQLHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
-
-
 }

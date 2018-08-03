@@ -9,7 +9,7 @@ import okhttp3.CookieJar;
  * 用于配置OkHttpClient，采用build模式进行配置
  * 用于配置单次OkHttp请求参数，在OKHttp创建时初始化使用
  */
-public class OKHttpConfig {
+public class OKConfig {
 
     private long connectTimeout; //连接超时时间
     private long readTimeoutMills;//读取超时时间
@@ -28,7 +28,7 @@ public class OKHttpConfig {
         return builder;
     }
 
-    private OKHttpConfig(Builder builder) {
+    private OKConfig(Builder builder) {
         connectTimeout = builder.connectTimeout;
         readTimeoutMills = builder.readTimeoutMills;
         cookie = builder.cookie;
@@ -113,8 +113,8 @@ public class OKHttpConfig {
             return this;
         }
 
-        public OKHttpConfig build() {
-            return new OKHttpConfig(this);
+        public OKConfig build() {
+            return new OKConfig(this);
         }
     }
 }

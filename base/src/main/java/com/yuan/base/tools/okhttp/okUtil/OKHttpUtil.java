@@ -25,14 +25,14 @@ public class OKHttpUtil {
     private static Context mContext;
 
     private static OKHttpUtil okHttp;
-    private static OKHttpConfig okConfig;
+    private static OKConfig okConfig;
 
 
-    public static void init(OKHttpConfig okConfig) {
+    public static void init(OKConfig okConfig) {
         OKHttpUtil.okConfig = okConfig;
     }
 
-    private OKHttpUtil(Context context, OKHttpConfig config) {
+    private OKHttpUtil(Context context, OKConfig config) {
         //获取Client
         client = new RxHttpClient(context, config).getClient();
         requestBuilder = new Request.Builder();

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.PopupWindow;
 
-import com.yuan.base.tools.adapter.RLVAdapter;
+import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.widget.title.OnMenuItemClickListener;
 import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;

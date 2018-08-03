@@ -1,4 +1,4 @@
-package com.yuan.base.tools.adapter;
+package com.yuan.base.tools.adapter.expandable;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.R;
+import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.other.Views;
 
 import java.util.ArrayList;

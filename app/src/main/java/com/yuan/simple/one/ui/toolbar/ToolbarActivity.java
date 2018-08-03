@@ -3,7 +3,7 @@ package com.yuan.simple.one.ui.toolbar;
 
 import android.os.Bundle;
 
-import com.yuan.base.tools.adapter.GridDivider;
+import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.other.Kits;
 import com.yuan.base.tools.other.Views;
 import com.yuan.base.ui.mvp.MvpActivity;
@@ -13,7 +13,6 @@ import com.yuan.simple.R;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.FrameLayout;
 
 import com.yuan.simple.one.adapter.ToolbarAdapter;
 

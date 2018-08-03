@@ -9,7 +9,7 @@ import android.util.Log;
  * 一、与ViewPage配合使用，替换普通Fragment即可
  * 二、与Activity使用，需配合FragmentActivity
  */
-abstract class LazyFragment extends StatedFragment {
+abstract class LazyFragment extends BaseFragment {
 
     private static final String TAG = "fragment";
     private boolean isPrepared;

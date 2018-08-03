@@ -9,7 +9,7 @@ import android.provider.Settings;
  * 打开系统的设置界面
  */
 
-public class OpenSystemSetting {
+public class JumpSetting {
 
     // 跳转系统设置界面
     public static void startSetting(Context mContext) {

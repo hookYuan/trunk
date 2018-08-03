@@ -110,38 +110,4 @@ abstract class BaseFragment extends Fragment implements IView {
         JumpHelper.open(mContext, clazz, param);
     }
 
-    /**
-     * 获取Fragment实例,无其他参数
-     */
-    public static <T extends BaseFragment> T newInstance(Class<T> packageName) {
-        return newInstance(packageName, null);
-    }
-
-    /**
-     * 获取Fragment实例
-     *
-     * @param packageName 子类包名
-     * @param bundle      需要传递给Fragment的参数
-     * @return 返回子类对象实例
-     */
-    public static <T extends BaseFragment> T newInstance(Class<T> packageName, Bundle bundle) {
-        T child = null;
-        try {
-            child = (T) Class.forName(packageName.getName()).newInstance();
-            if (bundle != null) {
-                Bundle bundle1 = new Bundle();
-                child.setArguments(bundle1);
-                //建议通过这样的方式给Fragment传值,内存重启前,系统可以帮你保存数据
-                //界面恢复后,不会造成数据的丢失。
-                child.setArguments(bundle);
-            }
-        } catch (ClassNotFoundException e) {
-
-        } catch (java.lang.InstantiationException e) {
-
-        } catch (IllegalAccessException e) {
-
-        }
-        return child;
-    }
 }

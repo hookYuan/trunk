@@ -40,7 +40,7 @@ public class OKHttp {
      *
      * @param config
      */
-    public OKHttp(Context context, OKHttpConfig config) {
+    public OKHttp(Context context, OKConfig config) {
         //获取Client
         client = new RxHttpClient(context, config).getClient();
         requestBuilder = new Request.Builder();

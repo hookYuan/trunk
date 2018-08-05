@@ -3,6 +3,7 @@ package com.yuan.base.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 
 import com.yuan.base.ui.extra.HSwipeBack;
 import com.yuan.base.ui.extra.ISwipeBack;
@@ -16,7 +17,7 @@ import org.greenrobot.eventbus.EventBus;
  * 扩展功能基类，面对接口初始化
  * 如需使用扩展功能，应该继承该类
  */
-public abstract class ExtraActivity extends BaseActivity implements IView {
+abstract class ExtraActivity extends BaseActivity implements IView {
 
     private static final String TAG = "ExtraActivity";
 
@@ -45,8 +46,11 @@ public abstract class ExtraActivity extends BaseActivity implements IView {
      */
     private void initExtra(@Nullable Bundle savedInstanceState) {
         if (INIT_DEFAULT) {
-            if (getLayoutId() != 0) setContentView(getLayoutId());
-            else Log.e(TAG, "未设置getLayoutId,请检查是否设置布局");
+            View layoutView = getLayoutView();
+            int layoutId = getLayoutId();
+            if (layoutId != 0) setContentView(layoutId);
+            else if (layoutView != null) setContentView(layoutView);
+            else Log.e(TAG, "没有给Activity设置显示视图");
             initData(savedInstanceState);
         }
 
@@ -78,6 +82,12 @@ public abstract class ExtraActivity extends BaseActivity implements IView {
         if (useEvent && !EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
 
+    }
+
+
+    @Override
+    public View getLayoutView() {
+        return null;
     }
 
     protected void openEvent() {

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.3"
+        android:background="@color/black"></View>
+
+    <com.yuan.base.widget.title.Title
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:centerText="青花瓷"
+        app:centerTextColor="@color/white"
+        app:leftClickFinish="true"
+        app:leftDrawable="@drawable/ic_base_back_white"
+        app:statusBackgroundColor="@color/transparent"
+        app:statusVisibility="true">
+
+    </com.yuan.base.widget.title.Title>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/size_32"
+            android:layout_marginRight="@dimen/size_32"
+            android:gravity="center"
+            android:text="@string/QHC"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_16" />
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

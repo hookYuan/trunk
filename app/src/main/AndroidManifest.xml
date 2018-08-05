@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".one.ui.toolbar.ToolbarActivity" />
-        <activity android:name=".one.ui.mvp.LoginActivity"></activity>
+        <activity android:name=".one.ui.toolbar.TitleDemo1"></activity>
     </application>
 
 </manifest>

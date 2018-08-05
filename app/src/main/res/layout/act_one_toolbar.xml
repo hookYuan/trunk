@@ -1,29 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/amber50"
-    tools:context="com.yuan.simple.one.ui.toolbar.ToolbarActivity">
+    android:orientation="horizontal">
 
-    <com.yuan.base.widget.title.TitleBar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:centerText="自定义TitleBar"
-        app:leftClickFinish="true"
-        app:leftDrawable="@drawable/ic_base_back_black">
-
-    </com.yuan.base.widget.title.TitleBar>
-
-    <!--you can add refresh -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rlv_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

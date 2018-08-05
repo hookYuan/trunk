@@ -7,9 +7,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
  * <p>
  * 接口说明： 用于刷新的接口
  */
-public interface IRefresh {
+public interface IRefresh<T extends RefreshLayout> {
 
-    <T extends RefreshLayout> void onRefresh(T refresh);
+    void onRefresh(T refresh);
 
-    <T extends RefreshLayout> void onLoadMore(T refresh);
+    void onLoadMore(T refresh);
 }

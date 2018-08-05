@@ -127,12 +127,6 @@
     <attr name="rightText" format="string"></attr>
     <attr name="leftDrawable" format="reference"></attr>
     <attr name="rightDrawable" format="reference"></attr>
-    <!--设置模拟状态栏的高度-->
-    <attr name="statusBarHeight" format="dimension"></attr>
-    <!--设置TitleBar的高度-->
-    <attr name="titleBarHeight" format="dimension"></attr>
-    <!--设置Title底部线条的高度-->
-    <attr name="bottomLineHeight" format="dimension"></attr>
     <!--Left点击结束当前界面-->
     <attr name="leftClickFinish" format="boolean"></attr>
     <attr name="leftTextColor" format="color"></attr>
@@ -141,22 +135,24 @@
     <attr name="leftTextSize" format="dimension"></attr>
     <attr name="centerTextSize" format="dimension"></attr>
     <attr name="rightTextSize" format="dimension"></attr>
+    <!--TitleBar背景-->
+    <attr name="backgroundImg" format="string"></attr>
+    <!--status-->
+    <attr name="statusBackgroundColor" format="color"></attr>
+    <attr name="statusVisibility" format="boolean"></attr>
+
     <!--更具Type选择Title的类型-->
     <attr name="titleBarType" format="enum">
         <enum name="centerTextLeft" value="0" />
         <enum name="centerTextCenter" value="1" />
         <enum name="centerSearchView" value="2"></enum>
     </attr>
-
     <declare-styleable name="TitleBar">
         <attr name="leftText"></attr>
         <attr name="centerText"></attr>
         <attr name="rightText"></attr>
         <attr name="leftDrawable"></attr>
         <attr name="rightDrawable"></attr>
-        <attr name="statusBarHeight"></attr>
-        <attr name="titleBarHeight"></attr>
-        <attr name="bottomLineHeight"></attr>
         <attr name="leftClickFinish"></attr>
         <attr name="leftTextColor"></attr>
         <attr name="centerTextColor"></attr>
@@ -165,7 +161,27 @@
         <attr name="leftTextSize"></attr>
         <attr name="centerTextSize"></attr>
         <attr name="rightTextSize"></attr>
+    </declare-styleable>
+    <declare-styleable name="Title">
+        <attr name="leftText"></attr>
+        <attr name="centerText"></attr>
+        <attr name="rightText"></attr>
+        <attr name="leftDrawable"></attr>
+        <attr name="rightDrawable"></attr>
+        <attr name="leftClickFinish"></attr>
+        <attr name="leftTextColor"></attr>
+        <attr name="centerTextColor"></attr>
+        <attr name="rightTextColor"></attr>
+        <attr name="titleBarType"></attr>
+        <attr name="leftTextSize"></attr>
+        <attr name="centerTextSize"></attr>
+        <attr name="rightTextSize"></attr>
+        <attr name="statusBackgroundColor"></attr>
+        <attr name="statusVisibility"></attr>
+    </declare-styleable>
 
+    <declare-styleable name="AbsTitle">
+        <attr name="backgroundImg"></attr>
     </declare-styleable>
 
 </resources>

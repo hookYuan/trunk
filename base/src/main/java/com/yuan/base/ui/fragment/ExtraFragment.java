@@ -55,6 +55,10 @@ public abstract class ExtraFragment extends LazyFragment {
             EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public View getLayoutView() {
+        return null;
+    }
 
     protected void setContentView(View contentView) {
         this.contentView = contentView;

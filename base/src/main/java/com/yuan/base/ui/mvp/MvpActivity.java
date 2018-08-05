@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yuan.base.tools.other.ReflexUtil;
-import com.yuan.base.ui.activity.ExtraActivity;
 import com.yuan.base.ui.activity.FragActivity;
 
 /**

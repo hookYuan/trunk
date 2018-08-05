@@ -47,8 +47,11 @@ abstract class BaseFragment extends Fragment implements IView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getLayoutId() == 0) throw new NullPointerException("Fragment布局文件不能为空");
-        mView = inflater.inflate(getLayoutId(), container, false);
+        View layoutView = getLayoutView();
+        int layoutId = getLayoutId();
+        if (layoutId != 0) mView = inflater.inflate(layoutId, container, false);
+        else if (layoutView != null) mView = layoutView;
+        else throw new NullPointerException("Fragment布局视图不能为空");
         return mView;
     }
 

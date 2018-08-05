@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import com.yuan.base.tools.other.Views;
 import com.yuan.base.ui.mvp.MvpActivity;
-import com.yuan.simple.one.ui.OneFragment;
+import com.yuan.simple.one.ui.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
 import com.yuan.simple.two.ui.TwoFragment;
 
@@ -15,7 +15,7 @@ public class MainActivity extends MvpActivity {
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        addFragment(R.id.content, OneFragment.class, TwoFragment.class, ThreeFragment.class);
+        addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
         BottomNavigationView bottomView = Views.find(mContext, R.id.bottomNavigationView);
         bottomView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

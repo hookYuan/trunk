@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/act_shape"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.yuan.base.widget.title.Title
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:centerText="RoundView"
+        app:centerTextColor="@color/white"
+        app:leftClickFinish="true"
+        app:leftDrawable="@drawable/ic_base_back_white">
+
+    </com.yuan.base.widget.title.Title>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_16"
+        android:clickable="true"
+        android:thumb="@drawable/base_switch_thumb"
+        android:track="@drawable/base_switch_track_select" />
+
+    <GridView
+        android:id="@+id/gv_simple_demo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="3"></GridView>
+
+</LinearLayout>

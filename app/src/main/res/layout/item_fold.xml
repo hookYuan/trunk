@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.yuan.base.widget.fold.FoldTextView
+        android:id="@+id/ctv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0.8dp"
+        android:background="@android:color/white"
+        android:paddingBottom="16dp"
+        android:paddingLeft="@dimen/size_16"
+        android:paddingRight="@dimen/size_16"
+        android:paddingTop="16dp"
+        android:text="修改折叠World!"
+        android:textColor="@color/colorFont66"
+        android:textSize="@dimen/size_14"
+        app:ctv_textNum="60"
+        app:ctv_tipsColor="@color/colorPrimary" />
+</LinearLayout>

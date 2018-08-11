@@ -6,15 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.other.Kits;
 import com.yuan.base.tools.router.jump.JumpHelper;
 import com.yuan.base.ui.fragment.RLVFragment;
 import com.yuan.simple.R;
-import com.yuan.simple.one.bean.OneListBean;
-import com.yuan.simple.one.ui.toolbar.ToolbarActivity;
+import com.yuan.simple.one.ui.foldTextView.FoldActivity;
+import com.yuan.simple.one.ui.roundView.RoundTextActivity;
+import com.yuan.simple.one.ui.sort.SortActivity;
+import com.yuan.simple.one.ui.toolbar.TitleBarActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class BaseFragment extends RLVFragment {
 
         getTitleBar().setTitleText("基础功能")
                 .setTextColor(ContextCompat.getColor(mContext, R.color.white))
-                .setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+                .setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
     }
 
     @Override
@@ -55,7 +56,10 @@ public class BaseFragment extends RLVFragment {
     @Override
     public List<?> getData() {
         mData = new ArrayList<>();
-        mData.add(new OneListBean("toolbar", ToolbarActivity.class));
+        mData.add(new OneListBean("titleBar", TitleBarActivity.class));
+        mData.add(new OneListBean("roundView", RoundTextActivity.class));
+        mData.add(new OneListBean("foldTextView", FoldActivity.class));
+        mData.add(new OneListBean("sortChinese", SortActivity.class));
         return mData;
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.yuan.base.widget.roundview.RoundTextView
+        android:id="@+id/rtv_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_8"
+        android:layout_marginRight="@dimen/size_8"
+        android:layout_marginTop="@dimen/size_8"
+        android:gravity="center"
+        android:paddingBottom="@dimen/size_8"
+        android:paddingTop="@dimen/size_8"
+        android:textColor="@color/colorFont33"
+        android:textSize="@dimen/font_16"
+        app:rv_backgroundColor="@color/white"
+        app:rv_backgroundPressColor="@color/colorPrimary"
+        app:rv_backgroundSelectedColor="@color/colorPrimary"
+        app:rv_cornerRadius="@dimen/size_4"
+        app:rv_strokeColor="@color/colorPrimary"
+        app:rv_strokeWidth="@dimen/size_1"
+        app:rv_textPressColor="@color/white"
+        app:rv_textSelectedColor="@color/white"></com.yuan.base.widget.roundview.RoundTextView>
+
+</LinearLayout>

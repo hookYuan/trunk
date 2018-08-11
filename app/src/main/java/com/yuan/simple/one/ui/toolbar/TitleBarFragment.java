@@ -1,7 +1,6 @@
 package com.yuan.simple.one.ui.toolbar;
 
 
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.other.Kits;
@@ -17,8 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.simple.one.bean.ToolbarBean;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +23,16 @@ import java.util.List;
  * create by Yuan ye.
  * download truck before use this
  */
-public class ToolbarFragment extends RLVFragment {
+public class TitleBarFragment extends RLVFragment {
 
-    private List<ToolbarBean> mData;
+    private List<TitleBarBean> mData;
 
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
+        getTitleBar().setTitleText("TitleBar")
+                .setTextColor(ContextCompat.getColor(mContext, R.color.white))
+                .setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+
         GridLayoutManager manager = new GridLayoutManager(mContext, 2);
         //动态更改列数
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -154,37 +155,37 @@ public class ToolbarFragment extends RLVFragment {
     public List<?> getData() {
         if (mData == null) {
             mData = new ArrayList<>();
-            mData.add(new ToolbarBean("系统状态栏", 1000));
-            mData.add(new ToolbarBean("黑色文字", 1001));
-            mData.add(new ToolbarBean("白色文字", 1002));
-            mData.add(new ToolbarBean("系统状态栏背景色", 1003));
-            mData.add(new ToolbarBean("隐藏状态栏", 1004));
-            mData.add(new ToolbarBean("显示状态栏", 10041));
-            mData.add(new ToolbarBean("透明状态栏", 1005));
-            mData.add(new ToolbarBean("悬浮状态栏", 1006));
+            mData.add(new TitleBarBean("系统状态栏", 1000));
+            mData.add(new TitleBarBean("黑色文字", 1001));
+            mData.add(new TitleBarBean("白色文字", 1002));
+            mData.add(new TitleBarBean("系统状态栏背景色", 1003));
+            mData.add(new TitleBarBean("隐藏状态栏", 1004));
+            mData.add(new TitleBarBean("显示状态栏", 10041));
+            mData.add(new TitleBarBean("透明状态栏", 1005));
+            mData.add(new TitleBarBean("悬浮状态栏", 1006));
 
-            mData.add(new ToolbarBean("Toolbar", 2000));
-            mData.add(new ToolbarBean("背景图片", 2001));
-            mData.add(new ToolbarBean("颜色背景", 2002));
-            mData.add(new ToolbarBean("左边文字", 2003));
-            mData.add(new ToolbarBean("左边图标", 2004));
-            mData.add(new ToolbarBean("主标题", 2005));
-            mData.add(new ToolbarBean("副标题", 20051));
-            mData.add(new ToolbarBean("右边文字", 2006));
-            mData.add(new ToolbarBean("右边图标", 2007));
-            mData.add(new ToolbarBean("右边弹窗菜单", 2008));
-            mData.add(new ToolbarBean("进入动画", 2009));
-            mData.add(new ToolbarBean("出场动画", 2010));
-            mData.add(new ToolbarBean("左侧点击返回", 2011));
+            mData.add(new TitleBarBean("Toolbar", 2000));
+            mData.add(new TitleBarBean("背景图片", 2001));
+            mData.add(new TitleBarBean("颜色背景", 2002));
+            mData.add(new TitleBarBean("左边文字", 2003));
+            mData.add(new TitleBarBean("左边图标", 2004));
+            mData.add(new TitleBarBean("主标题", 2005));
+            mData.add(new TitleBarBean("副标题", 20051));
+            mData.add(new TitleBarBean("右边文字", 2006));
+            mData.add(new TitleBarBean("右边图标", 2007));
+            mData.add(new TitleBarBean("右边弹窗菜单", 2008));
+            mData.add(new TitleBarBean("进入动画", 2009));
+            mData.add(new TitleBarBean("出场动画", 2010));
+            mData.add(new TitleBarBean("左侧点击返回", 2011));
 
-            mData.add(new ToolbarBean("自定义状态栏", 3000));
-            mData.add(new ToolbarBean("显示状态栏", 3001));
-            mData.add(new ToolbarBean("背景颜色", 3002));
-            mData.add(new ToolbarBean("背景图", 3003));
-            mData.add(new ToolbarBean("隐藏状态栏", 3004));
+            mData.add(new TitleBarBean("自定义状态栏", 3000));
+            mData.add(new TitleBarBean("显示状态栏", 3001));
+            mData.add(new TitleBarBean("背景颜色", 3002));
+            mData.add(new TitleBarBean("背景图", 3003));
+            mData.add(new TitleBarBean("隐藏状态栏", 3004));
 
-            mData.add(new ToolbarBean("精彩案例", 4000));
-            mData.add(new ToolbarBean("全屏沉浸式", 4001));
+            mData.add(new TitleBarBean("精彩案例", 4000));
+            mData.add(new TitleBarBean("全屏沉浸式", 4001));
         }
         return mData;
     }

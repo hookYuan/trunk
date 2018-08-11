@@ -1,8 +1,12 @@
 package com.yuan.base.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
+import com.yuan.base.tools.other.Views;
 import com.yuan.base.tools.router.jump.JumpHelper;
 import com.yuan.base.tools.router.jump.JumpParam;
 import com.yuan.base.tools.system.SystemUtil;
@@ -53,5 +57,9 @@ abstract class BaseActivity extends RxAppCompatActivity {
      */
     public void open(Class clazz, JumpParam param) {
         JumpHelper.open(mContext, clazz, param);
+    }
+
+    protected <T extends View> T find(@IdRes int viewId) {
+        return Views.find(mContext, viewId);
     }
 }

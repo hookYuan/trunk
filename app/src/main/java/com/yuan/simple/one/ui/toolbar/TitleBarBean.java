@@ -1,14 +1,14 @@
-package com.yuan.simple.one.bean;
+package com.yuan.simple.one.ui.toolbar;
 
 /**
  * Created by YuanYe on 2018/8/4.
  */
-public class ToolbarBean {
+public class TitleBarBean {
 
     private String name;
     private int code;//标记
 
-    public ToolbarBean(String name, int code) {
+    public TitleBarBean(String name, int code) {
         this.name = name;
         this.code = code;
     }

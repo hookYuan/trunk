@@ -1,14 +1,19 @@
 package com.yuan.base.tools.adapter.recycler;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+
+import com.yuan.base.R;
+import com.yuan.base.tools.other.Kits;
 
 /**
  * Created by YuanYe on 2017/12/4.
@@ -21,6 +26,13 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     private
     @ColorInt
     int bgColor;
+
+    public GridDivider(Context context) {
+        mDividerWidth = Kits.Dimens.dpToPxInt(context, 0.8f);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setColor(ContextCompat.getColor(context, R.color.colorDivider));
+        mPaint.setStyle(Paint.Style.FILL);
+    }
 
     public GridDivider(int height, @ColorInt int color) {
         mDividerWidth = height;

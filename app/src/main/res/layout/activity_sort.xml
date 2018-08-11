@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".one.ui.sort.SortActivity">
+
+    <com.yuan.base.widget.title.Title
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:centerText="拼音排序"
+        app:centerTextColor="@color/white"
+        app:leftClickFinish="true"
+        app:leftDrawable="@drawable/ic_base_back_white">
+
+    </com.yuan.base.widget.title.Title>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <com.yuan.base.widget.sideBar.SideBar
+            android:id="@+id/sideBar"
+            android:layout_width="@dimen/size_26"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:paddingBottom="@dimen/size_32"
+            android:paddingTop="@dimen/size_32" />
+    </RelativeLayout>
+
+
+</LinearLayout>

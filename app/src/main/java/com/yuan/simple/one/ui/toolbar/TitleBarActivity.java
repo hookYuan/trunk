@@ -8,7 +8,7 @@ import com.yuan.simple.R;
 /**
  * Created by YuanYe on 2018/8/4.
  */
-public class ToolbarActivity extends MvpActivity {
+public class TitleBarActivity extends MvpActivity {
 
     @Override
     public int getLayoutId() {
@@ -17,6 +17,6 @@ public class ToolbarActivity extends MvpActivity {
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        addFragment(R.id.content, ToolbarFragment.class);
+        addFragment(R.id.content, TitleBarFragment.class);
     }
 }

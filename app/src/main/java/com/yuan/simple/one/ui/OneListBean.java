@@ -1,4 +1,4 @@
-package com.yuan.simple.one.bean;
+package com.yuan.simple.one.ui;
 
 /**
  * Created by YuanYe on 2018/8/4.

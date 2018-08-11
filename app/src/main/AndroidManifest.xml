@@ -16,8 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".one.ui.toolbar.ToolbarActivity" />
-        <activity android:name=".one.ui.toolbar.TitleDemo1"></activity>
+        <activity android:name=".one.ui.toolbar.TitleBarActivity" />
+        <activity android:name=".one.ui.toolbar.TitleDemo1" />
+        <activity android:name=".one.ui.roundView.RoundTextActivity" />
+        <activity android:name=".one.ui.foldTextView.FoldActivity" />
+        <activity android:name=".one.ui.sort.SortActivity"></activity>
     </application>
 
 </manifest>

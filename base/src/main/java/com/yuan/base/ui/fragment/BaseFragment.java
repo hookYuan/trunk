@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yuan.base.tools.other.Views;
 import com.yuan.base.tools.router.jump.JumpHelper;
 import com.yuan.base.tools.router.jump.JumpParam;
 import com.yuan.base.tools.system.SystemUtil;
@@ -113,4 +115,7 @@ abstract class BaseFragment extends Fragment implements IView {
         JumpHelper.open(mContext, clazz, param);
     }
 
+    protected <T extends View> T find(@IdRes int viewId) {
+        return Views.find(mView, viewId);
+    }
 }

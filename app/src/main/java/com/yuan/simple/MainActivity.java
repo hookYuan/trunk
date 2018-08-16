@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import com.yuan.base.tools.other.Views;
 import com.yuan.base.ui.mvp.MvpActivity;
-import com.yuan.simple.one.ui.BaseFragment;
+import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
 import com.yuan.simple.two.ui.TwoFragment;
 

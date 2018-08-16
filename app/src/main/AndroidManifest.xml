@@ -16,11 +16,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".one.ui.toolbar.TitleBarActivity" />
-        <activity android:name=".one.ui.toolbar.TitleDemo1" />
-        <activity android:name=".one.ui.roundView.RoundTextActivity" />
-        <activity android:name=".one.ui.foldTextView.FoldActivity" />
-        <activity android:name=".one.ui.sort.SortActivity"></activity>
+        <activity android:name=".one.toolbar.TitleBarActivity" />
+        <activity android:name=".one.toolbar.TitleDemo1" />
+        <activity android:name=".one.roundView.RoundTextActivity" />
+        <activity android:name=".one.foldTextView.FoldActivity" />
+        <activity android:name=".one.sort.SortActivity" />
+        <activity
+            android:name=".one.input.InputActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".one.http.NetActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.yuan.base.tools.other;
 
+import android.support.annotation.NonNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,7 +60,7 @@ public class PhoneIDCardUtil {
      * @return true 有效：false 无效
      * @throws ParseException
      */
-    public static boolean IDCardValidate(String IDStr) throws ParseException {
+    public static boolean IDCardValidate(@NonNull String IDStr) throws ParseException {
         String[] ValCodeArr = {"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"};
         String[] Wi = {"7", "9", "10", "5", "8", "4", "2", "1", "6", "3", "7", "9", "10", "5", "8", "4", "2"};
         String Ai = "";
@@ -67,9 +69,7 @@ public class PhoneIDCardUtil {
             return false;
         }
         // ================ 数字 除最后以为都为数字 ================
-        if (IDStr.length() == 18) {
-            Ai = IDStr.substring(0, 17);
-        }
+        Ai = IDStr.substring(0, 17);
         if (isNumeric(Ai) == false) {
             //errorInfo = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字。";
             return false;
@@ -117,13 +117,9 @@ public class PhoneIDCardUtil {
         String strVerifyCode = ValCodeArr[modValue];
         Ai = Ai + strVerifyCode;
 
-        if (IDStr.length() == 18) {
-            if (Ai.equals(IDStr) == false) {
-                //errorInfo = "身份证无效，不是合法的身份证号码";
-                return false;
-            }
-        } else {
-            return true;
+        if (Ai.equals(IDStr) == false) {
+            //errorInfo = "身份证无效，不是合法的身份证号码";
+            return false;
         }
         return true;
     }

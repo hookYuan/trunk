@@ -1,12 +1,15 @@
 package com.yuan.base.widget.title.titlebar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -60,7 +63,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
     private PopupWindow popupWindowMenu;//弹窗菜单
 
-    public TitleBar(Context _context, @Nullable AttributeSet attrs) {
+    public TitleBar(@NonNull Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
         this.context = _context;
         obtainAttributes(_context, attrs);
@@ -78,7 +81,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
      *
      * @param context
      */
-    public void obtainAttributes(Context context, @Nullable AttributeSet attrs) {
+    public void obtainAttributes(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
         leftText = ta.getText(R.styleable.TitleBar_leftText);
         centerText = ta.getText(R.styleable.TitleBar_centerText);
@@ -141,12 +144,12 @@ public class TitleBar extends AbsTitle<TitleBar> {
     /**
      * ------------------------------------左侧内容设置----------------------------------------
      **/
-    public TitleBar setLeftText(CharSequence text) {
+    public TitleBar setLeftText(@NonNull CharSequence text) {
         leftTextView.setText(text);
         return this;
     }
 
-    public TitleBar setLeftIcon(Drawable icon) {
+    public TitleBar setLeftIcon(@NonNull Drawable icon) {
         if (icon != null) {
             icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
             leftTextView.setCompoundDrawables(icon, null, null, null);//画在左边
@@ -180,7 +183,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
     /**
      * ------------------------------------中间toolbar按钮设置----------------------------------------
      **/
-    public TitleBar setTitleText(CharSequence text) {
+    public TitleBar setTitleText(@NonNull CharSequence text) {
         if (titleTextView != null && text != null) {
             titleTextView.setText(text);
         }
@@ -188,7 +191,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
     }
 
     //设置二级标题
-    public TitleBar setSubtitleText(CharSequence text) {
+    public TitleBar setSubtitleText(@NonNull CharSequence text) {
         if (subtitleTextView != null && text != null) {
             subtitleTextView.setText(text);
             subtitleTextView.setVisibility(VISIBLE);
@@ -199,7 +202,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
     /**
      * ------------------------------------右侧toolbar按钮设置----------------------------------------
      **/
-    public TitleBar setRightIcon(Drawable icon) {
+    public TitleBar setRightIcon(@NonNull Drawable icon) {
         if (rightTextView != null && icon != null) {
             icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
             rightTextView.setCompoundDrawables(icon, null, null, null);//画在左边
@@ -212,19 +215,19 @@ public class TitleBar extends AbsTitle<TitleBar> {
         return setRightIcon(icon);
     }
 
-    public TitleBar setRightText(CharSequence text) {
+    public TitleBar setRightText(@NonNull CharSequence text) {
         rightTextView.setText(text);
         return this;
     }
 
-    public TitleBar setRightOnClickListener(OnClickListener listener) {
+    public TitleBar setRightOnClickListener(@NonNull OnClickListener listener) {
         if (listener != null) {
             rightTextView.setOnClickListener(listener);
         }
         return this;
     }
 
-    public TitleBar setRightClickEnable(boolean clickAble) {
+    public TitleBar setRightClickEnable(@NonNull boolean clickAble) {
         rightTextView.setEnabled(clickAble);
         return this;
     }
@@ -242,7 +245,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
     /**
      * ------------------------------------右侧toolbar的menu菜单按钮设置----------------------------------------
      **/
-    public TitleBar setRightMenu(final List<String> popupData, final OnMenuItemClickListener listener) {
+    public TitleBar setRightMenu(@NonNull final List<String> popupData, @NonNull final OnMenuItemClickListener listener) {
         setRightOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,7 +260,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
      * @param popupData
      * @param listener
      */
-    private void showPopMenu(View view, List<String> popupData, final OnMenuItemClickListener listener) {
+    private void showPopMenu(@NonNull View view, @NonNull List<String> popupData, @NonNull final OnMenuItemClickListener listener) {
         if (popupWindowMenu != null && popupWindowMenu.isShowing()) {
             //关闭popupWindow
             popupWindowMenu.dismiss();
@@ -276,6 +279,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
             //必须设置的选项
             popupWindowMenu.setBackgroundDrawable(ContextCompat.getDrawable(context, android.R.color.transparent));
             popupWindowMenu.setTouchInterceptor(new OnTouchListener() {
+                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return false;

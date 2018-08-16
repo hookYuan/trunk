@@ -60,6 +60,6 @@ abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     protected <T extends View> T find(@IdRes int viewId) {
-        return Views.find(mContext, viewId);
+        return Views.find(this, viewId);
     }
 }

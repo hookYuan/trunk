@@ -10,7 +10,8 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_50"
-        app:centerText="关于">
+        app:centerText="关于"
+        >
 
     </com.yuan.base.widget.title.titlebar.TitleBar>
 

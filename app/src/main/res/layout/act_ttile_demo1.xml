@@ -26,7 +26,7 @@
         app:centerTextColor="@color/white"
         app:leftClickFinish="true"
         app:leftDrawable="@drawable/ic_base_back_white"
-        app:statusBackgroundColor="@color/transparent"
+        app:statusBgColor="@color/transparent"
         app:statusVisibility="true">
 
     </com.yuan.base.widget.title.Title>

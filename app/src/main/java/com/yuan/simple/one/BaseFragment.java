@@ -12,6 +12,7 @@ import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.router.jump.JumpHelper;
 import com.yuan.base.ui.fragment.RLVFragment;
 import com.yuan.simple.R;
+import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;
 import com.yuan.simple.one.http.NetActivity;
 import com.yuan.simple.one.input.InputActivity;
@@ -64,6 +65,7 @@ public class BaseFragment extends RLVFragment {
         mData.add(new OneListBean("sortChinese", SortActivity.class));
         mData.add(new OneListBean("input", InputActivity.class));
         mData.add(new OneListBean("okHttp", NetActivity.class));
+        mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
         return mData;
     }
 }

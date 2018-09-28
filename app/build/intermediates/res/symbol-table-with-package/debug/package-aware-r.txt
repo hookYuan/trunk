@@ -465,9 +465,9 @@ int attr stackFromEnd 0x7f0301bb
 int attr state_above_anchor 0x7f0301bc
 int attr state_collapsed 0x7f0301bd
 int attr state_collapsible 0x7f0301be
-int attr statusBackgroundColor 0x7f0301bf
-int attr statusBarBackground 0x7f0301c0
-int attr statusBarScrim 0x7f0301c1
+int attr statusBarBackground 0x7f0301bf
+int attr statusBarScrim 0x7f0301c0
+int attr statusBgColor 0x7f0301c1
 int attr statusVisibility 0x7f0301c2
 int attr subMenuArrow 0x7f0301c3
 int attr submitBackground 0x7f0301c4
@@ -2340,7 +2340,7 @@ int styleable ClassicsHeader_srlPrimaryColor 10
 int styleable ClassicsHeader_srlTextSizeTime 11
 int styleable ClassicsHeader_srlTextSizeTitle 12
 int styleable ClassicsHeader_srlTextTimeMarginTop 13
-int[] styleable CollapsingToolbarLayout { 0x7f03005e, 0x7f03005f, 0x7f03007b, 0x7f0300a3, 0x7f0300a4, 0x7f0300a5, 0x7f0300a6, 0x7f0300a7, 0x7f0300a8, 0x7f0300a9, 0x7f030174, 0x7f030175, 0x7f0301c1, 0x7f0301f5, 0x7f0301f7, 0x7f030201 }
+int[] styleable CollapsingToolbarLayout { 0x7f03005e, 0x7f03005f, 0x7f03007b, 0x7f0300a3, 0x7f0300a4, 0x7f0300a5, 0x7f0300a6, 0x7f0300a7, 0x7f0300a8, 0x7f0300a9, 0x7f030174, 0x7f030175, 0x7f0301c0, 0x7f0301f5, 0x7f0301f7, 0x7f030201 }
 int styleable CollapsingToolbarLayout_collapsedTitleGravity 0
 int styleable CollapsingToolbarLayout_collapsedTitleTextAppearance 1
 int styleable CollapsingToolbarLayout_contentScrim 2
@@ -2505,7 +2505,7 @@ int styleable ConstraintSet_layout_goneMarginLeft 68
 int styleable ConstraintSet_layout_goneMarginRight 69
 int styleable ConstraintSet_layout_goneMarginStart 70
 int styleable ConstraintSet_layout_goneMarginTop 71
-int[] styleable CoordinatorLayout { 0x7f0300e0, 0x7f0301c0 }
+int[] styleable CoordinatorLayout { 0x7f0300e0, 0x7f0301bf }
 int styleable CoordinatorLayout_keylines 0
 int styleable CoordinatorLayout_statusBarBackground 1
 int[] styleable CoordinatorLayout_Layout { 0x010100b3, 0x7f0300e3, 0x7f0300e4, 0x7f0300e5, 0x7f030111, 0x7f03011a, 0x7f03011b }
@@ -2895,7 +2895,7 @@ int styleable TextInputLayout_passwordToggleDrawable 12
 int styleable TextInputLayout_passwordToggleEnabled 13
 int styleable TextInputLayout_passwordToggleTint 14
 int styleable TextInputLayout_passwordToggleTintMode 15
-int[] styleable Title { 0x7f030054, 0x7f030055, 0x7f030056, 0x7f030121, 0x7f030122, 0x7f030123, 0x7f030124, 0x7f030125, 0x7f03015f, 0x7f030160, 0x7f030161, 0x7f030162, 0x7f0301bf, 0x7f0301c2, 0x7f0301f6 }
+int[] styleable Title { 0x7f030054, 0x7f030055, 0x7f030056, 0x7f030121, 0x7f030122, 0x7f030123, 0x7f030124, 0x7f030125, 0x7f03015f, 0x7f030160, 0x7f030161, 0x7f030162, 0x7f0301c1, 0x7f0301c2, 0x7f0301f6 }
 int styleable Title_centerText 0
 int styleable Title_centerTextColor 1
 int styleable Title_centerTextSize 2
@@ -2908,7 +2908,7 @@ int styleable Title_rightDrawable 8
 int styleable Title_rightText 9
 int styleable Title_rightTextColor 10
 int styleable Title_rightTextSize 11
-int styleable Title_statusBackgroundColor 12
+int styleable Title_statusBgColor 12
 int styleable Title_statusVisibility 13
 int styleable Title_titleBarType 14
 int[] styleable TitleBar { 0x7f030054, 0x7f030055, 0x7f030056, 0x7f030121, 0x7f030122, 0x7f030123, 0x7f030124, 0x7f030125, 0x7f03015f, 0x7f030160, 0x7f030161, 0x7f030162, 0x7f0301f6 }

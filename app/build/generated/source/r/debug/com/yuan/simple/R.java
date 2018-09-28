@@ -3374,24 +3374,24 @@ public final class R {
      */
     public static final int state_collapsible=0x7f0301be;
     /**
-     * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
-     * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
-     * "<code>#<i>aarrggbb</i></code>".
-     */
-    public static final int statusBackgroundColor=0x7f0301bf;
-    /**
      * <p>May be a reference to another resource, in the form
      * "<code>@[+][<i>package</i>:]<i>type</i>/<i>name</i></code>" or a theme
      * attribute in the form
      * "<code>?[<i>package</i>:]<i>type</i>/<i>name</i></code>".
      */
-    public static final int statusBarBackground=0x7f0301c0;
+    public static final int statusBarBackground=0x7f0301bf;
     /**
      * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
      * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
      * "<code>#<i>aarrggbb</i></code>".
      */
-    public static final int statusBarScrim=0x7f0301c1;
+    public static final int statusBarScrim=0x7f0301c0;
+    /**
+     * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
+     * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
+     * "<code>#<i>aarrggbb</i></code>".
+     */
+    public static final int statusBgColor=0x7f0301c1;
     /**
      * <p>May be a boolean value, such as "<code>true</code>" or
      * "<code>false</code>".
@@ -9699,7 +9699,7 @@ public final class R {
         0x7f03005e, 0x7f03005f, 0x7f03007b, 0x7f0300a3, 
         0x7f0300a4, 0x7f0300a5, 0x7f0300a6, 0x7f0300a7, 
         0x7f0300a8, 0x7f0300a9, 0x7f030174, 0x7f030175, 
-        0x7f0301c1, 0x7f0301f5, 0x7f0301f7, 0x7f030201
+        0x7f0301c0, 0x7f0301f5, 0x7f0301f7, 0x7f030201
       };
     /**
      * <p>This symbol is the offset where the {@link com.yuan.simple.R.attr#collapsedTitleGravity}
@@ -12338,7 +12338,7 @@ public final class R {
      * @see #CoordinatorLayout_statusBarBackground
      */
     public static final int[] CoordinatorLayout={
-        0x7f0300e0, 0x7f0301c0
+        0x7f0300e0, 0x7f0301bf
       };
     /**
      * <p>This symbol is the offset where the {@link com.yuan.simple.R.attr#keylines}
@@ -17962,7 +17962,7 @@ public final class R {
      * <tr><td><code>{@link #Title_rightText com.yuan.simple:rightText}</code></td><td></td></tr>
      * <tr><td><code>{@link #Title_rightTextColor com.yuan.simple:rightTextColor}</code></td><td></td></tr>
      * <tr><td><code>{@link #Title_rightTextSize com.yuan.simple:rightTextSize}</code></td><td></td></tr>
-     * <tr><td><code>{@link #Title_statusBackgroundColor com.yuan.simple:statusBackgroundColor}</code></td><td></td></tr>
+     * <tr><td><code>{@link #Title_statusBgColor com.yuan.simple:statusBgColor}</code></td><td></td></tr>
      * <tr><td><code>{@link #Title_statusVisibility com.yuan.simple:statusVisibility}</code></td><td></td></tr>
      * <tr><td><code>{@link #Title_titleBarType com.yuan.simple:titleBarType}</code></td><td></td></tr>
      * </table>
@@ -17978,7 +17978,7 @@ public final class R {
      * @see #Title_rightText
      * @see #Title_rightTextColor
      * @see #Title_rightTextSize
-     * @see #Title_statusBackgroundColor
+     * @see #Title_statusBgColor
      * @see #Title_statusVisibility
      * @see #Title_titleBarType
      */
@@ -17986,7 +17986,7 @@ public final class R {
         0x7f030054, 0x7f030055, 0x7f030056, 0x7f030121, 
         0x7f030122, 0x7f030123, 0x7f030124, 0x7f030125, 
         0x7f03015f, 0x7f030160, 0x7f030161, 0x7f030162, 
-        0x7f0301bf, 0x7f0301c2, 0x7f0301f6
+        0x7f0301c1, 0x7f0301c2, 0x7f0301f6
       };
     /**
      * <p>This symbol is the offset where the {@link com.yuan.simple.R.attr#centerText}
@@ -18125,16 +18125,16 @@ public final class R {
      */
     public static final int Title_rightTextSize=11;
     /**
-     * <p>This symbol is the offset where the {@link com.yuan.simple.R.attr#statusBackgroundColor}
+     * <p>This symbol is the offset where the {@link com.yuan.simple.R.attr#statusBgColor}
      * attribute's value can be found in the {@link #Title} array.
      *
      * <p>May be a color value, in the form of "<code>#<i>rgb</i></code>",
      * "<code>#<i>argb</i></code>", "<code>#<i>rrggbb</i></code>", or
      * "<code>#<i>aarrggbb</i></code>".
      *
-     * @attr name com.yuan.simple:statusBackgroundColor
+     * @attr name com.yuan.simple:statusBgColor
      */
-    public static final int Title_statusBackgroundColor=12;
+    public static final int Title_statusBgColor=12;
     /**
      * <p>This symbol is the offset where the {@link com.yuan.simple.R.attr#statusVisibility}
      * attribute's value can be found in the {@link #Title} array.

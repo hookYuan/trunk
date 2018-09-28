@@ -292,8 +292,8 @@ public final class R {
         public static final int state_above_anchor = 0x7f0301bc;
         public static final int state_collapsed = 0x7f0301bd;
         public static final int state_collapsible = 0x7f0301be;
-        public static final int statusBarBackground = 0x7f0301c0;
-        public static final int statusBarScrim = 0x7f0301c1;
+        public static final int statusBarBackground = 0x7f0301bf;
+        public static final int statusBarScrim = 0x7f0301c0;
         public static final int subMenuArrow = 0x7f0301c3;
         public static final int submitBackground = 0x7f0301c4;
         public static final int subtitle = 0x7f0301c5;
@@ -1616,7 +1616,7 @@ public final class R {
         public static final int BottomSheetBehavior_Layout_behavior_skipCollapsed = 2;
         public static final int[] ButtonBarLayout = { 0x7f030026 };
         public static final int ButtonBarLayout_allowStacking = 0;
-        public static final int[] CollapsingToolbarLayout = { 0x7f03005e, 0x7f03005f, 0x7f03007b, 0x7f0300a3, 0x7f0300a4, 0x7f0300a5, 0x7f0300a6, 0x7f0300a7, 0x7f0300a8, 0x7f0300a9, 0x7f030174, 0x7f030175, 0x7f0301c1, 0x7f0301f5, 0x7f0301f7, 0x7f030201 };
+        public static final int[] CollapsingToolbarLayout = { 0x7f03005e, 0x7f03005f, 0x7f03007b, 0x7f0300a3, 0x7f0300a4, 0x7f0300a5, 0x7f0300a6, 0x7f0300a7, 0x7f0300a8, 0x7f0300a9, 0x7f030174, 0x7f030175, 0x7f0301c0, 0x7f0301f5, 0x7f0301f7, 0x7f030201 };
         public static final int CollapsingToolbarLayout_collapsedTitleGravity = 0;
         public static final int CollapsingToolbarLayout_collapsedTitleTextAppearance = 1;
         public static final int CollapsingToolbarLayout_contentScrim = 2;
@@ -1644,7 +1644,7 @@ public final class R {
         public static final int CompoundButton_android_button = 0;
         public static final int CompoundButton_buttonTint = 1;
         public static final int CompoundButton_buttonTintMode = 2;
-        public static final int[] CoordinatorLayout = { 0x7f0300e0, 0x7f0301c0 };
+        public static final int[] CoordinatorLayout = { 0x7f0300e0, 0x7f0301bf };
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
         public static final int[] CoordinatorLayout_Layout = { 0x010100b3, 0x7f0300e3, 0x7f0300e4, 0x7f0300e5, 0x7f030111, 0x7f03011a, 0x7f03011b };

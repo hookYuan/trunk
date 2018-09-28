@@ -1,11 +1,9 @@
 package com.yuan.base.widget.title.titlebar;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -19,7 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.yuan.base.R;
 import com.yuan.base.tools.glide.GlideHelper;
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 
 /**
  * Created by YuanYe on 2018/8/4.
@@ -134,7 +132,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
         return this.getLayoutParams().height;
     }
 
-    /**
+    /*
      * -------------------------------------toolbar平移动画---------------------------------------------
      **/
 
@@ -179,7 +177,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
         return (T) this;
     }
 
-    /**
+    /*
      * *********************设置背景颜色、背景图片***********************************************************
      */
     /**

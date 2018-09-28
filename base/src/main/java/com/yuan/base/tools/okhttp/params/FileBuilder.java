@@ -82,7 +82,7 @@ public class FileBuilder extends HeadBuilder<FileBuilder> {
         requestBuilder.header("Authorization", "Client-ID " + IMGUR_CLIENT_ID);
         new Execute(mContext, requestBuilder, client).execute(jsonBack);
     }
-    /**
+    /*
      * *******************************Common工具*********************************************
      */
 

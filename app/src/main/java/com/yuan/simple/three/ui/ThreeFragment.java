@@ -1,9 +1,8 @@
 package com.yuan.simple.three.ui;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 import com.yuan.base.ui.mvp.MvpFragment;
 import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;

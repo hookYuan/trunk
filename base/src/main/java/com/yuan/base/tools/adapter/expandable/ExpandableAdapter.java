@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 
 import java.util.ArrayList;
 import java.util.List;

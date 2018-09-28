@@ -13,11 +13,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.sort.IPinyinSort;
 
 import java.util.ArrayList;

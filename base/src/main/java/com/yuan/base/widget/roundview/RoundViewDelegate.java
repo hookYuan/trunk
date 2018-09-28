@@ -240,7 +240,7 @@ public class RoundViewDelegate {
         gd.setColor(color);
 
         if (cornerRadius_TL > 0 || cornerRadius_TR > 0 || cornerRadius_BR > 0 || cornerRadius_BL > 0) {
-            /**The corners are ordered top-left, top-right, bottom-right, bottom-left*/
+            /*The corners are ordered top-left, top-right, bottom-right, bottom-left*/
             radiusArr[0] = cornerRadius_TL;
             radiusArr[1] = cornerRadius_TL;
             radiusArr[2] = cornerRadius_TR;

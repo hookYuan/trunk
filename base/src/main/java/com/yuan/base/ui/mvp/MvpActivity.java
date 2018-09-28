@@ -3,7 +3,7 @@ package com.yuan.base.ui.mvp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yuan.base.tools.other.ReflexUtil;
+import com.yuan.base.tools.common.ReflexUtil;
 import com.yuan.base.ui.activity.FragActivity;
 
 /**

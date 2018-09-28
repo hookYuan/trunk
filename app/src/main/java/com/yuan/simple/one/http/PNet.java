@@ -3,7 +3,7 @@ package com.yuan.simple.one.http;
 
 import com.yuan.base.tools.okhttp.OKHttp;
 import com.yuan.base.tools.okhttp.callback.BaseBack;
-import com.yuan.base.tools.other.ToastUtil;
+import com.yuan.base.tools.log.ToastUtil;
 import com.yuan.base.ui.mvp.MvpPresenter;
 
 import okhttp3.Call;

@@ -22,9 +22,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
  */
 
 public class HRefresh {
-    /**
-     * 静态代码块只执行一次
-     */
+
     static {
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
@@ -50,7 +48,7 @@ public class HRefresh {
      * 默认设置
      *
      * @param refreshLayout 可以先更改refreshLa参数后传入设置
-     * @param refresh
+     * @param refresh       刷新监听回调
      */
     public static void init(RefreshLayout refreshLayout, final IRefresh refresh) {
         //初始化一些默认设置(内容区域是否可以跟随下拉等连动)

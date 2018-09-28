@@ -13,10 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.router.jump.JumpHelper;
 import com.yuan.base.tools.router.jump.JumpParam;
-import com.yuan.base.tools.system.SystemUtil;
+import com.yuan.base.tools.common.KeyboardUtil;
 import com.yuan.base.ui.IView;
 
 /**
@@ -92,7 +92,7 @@ abstract class BaseFragment extends Fragment implements IView {
 
     @Override
     public void onDestroy() {
-        SystemUtil.Input.hideSoftInput(mContext);
+        KeyboardUtil.hideSoftInput(mContext);
         super.onDestroy();
     }
 

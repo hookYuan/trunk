@@ -62,10 +62,10 @@ dependencies {
     api "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle"
     api "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle"
     api "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle"
+    api "com.github.bumptech.glide:glide:$glide"
+    api "com.squareup.okhttp3:okhttp:$okhttp"
+    api "com.google.code.gson:gson:$gson"
+    api "com.alibaba:arouter-api:$arouter_api"
 
     implementation "com.jude:swipebackhelper:$swipebackhelper"
-    implementation "com.github.bumptech.glide:glide:$glide"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp"
-    implementation "com.google.code.gson:gson:$gson"
-    implementation "com.alibaba:arouter-api:$arouter_api"
 }

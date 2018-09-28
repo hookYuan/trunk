@@ -60,7 +60,7 @@ public abstract class FragActivity<T extends Fragment> extends ExtraActivity {
      * 把Fragment添加到FragmentActivity中
      *
      * @param showIndex   默认显示的页数
-     * @param packageName
+     * @param packageName Fragment对应的类名
      */
     protected void addFragment(@IdRes int container, int showIndex, Class<T>... packageName) {
         showIndex = showIndex >= packageName.length ? 0 : showIndex;

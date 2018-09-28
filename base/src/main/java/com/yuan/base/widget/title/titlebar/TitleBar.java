@@ -9,7 +9,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -25,8 +24,8 @@ import android.widget.TextView;
 
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.BaseListAdapter;
-import com.yuan.base.tools.other.Kits;
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.common.Kits;
+import com.yuan.base.tools.layout.Views;
 
 import java.util.List;
 
@@ -78,8 +77,6 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
     /**
      * 绑定自定义属性
-     *
-     * @param context
      */
     public void obtainAttributes(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
@@ -256,9 +253,9 @@ public class TitleBar extends AbsTitle<TitleBar> {
     }
 
     /**
-     * @param view
-     * @param popupData
-     * @param listener
+     * @param view      做为参考坐标的View
+     * @param popupData 数据源
+     * @param listener  点击监听
      */
     private void showPopMenu(@NonNull View view, @NonNull List<String> popupData, @NonNull final OnMenuItemClickListener listener) {
         if (popupWindowMenu != null && popupWindowMenu.isShowing()) {

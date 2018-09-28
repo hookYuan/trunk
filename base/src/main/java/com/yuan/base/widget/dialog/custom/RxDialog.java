@@ -17,7 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 
 /**
  * Created by YuanYe on 2017/9/20.

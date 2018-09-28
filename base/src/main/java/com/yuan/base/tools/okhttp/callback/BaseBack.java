@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.MainThread;
 
 import com.google.gson.Gson;
-import com.yuan.base.tools.other.ReflexUtil;
+import com.yuan.base.tools.common.ReflexUtil;
 
 import java.io.IOException;
 

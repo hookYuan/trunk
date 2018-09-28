@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.yuan.base.tools.other.ReflexUtil;
+import com.yuan.base.tools.common.ReflexUtil;
 import com.yuan.base.ui.fragment.ExtraFragment;
 
 /**

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 import com.yuan.base.ui.mvp.MvpActivity;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;

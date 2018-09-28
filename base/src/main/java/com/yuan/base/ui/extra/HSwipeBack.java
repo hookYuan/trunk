@@ -6,6 +6,8 @@ import android.graphics.Color;
 import com.jude.swipbackhelper.SwipeBackHelper;
 import com.jude.swipbackhelper.SwipeListener;
 
+import io.reactivex.annotations.NonNull;
+
 /**
  * Created by YuanYe on 2017/7/12.
  * SwipeBackHelper 的辅助实现类，方便替换
@@ -49,18 +51,16 @@ public class HSwipeBack {
     /**
      * 需绑定生命周期
      *
-     * @param context
+     * @param activity Activity
      */
-    public static void onPostCreate(Activity context) {
-        SwipeBackHelper.onPostCreate(context);
+    public static void onPostCreate(@NonNull Activity activity) {
+        SwipeBackHelper.onPostCreate(activity);
     }
 
     /**
-     * 需绑定生命周期
-     *
-     * @param context
+     * 销毁
      */
-    public static void onDestroy(Activity context) {
-        SwipeBackHelper.onDestroy(context);
+    public static void onDestroy(Activity activity) {
+        SwipeBackHelper.onDestroy(activity);
     }
 }

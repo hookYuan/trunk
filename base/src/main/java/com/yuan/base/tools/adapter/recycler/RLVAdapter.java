@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 
 /**
  * Created by YuanYe on 2017/12/18.

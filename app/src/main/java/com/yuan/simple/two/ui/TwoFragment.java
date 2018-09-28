@@ -2,9 +2,7 @@ package com.yuan.simple.two.ui;
 
 import android.os.Bundle;
 
-import com.yuan.base.tools.other.Views;
 import com.yuan.base.ui.mvp.MvpFragment;
-import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;
 
 /**

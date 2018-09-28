@@ -1,9 +1,5 @@
 package com.yuan.base.tools.okhttp.params;
 
-/**
- * Created by YuanYe on 2017/9/8.
- */
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -26,6 +22,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
+ * Created by YuanYe on 2017/9/8.
  * 用于构建get(),post()等参数方法
  */
 public class ParamsBuild {
@@ -147,7 +144,7 @@ public class ParamsBuild {
         new Execute(mContext, requestBuilder, client).execute(fileBack);
     }
 
-    /**
+    /*
      * *******************************Common工具*********************************************
      */
 

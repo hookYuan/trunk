@@ -3,7 +3,7 @@ package com.yuan.base.tools.okhttp.params;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.common.Kits;
 
 import java.util.Map;
 
@@ -31,7 +31,7 @@ class HeadBuilder<T extends HeadBuilder> {
      * ****************************addHead请求封装****************************************
      */
     public T addHead(@NonNull Map<String, String> params) {
-        if (Kits.Empty.check(params)) throw new NullPointerException("参数：params == null");
+        if (Kits.Empty.isEmpty(params)) throw new NullPointerException("参数：params == null");
         for (Map.Entry<String, String> entry : params.entrySet()) {
             requestBuilder.addHeader(entry.getKey(), entry.getValue());
         }
@@ -39,7 +39,7 @@ class HeadBuilder<T extends HeadBuilder> {
     }
 
     public T addHead(@NonNull String key, @NonNull String value) {
-        if (Kits.Empty.check(key)) throw new NullPointerException("参数：params.key == null");
+        if (Kits.Empty.isEmpty(key)) throw new NullPointerException("参数：params.key == null");
         requestBuilder.addHeader(key, value);
         return (T) this;
     }

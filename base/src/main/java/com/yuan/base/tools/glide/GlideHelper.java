@@ -12,8 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.yuan.base.R;
-import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.common.Kits;
 
 public class GlideHelper {
 
@@ -37,8 +36,8 @@ public class GlideHelper {
     /**
      * 加载本地 资源文件图片
      *
-     * @param drawableId
-     * @param image
+     * @param drawableId 资源ID
+     * @param image      需要显示的ImageView
      */
     public static void load(@DrawableRes int drawableId, @NonNull ImageView image) {
         DisplayMetrics metrics = image.getResources().getDisplayMetrics();
@@ -67,8 +66,8 @@ public class GlideHelper {
     /**
      * 加载圆形图片
      *
-     * @param path
-     * @param image
+     * @param path  图片的网络地址
+     * @param image 需要显示的ImageView
      */
     public static void loadCircle(@Nullable String path, @NonNull final ImageView image) {
         final String imgPath = path;
@@ -130,8 +129,8 @@ public class GlideHelper {
     /**
      * 根据路径或者网络路径加载图片
      *
-     * @param path
-     * @param image
+     * @param path  网络图片地址
+     * @param image 需要显示的ImageView
      */
     public static void load(@Nullable String path, @NonNull final ImageView image) {
         load(path, image, placeholder);
@@ -141,8 +140,8 @@ public class GlideHelper {
     /**
      * 加载原图
      *
-     * @param path
-     * @param image
+     * @param path  加载图片的网络路径
+     * @param image 需要显示的ImageView
      */
     public static void loadFull(@NonNull String path, @NonNull final ImageView image) {
         loadFull(path, image, new ImageLoadingListener() {
@@ -161,9 +160,9 @@ public class GlideHelper {
     /**
      * 加载原图
      *
-     * @param path
-     * @param image
-     * @param listener
+     * @param path     图片网络地址
+     * @param image    需要显示的地址
+     * @param listener 加载中的监听回调
      */
     public static void loadFull(@NonNull String path, @NonNull final ImageView image,
                                 @Nullable final ImageLoadingListener listener) {
@@ -199,8 +198,10 @@ public class GlideHelper {
 
 
     public interface ImageLoadingListener {
+        //加载完成
         void onLoaded();
 
+        //加载失败
         void onFailed();
     }
 

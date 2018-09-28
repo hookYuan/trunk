@@ -302,7 +302,7 @@ public final class DiskLruCache implements Closeable {
      * there.
      *
      * @param directory  a writable directory
-     * @param appVersion
+     * @param appVersion 版本号
      * @param valueCount the number of values per cache entry. Must be positive.
      * @param maxSize    the maximum number of bytes this cache should use to store
      * @throws IOException if reading or writing the cache directory fails

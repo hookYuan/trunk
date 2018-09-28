@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.common.Kits;
 import com.yuan.base.widget.title.statusbar.StatusBar;
 import com.yuan.base.widget.title.statusbar.StatusUtil;
 import com.yuan.base.widget.title.titlebar.TitleBar;

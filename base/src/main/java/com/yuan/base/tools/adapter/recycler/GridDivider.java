@@ -13,7 +13,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.common.Kits;
 
 /**
  * Created by YuanYe on 2017/12/4.

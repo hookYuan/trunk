@@ -5,8 +5,8 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.yuan.base.TrunkConfig;
-import com.yuan.base.tools.other.Codec;
-import com.yuan.base.tools.other.Kits;
+import com.yuan.base.tools.common.Codec;
+import com.yuan.base.tools.common.Kits;
 
 import java.io.File;
 import java.io.IOException;

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.tools.other.Views;
+import com.yuan.base.tools.layout.Views;
 import com.yuan.base.ui.extra.HRefresh;
 import com.yuan.base.ui.extra.IRefresh;
 import com.yuan.base.ui.mvp.MvpFragment;

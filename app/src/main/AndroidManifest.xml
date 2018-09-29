@@ -25,7 +25,9 @@
             android:name=".one.input.InputActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".one.http.NetActivity" />
-        <activity android:name=".one.dialog.AlertDialogActivity"></activity>
+        <activity android:name=".one.dialog.AlertDialogActivity" />
+        <activity android:name=".one.expandable.ExpandableActivity" />
+        <activity android:name=".one.database.DatabaseActivity"></activity>
     </application>
 
 </manifest>

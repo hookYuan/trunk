@@ -41,7 +41,7 @@ public class Title extends LinearLayout {
         titleBar.obtainAttributes(context, attrs);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Title);
-        int statusBarColor = ta.getColor(R.styleable.Title_statusBgColor, ContextCompat.getColor(context, R.color.colorPrimaryDark));
+        int statusBarColor = ta.getColor(R.styleable.Title_statusBackgroundColor, ContextCompat.getColor(context, R.color.colorPrimaryDark));
         statusBar.setBackgroundColor(statusBarColor);
         boolean statusVisibility = ta.getBoolean(R.styleable.Title_statusVisibility, false);
         statusBar.setVisibility(statusVisibility ? VISIBLE : GONE);

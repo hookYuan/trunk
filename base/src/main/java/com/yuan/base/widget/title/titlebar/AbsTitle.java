@@ -180,7 +180,6 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
     /*
      * *********************设置背景颜色、背景图片***********************************************************
      */
-
     /**
      * 设置Title的背景图片
      * 替换系统的设置背景图，采用Glide加载，不会使图片变形
@@ -195,7 +194,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
 
     @Override
     public void setBackgroundDrawable(Drawable drawable) {
-        if (background != null) background.setImageDrawable(drawable);
+        background.setImageDrawable(drawable);
     }
 
     @Override
@@ -205,7 +204,6 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
 
     @Override
     public void setBackgroundColor(int color) {
-        super.setBackgroundColor(color);
         Bitmap bitmap = Bitmap.createBitmap(10, 10,
                 Bitmap.Config.ARGB_4444);
         bitmap.eraseColor(color);//填充颜色

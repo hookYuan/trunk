@@ -1,7 +1,6 @@
 package com.yuan.base.widget.dialog.v7;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,18 +8,13 @@ import android.content.DialogInterface;
 import android.support.annotation.StyleRes;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.yuan.base.R;
 
-import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +27,6 @@ import java.util.Map;
  */
 public class DialogHelper {
 
-    private final static String TAG = "DialogHelper";
-
     private AlertDialog.Builder dialog;
     private AlertDialog alertDialog;
     private Context mContext;
@@ -44,6 +36,7 @@ public class DialogHelper {
 
     public DialogHelper(Context context) {
         diaLogParams = new DialogHelperParams.Builder()
+                .matchWidth(true)
                 .build();
         this.mContext = context;
     }
@@ -81,133 +74,50 @@ public class DialogHelper {
     public void show() {
         if (dialog != null) {
             alertDialog = dialog.show();
-            initWindow(alertDialog.getWindow(), alertDialog);
+            initWindow(alertDialog.getWindow());
         } else if (progressDialog != null && !progressDialog.isShowing()) {
             progressDialog.show();
-            initWindow(progressDialog.getWindow(), progressDialog);
+            initWindow(progressDialog.getWindow());
         } else if (datePickerDialog != null && !datePickerDialog.isShowing()) {
             datePickerDialog.show();
-            initWindow(datePickerDialog.getWindow(), datePickerDialog);
+            initWindow(datePickerDialog.getWindow());
         } else if (timePickerDialog != null && !timePickerDialog.isShowing()) {
             timePickerDialog.show();
-            initWindow(timePickerDialog.getWindow(), timePickerDialog);
+            initWindow(timePickerDialog.getWindow());
         }
     }
 
     /**
      * 设置弹窗窗体界面
      */
-    private void initWindow(Window window, Object object) {
-        //设置背景颜色，通常为透明
-        if (diaLogParams.getWindowBackground() != null) {
-            window.setBackgroundDrawable(diaLogParams.getWindowBackground());
+    private void initWindow(Window window) {
+        if (diaLogParams.isMatchWidth() || diaLogParams.isMatchHeight()) {
+            //此处设置位置窗体大小
+            window.setLayout(diaLogParams.isMatchWidth() ? LinearLayout.LayoutParams.MATCH_PARENT : LinearLayout.LayoutParams.WRAP_CONTENT,
+                    diaLogParams.isMatchHeight() ? LinearLayout.LayoutParams.MATCH_PARENT : LinearLayout.LayoutParams.WRAP_CONTENT);
+            //设置Dialog全屏(更改背景颜色，通常为透明)
+            window.setBackgroundDrawableResource(diaLogParams.getDialogBackground());
+            window.getDecorView().setPadding(0, 0, 0, 0);
         }
-
-        //设置Dialog相对于屏幕的位置
         window.setGravity(diaLogParams.getGravity());
-
-        //设置padding
-        int paddingLeft = diaLogParams.getPaddingLeft() != -1 ? diaLogParams.getPaddingLeft()
-                : window.getDecorView().getPaddingLeft();
-        int paddingTop = diaLogParams.getPaddingTop() != -1 ? diaLogParams.getPaddingTop()
-                : window.getDecorView().getPaddingTop();
-        int paddingRight = diaLogParams.getPaddingRight() != -1 ? diaLogParams.getPaddingRight()
-                : window.getDecorView().getPaddingRight();
-        int paddingBottom = diaLogParams.getPaddingBottom() != -1 ? diaLogParams.getPaddingBottom()
-                : window.getDecorView().getPaddingBottom();
-        window.getDecorView().setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-
-        WindowManager.LayoutParams windowParams = window.getAttributes();
-        //最大高度
-        if (diaLogParams.isMatchHeight()) {
-            windowParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-        } else if (diaLogParams.getHeight() > 0) {
-            windowParams.height = diaLogParams.getHeight();
-        }
-
-        //最大宽度
-        if (diaLogParams.isMatchWidth()) {
-            windowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        } else if (diaLogParams.getWidth() > 0) {
-            windowParams.width = diaLogParams.getWidth();
-        }
-
-        /*实例化Window*/
-        windowParams.x = diaLogParams.getPosX();
-        windowParams.y = diaLogParams.getPosY();
-
+            /*实例化Window*/
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.x = diaLogParams.getPosX();
+        layoutParams.y = diaLogParams.getPosY();
         //弹窗布局的alpha值  1.0表示完全不透明，0.0表示没有变暗。
-        windowParams.alpha = diaLogParams.getDialogFrontAlpha();
+        layoutParams.alpha = diaLogParams.getDialogFrontAlpha();
         // 当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。1.0表示完全不透明，0.0表示没有变暗。
-        windowParams.dimAmount = diaLogParams.getDialogBehindAlpha();
+        layoutParams.dimAmount = diaLogParams.getDialogBehindAlpha();
         //屏幕亮度 用来覆盖用户设置的屏幕亮度。表示应用用户设置的屏幕亮度。从0到1调整亮度从暗到最亮发生变化。
         //layoutParams.screenBrightness = 0.7f;
-        window.setAttributes(windowParams);
+        window.setAttributes(layoutParams);
         window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
-        //通过反射设置字体颜色及大小
-        Field mAlert = null;
-        try {
-            if (object instanceof AlertDialog) {
-                mAlert = AlertDialog.class.getDeclaredField("mAlert");
-                mAlert.setAccessible(true);
-                Object mAlertController = null;
-                mAlertController = mAlert.get(alertDialog);
-                Field mTitle = mAlertController.getClass().getDeclaredField("mTitleView");
-                Field mMessage = mAlertController.getClass().getDeclaredField("mMessageView");
-                Field mPositive = mAlertController.getClass().getDeclaredField("mButtonPositive");
-                Field mNegative = mAlertController.getClass().getDeclaredField("mButtonNegative");
-                mTitle.setAccessible(true);
-                mMessage.setAccessible(true);
-                mPositive.setAccessible(true);
-                mNegative.setAccessible(true);
-
-                if (mTitle != null) {
-                    TextView titleView = (TextView) mTitle.get(mAlertController);
-                    if (diaLogParams.getTitleColor() != 0)
-                        titleView.setTextColor(diaLogParams.getTitleColor());
-                    if (diaLogParams.getTitleSize() != 0)
-                        titleView.setTextSize(diaLogParams.getTitleSize());
-                }
-
-                if (mMessage != null) {
-                    TextView tvMessage = (TextView) mMessage.get(mAlertController);
-                    if (diaLogParams.getContentColor() != 0)
-                        tvMessage.setTextColor(diaLogParams.getContentColor());
-                    if (diaLogParams.getContentSize() != 0)
-                        tvMessage.setTextSize(diaLogParams.getContentSize());
-                }
-
-                if (mPositive != null) {
-                    Button btnPositive = (Button) mPositive.get(mAlertController);
-                    if (diaLogParams.getPositiveColor() != 0)
-                        btnPositive.setTextColor(diaLogParams.getPositiveColor());
-                    if (diaLogParams.getPositiveSize() != 0)
-                        btnPositive.setTextSize(diaLogParams.getPositiveSize());
-                }
-                if (mNegative != null) {
-                    Button btnNegative = (Button) mNegative.get(mAlertController);
-                    if (diaLogParams.getNegativeColor() != 0)
-                        btnNegative.setTextColor(diaLogParams.getNegativeColor());
-                    if (diaLogParams.getNegativeSize() != 0)
-                        btnNegative.setTextSize(diaLogParams.getNegativeSize());
-                }
-            } else if (object instanceof android.app.AlertDialog) {
-                //TODO android.app.AlertDialog下的字体、颜色设置不会生效,暂无处理
-
-            }
-        } catch (NoSuchFieldException e) {
-            Log.e(TAG, "设置失败：" + e.getMessage());
-        } catch (IllegalAccessException e) {
-            Log.e(TAG, "设置失败：" + e.getMessage());
-        }
     }
 
 
     /*
      * ************************文本Dialog*****************************************************************
      */
-
     /**
      * @param title            标题
      * @param message          正文

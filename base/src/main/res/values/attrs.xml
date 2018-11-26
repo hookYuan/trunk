@@ -138,7 +138,7 @@
     <!--TitleBar背景-->
     <attr name="backgroundImg" format="string"></attr>
     <!--status-->
-    <attr name="statusBgColor" format="color"></attr>
+    <attr name="statusBackgroundColor" format="color"></attr>
     <attr name="statusVisibility" format="boolean"></attr>
 
     <!--更具Type选择Title的类型-->
@@ -176,7 +176,7 @@
         <attr name="leftTextSize"></attr>
         <attr name="centerTextSize"></attr>
         <attr name="rightTextSize"></attr>
-        <attr name="statusBgColor"></attr>
+        <attr name="statusBackgroundColor"></attr>
         <attr name="statusVisibility"></attr>
     </declare-styleable>
 

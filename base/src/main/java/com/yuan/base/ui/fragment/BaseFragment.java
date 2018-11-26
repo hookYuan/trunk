@@ -3,17 +3,12 @@ package com.yuan.base.ui.fragment;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,28 +117,5 @@ abstract class BaseFragment extends Fragment implements IView {
 
     protected <T extends View> T find(@IdRes int viewId) {
         return Views.find(mView, viewId);
-    }
-
-    /**
-     * 获取颜色
-     * 避免23以上可用
-     *
-     * @param colorId
-     * @return
-     */
-    protected @ColorInt
-    final int getColor2(@ColorRes int colorId) {
-        return ContextCompat.getColor(mContext, colorId);
-    }
-
-    /**
-     * 获取Drawable
-     * 避免23以上可用
-     *
-     * @param drawableId
-     * @return
-     */
-    protected final Drawable getDrawable2(@DrawableRes int drawableId) {
-        return ContextCompat.getDrawable(mContext, drawableId);
     }
 }

@@ -1,7 +1,6 @@
 package com.yuan.base.ui;
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.view.View;
 
@@ -18,5 +17,4 @@ public interface IView {
     View getLayoutView();
 
     void initData(Bundle savedInstanceState);
-
 }

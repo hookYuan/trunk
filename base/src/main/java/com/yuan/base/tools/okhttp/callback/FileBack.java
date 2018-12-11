@@ -1,8 +1,12 @@
 package com.yuan.base.tools.okhttp.callback;
 
-import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import com.yuan.base.tools.okhttp.callback.construct.BaseMainBack;
+import com.yuan.base.tools.okhttp.callback.construct.BaseResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -15,72 +19,70 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-
 /**
  * Created by YuanYe on 2017/9/13.
  * 文件下载
  */
-public abstract class FileBack implements Callback {
+public abstract class FileBack implements BaseMainBack {
 
-    private String saveDir = "/Download"; //下载文件保存目录
+    /**
+     * 文件保存的地址
+     */
+    private String saveDir = ""; //下载文件保存目录
+    /**
+     * 是否保存文件
+     */
+    private boolean isSave;
 
-    protected Context mContext; //在ParamsBuilder中传递过来，不为空(用于统一处理提示、dialog等)
+    /**
+     * @param fileDir 需要保存的完整地址
+     */
+    public FileBack(String fileDir) {
+        this.saveDir = fileDir;
+        isSave = TextUtils.isEmpty(saveDir) ? false : true;
+    }
 
-    private boolean isSave = true;
-
+    /**
+     * 默认不保存
+     */
     public FileBack() {
-
+        isSave = TextUtils.isEmpty(saveDir) ? false : true;
     }
 
     /**
-     * @param isSave
+     * 下载成功
+     * 执行在主线程
      */
-    public FileBack(boolean isSave) {
-        this.isSave = isSave;
-    }
+    @MainThread
+    public abstract void onSuccess(String fileDir, byte[] bytes);
 
     /**
-     * @param _saveDir 下载文件保存的路径
+     * 下载中
+     *
+     * @param percent 下载百分比
+     * @param total   总的大小
+     * @param current 已下载的大小
      */
-    public FileBack(String _saveDir) {
-        this.saveDir = _saveDir;
+    @MainThread
+    public void onDowning(int percent, long total, long current) {
+
     }
 
 
     @Override
-    public void onFailure(Call call, final IOException ioE) {
-        Observable.create(new ObservableOnSubscribe<IOException>() {
-            @Override
-            public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<IOException> e) throws Exception {
-                e.onNext(ioE);
-            }
-        }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                .subscribe(new Consumer<IOException>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull IOException response) throws Exception {
-                        onDownloadFailed(response);
-                    }
-                });
-    }
-
-    @Override
-    public void onResponse(Call call, Response response) throws IOException {
-        ResponseBody responseBody = response.body();
+    public void onResponse(BaseResponse response) throws Exception {
         if (!isSave) {
             byte[] buffer = new byte[2048];
-            int len = 0;
+            int len;
             long sum = 0;
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            long total = responseBody.contentLength();
-            InputStream is = responseBody.byteStream();
+            long total = response.contentLength;
+            InputStream is = response.body.byteStream();
             while ((len = is.read(buffer)) != -1) {
                 bos.write(buffer, 0, len);
                 sum += len;
                 final int progress = (int) (sum * 1.0f / total * 100);
+                final long temp = sum;
                 //切换到主线程
                 Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
@@ -92,12 +94,12 @@ public abstract class FileBack implements Callback {
                             @Override
                             public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
                                 // 下载中
-                                onDownloading(response);
+                                onDowning(response, total, temp);
                             }
                         });
             }
             bos.close();
-            onDownloadSuccess(bos.toByteArray());
+            runMainSuccess(saveDir, bos.toByteArray());
         } else {
             InputStream is = null;
             byte[] buf = new byte[2048];
@@ -106,15 +108,16 @@ public abstract class FileBack implements Callback {
             // 储存下载文件的目录
             final String savePath = isExistDir(saveDir);
             try {
-                is = responseBody.byteStream();
-                long total = response.body().contentLength();
-                final String fileName = getNameFromUrl(response.request().url().url().getPath()); //文件名
+                is = response.body.byteStream();
+                long total = response.contentLength;
+                final String fileName = getNameFromUrl(response.requestUrl); //文件名
                 File file = new File(savePath, fileName);
                 fos = new FileOutputStream(file);
                 long sum = 0;
                 while ((len = is.read(buf)) != -1) {
                     fos.write(buf, 0, len);
                     sum += len;
+                    final long temp = sum;
                     final int progress = (int) (sum * 1.0f / total * 100);
                     //切换到主线程
                     Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -127,50 +130,26 @@ public abstract class FileBack implements Callback {
                                 @Override
                                 public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
                                     // 下载中
-                                    onDownloading(response);
+                                    onDowning(response, total, temp);
                                 }
                             });
                 }
                 fos.flush();
-                //切换到主线程
-                Observable.create(new ObservableOnSubscribe<Integer>() {
-                    @Override
-                    public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
-                        e.onNext(0);
-                    }
-                }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                        .subscribe(new Consumer<Integer>() {
-                            @Override
-                            public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
-                                // 下载完成
-                                onDownloadSuccess(savePath + File.separator + fileName);
-                            }
-                        });
-
+                runMainSuccess(savePath + File.separator + fileName, null);
             } catch (final Exception ioE) {
-                Observable.create(new ObservableOnSubscribe<Exception>() {
-                    @Override
-                    public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Exception> e) throws Exception {
-                        e.onNext(ioE);
-                    }
-                }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                        .subscribe(new Consumer<Exception>() {
-                            @Override
-                            public void accept(@io.reactivex.annotations.NonNull Exception response) throws Exception {
-                                onDownloadFailed(response);
-                            }
-                        });
+                runMainException(ioE);
             } finally {
                 try {
                     if (is != null)
                         is.close();
                 } catch (IOException e) {
+                    runMainException(e);
                 }
                 try {
                     if (fos != null)
                         fos.close();
                 } catch (IOException e) {
-
+                    runMainException(e);
                 }
             }
         }
@@ -200,34 +179,38 @@ public abstract class FileBack implements Callback {
         return url.substring(url.lastIndexOf("/") + 1);
     }
 
-    /**
-     * 下载成功
-     * 执行在主线程
-     */
-    public void onDownloadSuccess(String fileDir) {
+
+    private void runMainException(Exception exception) {
+        Observable.create(new ObservableOnSubscribe<Exception>() {
+            @Override
+            public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Exception> e) throws Exception {
+                e.onNext(exception);
+            }
+        }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
+                .subscribe(new Consumer<Exception>() {
+
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Exception response) throws Exception {
+                        onFail(response);
+                    }
+                });
     }
 
-    /**
-     * 当不保存时执行
-     *
-     * @param bytes
-     */
-    public void onDownloadSuccess(byte[] bytes) {
+    private void runMainSuccess(String saveDir, final byte[] bytes) {
+        //切换到主线程
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
+                e.onNext(0);
+            }
+        }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
+                        // 下载完成
+                        onSuccess(saveDir, bytes);
+                    }
+                });
     }
 
-    /**
-     * @param progress 下载进度
-     *                 执行在主线程
-     */
-    public void onDownloading(int progress) {
-    }
-
-    /**
-     * 下载失败
-     */
-    public abstract void onDownloadFailed(Exception e);
-
-    public void setContext(Context mContext) {
-        this.mContext = mContext;
-    }
 }

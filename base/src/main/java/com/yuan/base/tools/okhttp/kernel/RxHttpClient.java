@@ -67,7 +67,7 @@ public class RxHttpClient {
                 builder.cookieJar(cookieJar);
             }
             //设置缓存路径
-            File cacheFile = new File(getCachePath(), config.getCacheFolder());
+            File cacheFile = new File(config.getCacheFolder());
             if (cacheFile.getParentFile().exists())
                 cacheFile.mkdirs();
             //设置缓存大小
@@ -89,23 +89,6 @@ public class RxHttpClient {
 
     public Context getContext() {
         return mContext;
-    }
-
-    /**
-     * 获取OKHttp缓存文件目录地址
-     *
-     * @return 地址
-     */
-    private @NonNull
-    String getCachePath() {
-        String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable()) {
-            cachePath = mContext.getExternalCacheDir().getPath();
-        } else {
-            cachePath = mContext.getCacheDir().getPath();
-        }
-        return cachePath;
     }
 
 }

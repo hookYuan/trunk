@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -233,6 +235,16 @@ public class AlertDialogActivity extends RLVActivity {
         mData.add(new DialogBean("多选弹窗", 14));
         mData.add(new DialogBean("列表弹窗", 15));
         return mData;
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void setListener() {
+
     }
 
     public class DialogBean {

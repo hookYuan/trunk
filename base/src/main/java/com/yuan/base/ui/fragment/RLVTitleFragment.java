@@ -9,9 +9,9 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.ui.MvpPresenter;
 import com.yuan.base.ui.extra.HRefresh;
 import com.yuan.base.ui.extra.IRefresh;
+import com.yuan.base.ui.MvpPresenter;
 import com.yuan.base.widget.state.StateController;
 import com.yuan.base.widget.title.Title;
 import com.yuan.base.widget.title.statusbar.StatusBar;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by YuanYe on 2018/8/3.
  * 集成列表recyclerView、刷新SmartRefreshLayout、状态StateController的Fragment
  */
-public abstract class RLVFragment<T extends MvpPresenter> extends MvpFragment<T> {
+public abstract class RLVTitleFragment<T extends MvpPresenter> extends MvpFragment<T> {
 
     protected SmartRefreshLayout refreshView;
     protected StateController stateView;
@@ -36,15 +36,11 @@ public abstract class RLVFragment<T extends MvpPresenter> extends MvpFragment<T>
     }
 
     @Override
-    public void findViews() {
+    public void initData() {
         refreshView = Views.find(mView, R.id.srl_refresh);
         stateView = Views.find(mView, R.id.sc_state);
         rlvList = Views.find(mView, R.id.rlv_list);
         title = Views.find(mView, R.id.title_bar);
-    }
-
-    @Override
-    public void initData() {
 
         if (this instanceof IRefresh) HRefresh.init(refreshView, (IRefresh) this);
         else refreshView.setEnableRefresh(false);
@@ -70,12 +66,12 @@ public abstract class RLVFragment<T extends MvpPresenter> extends MvpFragment<T>
         RLVAdapter adapter = new RLVAdapter(mContext) {
             @Override
             public int getItemLayout(ViewGroup parent, int viewType) {
-                return RLVFragment.this.getItemLayout(parent, viewType);
+                return RLVTitleFragment.this.getItemLayout(parent, viewType);
             }
 
             @Override
             public void onBindHolder(ViewHolder holder, int position) {
-                RLVFragment.this.onBindHolder(holder, position);
+                RLVTitleFragment.this.onBindHolder(holder, position);
             }
 
             @Override
@@ -85,7 +81,7 @@ public abstract class RLVFragment<T extends MvpPresenter> extends MvpFragment<T>
 
             @Override
             public void onItemClick(ViewHolder holder, View view, int position) {
-                RLVFragment.this.onItemClick(holder, view, position);
+                RLVTitleFragment.this.onItemClick(holder, view, position);
             }
         };
         return adapter;

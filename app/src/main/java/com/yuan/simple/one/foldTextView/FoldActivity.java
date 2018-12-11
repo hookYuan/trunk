@@ -1,5 +1,7 @@
 package com.yuan.simple.one.foldTextView;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -76,5 +78,15 @@ public class FoldActivity extends RLVActivity {
             data.add("走 在茫茫人海，常怀一份感动来锤炼善良的内心，荡起生命之舟，扬帆在前进的旅途之中。在淡然中生活，在静默中守心，不要刻意去改变什么，走一步有一步的精 彩，停一步有一步的风景，只要心中怀着美好，哪里的风景都是倾心的。静静地把时光捧在手心，记载岁月走过残留下的痕迹。本着对生命的尊重，感谢生命中所有 的赠予，无论世事如何改变，守着那些美好的，温馨的东西，过此一生。如此，安好。");
         }
         return data;
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void setListener() {
+
     }
 }

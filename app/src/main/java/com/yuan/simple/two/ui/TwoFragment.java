@@ -1,9 +1,9 @@
 package com.yuan.simple.two.ui;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
-import com.yuan.base.ui.mvp.MvpFragment;
-import com.yuan.base.widget.title.Title;
+import com.yuan.base.ui.fragment.MvpFragment;
 import com.yuan.simple.R;
 
 /**
@@ -17,7 +17,23 @@ public class TwoFragment extends MvpFragment {
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
+    public void findViews() {
+
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void setListener() {
+
     }
 
 }

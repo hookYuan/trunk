@@ -10,6 +10,8 @@ import com.yuan.base.widget.title.statusbar.StatusUtil;
 import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -190,4 +192,23 @@ public class TitleBarFragment extends RLVFragment {
         return mData;
     }
 
+    @Override
+    public void findViews() {
+
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void setListener() {
+
+    }
 }

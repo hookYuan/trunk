@@ -1,9 +1,9 @@
-package com.yuan.base.tools.okhttp;
+package com.yuan.base.tools.okhttp.params;
 
 import android.content.Context;
 
-import com.yuan.base.tools.okhttp.callback.BaseBack;
-import com.yuan.base.tools.okhttp.callback.FileBack;
+import com.yuan.base.tools.okhttp.callback.construct.BaseMainBack;
+import com.yuan.base.tools.okhttp.callback.construct.MainCall;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,20 +32,11 @@ public class Execute {
         return requestBuilder.build();
     }
 
-
-    //正常json返回的时候使用
-    public void execute(BaseBack call) {
-        if (call == null) throw new NullPointerException("回调：RxCall == null");
-        call.setContext(mContext);
+    //统一返回
+    public void execute(BaseMainBack mainBack) {
+        if (mainBack == null) throw new NullPointerException("回调：RxCall == null");
+        MainCall baseFileBack = new MainCall(mainBack);
         client.newCall(getRequestBuild())
-                .enqueue(call);
-    }
-
-    //下载文件时使用
-    public void execute(FileBack fileBack) {
-        if (fileBack == null) throw new NullPointerException("回调：RxCall == null");
-        fileBack.setContext(mContext);
-        client.newCall(getRequestBuild())
-                .enqueue(fileBack);
+                .enqueue(baseFileBack);
     }
 }

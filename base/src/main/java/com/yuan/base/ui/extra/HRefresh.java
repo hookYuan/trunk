@@ -3,9 +3,12 @@ package com.yuan.base.ui.extra;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.scwang.smartrefresh.header.BezierCircleHeader;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.yuan.base.R;
@@ -51,6 +54,10 @@ public class HRefresh {
      * @param refresh       刷新监听回调
      */
     public static void init(RefreshLayout refreshLayout, final IRefresh refresh) {
+        refreshLayout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
+        refreshLayout.setRefreshHeader(new ClassicsHeader(refreshLayout.getLayout().getContext()));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(refreshLayout.getLayout().getContext()));
+
         //初始化一些默认设置(内容区域是否可以跟随下拉等连动)
         refreshLayout.setEnableHeaderTranslationContent(true);
         refreshLayout.setEnableFooterTranslationContent(true);

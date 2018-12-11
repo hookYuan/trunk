@@ -2,6 +2,7 @@ package com.yuan.base.tools.router.jump;
 
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -55,6 +56,11 @@ public class JumpParam {
     }
 
     public JumpParam put(String key, ArrayList value) {
+        attr.put(key, value);
+        return param;
+    }
+
+    public JumpParam put(String key, Serializable value) {
         attr.put(key, value);
         return param;
     }

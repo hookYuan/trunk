@@ -31,8 +31,23 @@ android {
     }
     buildTypes {
         release {
+            debuggable true
+            //混淆
+            minifyEnabled true
+            //Zipalign优化
+            zipAlignEnabled true
+            //混淆文件
+            proguardFile file("proguard-rules.pro")
+        }
+
+        debug {
+            debuggable true
+            //混淆
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //Zipalign优化
+            zipAlignEnabled true
+            //混淆文件
+            proguardFile file("proguard-rules.pro")
         }
     }
 

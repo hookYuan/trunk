@@ -10,10 +10,9 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.layout.Views;
+import com.yuan.base.ui.MvpPresenter;
 import com.yuan.base.ui.extra.HRefresh;
 import com.yuan.base.ui.extra.IRefresh;
-import com.yuan.base.ui.mvp.MvpActivity;
-import com.yuan.base.ui.mvp.MvpPresenter;
 import com.yuan.base.widget.state.StateController;
 import com.yuan.base.widget.title.Title;
 import com.yuan.base.widget.title.statusbar.StatusBar;
@@ -37,12 +36,15 @@ public abstract class RLVActivity<T extends MvpPresenter> extends MvpActivity<T>
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
+    public void findViews() {
         refreshView = Views.find(mContext, R.id.srl_refresh);
         stateView = Views.find(mContext, R.id.sc_state);
         rlvList = Views.find(mContext, R.id.rlv_list);
         title = Views.find(mContext, R.id.title_bar);
+    }
 
+    @Override
+    public void initData() {
         if (this instanceof IRefresh) HRefresh.init(refreshView, (IRefresh) this);
         else refreshView.setEnableRefresh(false);
 

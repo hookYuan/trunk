@@ -1,13 +1,14 @@
 package com.yuan.base.ui.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import com.yuan.base.ui.BaseContract;
 import com.yuan.base.ui.extra.HSwipeBack;
 import com.yuan.base.ui.extra.ISwipeBack;
-import com.yuan.base.ui.IView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -17,7 +18,7 @@ import org.greenrobot.eventbus.EventBus;
  * 扩展功能基类，面对接口初始化
  * 如需使用扩展功能，应该继承该类
  */
-abstract class ExtraActivity extends BaseActivity implements IView {
+abstract class ExtraActivity extends BaseActivity implements BaseContract.View {
 
     private static final String TAG = "ExtraActivity";
 
@@ -44,18 +45,29 @@ abstract class ExtraActivity extends BaseActivity implements IView {
     /**
      * 管理Activity的扩展功能
      */
-    private void initExtra(@Nullable Bundle savedInstanceState) {
+    private void initExtra(@Nullable Bundle bundle) {
         if (INIT_DEFAULT) {
             View layoutView = getLayoutView();
             int layoutId = getLayoutId();
-            if (layoutId != 0) setContentView(layoutId);
-            else if (layoutView != null) setContentView(layoutView);
-            else Log.e(TAG, "没有给Activity设置显示视图");
-            initData(savedInstanceState);
+            if (layoutId != 0) {
+                setContentView(layoutId);
+            } else if (layoutView != null) {
+                setContentView(layoutView);
+            } else {
+                Log.e(TAG, "没有给Activity设置显示视图");
+            }
+            findViews();
+            parseBundle(bundle);
+            initData();
+            setListener();
         }
 
         if (INIT_SWIPE_BACK) {
-            if (this instanceof ISwipeBack) {
+            /**
+             * 这里有一个bug,当系统高于8.1时，android:screenOrientation="portrait"与
+             *    <item name="android:windowIsTranslucent">true</item> 冲突
+             */
+            if (this instanceof ISwipeBack && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 iSwipeBack = (ISwipeBack) this;
                 HSwipeBack.init(this);
             }

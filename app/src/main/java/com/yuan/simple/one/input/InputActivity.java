@@ -6,13 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.tools.glide.GlideHelper;
-import com.yuan.base.ui.mvp.MvpActivity;
+import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.R;
 
 /**
@@ -31,9 +27,7 @@ public class InputActivity extends MvpActivity {
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
-//        ImageView imageView = find(R.id.iv_background);
-//        GlideHelper.load("http://static.oneplus.cn/data/attachment/forum/201701/05/165732nmebemxb1my1e08e.jpg", imageView);
+    public void findViews() {
         RecyclerView recyclerView = find(R.id.rlv_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -55,4 +49,20 @@ public class InputActivity extends MvpActivity {
             }
         });
     }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void setListener() {
+
+    }
+
 }

@@ -1,13 +1,13 @@
 package com.yuan.simple.one.roundView;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
 import com.yuan.base.tools.adapter.BaseListAdapter;
-import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.ui.mvp.MvpActivity;
+import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;
@@ -24,12 +24,27 @@ public class RoundTextActivity extends MvpActivity {
         return R.layout.activity_round_text;
     }
 
-
     @Override
-    public void initData(Bundle savedInstanceState) {
+    public void findViews() {
         gridView = (GridView) findViewById(R.id.gv_simple_demo);
         gridView.setAdapter(getAdapter());
     }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void setListener() {
+
+    }
+
 
     private ListAdapter getAdapter() {
         return new BaseListAdapter<String>(getData(), R.layout.shape_gv_item) {

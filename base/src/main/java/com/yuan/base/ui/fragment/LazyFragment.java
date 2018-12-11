@@ -83,7 +83,10 @@ abstract class LazyFragment extends BaseFragment {
      * 第一次fragment可见（进行初始化工作）
      */
     public void onFirstUserVisible() {
-        initData(getArguments());
+        findViews();
+        parseBundle(getArguments());
+        initData();
+        setListener();
     }
 
     /**

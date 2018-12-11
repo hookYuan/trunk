@@ -1,6 +1,7 @@
 package com.yuan.simple.one.sort;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -8,7 +9,7 @@ import android.view.ViewGroup;
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.sort.ChineseSortUtil;
-import com.yuan.base.ui.mvp.MvpActivity;
+import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.base.widget.sideBar.SideBar;
 import com.yuan.simple.R;
 
@@ -28,7 +29,7 @@ public class SortActivity extends MvpActivity {
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
+    public void findViews() {
         ChineseSortUtil.sortData(createData());
         RecyclerView recyclerView = find(R.id.rlv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -40,6 +41,20 @@ public class SortActivity extends MvpActivity {
         sideBar.setSortData(data);
     }
 
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void setListener() {
+
+    }
 
     private RLVAdapter createAdapter() {
         RLVAdapter adapter = new RLVAdapter(mContext) {

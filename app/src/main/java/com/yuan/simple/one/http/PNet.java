@@ -2,9 +2,9 @@ package com.yuan.simple.one.http;
 
 
 import com.yuan.base.tools.okhttp.OKHttp;
-import com.yuan.base.tools.okhttp.callback.BaseBack;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.ui.mvp.MvpPresenter;
+import com.yuan.base.tools.okhttp.callback.JsonBack;
+import com.yuan.base.ui.MvpPresenter;
 
 import okhttp3.Call;
 
@@ -14,12 +14,12 @@ import okhttp3.Call;
 public class PNet extends MvpPresenter<NetActivity> {
 
     public void get() {
-        new OKHttp(getV()).url("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
-                .get().execute(new BaseBack() {
-            @Override
-            public void onSuccess(Call call, String obj) {
-                ToastUtil.showShort(mContext, obj);
-            }
-        });
+        new OKHttp(getV()).get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
+                .execute(new JsonBack() {
+                    @Override
+                    public void onSuccess(Object o, String json) {
+                        ToastUtil.showShort(getContext(), json);
+                    }
+                });
     }
 }

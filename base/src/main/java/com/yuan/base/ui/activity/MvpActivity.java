@@ -1,15 +1,14 @@
-package com.yuan.base.ui.mvp;
+package com.yuan.base.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yuan.base.tools.common.ReflexUtil;
-import com.yuan.base.ui.activity.FragActivity;
+import com.yuan.base.ui.MvpPresenter;
 
 /**
  * Created by YuanYe on 2017/9/19.
  */
-
 public abstract class MvpActivity<T extends MvpPresenter> extends FragActivity {
 
     private T presenter;
@@ -21,6 +20,7 @@ public abstract class MvpActivity<T extends MvpPresenter> extends FragActivity {
             presenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
+        if (presenter != null) presenter.onCreate(savedInstanceState);
     }
 
     public T getP() {
@@ -32,5 +32,17 @@ public abstract class MvpActivity<T extends MvpPresenter> extends FragActivity {
             }
         }
         return presenter;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (presenter != null) presenter.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

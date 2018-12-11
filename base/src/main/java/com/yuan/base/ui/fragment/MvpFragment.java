@@ -1,11 +1,12 @@
-package com.yuan.base.ui.mvp;
+package com.yuan.base.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.yuan.base.tools.common.ReflexUtil;
-import com.yuan.base.ui.fragment.ExtraFragment;
+import com.yuan.base.ui.MvpPresenter;
 
 /**
  * Created by YuanYe on 2017/9/19.
@@ -21,6 +22,7 @@ public abstract class MvpFragment<T extends MvpPresenter> extends ExtraFragment 
             presenter.attachView(this);
         }
         super.onViewCreated(view, savedInstanceState);
+        if (presenter != null) presenter.onCreate(savedInstanceState);
     }
 
     protected T getP() {
@@ -32,5 +34,17 @@ public abstract class MvpFragment<T extends MvpPresenter> extends ExtraFragment 
             }
         }
         return presenter;
+    }
+
+    @Override
+    public void onUserVisible() {
+        super.onUserVisible();
+        if (presenter != null) presenter.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.yuan.base.tools.okhttp.kernel.OKConfig;
 import com.yuan.base.tools.okhttp.kernel.RxHttpClient;
-import com.yuan.base.tools.okhttp.params.ParamsBuild;
+import com.yuan.base.tools.okhttp.params.ParamBuild;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -52,23 +52,20 @@ public class OKHttp {
         }
     }
 
-    /**
-     * @param httpUrl
-     * @return
-     */
-    public ParamsBuild url(@NonNull String httpUrl) {
+    public ParamBuild post(@NonNull String httpUrl) {
         if (TextUtils.isEmpty(httpUrl)) {
             throw new NullPointerException("地址：url == null");
         }
         requestBuilder.url(httpUrl);
-        return new ParamsBuild(mContext, requestBuilder, client);
+        return new ParamBuild(mContext, requestBuilder, client, ParamBuild.POST, httpUrl);
     }
 
-    public ParamsBuild url(@NonNull HttpUrl _httpUrl) {
-        if (_httpUrl == null) {
+
+    public ParamBuild get(@NonNull String httpUrl) {
+        if (TextUtils.isEmpty(httpUrl)) {
             throw new NullPointerException("地址：url == null");
         }
-        requestBuilder.url(_httpUrl);
-        return new ParamsBuild(mContext, requestBuilder, client);
+        requestBuilder.url(httpUrl);
+        return new ParamBuild(mContext, requestBuilder, client, ParamBuild.GET, httpUrl);
     }
 }

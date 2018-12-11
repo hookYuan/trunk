@@ -34,19 +34,22 @@
     <dimen name="font_46">46sp</dimen>
     <dimen name="font_56">56sp</dimen>
     <!--尺寸适配文件-->
-    <dimen name="size_0.8">0.8dp</dimen>
+    <dimen name="size_0_8">0.8dp</dimen>
     <dimen name="size_1">1dp</dimen>
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_4">4dp</dimen>
     <dimen name="size_6">6dp</dimen>
+    <dimen name="size_7">7dp</dimen>
     <dimen name="size_8">8dp</dimen>
     <dimen name="size_10">10dp</dimen>
+    <dimen name="size_11">11dp</dimen>
     <dimen name="size_12">12dp</dimen>
     <dimen name="size_14">14dp</dimen>
+    <dimen name="size_15">15dp</dimen>
     <dimen name="size_16">16dp</dimen>
     <dimen name="size_18">18dp</dimen>
     <dimen name="size_20">20dp</dimen>
-    <dimen name="size_22">2dp</dimen>
+    <dimen name="size_22">22dp</dimen>
     <dimen name="size_24">24dp</dimen>
     <dimen name="size_26">26dp</dimen>
     <dimen name="size_28">28dp</dimen>
@@ -91,6 +94,7 @@
     <dimen name="size_140">140dp</dimen>
     <dimen name="size_150">150dp</dimen>
     <dimen name="size_160">160dp</dimen>
+    <dimen name="size_164">164dp</dimen>
     <dimen name="size_170">170dp</dimen>
     <dimen name="size_180">180dp</dimen>
     <dimen name="size_190">190dp</dimen>

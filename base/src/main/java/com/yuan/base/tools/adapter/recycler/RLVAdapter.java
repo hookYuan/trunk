@@ -12,13 +12,20 @@ import android.widget.TextView;
 import com.yuan.base.R;
 import com.yuan.base.tools.layout.Views;
 
+import java.util.List;
+
 /**
  * Created by YuanYe on 2017/12/18.
  * 简化RecyclerView的Adapter代码
  */
-public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHolder> implements View.OnClickListener {
+public abstract class RLVAdapter<T> extends RecyclerView.Adapter<RLVAdapter.ViewHolder> implements View.OnClickListener {
 
     protected Context mContext;
+
+    /**
+     * item点击事件监听
+     */
+    private OnItemClickListener listener;
 
     public RLVAdapter(Context context) {
         this.mContext = context;
@@ -34,6 +41,48 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
     public abstract
     @LayoutRes
     int getItemLayout(ViewGroup parent, int viewType);
+
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.itemView.setTag(R.id.item_position, position);
+        holder.itemView.setTag(R.id.item_holder, holder);
+        holder.itemView.setOnClickListener(this);
+        onBindHolder(holder, position);
+    }
+
+    /**
+     * 绑定数据
+     *
+     * @param holder
+     * @param position
+     */
+    public abstract void onBindHolder(ViewHolder holder, int position);
+
+    /**
+     * item的点击事件
+     */
+    protected void onItemClick(ViewHolder holder, View view, int position) {
+
+    }
+
+    public void setOnItemClick(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getTag(R.id.item_position) != null) {
+            int position = (int) view.getTag(R.id.item_position);
+            if (view.getTag(R.id.item_holder) != null) {
+                ViewHolder holder = (ViewHolder) view.getTag(R.id.item_holder);
+                if (holder.itemView.getId() == view.getId()) {
+                    onItemClick(holder, view, position);
+                    if (listener != null) listener.onItemClick(holder, view, position);
+                }
+            }
+        }
+    }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,39 +124,7 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
         }
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setTag(R.id.item_position, position);
-        holder.itemView.setTag(R.id.item_holder, holder);
-        holder.itemView.setOnClickListener(this);
-        onBindHolder(holder, position);
-    }
-
-    /**
-     * 绑定数据
-     *
-     * @param holder
-     * @param position
-     */
-    public abstract void onBindHolder(ViewHolder holder, int position);
-
-    /**
-     * item的点击事件
-     */
-    public void onItemClick(ViewHolder holder, View view, int position) {
-
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getTag(R.id.item_position) != null) {
-            int position = (int) view.getTag(R.id.item_position);
-            if (view.getTag(R.id.item_holder) != null) {
-                ViewHolder holder = (ViewHolder) view.getTag(R.id.item_holder);
-                if (holder.itemView.getId() == view.getId()) {
-                    onItemClick(holder, view, position);
-                }
-            }
-        }
+    public interface OnItemClickListener {
+        void onItemClick(ViewHolder holder, View view, int position);
     }
 }

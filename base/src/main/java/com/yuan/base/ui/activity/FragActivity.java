@@ -18,7 +18,7 @@ import java.util.List;
  * 在initData()中调用 addFragment()初始化
  * 调用showFragment()切换Fragment
  */
-public abstract class FragActivity<T extends Fragment> extends ExtraActivity {
+abstract class FragActivity<T extends Fragment> extends ExtraActivity {
 
     private static final String TAG = "FragActivity";
 

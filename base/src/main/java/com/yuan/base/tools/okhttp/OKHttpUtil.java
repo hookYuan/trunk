@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.yuan.base.tools.okhttp.kernel.OKConfig;
 import com.yuan.base.tools.okhttp.kernel.RxHttpClient;
-import com.yuan.base.tools.okhttp.params.ParamsBuild;
+import com.yuan.base.tools.okhttp.params.ParamBuild;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -30,10 +30,22 @@ public class OKHttpUtil {
 
     /**
      * 如果需要统一修改
+     *
      * @param okConfig
      */
-    public static void init(@NonNull OKConfig okConfig) {
+    public static void init(Context context, @NonNull OKConfig okConfig) {
         OKHttpUtil.okConfig = okConfig;
+        mContext = context;
+    }
+
+    /**
+     * 初始化的方法
+     */
+    private static void init() {
+        if (okConfig == null) {
+            throw new NullPointerException("全局OkHttp配置参数为空,请确认是否需要全局配置");
+        }
+        okHttp = new OKHttpUtil(mContext, okConfig);
     }
 
     private OKHttpUtil(@NonNull Context context, @NonNull OKConfig config) {
@@ -47,32 +59,22 @@ public class OKHttpUtil {
         }
     }
 
-    public static ParamsBuild url(@NonNull String httpUrl) {
-        if (okConfig == null) {
-            throw new NullPointerException("全局OkHttp配置参数为空,请确认是否需要全局配置");
-        }
-        if (okHttp == null) {
-            okHttp = new OKHttpUtil(mContext, okConfig);
-        }
-
+    public static ParamBuild post(@NonNull String httpUrl) {
+        init();
         if (TextUtils.isEmpty(httpUrl)) {
             throw new NullPointerException("地址：url == null");
         }
         requestBuilder.url(httpUrl);
-        return new ParamsBuild(mContext, requestBuilder, client);
+        return new ParamBuild(mContext, requestBuilder, client, ParamBuild.POST, httpUrl);
     }
 
-    public static ParamsBuild url(@NonNull HttpUrl _httpUrl) {
-        if (okConfig == null) {
-            throw new NullPointerException("全局OkHttp配置参数为空,请确认是否需要全局配置");
-        }
-        if (okHttp == null) {
-            okHttp = new OKHttpUtil(mContext, okConfig);
-        }
-        if (_httpUrl == null) {
+
+    public static ParamBuild get(@NonNull String httpUrl) {
+        init();
+        if (TextUtils.isEmpty(httpUrl)) {
             throw new NullPointerException("地址：url == null");
         }
-        requestBuilder.url(_httpUrl);
-        return new ParamsBuild(mContext, requestBuilder, client);
+        return new ParamBuild(mContext, requestBuilder, client, ParamBuild.GET, httpUrl);
     }
+
 }

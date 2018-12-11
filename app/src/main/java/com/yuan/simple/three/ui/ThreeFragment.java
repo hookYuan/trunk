@@ -1,9 +1,10 @@
 package com.yuan.simple.three.ui;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.ui.mvp.MvpFragment;
+import com.yuan.base.ui.fragment.MvpFragment;
 import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;
 
@@ -19,9 +20,24 @@ public class ThreeFragment extends MvpFragment {
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
+    public void findViews() {
         TitleBar titleBar = Views.find(mView, R.id.title_bar);
         titleBar.setTitleText("关于");
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void setListener() {
+
     }
 
 }

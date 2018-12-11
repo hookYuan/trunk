@@ -2,21 +2,46 @@ package com.yuan.simple;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.ui.mvp.MvpActivity;
+import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
 import com.yuan.simple.two.ui.TwoFragment;
 
 public class MainActivity extends MvpActivity {
 
+    /**
+     * 底部导航
+     */
+    private BottomNavigationView bottomView;
+
     @Override
-    public void initData(Bundle savedInstanceState) {
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void findViews() {
+        bottomView = Views.find(mContext, R.id.bottomNavigationView);
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initData() {
         addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
-        BottomNavigationView bottomView = Views.find(mContext, R.id.bottomNavigationView);
+
+    }
+
+    @Override
+    public void setListener() {
         bottomView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -34,10 +59,5 @@ public class MainActivity extends MvpActivity {
                 return false;
             }
         });
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_main;
     }
 }

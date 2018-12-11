@@ -1,5 +1,7 @@
 package com.yuan.simple.one.http;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -60,5 +62,15 @@ public class NetActivity extends RLVActivity<PNet> {
             mData.add("下载文件");
         }
         return mData;
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void setListener() {
+
     }
 }

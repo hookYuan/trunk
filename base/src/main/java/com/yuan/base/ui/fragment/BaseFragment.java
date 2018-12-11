@@ -3,27 +3,33 @@ package com.yuan.base.ui.fragment;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.layout.Views;
+import com.yuan.base.tools.log.ToastUtil;
 import com.yuan.base.tools.router.jump.JumpHelper;
 import com.yuan.base.tools.router.jump.JumpParam;
 import com.yuan.base.tools.common.KeyboardUtil;
-import com.yuan.base.ui.IView;
+import com.yuan.base.ui.BaseContract;
 
 /**
  * Created by YuanYe on 2017/4/30.
  * 7/10日修复BaseFragment部分bug,完善功能
  */
-abstract class BaseFragment extends Fragment implements IView {
+abstract class BaseFragment extends Fragment implements BaseContract.View {
 
     protected Activity mContext;  //防止getActivity()空指针
     //保存Fragment的状态，防止重启后Fragment重叠
@@ -117,5 +123,38 @@ abstract class BaseFragment extends Fragment implements IView {
 
     protected <T extends View> T find(@IdRes int viewId) {
         return Views.find(mView, viewId);
+    }
+
+    /**
+     * 获取颜色
+     * 避免23以上可用
+     *
+     * @param colorId
+     * @return
+     */
+    protected @ColorInt
+    final int getColor2(@ColorRes int colorId) {
+        return ContextCompat.getColor(mContext, colorId);
+    }
+
+    /**
+     * 获取Drawable
+     * 避免23以上可用
+     *
+     * @param drawableId
+     * @return
+     */
+    protected final Drawable getDrawable2(@DrawableRes int drawableId) {
+        return ContextCompat.getDrawable(mContext, drawableId);
+    }
+
+
+    /**
+     * Toast,系统默认样式，如需修改，请调用ToastUtil自定义
+     *
+     * @param msg 提示内容
+     */
+    protected final void toast(String msg) {
+        ToastUtil.showShort(mContext, msg);
     }
 }

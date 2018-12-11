@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.yuan.base.R;
+import com.yuan.base.tools.common.NoProguard;
 
 /**
  * Created by wanglei on 2016/1/21.
@@ -26,6 +28,8 @@ public class StateController extends FrameLayout {
     public static final int STATE_ERROR = 0x2;
     public static final int STATE_EMPTY = 0x3;
     public static final int STATE_CONTENT = 0x4;
+
+
     int displayState = -1;
 
     int loadingLayoutId, errorLayoutId, emptyLayoutId, contentLayoutId;
@@ -33,6 +37,25 @@ public class StateController extends FrameLayout {
     static final int RES_NONE = -1;
 
     OnStateChangeListener stateChangeListener;
+
+
+    /**
+     * 动画时长
+     */
+    private static int animationTime = 50;
+
+    /**
+     * 各个状态之间切换的时长
+     */
+    private static int switchTime = 200;
+    /**
+     * 记录上次动画时间
+     */
+    private long oldTime = 0;
+    /**
+     * 延迟
+     */
+    private Handler handler;
 
 
     public StateController(Context context) {
@@ -55,6 +78,7 @@ public class StateController extends FrameLayout {
         emptyLayoutId = typedArray.getResourceId(R.styleable.StateController_x_emptyLayoutId, RES_NONE);
         contentLayoutId = typedArray.getResourceId(R.styleable.StateController_x_contentLayoutId, RES_NONE);
         typedArray.recycle();
+        handler = new Handler();
     }
 
     @Override
@@ -134,18 +158,24 @@ public class StateController extends FrameLayout {
 
 
     private void notifyStateChange(int oldState, int newState, View enterView) {
-        if (enterView != null) {
 
-            displayState = newState;
-
-            if (oldState != -1) {
-                getStateChangeListener().onStateChange(oldState, newState);
-                getStateChangeListener().animationState(getDisplayView(oldState), enterView);
-            } else {
-                enterView.setVisibility(VISIBLE);
-                enterView.setAlpha(1);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (enterView != null) {
+                    displayState = newState;
+                    if (oldState != -1) {
+                        getStateChangeListener().onStateChange(oldState, newState);
+                        getStateChangeListener().animationState(getDisplayView(oldState), enterView);
+                    } else {
+                        enterView.setVisibility(VISIBLE);
+                        enterView.setAlpha(1);
+                    }
+                }
+                oldTime = System.currentTimeMillis();
             }
-        }
+        }, (switchTime - (System.currentTimeMillis() - oldTime)) >= 0 ?
+                switchTime - (System.currentTimeMillis() - oldTime) : 0);
     }
 
 
@@ -247,7 +277,7 @@ public class StateController extends FrameLayout {
     }
 
 
-    static class SavedState extends BaseSavedState {
+    static class SavedState extends BaseSavedState implements NoProguard {
         int state;
 
         SavedState(Parcelable superState) {
@@ -318,7 +348,7 @@ public class StateController extends FrameLayout {
             final ObjectAnimator enter = ObjectAnimator.ofFloat(enterView, View.ALPHA, 1f);
             ObjectAnimator exit = ObjectAnimator.ofFloat(exitView, View.ALPHA, 0f);
             set.playTogether(enter, exit);
-            set.setDuration(300);
+            set.setDuration(animationTime);
             set.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {

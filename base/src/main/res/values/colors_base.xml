@@ -10,7 +10,8 @@
     <color name="background">#eaeaea</color>
     <color name="backgroundWhite">#fafafa</color>
     <color name="backgroundBlack">#000000</color>
-    <color name="backgroundTransparent">#80000000</color>
+    <color name="backgroundBlackTransparent">#80000000</color>
+    <color name="backgroundWhiteTransparent">#80ffffff</color>
 
     <!--常用颜色-->
     <color name="white">#fafafa</color>

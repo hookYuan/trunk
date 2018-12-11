@@ -7,17 +7,16 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Created by YuanYe on 2018/4/13.
- * 跳转辅助类
+ * Activity跳转辅助类
+ *
+ * @author Created by YuanYe on 2018/4/13.
  */
-
-public class JumpHelper {
+public class Jump {
 
     public static void open(Context mContext, Class clazz) {
         open(mContext, clazz, null, false);
@@ -44,7 +43,7 @@ public class JumpHelper {
     }
 
     public static void openResult(Context mContext, Class clazz, JumpParam param, int requestCode, OnResultListener listener) {
-        JumpResult jumpResult = new JumpResult(mContext);
+        ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
         jumpResult.getFragment().startForResult(getIntent(mContext, clazz, param), requestCode, listener);
     }
 

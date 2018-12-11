@@ -7,7 +7,6 @@ ext.gson = '2.8.2'
 ext.eventbus = '3.0.0'
 ext.rxandroid = '2.0.1'
 ext.rxlifecycle = '2.1.0'
-ext.rxpermissions = '0.9.5@aar'
 ext.SmartRefreshLayout = '1.0.5.1'
 ext.swipebackhelper = '3.1.2'
 ext.arouter_api = '1.3.1'
@@ -71,7 +70,6 @@ dependencies {
     api "com.android.support:design:$support"
     api "org.greenrobot:eventbus:$eventbus"
     api "io.reactivex.rxjava2:rxandroid:$rxandroid"
-    api "com.tbruyelle.rxpermissions2:rxpermissions:$rxpermissions"
     api "com.scwang.smartrefresh:SmartRefreshLayout:$SmartRefreshLayout"
     api "com.scwang.smartrefresh:SmartRefreshHeader:$SmartRefreshLayout"
     api "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle"

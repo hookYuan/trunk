@@ -1,4 +1,4 @@
-package com.yuan.base.tools.router;
+package com.yuan.base.tools.router.arouter;
 
 
 import android.util.Log;

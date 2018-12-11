@@ -3,3 +3,9 @@ build/intermediates/lint-cache/maven.google/master-index.xml
 build/intermediates/lint-cache/maven.google/com/android/support/constraint/group-index.xml
 build/intermediates/proguard-files/proguard-defaults.txt-3.1.3
 build/intermediates/proguard-files/proguard-android.txt-3.1.3
+base/build/
+app/build/
+.idea/libraries/Gradle__io_reactivex_rxjava2_rxjava_2_1_0_jar.xml
+.idea/libraries/Gradle__com_trello_rxlifecycle2_rxlifecycle_components_2_1_0.xml
+.gradle/
+.idea/

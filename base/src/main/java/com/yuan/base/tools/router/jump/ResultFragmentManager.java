@@ -1,32 +1,33 @@
 package com.yuan.base.tools.router.jump;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 
 /**
+ * 处理ResultFragment添加到Activity
+ *
  * @author yuanye
  * @date 2018/12/11
  */
-public class JumpResult {
+public class ResultFragmentManager {
 
     /**
      * 标识Fragment
      */
-    private static final String TAG = "com.yuan.base.tools.router.jump.JumpResult";
+    private static final String TAG = "com.yuan.base.tools.router.jump.ResultFragmentManager";
     /**
      * 处理返回结果的Fragment
      */
     private ResultFragment resultFragment;
 
 
-    protected JumpResult(Activity activity) {
+    public ResultFragmentManager(Activity activity) {
         resultFragment = getFragment(activity);
     }
 
-    protected JumpResult(Context context) {
-        this((Activity)context);
+    public ResultFragmentManager(Context context) {
+        this((Activity) context);
     }
 
 
@@ -44,7 +45,7 @@ public class JumpResult {
         return fragment;
     }
 
-    protected ResultFragment getFragment() {
+    public ResultFragment getFragment() {
         return resultFragment;
     }
 }

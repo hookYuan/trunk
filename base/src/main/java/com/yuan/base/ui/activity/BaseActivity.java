@@ -10,10 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import com.yuan.base.tools.common.ScreenManager;
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.tools.router.jump.JumpHelper;
+import com.yuan.base.tools.router.jump.Jump;
 import com.yuan.base.tools.router.jump.JumpParam;
 import com.yuan.base.tools.common.KeyboardUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -55,7 +54,7 @@ abstract class BaseActivity extends RxAppCompatActivity {
      * @param clazz 需要打开的Activity
      */
     public void open(Class clazz) {
-        JumpHelper.open(mContext, clazz);
+        Jump.open(mContext, clazz);
     }
 
     /**
@@ -65,7 +64,7 @@ abstract class BaseActivity extends RxAppCompatActivity {
      * @param param 跳转需要传递的参数
      */
     public void open(Class clazz, JumpParam param) {
-        JumpHelper.open(mContext, clazz, param);
+        Jump.open(mContext, clazz, param);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.yuan.base.tools.okhttp.kernel;
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -66,16 +67,19 @@ public class RxHttpClient {
             if (cookieJar != null) {
                 builder.cookieJar(cookieJar);
             }
-            //设置缓存路径
-            File cacheFile = new File(config.getCacheFolder());
-            if (cacheFile.getParentFile().exists())
-                cacheFile.mkdirs();
-            //设置缓存大小
-            Cache cache = new Cache(cacheFile, config.getMaxCacheSize());
-            //设置缓存拦截器，实现网络缓存(有网络的时候不缓存，没有网络的时候缓存)
-            builder.addInterceptor(new CacheInterceptor(mContext))
-                    .addNetworkInterceptor(new CacheInterceptor(mContext))
-                    .cache(cache);
+
+            if (!TextUtils.isEmpty(config.getCacheFolder())) {
+                //设置缓存路径
+                File cacheFile = new File(config.getCacheFolder());
+                if (cacheFile.getParentFile().exists())
+                    cacheFile.mkdirs();
+                //设置缓存大小
+                Cache cache = new Cache(cacheFile, config.getMaxCacheSize());
+                //设置缓存拦截器，实现网络缓存(有网络的时候不缓存，没有网络的时候缓存)
+                builder.addInterceptor(new CacheInterceptor(mContext))
+                        .addNetworkInterceptor(new CacheInterceptor(mContext))
+                        .cache(cache);
+            }
             //添加请求头
             client = builder.build();
         }

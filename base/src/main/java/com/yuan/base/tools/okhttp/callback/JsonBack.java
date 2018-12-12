@@ -82,7 +82,7 @@ public abstract class JsonBack<T> implements BaseMainBack {
 
                     @Override
                     public void onNext(@NonNull TempBean response) {
-                        if (response.t == null || TextUtils.isEmpty(response.json)) {
+                        if (TextUtils.isEmpty(response.json)) {
                             runMainException(new NullPointerException("服务返回数据为空,请检查接口"));
                         } else {
                             onSuccess(response.t, response.json);

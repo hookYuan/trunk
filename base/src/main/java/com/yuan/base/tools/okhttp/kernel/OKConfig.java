@@ -13,7 +13,7 @@ public class OKConfig {
 
     private final static long CONNECTTIMEOUT = 10 * 1000l; //链接超时，单位：毫秒
     private final static long READTIMEOUT = 10 * 1000l;//读取超时， 单位：毫秒
-    private final static String CACHEFOLDER = "okCache"; //默认网络缓存文件夹
+    private final static String CACHEFOLDER = ""; //默认网络缓存文件夹
 
     private long connectTimeout; //连接超时时间
     private long readTimeout;//读取超时时间

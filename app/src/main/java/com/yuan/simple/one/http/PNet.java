@@ -14,7 +14,8 @@ import okhttp3.Call;
 public class PNet extends MvpPresenter<NetActivity> {
 
     public void get() {
-        new OKHttp(getV()).get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
+        new OKHttp(getV())
+                .get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
                 .execute(new JsonBack() {
                     @Override
                     public void onSuccess(Object o, String json) {

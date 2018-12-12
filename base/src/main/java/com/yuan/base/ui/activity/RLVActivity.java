@@ -1,6 +1,5 @@
 package com.yuan.base.ui.activity;
 
-import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

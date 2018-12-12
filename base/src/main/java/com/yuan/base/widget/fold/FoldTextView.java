@@ -300,7 +300,6 @@ public class FoldTextView extends AppCompatTextView implements View.OnClickListe
             formatExpandedText(type);
         } else {
             // 获取TextView中文字显示的宽度，需要在layout之后才能获取到，避免重复获取
-            Log.i("yuanye123", "丢掉的文字是----" + mListPosition + "------" + text);
             setCollapsedText(text, type);
         }
     }

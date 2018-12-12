@@ -45,7 +45,6 @@ public abstract class RLVFragment<T extends MvpPresenter> extends MvpFragment<T>
 
     @Override
     public void initData() {
-
         if (this instanceof IRefresh) HRefresh.init(refreshView, (IRefresh) this);
         else refreshView.setEnableRefresh(false);
 

@@ -193,17 +193,7 @@ public class TitleBarFragment extends RLVFragment {
     }
 
     @Override
-    public void findViews() {
-
-    }
-
-    @Override
     public void parseBundle(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void initData() {
 
     }
 

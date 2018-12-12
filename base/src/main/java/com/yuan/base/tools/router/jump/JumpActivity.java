@@ -16,7 +16,13 @@ import java.util.Map;
  *
  * @author Created by YuanYe on 2018/4/13.
  */
-public class Jump {
+public class JumpActivity {
+
+    /**
+     * 提供的默认请求码
+     */
+    public final static int PERMISSIONREQUESTCODE = 10021;
+
 
     public static void open(Context mContext, Class clazz) {
         open(mContext, clazz, null, false);
@@ -42,9 +48,22 @@ public class Jump {
         openResult(mContext, clazz, null, requestCode, listener);
     }
 
+    public static void openResult(Context mContext, Class clazz, OnResultListener listener) {
+        openResult(mContext, clazz, PERMISSIONREQUESTCODE, listener);
+    }
+
     public static void openResult(Context mContext, Class clazz, JumpParam param, int requestCode, OnResultListener listener) {
         ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
         jumpResult.getFragment().startForResult(getIntent(mContext, clazz, param), requestCode, listener);
+    }
+
+    public static void openResult(Context mContext, Intent intent, OnResultListener listener) {
+        openResult(mContext, intent, PERMISSIONREQUESTCODE, listener);
+    }
+
+    public static void openResult(Context context, Intent intent, int requestCode, OnResultListener listener) {
+        ResultFragmentManager jumpResult = new ResultFragmentManager(context);
+        jumpResult.getFragment().startForResult(intent, requestCode, listener);
     }
 
 

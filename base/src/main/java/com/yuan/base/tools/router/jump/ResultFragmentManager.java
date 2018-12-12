@@ -11,7 +11,6 @@ import android.content.Context;
  * @date 2018/12/11
  */
 public class ResultFragmentManager {
-
     /**
      * 标识Fragment
      */

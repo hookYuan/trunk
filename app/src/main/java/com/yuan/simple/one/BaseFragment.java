@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
-import com.yuan.base.tools.router.jump.Jump;
+import com.yuan.base.tools.router.jump.JumpActivity;
 import com.yuan.base.ui.fragment.RLVFragment;
 import com.yuan.simple.R;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
@@ -55,7 +55,7 @@ public class BaseFragment extends RLVFragment {
 
     @Override
     public void onItemClick(RLVAdapter.ViewHolder holder, View view, int position) {
-        Jump.open(mContext, mData.get(position).getClazz());
+        JumpActivity.open(mContext, mData.get(position).getClazz());
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Permission {
     /**
      * 提供的默认请求码
      */
-    public final static int PERMISSIONREQUESTCODE = 10021;
+    public final static int PERMISSIONREQUESTCODE = 10011;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static void request(Context mContext, String[] permissions, int requestCode, OnPermissionListener listener) {

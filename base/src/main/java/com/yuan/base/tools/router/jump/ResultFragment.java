@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 /**
  * 处理startActivityForResult返回结果
+ * 处理onRequestPermissionsResult返回结果
  *
  * @author yuanye
  * @date 2018/12/11

@@ -19,6 +19,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+
 /**
  * Created by YuanYe on 2017/9/13.
  * 文件下载
@@ -39,6 +40,10 @@ public abstract class FileBack implements BaseMainBack {
      */
     public FileBack(String fileDir) {
         this.saveDir = fileDir;
+        //校验地址是否可用
+        File cacheFile = new File(fileDir);
+        if (cacheFile.getParentFile().exists())
+            cacheFile.mkdirs();
         isSave = TextUtils.isEmpty(saveDir) ? false : true;
     }
 

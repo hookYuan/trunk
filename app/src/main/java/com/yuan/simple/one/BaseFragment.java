@@ -18,6 +18,7 @@ import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;
 import com.yuan.simple.one.http.NetActivity;
 import com.yuan.simple.one.input.InputActivity;
+import com.yuan.simple.one.multi.MultiActivity;
 import com.yuan.simple.one.roundView.RoundTextActivity;
 import com.yuan.simple.one.sort.SortActivity;
 import com.yuan.simple.one.toolbar.TitleBarActivity;
@@ -68,6 +69,8 @@ public class BaseFragment extends RLVFragment {
         mData.add(new OneListBean("input", InputActivity.class));
         mData.add(new OneListBean("okHttp", NetActivity.class));
         mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
+        mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
+        mData.add(new OneListBean("multiAdapter", MultiActivity.class));
         return mData;
     }
 

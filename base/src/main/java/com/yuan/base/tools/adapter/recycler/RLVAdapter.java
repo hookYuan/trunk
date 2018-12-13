@@ -15,12 +15,25 @@ import com.yuan.base.tools.layout.Views;
 import java.util.List;
 
 /**
+ * RecyclerView.Adapter 的基本封装
  * Created by YuanYe on 2017/12/18.
  * 简化RecyclerView的Adapter代码
  */
-public abstract class RLVAdapter<T> extends RecyclerView.Adapter<RLVAdapter.ViewHolder> implements View.OnClickListener {
+public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHolder> implements View.OnClickListener {
 
     protected Context mContext;
+
+    /**
+     * 位置Tag
+     */
+    private @IdRes
+    int positionTag = R.id.item_position;
+
+    /**
+     * holder Tag
+     */
+    private @IdRes
+    int holderTag = R.id.item_holder;
 
     /**
      * item点击事件监听
@@ -45,8 +58,8 @@ public abstract class RLVAdapter<T> extends RecyclerView.Adapter<RLVAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setTag(R.id.item_position, position);
-        holder.itemView.setTag(R.id.item_holder, holder);
+        holder.itemView.setTag(positionTag, position);
+        holder.itemView.setTag(holderTag, holder);
         holder.itemView.setOnClickListener(this);
         onBindHolder(holder, position);
     }
@@ -72,10 +85,10 @@ public abstract class RLVAdapter<T> extends RecyclerView.Adapter<RLVAdapter.View
 
     @Override
     public void onClick(View view) {
-        if (view.getTag(R.id.item_position) != null) {
-            int position = (int) view.getTag(R.id.item_position);
-            if (view.getTag(R.id.item_holder) != null) {
-                ViewHolder holder = (ViewHolder) view.getTag(R.id.item_holder);
+        if (view.getTag(positionTag) != null) {
+            int position = (int) view.getTag(positionTag);
+            if (view.getTag(holderTag) != null) {
+                ViewHolder holder = (ViewHolder) view.getTag(holderTag);
                 if (holder.itemView.getId() == view.getId()) {
                     onItemClick(holder, view, position);
                     if (listener != null) listener.onItemClick(holder, view, position);

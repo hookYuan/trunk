@@ -137,6 +137,7 @@
     <attr name="rightTextSize" format="dimension"></attr>
     <!--TitleBar背景-->
     <attr name="backgroundImg" format="string"></attr>
+    <attr name="backgroundColor" format="color"></attr>
     <!--status-->
     <attr name="statusBgColor" format="color"></attr>
     <attr name="statusVisibility" format="boolean"></attr>
@@ -161,6 +162,7 @@
         <attr name="leftTextSize"></attr>
         <attr name="centerTextSize"></attr>
         <attr name="rightTextSize"></attr>
+        <attr name="backgroundColor"></attr>
     </declare-styleable>
     <declare-styleable name="Title">
         <attr name="leftText"></attr>

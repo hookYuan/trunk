@@ -2,35 +2,41 @@ package com.yuan.base.tools.adapter.recycler;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-
-import com.yuan.base.R;
-import com.yuan.base.tools.common.Kits;
-
 /**
  * Created by YuanYe on 2017/12/4.
  * Grid布局样式分割线
  */
 public class GridDivider extends RecyclerView.ItemDecoration {
 
+    /**
+     * 画笔
+     */
     private Paint mPaint;
+    /**
+     * 分割线宽度
+     */
     private int mDividerWidth;
+
+    /**
+     * 背景颜色
+     */
     private
     @ColorInt
     int bgColor;
 
     public GridDivider(Context context) {
-        mDividerWidth = Kits.Dimens.dpToPxInt(context, 0.8f);
+        mDividerWidth = (int) (0.8 * context.getResources().getDisplayMetrics().density);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(ContextCompat.getColor(context, R.color.colorDivider));
+        mPaint.setColor(Color.parseColor("#dddddd"));
         mPaint.setStyle(Paint.Style.FILL);
     }
 

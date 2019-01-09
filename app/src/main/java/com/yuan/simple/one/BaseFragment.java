@@ -1,10 +1,12 @@
 package com.yuan.simple.one;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,6 +14,8 @@ import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.router.jump.JumpActivity;
+import com.yuan.base.tools.thread.RxThread;
+import com.yuan.base.tools.thread.ThreadHelper;
 import com.yuan.base.ui.fragment.RLVFragment;
 import com.yuan.simple.R;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
@@ -41,6 +45,45 @@ public class BaseFragment extends RLVFragment {
 
         getTitleBar().setTitleText("基础功能")
                 .setTextColor(ContextCompat.getColor(mContext, R.color.white))
+                .setRightText("线程")
+                .setRightOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//
+//                            }
+//                        }).start();
+//                        RxThread.onCreate().newThread(new RxThread.CallBack() {
+//                            @Override
+//                            public void run(Message message) {
+//
+//                            }
+//                        });
+
+//                        RxThread.onCreate().mainThread(new RxThread.CallBack() {
+//                            @Override
+//                            public void run(Message message) {
+//
+//                            }
+//                        });
+//                        RxThread.onCreate().newThread(new RxThread.CallBack() {
+//                            @Override
+//                            public void run(Message message) {
+//
+//                            }
+//                        });
+
+//                        RxThread.onCreate()
+//                                .currentThread(new RxThread.CallBack() {
+//                                    @Override
+//                                    public void run(Message message) {
+//
+//                                    }
+//                                });
+                    }
+                })
                 .setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
     }
 

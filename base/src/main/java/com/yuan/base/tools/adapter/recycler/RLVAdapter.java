@@ -5,13 +5,12 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.yuan.base.R;
-import com.yuan.base.tools.layout.Views;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,34 +18,26 @@ import java.util.List;
  * Created by YuanYe on 2017/12/18.
  * 简化RecyclerView的Adapter代码
  */
-public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHolder> implements View.OnClickListener {
-
+public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHolder> {
+    /**
+     * context
+     */
     protected Context mContext;
-
-    /**
-     * 位置Tag
-     */
-    private @IdRes
-    int positionTag = R.id.item_position;
-
-    /**
-     * holder Tag
-     */
-    private @IdRes
-    int holderTag = R.id.item_holder;
-
     /**
      * item点击事件监听
+     * 支持多次设置点击事件
      */
-    private OnItemClickListener listener;
+    private List<OnItemClickListener> listeners;
 
     public RLVAdapter(Context context) {
         this.mContext = context;
+        listeners = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = Views.inflate(parent, getItemLayout(parent, viewType));
+        View itemView = LayoutInflater.from(mContext).inflate(getItemLayout(parent, viewType)
+                , parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
@@ -58,9 +49,7 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setTag(positionTag, position);
-        holder.itemView.setTag(holderTag, holder);
-        holder.itemView.setOnClickListener(this);
+        holder.itemView.setOnClickListener(new OnClickListener(holder, position));
         onBindHolder(holder, position);
     }
 
@@ -79,24 +68,16 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
 
     }
 
+    /**
+     * 提供外部设置点击事件
+     *
+     * @param listener 事件监听
+     */
     public void setOnItemClick(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getTag(positionTag) != null) {
-            int position = (int) view.getTag(positionTag);
-            if (view.getTag(holderTag) != null) {
-                ViewHolder holder = (ViewHolder) view.getTag(holderTag);
-                if (holder.itemView.getId() == view.getId()) {
-                    onItemClick(holder, view, position);
-                    if (listener != null) listener.onItemClick(holder, view, position);
-                }
-            }
+        if (listeners != null && !listeners.contains(listener)) {
+            listeners.add(listener);
         }
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -113,7 +94,7 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
         public <k extends View> k getView(@IdRes int resId) {
             k k = (k) mViews.get(resId);
             if (k == null) {
-                k = Views.find(itemView, resId);
+                k = (k) itemView.findViewById(resId);
                 mViews.put(resId, k);
             }
             return k;
@@ -134,6 +115,37 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
          */
         public void setOnclick(@IdRes int resId, View.OnClickListener listener) {
             getView(resId).setOnClickListener(listener);
+        }
+
+        /**
+         * 控制自定义View的显示与隐藏
+         */
+        public void setVisibility(@IdRes int resId, int visibility) {
+            getView(resId).setVisibility(visibility);
+        }
+    }
+
+    /**
+     * 点击事件处理
+     */
+    public class OnClickListener implements View.OnClickListener {
+
+        private ViewHolder holder;
+        private int position;
+
+        public OnClickListener(ViewHolder holder, int position) {
+            this.holder = holder;
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View view) {
+            onItemClick(holder, view, position);
+            if (listeners != null && listeners.size() > 0) {
+                for (OnItemClickListener listener : listeners) {
+                    listener.onItemClick(holder, view, position);
+                }
+            }
         }
     }
 

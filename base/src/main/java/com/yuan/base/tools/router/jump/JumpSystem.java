@@ -8,7 +8,7 @@ import android.provider.Settings;
 
 import java.io.File;
 
-import io.reactivex.annotations.NonNull;
+import android.support.annotation.NonNull;
 
 /**
  * 跳转到系统

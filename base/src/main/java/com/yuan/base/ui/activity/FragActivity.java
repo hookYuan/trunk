@@ -45,6 +45,14 @@ abstract class FragActivity<T extends Fragment> extends ExtraActivity {
      */
     private Bundle savedInstanceState;
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        this.savedInstanceState = savedInstanceState;
+        if (savedInstanceState != null) {
+            showIndex = savedInstanceState.getInt(SAVE_SHOWPOSITION, 0);
+        }
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -61,15 +69,6 @@ abstract class FragActivity<T extends Fragment> extends ExtraActivity {
         }
         //保存上次Fragment的位置
         outState.putInt(SAVE_SHOWPOSITION, showIndex);
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        this.savedInstanceState = savedInstanceState;
-        if (savedInstanceState != null) {
-            showIndex = savedInstanceState.getInt(SAVE_SHOWPOSITION, 0);
-        }
-        super.onCreate(savedInstanceState);
     }
 
     /**

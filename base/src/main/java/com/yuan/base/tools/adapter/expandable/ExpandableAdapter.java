@@ -3,12 +3,12 @@ package com.yuan.base.tools.adapter.expandable;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.tools.layout.Views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,10 +65,10 @@ public abstract class ExpandableAdapter<S extends ExpandableSection, I extends E
     public RLVAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE) {
             int layout = getChildLayout(parent, viewType);
-            return new ChildHolder(Views.inflate(parent, layout));
+            return new ChildHolder(LayoutInflater.from(parent.getContext()).inflate(layout, parent, false));
         } else if (viewType == SECTION_TYPE) {
             int layout = getGroupLayout(parent, viewType);
-            return new GroupHolder(Views.inflate(parent, layout));
+            return new GroupHolder(LayoutInflater.from(parent.getContext()).inflate(layout, parent, false));
         }
         return onCreateViewHolder(parent, viewType);
     }

@@ -15,17 +15,16 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.adapter.BaseListAdapter;
-import com.yuan.base.tools.common.Kits;
-import com.yuan.base.tools.layout.Views;
 
 import java.util.List;
 
@@ -52,6 +51,8 @@ public class TitleBar extends AbsTitle<TitleBar> {
     private float leftFontSize = 16 * context.getResources().getDisplayMetrics().scaledDensity; //左侧文字大小
     private float centerFontSize = 18 * context.getResources().getDisplayMetrics().scaledDensity; //中间文字大小
     private float rightFontSize = 16 * context.getResources().getDisplayMetrics().scaledDensity; //右侧文字大小
+
+    private int backgroundColor = ContextCompat.getColor(context, android.R.color.transparent); //titleBar背景颜色
 
     private boolean leftClickFinish;//点击左侧图标返回
 
@@ -89,8 +90,10 @@ public class TitleBar extends AbsTitle<TitleBar> {
         leftFontColor = ta.getColor(R.styleable.TitleBar_leftTextColor, ContextCompat.getColor(context, R.color.colorFont33));
         centerFontColor = ta.getColor(R.styleable.TitleBar_centerTextColor, ContextCompat.getColor(context, R.color.colorFont33));
         rightFontColor = ta.getColor(R.styleable.TitleBar_rightTextColor, ContextCompat.getColor(context, R.color.colorFont33));
+        backgroundColor = ta.getColor(R.styleable.TitleBar_backgroundColor, ContextCompat.getColor(context, android.R.color.transparent));
         leftFontSize = ta.getDimension(R.styleable.TitleBar_leftTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
         centerFontSize = ta.getDimension(R.styleable.TitleBar_centerTextSize, 18 * context.getResources().getDisplayMetrics().scaledDensity);
+        rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
         rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
         ta.recycle();
         drawTitle();
@@ -113,9 +116,9 @@ public class TitleBar extends AbsTitle<TitleBar> {
         setLeftIcon(leftIcon);
 
         if (titleTextView == null) {
-            View view = Views.inflate(context, R.layout.title_center);
-            titleTextView = Views.find(view, R.id.tv_title);
-            subtitleTextView = Views.find(view, R.id.tv_subtitle);
+            View view = LayoutInflater.from(context).inflate(R.layout.title_center, this, false);
+            titleTextView = view.findViewById(R.id.tv_title);
+            subtitleTextView = view.findViewById(R.id.tv_subtitle);
             subtitleTextView.setVisibility(GONE);
             addCenterView(view);
         }
@@ -135,6 +138,8 @@ public class TitleBar extends AbsTitle<TitleBar> {
         setRightText(rightText);
 
         if (leftClickFinish) setLeftClickFinish();
+
+        setBackgroundColor(backgroundColor);
     }
 
 
@@ -231,10 +236,10 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
     public TitleBar setRightAsButton(@DrawableRes int res) {
         rightTextView.setBackgroundResource(res);
-        int left = Kits.Dimens.dpToPxInt(context, 8);
-        int top = Kits.Dimens.dpToPxInt(context, 4);
-        int right = Kits.Dimens.dpToPxInt(context, 8);
-        int bottom = Kits.Dimens.dpToPxInt(context, 4);
+        int left = (int) (8 * context.getResources().getDisplayMetrics().density);
+        int top = (int) (4 * context.getResources().getDisplayMetrics().density);
+        int right = (int) (8 * context.getResources().getDisplayMetrics().density);
+        int bottom = (int) (4 * context.getResources().getDisplayMetrics().density);
         rightTextView.setPadding(left, top, right, bottom);
         return this;
     }
@@ -287,12 +292,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
             //将window视图显示在点击按钮下面(向上偏移20像素)
             popupWindowMenu.showAsDropDown(view, 0, 0);
             ListView listView = (ListView) popupView.findViewById(R.id.pop_listView);
-            listView.setAdapter(new BaseListAdapter<String>(popupData, R.layout.title_menu_item) {
-                @Override
-                public void bindView(ViewHolder holder, String obj) {
-                    holder.setText(R.id.tv_item_content, obj);
-                }
-            });
+            listView.setAdapter(new MenuAdapter(popupData));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -355,5 +355,52 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
     public interface OnMenuItemClickListener {
         void onItemClick(int position);
+    }
+
+
+    /**
+     * menu菜单适配器
+     */
+    public class MenuAdapter extends BaseAdapter {
+
+        private List<String> popupData;
+
+        public MenuAdapter(List<String> popupData) {
+            this.popupData = popupData;
+        }
+
+        @Override
+        public int getCount() {
+            return popupData.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return popupData.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder holder = null;
+            if (view == null) {
+                holder = new ViewHolder();
+                view = LayoutInflater.from(context).inflate(R.layout.title_menu_item, viewGroup, false);
+                holder.content = view.findViewById(R.id.tv_item_content);
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder) view.getTag();
+            }
+            holder.content.setText(popupData.get(i));
+            return view;
+        }
+
+        public class ViewHolder {
+            private TextView content;
+        }
     }
 }

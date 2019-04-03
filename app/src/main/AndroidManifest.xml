@@ -19,7 +19,9 @@
         <activity android:name=".one.toolbar.TitleBarActivity" />
         <activity android:name=".one.toolbar.TitleDemo1" />
         <activity android:name=".one.roundView.RoundTextActivity" />
-        <activity android:name=".one.foldTextView.FoldActivity" />
+        <activity android:name=".one.foldTextView.FoldActivity">
+
+        </activity>
         <activity android:name=".one.sort.SortActivity" />
         <activity
             android:name=".one.input.InputActivity"
@@ -27,6 +29,7 @@
         <activity android:name=".one.http.NetActivity" />
         <activity android:name=".one.dialog.AlertDialogActivity" />
         <activity android:name=".one.multi.MultiActivity"></activity>
+
     </application>
 
 </manifest>

@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.yuan.base.R;
 import com.yuan.base.tools.glide.GlideHelper;
-import com.yuan.base.tools.layout.Views;
 
 /**
  * Created by YuanYe on 2018/8/4.
@@ -106,7 +105,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
     }
 
     public <T extends View> T find(@IdRes int viewId) {
-        return Views.find(this, viewId);
+        return this.findViewById(viewId);
     }
 
     /**

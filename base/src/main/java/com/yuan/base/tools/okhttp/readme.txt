@@ -1,4 +1,4 @@
-OKHttpUtil使用说明
+OKHttpUtil使用说明（依赖okhttp3和Gson）
 
 1、OkHttpUtil有两种使用方式：
 一、全局设置，使用OKHttpUtil类实现，使用前需要在Application中做全局初始化的操作

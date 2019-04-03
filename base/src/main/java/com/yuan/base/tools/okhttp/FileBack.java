@@ -1,24 +1,17 @@
 package com.yuan.base.tools.okhttp.callback;
 
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import com.yuan.base.tools.okhttp.callback.construct.BaseMainBack;
-import com.yuan.base.tools.okhttp.callback.construct.BaseResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by YuanYe on 2017/9/13.
@@ -31,27 +24,44 @@ public abstract class FileBack implements BaseMainBack {
      */
     private String saveDir = ""; //下载文件保存目录
     /**
-     * 是否保存文件
+     * 是否保存文件 true:保存， false:不保存
      */
     private boolean isSave;
+    /**
+     * 主线程
+     */
+    private Handler mainHandler;
 
     /**
      * @param fileDir 需要保存的完整地址
      */
     public FileBack(String fileDir) {
         this.saveDir = fileDir;
-        //校验地址是否可用
-        File cacheFile = new File(fileDir);
-        if (cacheFile.getParentFile().exists())
-            cacheFile.mkdirs();
-        isSave = TextUtils.isEmpty(saveDir) ? false : true;
+        init(saveDir);
     }
 
     /**
      * 默认不保存
      */
     public FileBack() {
-        isSave = TextUtils.isEmpty(saveDir) ? false : true;
+        init(saveDir);
+    }
+
+    /**
+     * 初始化
+     */
+    private void init(String fileDir) {
+        //校验地址是否可用|
+        if (TextUtils.isEmpty(saveDir)) {
+            isSave = false;
+        } else {
+            File cacheFile = new File(fileDir);
+            if (cacheFile.getParentFile().exists()) {
+                cacheFile.mkdirs();
+            }
+            isSave = true;
+        }
+        mainHandler = new Handler(Looper.getMainLooper());
     }
 
     /**
@@ -70,12 +80,11 @@ public abstract class FileBack implements BaseMainBack {
      */
     @MainThread
     public void onDowning(int percent, long total, long current) {
-
     }
 
 
     @Override
-    public void onResponse(BaseResponse response) throws Exception {
+    public void onResponse(Response response) throws Exception {
         if (!isSave) {
             byte[] buffer = new byte[2048];
             int len;
@@ -89,19 +98,13 @@ public abstract class FileBack implements BaseMainBack {
                 final int progress = (int) (sum * 1.0f / total * 100);
                 final long temp = sum;
                 //切换到主线程
-                Observable.create(new ObservableOnSubscribe<Integer>() {
+                mainHandler.post(new Runnable() {
                     @Override
-                    public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
-                        e.onNext(progress);
+                    public void run() {
+                        // 下载中
+                        onDowning(progress, total, temp);
                     }
-                }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                        .subscribe(new Consumer<Integer>() {
-                            @Override
-                            public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
-                                // 下载中
-                                onDowning(response, total, temp);
-                            }
-                        });
+                });
             }
             bos.close();
             runMainSuccess(saveDir, bos.toByteArray());
@@ -125,19 +128,13 @@ public abstract class FileBack implements BaseMainBack {
                     final long temp = sum;
                     final int progress = (int) (sum * 1.0f / total * 100);
                     //切换到主线程
-                    Observable.create(new ObservableOnSubscribe<Integer>() {
+                    mainHandler.post(new Runnable() {
                         @Override
-                        public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
-                            e.onNext(progress);
+                        public void run() {
+                            // 下载中
+                            onDowning(progress, total, temp);
                         }
-                    }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                            .subscribe(new Consumer<Integer>() {
-                                @Override
-                                public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
-                                    // 下载中
-                                    onDowning(response, total, temp);
-                                }
-                            });
+                    });
                 }
                 fos.flush();
                 runMainSuccess(savePath + File.separator + fileName, null);
@@ -186,36 +183,23 @@ public abstract class FileBack implements BaseMainBack {
 
 
     private void runMainException(Exception exception) {
-        Observable.create(new ObservableOnSubscribe<Exception>() {
+        mainHandler.post(new Runnable() {
             @Override
-            public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Exception> e) throws Exception {
-                e.onNext(exception);
+            public void run() {
+                onFail(exception);
             }
-        }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                .subscribe(new Consumer<Exception>() {
-
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Exception response) throws Exception {
-                        onFail(response);
-                    }
-                });
+        });
     }
 
     private void runMainSuccess(String saveDir, final byte[] bytes) {
         //切换到主线程
-        Observable.create(new ObservableOnSubscribe<Integer>() {
+        mainHandler.post(new Runnable() {
             @Override
-            public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<Integer> e) throws Exception {
-                e.onNext(0);
+            public void run() {
+                // 下载完成
+                onSuccess(saveDir, bytes);
             }
-        }).observeOn(AndroidSchedulers.mainThread()) //指定 Subscriber 的回调发生在主线程
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Integer response) throws Exception {
-                        // 下载完成
-                        onSuccess(saveDir, bytes);
-                    }
-                });
+        });
     }
 
 }

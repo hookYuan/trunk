@@ -2,11 +2,9 @@ package com.yuan.base.tools.okhttp.params;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.yuan.base.tools.okhttp.callback.construct.BaseMainBack;
+import com.yuan.base.tools.okhttp.callback.BaseMainBack;
 
 import java.io.File;
 import java.net.FileNameMap;
@@ -18,7 +16,6 @@ import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -247,6 +244,4 @@ public class ParamBuild {
         }
         return contentType;
     }
-
-
 }

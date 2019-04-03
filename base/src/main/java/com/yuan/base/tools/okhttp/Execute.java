@@ -2,8 +2,8 @@ package com.yuan.base.tools.okhttp.params;
 
 import android.content.Context;
 
-import com.yuan.base.tools.okhttp.callback.construct.BaseMainBack;
-import com.yuan.base.tools.okhttp.callback.construct.MainCall;
+import com.yuan.base.tools.okhttp.callback.BaseMainBack;
+import com.yuan.base.tools.okhttp.callback.MainCall;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

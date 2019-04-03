@@ -1,6 +1,4 @@
-package com.yuan.base.tools.okhttp.callback.construct;
-
-import java.io.InputStream;
+package com.yuan.base.tools.okhttp.callback;
 
 import okhttp3.ResponseBody;
 
@@ -10,7 +8,7 @@ import okhttp3.ResponseBody;
  * @author yuanye
  * @date 2018/11/28 11:47
  */
-public class BaseResponse {
+public class Response {
 
     public ResponseBody body;
     /**

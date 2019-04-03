@@ -1,7 +1,6 @@
 package com.yuan.base.tools.okhttp.kernel;
 
 import android.content.Context;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import java.io.File;

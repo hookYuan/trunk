@@ -25,7 +25,7 @@ public class NetActivity extends RLVActivity<PNet> {
     public void initRecyclerView(RecyclerView rlvList) {
         rlvList.setLayoutManager(new LinearLayoutManager(mContext));
         rlvList.addItemDecoration(new GridDivider(mContext));
-        getTitleBar().setTitleText("OKHttp")
+        getTitleBar().setTitleText("OKUtil")
                 .setLeftClickFinish()
                 .setTextColor(getResources().getColor(com.yuan.base.R.color.white))
                 .setLeftIcon(getResources().getDrawable(com.yuan.base.R.drawable.ic_base_back_white))

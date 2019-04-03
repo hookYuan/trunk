@@ -3,7 +3,6 @@ package com.yuan.base.tools.okhttp;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.AnyThread;
@@ -876,7 +875,10 @@ public class OKUtil {
                 try {
                     is = response.body.byteStream();
                     final long total = response.contentLength;
-                    final String fileName = getNameFromUrl(response.requestUrl); //文件名
+
+                    //TODO 如果传入的路径是文件夹，取url做文件名，否则取传入文件名
+                    String fileName = getNameFromUrl(response.requestUrl); //文件名
+
                     File file = new File(savePath, fileName);
                     fos = new FileOutputStream(file);
                     long sum = 0;
@@ -922,7 +924,7 @@ public class OKUtil {
          */
         private String isExistDir(String saveDir) throws IOException {
             // 下载位置
-            File downloadFile = new File(Environment.getExternalStorageDirectory(), saveDir);
+            File downloadFile = new File(saveDir);
             if (!downloadFile.mkdirs()) {
                 downloadFile.createNewFile();
             }

@@ -9,3 +9,5 @@ app/build/
 .idea/libraries/Gradle__com_trello_rxlifecycle2_rxlifecycle_components_2_1_0.xml
 .gradle/
 .idea/
+base/base.iml
+Trunk_Java.iml

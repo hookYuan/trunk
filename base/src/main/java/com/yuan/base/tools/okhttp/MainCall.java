@@ -1,4 +1,4 @@
-package com.yuan.base.tools.okhttp.callback;
+package com.yuan.base.tools.okhttp;
 
 import android.os.Handler;
 import android.os.Looper;

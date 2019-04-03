@@ -3,10 +3,8 @@ package com.yuan.simple.one.http;
 
 import com.yuan.base.tools.okhttp.OKHttp;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.tools.okhttp.callback.JsonBack;
+import com.yuan.base.tools.okhttp.JsonBack;
 import com.yuan.base.ui.MvpPresenter;
-
-import okhttp3.Call;
 
 /**
  * Created by YuanYe on 2018/8/15.

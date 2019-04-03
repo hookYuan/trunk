@@ -1,4 +1,4 @@
-package com.yuan.base.tools.okhttp.callback;
+package com.yuan.base.tools.okhttp;
 
 import okhttp3.ResponseBody;
 

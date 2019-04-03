@@ -1,17 +1,12 @@
-package com.yuan.base.tools.okhttp.params;
+package com.yuan.base.tools.okhttp;
 
 import android.content.Context;
-
-import com.yuan.base.tools.okhttp.callback.BaseMainBack;
-import com.yuan.base.tools.okhttp.callback.MainCall;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
  * Created by YuanYe on 2017/9/26.
  */
-
 public class Execute {
 
     protected Request.Builder requestBuilder;

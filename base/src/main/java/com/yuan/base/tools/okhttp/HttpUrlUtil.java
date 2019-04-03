@@ -1,4 +1,4 @@
-package com.yuan.base.tools.okhttp.params;
+package com.yuan.base.tools.okhttp;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author yuanye
  * @date 2018/11/28 15:26
  */
-public class HttpUrlUtil {
+class HttpUrlUtil {
 
     /**
      * 地址上添加参数

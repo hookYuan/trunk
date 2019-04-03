@@ -7,6 +7,12 @@ import java.util.Map;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * 描述：key-value本地存储
+ *
+ * @author yuanye
+ * @date 2019/4/3 14:48
+ */
 public class SPUtil {
     /**
      * 保存在手机里面的文件名

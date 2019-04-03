@@ -1,4 +1,4 @@
-package com.yuan.base.tools.okhttp.kernel;
+package com.yuan.base.tools.okhttp;
 
 import android.support.annotation.NonNull;
 

@@ -4,11 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.yuan.base.tools.okhttp.kernel.OKConfig;
-import com.yuan.base.tools.okhttp.kernel.RxHttpClient;
-import com.yuan.base.tools.okhttp.params.ParamBuild;
-
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 

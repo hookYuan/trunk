@@ -1,4 +1,4 @@
-package com.yuan.base.tools.okhttp.kernel;
+package com.yuan.base.tools.okhttp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -20,7 +20,8 @@ import okhttp3.OkHttpClient;
  * 根据CacheInterceptor实现OKHttp缓存,
  * 本类主要用于创建OKHttpClient对象,一次请求创建一个OKHttpClient对象
  */
-public class RxHttpClient {
+
+class RxHttpClient {
 
     private static final String TAG = "RxHttpClient";
 

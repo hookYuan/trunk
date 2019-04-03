@@ -1,4 +1,4 @@
-package com.yuan.base.tools.okhttp.kernel;
+package com.yuan.base.tools.okhttp;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -1,10 +1,8 @@
-package com.yuan.base.tools.okhttp.params;
+package com.yuan.base.tools.okhttp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import com.yuan.base.tools.okhttp.callback.BaseMainBack;
 
 import java.io.File;
 import java.net.FileNameMap;

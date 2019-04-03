@@ -5,7 +5,7 @@ import android.util.Log;
 import java.lang.reflect.ParameterizedType;
 
 /**
- * Created by hpw on 16/10/28.
+ * Created by yuan
  * 根据泛型型反射对象
  */
 public class ReflexUtil {

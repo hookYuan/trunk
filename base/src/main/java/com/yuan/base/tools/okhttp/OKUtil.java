@@ -507,7 +507,7 @@ public class OKUtil {
             }
         }
 
-        protected void runMainException(Exception exception) {
+        protected void runMainException(final Exception exception) {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -728,7 +728,7 @@ public class OKUtil {
         @Override
         public void onResponse(Response response) {
             try {
-                String json = response.body.string();
+                final String json = response.body.string();
 
                 Class<T> clazz = getClazz();
                 if (clazz != null) {
@@ -740,7 +740,7 @@ public class OKUtil {
                         onSuccess(entity, json);
                     }
                 });
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -848,7 +848,7 @@ public class OKUtil {
                 int len;
                 long sum = 0;
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                long total = response.contentLength;
+                final long total = response.contentLength;
                 InputStream is = response.body.byteStream();
                 while ((len = is.read(buffer)) != -1) {
                     bos.write(buffer, 0, len);
@@ -875,7 +875,7 @@ public class OKUtil {
                 final String savePath = isExistDir(saveDir);
                 try {
                     is = response.body.byteStream();
-                    long total = response.contentLength;
+                    final long total = response.contentLength;
                     final String fileName = getNameFromUrl(response.requestUrl); //文件名
                     File file = new File(savePath, fileName);
                     fos = new FileOutputStream(file);
@@ -940,7 +940,7 @@ public class OKUtil {
         }
 
 
-        private void runMainException(Exception exception) {
+        private void runMainException(final Exception exception) {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -949,7 +949,7 @@ public class OKUtil {
             });
         }
 
-        private void runMainSuccess(String saveDir, final byte[] bytes) {
+        private void runMainSuccess(final String saveDir, final byte[] bytes) {
             //切换到主线程
             mainHandler.post(new Runnable() {
                 @Override
@@ -1118,5 +1118,4 @@ public class OKUtil {
         public int code;
 
     }
-
 }

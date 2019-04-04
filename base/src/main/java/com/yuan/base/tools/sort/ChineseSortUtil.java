@@ -3,6 +3,7 @@ package com.yuan.base.tools.sort;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by YuanYe on 2018/7/12.
@@ -16,7 +17,7 @@ public class ChineseSortUtil {
      * @param data 传入的数据需要集成SortBean
      * @return
      */
-    public static <T extends IPinyinSort> ArrayList<T> sortData(ArrayList<T> data) {
+    public static <T extends IPinyinSort> List<T> sortData(List<T> data) {
         if (data != null) {
             //对数据重新排序
             PinyinComparator pinyinComparator = new PinyinComparator();

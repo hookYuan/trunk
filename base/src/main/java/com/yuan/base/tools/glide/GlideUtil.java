@@ -29,6 +29,7 @@ import com.bumptech.glide.request.target.Target;
 
 /**
  * 描述： 整合Glide基本使用
+ * 圆角图片，圆形图片加载
  *
  * @author yuanye
  * @date 2019/4/4 8:53

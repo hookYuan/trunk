@@ -15,7 +15,7 @@ public interface IPinyinSort {
     //获取汉字全拼
     @TargetApi(Build.VERSION_CODES.N)
     default String getPinyin() {
-        return CharacterParser.getInstance().getSelling(getSortText());
+        return ChineseSortUtil.CharacterParser.getInstance().getSelling(getSortText());
     }
 
     //获取首字母
@@ -28,5 +28,4 @@ public interface IPinyinSort {
         }
         return firstLetters;
     }
-
 }

@@ -11,7 +11,6 @@ import android.view.MenuItem;
 
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.router.jump.RouteUtil;
-import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
 import com.yuan.simple.two.ui.TwoFragment;

@@ -3,7 +3,6 @@ package com.yuan.simple.one.toolbar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.R;
 
 /**

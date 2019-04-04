@@ -6,13 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yuan.base.ui.kernel.BaseFragment;
+import com.yuan.base.ui.kernel.Presenter;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by YuanYe on 2017/8/9.
  */
 
-public abstract class ExtraFragment extends LazyFragment {
+public abstract class ExtraFragment<P extends Presenter> extends BaseFragment<P> {
 
     private static final String TAG = "ExtraFragment";
 

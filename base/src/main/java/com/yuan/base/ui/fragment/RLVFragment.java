@@ -9,7 +9,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yuan.base.R;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.ui.MvpPresenter;
+import com.yuan.base.ui.kernel.Presenter;
 import com.yuan.base.ui.extra.HRefresh;
 import com.yuan.base.ui.extra.IRefresh;
 import com.yuan.base.widget.state.StateController;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by YuanYe on 2018/8/3.
  * 集成列表recyclerView、刷新SmartRefreshLayout、状态StateController的Fragment
  */
-public abstract class RLVFragment<T extends MvpPresenter> extends MvpFragment<T> {
+public abstract class RLVFragment<T extends Presenter> extends ExtraFragment<T> {
 
     protected SmartRefreshLayout refreshView;
     protected StateController stateView;

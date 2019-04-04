@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.yuan.base.tools.glide.GlideUtil;
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.base.ui.extra.ISwipeBack;
 import com.yuan.base.widget.title.statusbar.StatusUtil;
 import com.yuan.simple.R;

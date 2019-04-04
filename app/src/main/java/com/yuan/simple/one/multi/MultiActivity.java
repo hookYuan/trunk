@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.MultiAdapter;
-import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;
 

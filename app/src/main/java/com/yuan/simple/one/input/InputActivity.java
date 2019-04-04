@@ -1,14 +1,12 @@
 package com.yuan.simple.one.input;
 
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.R;
 
 /**

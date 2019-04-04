@@ -3,7 +3,6 @@ package com.yuan.simple.two.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yuan.base.ui.fragment.MvpFragment;
 import com.yuan.simple.R;
 
 /**

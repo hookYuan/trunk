@@ -3,12 +3,12 @@ package com.yuan.simple.one.http;
 
 import com.yuan.base.tools.okhttp.OKUtil;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.ui.MvpPresenter;
+import com.yuan.base.ui.kernel.Presenter;
 
 /**
  * Created by YuanYe on 2018/8/15.
  */
-public class PNet extends MvpPresenter<NetActivity> {
+public class PNet extends Presenter<NetActivity> {
 
     public void get() {
         new OKUtil(getV()).get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")

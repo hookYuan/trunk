@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.sort.ChineseSortUtil;
-import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.base.widget.sideBar.SideBar;
 import com.yuan.simple.R;
 

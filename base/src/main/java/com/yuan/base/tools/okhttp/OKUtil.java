@@ -45,22 +45,30 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
- * Created by YuanYe on 2017/9/8.
- * 基于OKHttp的简单封装。
- * 构建地址，创建Client. 其他参数构建详见MethodBuild
- * 这里的
+ * 描述：基于OKHttp的网络请求封装。
+ * <p>
+ * 使用方式：
+ * 1.通过new OKUtil()发起一次网络请求，无法设置公共参数
+ * 2.通过getInstance()发起一次网络请求，可以设置公共参数
+ * <p>
+ * 特性：
+ * 1.支持get,post请求，支持设置单次head,使用简单
+ * 2.支持json,file,byte上传
+ * 3.文件下载，自动Gson解析，支持扩展解析
+ * 4.支持全局设置head/配置okHttp信息
+ *
+ * @author yuanye
+ * @date 2019/4/4 13:10
  */
 public class OKUtil {
 
     private OkHttpClient client;
     private Request.Builder requestBuilder;
     private Context mContext;
-
     /**
      * 单例
      */
     private static OKUtil okHttp;
-
 
     public static OKUtil getInstance() {
         if (okHttp == null) {

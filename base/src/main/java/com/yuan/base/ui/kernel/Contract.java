@@ -1,4 +1,4 @@
-package com.yuan.base.ui;
+package com.yuan.base.ui.kernel;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,13 +12,12 @@ import android.support.annotation.Nullable;
  * @author yuanye
  * @date 2018/11/26
  */
-public class BaseContract {
+class Contract {
 
     /**
      * 约束 Activity/Fragment 中的方法
      */
     public interface View {
-
         /**
          * 加载的布局文件
          */
@@ -56,7 +55,7 @@ public class BaseContract {
      * 约束Presenter中的方法
      * TODO 绑定生命周期
      */
-    public interface Presenter {
+    public interface IPresenter {
         /**
          * create
          */

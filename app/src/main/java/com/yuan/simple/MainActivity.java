@@ -43,7 +43,7 @@ public class MainActivity extends MvpActivity {
     public void initData() {
         addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            RouteUtil.requestPermission(mContext, new String[]{
+            RouteUtil.openPermission(mContext, new String[]{
                     Manifest.permission.CAMERA
                     , Manifest.permission.CALL_PHONE
             }, new RouteUtil.OnPermissionListener() {

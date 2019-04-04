@@ -24,10 +24,10 @@ import java.util.Map;
 
 /**
  * 描述：
- * 1.Activity跳转辅助类（跳转参数携带一律从getIntent（）获取
- * 2.系统设置调整辅助
- * 3.系统播放文件跳转
- * 4.权限检查和声情
+ * 1.Activity跳转辅助类（跳转参数携带一律从getIntent（）获取 open
+ * 2.系统设置调整辅助  openSetting
+ * 3.系统播放文件跳转  openPlay
+ * 4.权限检查和声情    requestPermission
  *
  * @author yuanye
  * @date 2019/4/4 9:13
@@ -237,14 +237,14 @@ public class RouteUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static void requestPermission(Context mContext, String[] permissions, int requestCode, OnPermissionListener listener) {
+    public static void openPermission(Context mContext, String[] permissions, int requestCode, OnPermissionListener listener) {
         ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
         jumpResult.getFragment().startPermission(permissions, requestCode, listener);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static void requestPermission(Context mContext, String[] permissions, OnPermissionListener listener) {
-        requestPermission(mContext, permissions, PERMISSIONREQUESTCODE, listener);
+    public static void openPermission(Context mContext, String[] permissions, OnPermissionListener listener) {
+        openPermission(mContext, permissions, PERMISSIONREQUESTCODE, listener);
     }
 
     /**

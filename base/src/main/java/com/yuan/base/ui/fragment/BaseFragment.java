@@ -20,8 +20,7 @@ import android.view.ViewGroup;
 
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.tools.router.jump.JumpActivity;
-import com.yuan.base.tools.router.jump.JumpParam;
+import com.yuan.base.tools.router.jump.RouteUtil;
 import com.yuan.base.tools.common.KeyboardUtil;
 import com.yuan.base.ui.BaseContract;
 
@@ -108,7 +107,7 @@ abstract class BaseFragment extends Fragment implements BaseContract.View {
      * @param clazz
      */
     protected void open(Class clazz) {
-        JumpActivity.open(mContext, clazz);
+        RouteUtil.open(mContext, clazz);
     }
 
     /**
@@ -117,8 +116,8 @@ abstract class BaseFragment extends Fragment implements BaseContract.View {
      * @param clazz
      * @param param
      */
-    protected void open(Class clazz, JumpParam param) {
-        JumpActivity.open(mContext, clazz, param);
+    protected void open(Class clazz, RouteUtil.RouteParam param) {
+        RouteUtil.open(mContext, clazz, param);
     }
 
     protected <T extends View> T find(@IdRes int viewId) {

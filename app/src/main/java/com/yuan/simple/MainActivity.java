@@ -1,19 +1,16 @@
 package com.yuan.simple;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.tools.router.permission.OnPermissionListener;
-import com.yuan.base.tools.router.permission.Permission;
+import com.yuan.base.tools.router.jump.RouteUtil;
 import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
@@ -46,10 +43,10 @@ public class MainActivity extends MvpActivity {
     public void initData() {
         addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Permission.request(mContext, new String[]{
+            RouteUtil.requestPermission(mContext, new String[]{
                     Manifest.permission.CAMERA
                     , Manifest.permission.CALL_PHONE
-            }, new OnPermissionListener() {
+            }, new RouteUtil.OnPermissionListener() {
                 @Override
                 public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {
                     Log.i("yuanye", permissions.toString() + "--" + result.toString());

@@ -1,21 +1,17 @@
 package com.yuan.simple.one;
 
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
-import com.yuan.base.tools.router.jump.JumpActivity;
-import com.yuan.base.tools.thread.RxThread;
-import com.yuan.base.tools.thread.ThreadHelper;
+import com.yuan.base.tools.router.jump.RouteUtil;
 import com.yuan.base.ui.fragment.RLVFragment;
 import com.yuan.simple.R;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
@@ -99,7 +95,7 @@ public class BaseFragment extends RLVFragment {
 
     @Override
     public void onItemClick(RLVAdapter.ViewHolder holder, View view, int position) {
-        JumpActivity.open(mContext, mData.get(position).getClazz());
+        RouteUtil.open(mContext, mData.get(position).getClazz());
     }
 
     @Override

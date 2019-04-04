@@ -12,8 +12,7 @@ import android.view.View;
 
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.tools.router.jump.JumpActivity;
-import com.yuan.base.tools.router.jump.JumpParam;
+import com.yuan.base.tools.router.jump.RouteUtil;
 import com.yuan.base.tools.common.KeyboardUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -54,7 +53,7 @@ abstract class BaseActivity extends RxAppCompatActivity {
      * @param clazz 需要打开的Activity
      */
     public void open(Class clazz) {
-        JumpActivity.open(mContext, clazz);
+        RouteUtil.open(mContext, clazz);
     }
 
     /**
@@ -63,8 +62,8 @@ abstract class BaseActivity extends RxAppCompatActivity {
      * @param clazz Activity类名
      * @param param 跳转需要传递的参数
      */
-    public void open(Class clazz, JumpParam param) {
-        JumpActivity.open(mContext, clazz, param);
+    public void open(Class clazz, RouteUtil.RouteParam param) {
+        RouteUtil.open(mContext, clazz, param);
     }
 
     /**

@@ -1,18 +1,21 @@
 package com.yuan.simple.one.input;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
+import com.yuan.base.ui.kernel.BaseActivity;
 import com.yuan.simple.R;
 
 /**
  * 解决键盘弹出引起的布局上窜
  */
-public class InputActivity extends MvpActivity {
+public class InputActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,4 +66,8 @@ public class InputActivity extends MvpActivity {
 
     }
 
+
+//    public <T extends View> T findViewById2(@IdRes int id) {
+//        return getDelegate().findViewById(id);
+//    }
 }

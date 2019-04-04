@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.MultiAdapter;
+import com.yuan.base.ui.kernel.BaseActivity;
 import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * @author yuanye
  * @date 2018-12-12 12:20:59
  */
-public class MultiActivity extends MvpActivity {
+public class MultiActivity extends BaseActivity {
 
 
     private TitleBar titleBar;

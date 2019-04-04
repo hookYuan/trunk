@@ -3,12 +3,13 @@ package com.yuan.simple.one.toolbar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.yuan.base.ui.kernel.BaseActivity;
 import com.yuan.simple.R;
 
 /**
  * Created by YuanYe on 2018/8/4.
  */
-public class TitleBarActivity extends MvpActivity {
+public class TitleBarActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {

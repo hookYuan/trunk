@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
+import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.sort.ChineseSortUtil;
+import com.yuan.base.ui.kernel.BaseActivity;
 import com.yuan.base.widget.sideBar.SideBar;
 import com.yuan.simple.R;
 
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 /**
  * 按照汉字排序
  */
-public class SortActivity extends MvpActivity {
+public class SortActivity extends BaseActivity {
 
     private ArrayList<ChineseBean> data = new ArrayList<>();
 
@@ -30,7 +32,8 @@ public class SortActivity extends MvpActivity {
     @Override
     public void findViews() {
         ChineseSortUtil.sortData(createData());
-        RecyclerView recyclerView = find(R.id.rlv_list);
+//        Views.find();
+        RecyclerView recyclerView = Views.find(this,R.id.rlv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new GridDivider(mContext));
         recyclerView.setAdapter(createAdapter());

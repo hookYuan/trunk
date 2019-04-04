@@ -11,11 +11,12 @@ import android.view.MenuItem;
 
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.router.jump.RouteUtil;
+import com.yuan.base.ui.kernel.BaseActivity;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
 import com.yuan.simple.two.ui.TwoFragment;
 
-public class MainActivity extends MvpActivity {
+public class MainActivity extends BaseActivity {
 
     /**
      * 底部导航

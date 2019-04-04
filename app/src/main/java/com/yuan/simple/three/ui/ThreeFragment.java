@@ -6,12 +6,12 @@ import android.support.annotation.Nullable;
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.widget.title.titlebar.TitleBar;
 import com.yuan.simple.R;
+import com.yuan.simple.one.BaseFragment;
 
 /**
  * Created by YuanYe on 2018/4/13.
  */
-
-public class ThreeFragment extends MvpFragment {
+public class ThreeFragment extends BaseFragment {
 
     @Override
     public int getLayoutId() {

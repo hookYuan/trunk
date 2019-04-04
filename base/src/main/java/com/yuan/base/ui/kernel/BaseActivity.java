@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.yuan.base.tools.layout.Views;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +51,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
     /**
      * 上下文对象
      */
-    protected BaseActivity mContext;
+    protected Activity mContext;
 
     /**
      * 需要默认显示Fragment下标,默认显示第一页
@@ -289,7 +291,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
      * @param <T>
      * @return
      */
-    protected final <T extends View> T find(@IdRes int viewId) {
+    protected <T extends View> T find(@IdRes int viewId) {
         return (T) findViewById(viewId);
     }
 

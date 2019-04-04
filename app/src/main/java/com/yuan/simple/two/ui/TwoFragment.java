@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yuan.simple.R;
+import com.yuan.simple.one.BaseFragment;
 
 /**
  * Created by YuanYe on 2018/4/13.
  */
-public class TwoFragment extends MvpFragment {
+public class TwoFragment extends BaseFragment {
 
     @Override
     public int getLayoutId() {

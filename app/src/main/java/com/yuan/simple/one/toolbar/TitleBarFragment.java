@@ -5,6 +5,7 @@ import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.log.ToastUtil;
+import com.yuan.base.tools.router.jump.RouteUtil;
 import com.yuan.base.ui.fragment.RLVFragment;
 import com.yuan.base.widget.title.statusbar.StatusUtil;
 import com.yuan.base.widget.title.titlebar.TitleBar;
@@ -148,7 +149,7 @@ public class TitleBarFragment extends RLVFragment {
                 getStatusBar().setVisibility(View.GONE);
                 break;
             case 4001:
-                open(TitleDemo1.class);
+                RouteUtil.open(mContext, TitleDemo1.class);
                 break;
         }
     }

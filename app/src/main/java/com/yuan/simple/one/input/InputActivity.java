@@ -1,11 +1,9 @@
 package com.yuan.simple.one.input;
 
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
@@ -29,7 +27,7 @@ public class InputActivity extends BaseActivity {
 
     @Override
     public void findViews() {
-        RecyclerView recyclerView = find(R.id.rlv_list);
+        RecyclerView recyclerView = findViewById(R.id.rlv_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(true);
@@ -66,8 +64,12 @@ public class InputActivity extends BaseActivity {
 
     }
 
+    /**
+     * 代替findViewById
+     *
+     * @param viewId
+     * @param <T>
+     * @return
+     */
 
-//    public <T extends View> T findViewById2(@IdRes int id) {
-//        return getDelegate().findViewById(id);
-//    }
 }

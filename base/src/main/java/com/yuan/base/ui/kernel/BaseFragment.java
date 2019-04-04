@@ -259,16 +259,17 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         return presenter;
     }
 
-    /**
-     * 代替findViewById
-     *
-     * @param viewId
-     * @param <T>
-     * @return
-     */
-    protected final <T extends View> T find(@IdRes int viewId) {
-        return (T) mView.findViewById(viewId);
-    }
+//    返回泛型冲突
+//    /**
+//     * 代替findViewById
+//     *
+//     * @param viewId
+//     * @param <T>
+//     * @return
+//     */
+//    protected <T extends View> T find(@IdRes int viewId) {
+//        return (T) mView.findViewById(viewId);
+//    }
 
     /**
      * 获取颜色

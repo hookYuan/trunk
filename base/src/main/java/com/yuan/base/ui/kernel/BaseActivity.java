@@ -19,8 +19,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.yuan.base.tools.layout.Views;
-
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +33,8 @@ import java.util.List;
  * 3.支持快捷加载 String,View,Drawable,color等资源
  * 4.统一书写格式
  * 5.通过泛型自动绑定Presenter,可通过getP()获取Presenter实例
+ * <p>
+ * 注意：因为这里使用到泛型P易冲突，所有使用泛型返回的方法都需要强转
  *
  * @author yuanye
  * @date 2019/4/4 13:17
@@ -284,16 +284,17 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         return presenter;
     }
 
-    /**
-     * 代替findViewById
-     *
-     * @param viewId
-     * @param <T>
-     * @return
-     */
-    protected <T extends View> T find(@IdRes int viewId) {
-        return (T) findViewById(viewId);
-    }
+//    返回泛型冲突
+//    /**
+//     * 代替findViewById
+//     *
+//     * @param viewId
+//     * @param <T>
+//     * @return
+//     */
+//    protected final <T extends View> T find(@IdRes int viewId) {
+//        return (T) findViewById(viewId);
+//    }
 
     /**
      * 获取颜色

@@ -34,8 +34,8 @@ public class MultiActivity extends BaseActivity {
 
     @Override
     public void findViews() {
-        rlvList = find(R.id.rlv_list);
-        titleBar = find(R.id.title_bar);
+        rlvList = findViewById(R.id.rlv_list);
+        titleBar = findViewById(R.id.title_bar);
 
         rlvList.setLayoutManager(new GridLayoutManager(mContext, 2));
         rlvList.setAdapter(getAdapter(MultiAdapter.MultiBean.TYPE_NORMAL, 1));

@@ -38,7 +38,7 @@ public class SortActivity extends BaseActivity {
         recyclerView.addItemDecoration(new GridDivider(mContext));
         recyclerView.setAdapter(createAdapter());
 
-        SideBar sideBar = find(R.id.sideBar);
+        SideBar sideBar = findViewById(R.id.sideBar);
         sideBar.setRecyclerView(recyclerView, data);
         sideBar.setSortData(data);
     }

@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.glide.GlideHelper;
+import com.yuan.base.tools.glide.GlideUtil;
 
 /**
  * Created by YuanYe on 2018/8/4.
@@ -188,7 +188,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
      */
     public T setBackgroundImg(String imgUrl) {
         if (!TextUtils.isEmpty(imgUrl) && background != null)
-            GlideHelper.load(imgUrl, background);
+            GlideUtil.load(imgUrl, background);
         return (T) this;
     }
 
@@ -199,7 +199,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
 
     @Override
     public void setBackgroundResource(int resid) {
-        GlideHelper.load(resid, background);
+        GlideUtil.load(resid, background);
     }
 
     @Override

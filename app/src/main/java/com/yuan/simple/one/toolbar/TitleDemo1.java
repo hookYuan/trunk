@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.yuan.base.tools.glide.GlideHelper;
+import com.yuan.base.tools.glide.GlideUtil;
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.ui.activity.MvpActivity;
 import com.yuan.base.ui.extra.ISwipeBack;
@@ -33,7 +33,7 @@ public class TitleDemo1 extends MvpActivity implements ISwipeBack {
         StatusUtil.setFloat(mContext);
         StatusUtil.setTransparent(mContext);
         ImageView imageView = Views.find(mContext, R.id.iv_background);
-        GlideHelper.load("http://static.oneplus.cn/data/attachment/forum/201701/05/165732nmebemxb1my1e08e.jpg", imageView);
+        GlideUtil.load("http://static.oneplus.cn/data/attachment/forum/201701/05/165732nmebemxb1my1e08e.jpg", imageView);
     }
 
     @Override

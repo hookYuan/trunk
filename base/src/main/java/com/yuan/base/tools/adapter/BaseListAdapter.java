@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * Created by YuanYe on 2016/8/1.
  */
-
 public abstract class BaseListAdapter<T> extends BaseAdapter {
 
     protected List<T> mData;

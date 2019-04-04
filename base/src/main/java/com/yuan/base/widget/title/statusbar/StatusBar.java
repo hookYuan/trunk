@@ -2,16 +2,12 @@ package com.yuan.base.widget.title.statusbar;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.ViewGroup;
 
-import com.yuan.base.tools.glide.GlideHelper;
+import com.yuan.base.tools.glide.GlideUtil;
 
 /**
  * Created by YuanYe on 2018/8/4.
@@ -53,12 +49,12 @@ public class StatusBar extends AppCompatImageView {
      */
     public void setBackgroundImg(String imgUrl) {
         if (!TextUtils.isEmpty(imgUrl))
-            GlideHelper.load(imgUrl, this);
+            GlideUtil.load(imgUrl, this);
     }
 
     @Override
     public void setBackgroundResource(int resid) {
-        GlideHelper.load(resid, this);
+        GlideUtil.load(resid, this);
     }
 
     @Override

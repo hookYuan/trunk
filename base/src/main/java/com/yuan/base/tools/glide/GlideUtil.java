@@ -1,5 +1,14 @@
 package com.yuan.base.tools.glide;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,12 +18,22 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.yuan.base.tools.common.Kits;
+import com.bumptech.glide.request.target.Target;
 
-public class GlideHelper {
+/**
+ * 描述： 整合Glide基本使用
+ *
+ * @author yuanye
+ * @date 2019/4/4 8:53
+ */
+public class GlideUtil {
 
     private static final ViewPropertyAnimation.Animator ANIMATOR =
             new ViewPropertyAnimation.Animator() {
@@ -29,7 +48,7 @@ public class GlideHelper {
     @DrawableRes
     int placeholder = 0; //加载前的占位符
 
-    private GlideHelper() {
+    private GlideUtil() {
 
     }
 
@@ -89,20 +108,20 @@ public class GlideHelper {
      * 默认圆角弧度为4dp
      */
     public static void loadRound(@Nullable String path, @NonNull final ImageView image) {
-        loadRound(path, image, (int) Kits.Dimens.dpToPx(image.getContext(), 4f));
+        loadRound(path, image, (int) (image.getContext().getResources().getDisplayMetrics().density * 4.0f));
     }
 
     /**
      * 加载圆角矩形
      */
-    public static void loadRound(@Nullable String path, @NonNull final ImageView image, int radus) {
+    public static void loadRound(@Nullable String path, @NonNull final ImageView image, int radius) {
         final String imgPath = path;
         Glide.with(image.getContext())
                 .load(imgPath == null ? null : imgPath)
                 .crossFade(0)
                 .placeholder(placeholder)
                 .dontAnimate()
-                .transform(new GlideRoundTransform(image.getContext(), radus))
+                .transform(new RoundTransform(image.getContext(), radius))
                 .thumbnail(Glide.with(image.getContext())  //缩略图
                         .load(imgPath == null ? null : imgPath)
                         .dontAnimate()
@@ -205,4 +224,157 @@ public class GlideHelper {
         void onFailed();
     }
 
+
+    abstract static class GlideDrawableListener implements RequestListener<String, Bitmap> {
+
+        @Override
+        public boolean onException(Exception ex, String url,
+                                   Target<Bitmap> target, boolean isFirstResource) {
+            onFail(url);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Bitmap resource, String url,
+                                       Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            onSuccess(url);
+            return false;
+        }
+
+        public void onSuccess(String url) {
+            // No-op
+        }
+
+        public void onFail(String url) {
+            // No-op
+        }
+
+    }
+
+    static class GlideImageTarget extends BitmapImageViewTarget {
+
+        private static final long NO_ANIMATION_INTERVAL = 150L;
+
+        private long startTime = 0L;
+
+        GlideImageTarget(ImageView view) {
+            super(view);
+        }
+
+        @Override
+        public void onLoadStarted(Drawable placeholder) {
+            super.onLoadStarted(placeholder);
+            startTime = SystemClock.uptimeMillis();
+        }
+
+        @Override
+        public void onResourceReady(Bitmap resource,
+                                    GlideAnimation<? super Bitmap> glideAnimation) {
+
+            if (startTime == 0 || SystemClock.uptimeMillis() - startTime < NO_ANIMATION_INTERVAL) {
+                startTime = 0L;
+                glideAnimation = null;
+            }
+
+            super.onResourceReady(resource, glideAnimation);
+        }
+
+        @Override
+        public void onLoadCleared(Drawable placeholder) {
+            super.onLoadCleared(placeholder);
+            startTime = 0L;
+        }
+
+    }
+
+
+    /**
+     * Created by YuanYe on 2017/6/5.
+     * 圆角效果的Transform
+     */
+    static class RoundTransform extends BitmapTransformation {
+        private static float radius = 4f;
+
+        public RoundTransform(Context context) {
+            this(context, 4);
+        }
+
+        public RoundTransform(Context context, int dp) {
+            super(context);
+            this.radius = Resources.getSystem().getDisplayMetrics().density * dp;
+        }
+
+        @Override
+        protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+            return roundCrop(pool, toTransform);
+        }
+
+        private static Bitmap roundCrop(BitmapPool pool, Bitmap source) {
+            if (source == null) return null;
+
+            Bitmap result = pool.get(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+            if (result == null) {
+                result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+            }
+
+            Canvas canvas = new Canvas(result);
+            Paint paint = new Paint();
+            paint.setShader(new BitmapShader(source, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+            paint.setAntiAlias(true);
+            RectF rectF = new RectF(0f, 0f, source.getWidth(), source.getHeight());
+            canvas.drawRoundRect(rectF, radius, radius, paint);
+            return result;
+        }
+
+        @Override
+        public String getId() {
+            return getClass().getName() + Math.round(radius);
+        }
+    }
+
+
+    /**
+     * Created by caoyingfu on 16/3/18.
+     * 圆形的Transformation
+     */
+    static class CircleTransform extends BitmapTransformation {
+        public CircleTransform(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+            return circleCrop(pool, toTransform);
+        }
+
+        private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
+            if (source == null) return null;
+
+            int size = Math.min(source.getWidth(), source.getHeight());
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            // TODO this could be acquired from the pool too
+            Bitmap squared = Bitmap.createBitmap(source, x, y, size, size);
+
+            Bitmap result = pool.get(size, size, Bitmap.Config.ARGB_8888);
+            if (result == null) {
+                result = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            }
+
+            Canvas canvas = new Canvas(result);
+            Paint paint = new Paint();
+
+            paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+            paint.setAntiAlias(true);
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+            return result;
+        }
+
+        @Override
+        public String getId() {
+            return getClass().getName();
+        }
+    }
 }

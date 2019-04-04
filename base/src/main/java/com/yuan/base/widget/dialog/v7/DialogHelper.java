@@ -99,7 +99,6 @@ public class DialogHelper {
         if (diaLogParams.getWindowBackground() != null) {
             window.setBackgroundDrawable(diaLogParams.getWindowBackground());
         }
-
         //设置Dialog相对于屏幕的位置
         window.setGravity(diaLogParams.getGravity());
 

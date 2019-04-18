@@ -28,7 +28,7 @@
     </style>
 
 
-    <style name="DialogHelperTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+    <style name="DialogHelperTheme" parent="@style/Theme.AppCompat.Dialog.Alert">
         <!--修改AlertDialog按钮的颜色-->
         <item name="colorAccent">@color/colorFont33</item>
         <!--修改AlertDialog标题颜色-->

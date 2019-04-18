@@ -70,14 +70,14 @@ public class OKUtil {
      */
     private static OKUtil okHttp;
 
-    public static OKUtil getInstance() {
+    public static OKUtil create() {
         if (okHttp == null) {
             throw new NullPointerException("第一次调用请先进行全局OkHttp参数配置,请确认是否需要全局配置");
         }
         return okHttp;
     }
 
-    public static OKUtil getInstance(@NonNull Context context, @NonNull OKConfig config) {
+    public static OKUtil create(@NonNull Context context, @NonNull Config config) {
         if (okHttp == null) {
             okHttp = new OKUtil(context, config);
         }
@@ -101,14 +101,15 @@ public class OKUtil {
      *
      * @param config 配置
      */
-    public OKUtil(@NonNull Context context, @NonNull OKConfig config) {
+    public OKUtil(@NonNull Context context, @NonNull Config config) {
         //获取Client
         client = new RxHttpClient(context, config).getClient();
         requestBuilder = new Request.Builder();
         this.mContext = context;
-        if (!TextUtils.isEmpty(config.getCommonHead()) && !TextUtils.isEmpty(config.getCommonHeadKey())) {
-            //TODO 公共head,可以统一添加
-            requestBuilder.addHeader(config.getCommonHeadKey(), config.getCommonHead());
+        if (config != null) {
+            for (String key : config.getCommonHead().keySet()) {
+                requestBuilder.addHeader(key, config.getCommonHead().get(key));
+            }
         }
     }
 
@@ -541,12 +542,12 @@ public class OKUtil {
         private static final String TAG = "RxHttpClient";
 
         private OkHttpClient client; //主要创建的网络请求client
-        private OKConfig config; //配置参数
+        private Config config; //配置参数
         private Context mContext; //上下文
 
         public RxHttpClient(@NonNull Context context) {
             this.mContext = context;
-            this.config = new OKConfig.Builder()
+            this.config = new Config.Builder()
                     .isReConnect(true)
                     .build();
         }
@@ -557,7 +558,7 @@ public class OKUtil {
          * @param context 上下文
          * @param _config 基本配置
          */
-        public RxHttpClient(@NonNull Context context, @NonNull OKConfig _config) {
+        public RxHttpClient(@NonNull Context context, @NonNull Config _config) {
             this.mContext = context;
             this.config = _config;
         }
@@ -736,7 +737,6 @@ public class OKUtil {
         public void onResponse(Response response) {
             try {
                 final String json = response.body.string();
-
                 Class<T> clazz = getClazz();
                 if (clazz != null) {
                     entity = new Gson().fromJson(json, clazz);
@@ -977,7 +977,7 @@ public class OKUtil {
      * 用于配置OkHttpClient，采用build模式进行配置
      * 用于配置单次OkHttp请求参数，在OKHttp创建时初始化使用
      */
-    public static class OKConfig {
+    public static class Config {
 
         private final static long CONNECTTIMEOUT = 10 * 1000l; //链接超时，单位：毫秒
         private final static long READTIMEOUT = 10 * 1000l;//读取超时， 单位：毫秒
@@ -987,19 +987,18 @@ public class OKUtil {
         private long readTimeout;//读取超时时间
         private CookieJar cookie;//设置Cookie
         private boolean isReConnect; //是否重新连接
-        private String commonHead;  //公共头部
-        private String commonHeadKey;//公共头部key
+
+        private HashMap<String, String> commonHead;//公共头部
 
         private String cacheFolder;//OKHttp缓存文件存放的文件夹位置
         private long maxCacheSize;//最大缓存的大小
 
-        private OKConfig(Builder builder) {
+        private Config(Builder builder) {
             connectTimeout = builder.connectTimeout;
             readTimeout = builder.readTimeout;
             cookie = builder.cookie;
             isReConnect = builder.isReConnect;
             commonHead = builder.commonHead;
-            commonHeadKey = builder.commonHeadKey;
             cacheFolder = builder.cacheFolder;
             maxCacheSize = builder.maxCacheSize;
         }
@@ -1020,12 +1019,8 @@ public class OKUtil {
             return isReConnect;
         }
 
-        public String getCommonHead() {
+        public HashMap<String, String> getCommonHead() {
             return commonHead;
-        }
-
-        public String getCommonHeadKey() {
-            return commonHeadKey;
         }
 
         public String getCacheFolder() {
@@ -1041,8 +1036,7 @@ public class OKUtil {
             private long readTimeout;
             private CookieJar cookie;
             private boolean isReConnect;
-            private String commonHead;
-            private String commonHeadKey;
+            private HashMap<String, String> commonHead;
             private String cacheFolder;
             private long maxCacheSize;
 
@@ -1052,6 +1046,7 @@ public class OKUtil {
                 cacheFolder = CACHEFOLDER;
                 //默认缓存大小为当先线程的八分之一
                 maxCacheSize = Runtime.getRuntime().maxMemory() / 8;
+                commonHead = new HashMap<>();
             }
 
             public Builder connectTimeout(long val) {
@@ -1074,13 +1069,8 @@ public class OKUtil {
                 return this;
             }
 
-            public Builder commonHead(@NonNull String val) {
-                commonHead = val;
-                return this;
-            }
-
-            public Builder commonHeadKey(@NonNull String val) {
-                commonHeadKey = val;
+            public Builder commonHead(@NonNull String val, @NonNull String value) {
+                commonHead.put(val, value);
                 return this;
             }
 
@@ -1094,8 +1084,8 @@ public class OKUtil {
                 return this;
             }
 
-            public OKConfig build() {
-                return new OKConfig(this);
+            public Config build() {
+                return new Config(this);
             }
         }
     }

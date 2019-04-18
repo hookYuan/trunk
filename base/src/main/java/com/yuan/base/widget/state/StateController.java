@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.yuan.base.R;
-import com.yuan.base.tools.common.NoProguard;
 
 /**
  * Created by wanglei on 2016/1/21.
@@ -277,7 +276,7 @@ public class StateController extends FrameLayout {
     }
 
 
-    static class SavedState extends BaseSavedState implements NoProguard {
+    static class SavedState extends BaseSavedState {
         int state;
 
         SavedState(Parcelable superState) {

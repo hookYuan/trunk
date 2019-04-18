@@ -36,6 +36,8 @@ public class AlertDialogActivity extends RLVActivity {
     private ArrayList<DialogBean> mData;
     int i = 0;
 
+    DialogHelper helper;
+
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
         getTitleBar().setTitleText("AlertDialog")
@@ -45,6 +47,7 @@ public class AlertDialogActivity extends RLVActivity {
                 .setBackgroundColor(getColor2(R.color.colorPrimary));
         rlvList.setLayoutManager(new LinearLayoutManager(this));
         rlvList.addItemDecoration(new GridDivider(this));
+        helper = new DialogHelper(this);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class AlertDialogActivity extends RLVActivity {
     public void onItemClick(RLVAdapter.ViewHolder holder, View view, int position) {
         switch (mData.get(position).getType()) {
             case 1:
-                new DialogHelper(this).alertText("这是一个简单提示");
+                helper.alertText("这是一个简单提示");
                 break;
             case 2:
                 DialogHelperParams params1 = new DialogHelperParams.Builder()
@@ -122,8 +125,7 @@ public class AlertDialogActivity extends RLVActivity {
                         .alertView(dialogView);
                 break;
             case 9:
-                new DialogHelper(this)
-                        .alertDate(new DatePickerDialog.OnDateSetListener() {
+                this.helper.alertDate(new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 ToastUtil.showShort(AlertDialogActivity.this, (year + "--" + month + "--" + dayOfMonth));

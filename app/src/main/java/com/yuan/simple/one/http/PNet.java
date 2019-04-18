@@ -11,7 +11,7 @@ import com.yuan.base.ui.kernel.Presenter;
 public class PNet extends Presenter<NetActivity> {
 
     public void get() {
-        new OKUtil(getV()).get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
+        new OKUtil(getContext()).get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
                 .execute(new OKUtil.JsonBack() {
                     @Override
                     public void onSuccess(Object o, String json) {

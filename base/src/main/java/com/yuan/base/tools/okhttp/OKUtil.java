@@ -3,6 +3,7 @@ package com.yuan.base.tools.okhttp;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.AnyThread;
@@ -20,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -27,10 +29,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.CookieJar;
@@ -62,50 +65,154 @@ import okhttp3.ResponseBody;
  */
 public class OKUtil {
 
-    private OkHttpClient client;
-    private Request.Builder requestBuilder;
-    private Context mContext;
     /**
      * 单例
      */
     private static OKUtil okHttp;
+    /**
+     * 全局配置参数
+     */
+    private static Config mConfig;
+    /**
+     * 所有使用过的文件缓存路径
+     */
+    private static TreeSet<String> cachePaths;
 
-    public static OKUtil create() {
-        if (okHttp == null) {
-            throw new NullPointerException("第一次调用请先进行全局OkHttp参数配置,请确认是否需要全局配置");
-        }
-        return okHttp;
-    }
+    private OkHttpClient client;
+    private Request.Builder requestBuilder;
+    private Context mContext;
 
-    public static OKUtil create(@NonNull Context context, @NonNull Config config) {
-        if (okHttp == null) {
-            okHttp = new OKUtil(context, config);
-        }
-        return okHttp;
+
+    /**
+     * 全局参数初始化
+     *
+     * @param config
+     */
+    public static void init(Config config) {
+        mConfig = config;
     }
 
     /**
-     * 通过创建对象方式启动，可以动态配置每次请求参数
+     * 获取配置参数
      *
-     * @param context
+     * @return
      */
-    public OKUtil(@NonNull Context context) {
-        //获取Client
-        client = new RxHttpClient(context).getClient();
-        requestBuilder = new Request.Builder();
-        this.mContext = context;
+    public static long getCacheSize() {
+
+        return 0;
     }
+
+    /**
+     * 删除缓存
+     */
+    public static void deleteCache() {
+        if (cachePaths != null && cachePaths.size() > 0) {
+            for (String path : cachePaths) {
+                delFolder(path);
+            }
+        }
+    }
+
+    /**
+     * 删除文件夹
+     *
+     * @param folderPath
+     */
+    private static void delFolder(String folderPath) {
+        try {
+            delAllFile(folderPath); //删除完里面所有内容
+            String filePath = folderPath;
+            filePath = filePath.toString();
+            java.io.File myFilePath = new java.io.File(filePath);
+            myFilePath.delete(); //删除空文件夹
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 删除文件夹的所有文件
+     *
+     * @param path
+     * @return
+     */
+    private static boolean delAllFile(String path) {
+        boolean flag = false;
+        File file = new File(path);
+        if (!file.exists()) {
+            return flag;
+        }
+        if (!file.isDirectory()) {
+            return flag;
+        }
+        String[] tempList = file.list();
+        File temp = null;
+        for (int i = 0; i < tempList.length; i++) {
+            if (path.endsWith(File.separator)) {
+                temp = new File(path + tempList[i]);
+            } else {
+                temp = new File(path + File.separator + tempList[i]);
+            }
+            if (temp.isFile()) {
+                temp.delete();
+            }
+            if (temp.isDirectory()) {
+                delAllFile(path + "/" + tempList[i]);//先删除文件夹里面的文件
+                delFolder(path + "/" + tempList[i]);//再删除空文件夹
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 采用全局默认参数设置请求
+     *
+     * @param mContext
+     * @return
+     */
+    public static OKUtil with(Context mContext) {
+        return with(mContext, mConfig);
+    }
+
+    /**
+     * 当次参数设置请求
+     *
+     * @param mContext
+     * @param config   局部参数只针对当次请求有效，全局参数无效
+     * @return
+     */
+    public static OKUtil with(Context mContext, @NonNull Config config) {
+        if (config != null) { //重建一次请求
+            okHttp = new OKUtil(mContext, config);
+        } else if (mConfig != null) {
+            okHttp = new OKUtil(mContext, mConfig);
+        } else {
+            mConfig = new OKUtil.Config.Builder()
+                    .setCache(false)
+                    .setReConnect(true)
+                    .build();
+            okHttp = new OKUtil(mContext, mConfig);
+        }
+        return okHttp;
+    }
+
 
     /**
      * 对OKHttpUtil进行基本设置
      *
      * @param config 配置
      */
-    public OKUtil(@NonNull Context context, @NonNull Config config) {
+    private OKUtil(Context context, @NonNull Config config) {
+        mContext = context;
+        if (cachePaths == null) {
+            cachePaths = new TreeSet<>();
+        }
+        cachePaths.add(config.getCachePath());
         //获取Client
-        client = new RxHttpClient(context, config).getClient();
+        client = new RxHttpClient(config).getClient();
         requestBuilder = new Request.Builder();
-        this.mContext = context;
+        //配置公共请求头
         if (config != null) {
             for (String key : config.getCommonHead().keySet()) {
                 requestBuilder.addHeader(key, config.getCommonHead().get(key));
@@ -118,7 +225,7 @@ public class OKUtil {
             throw new NullPointerException("地址：url == null");
         }
         requestBuilder.url(httpUrl);
-        return new ParamBuild(mContext, requestBuilder, client, ParamBuild.POST, httpUrl);
+        return new ParamBuild(requestBuilder, client, ParamBuild.POST, httpUrl);
     }
 
 
@@ -127,9 +234,8 @@ public class OKUtil {
             throw new NullPointerException("地址：url == null");
         }
         requestBuilder.url(httpUrl);
-        return new ParamBuild(mContext, requestBuilder, client, ParamBuild.GET, httpUrl);
+        return new ParamBuild(requestBuilder, client, ParamBuild.GET, httpUrl);
     }
-
 
     /**
      * 参数配置
@@ -171,11 +277,6 @@ public class OKUtil {
          */
         private List<byte[]> bytes;
         /**
-         * context
-         */
-        private Context mContext;
-
-        /**
          * 请求类型： get,post等
          */
         private int requestType;
@@ -195,11 +296,10 @@ public class OKUtil {
         private String url;
 
 
-        public ParamBuild(@NonNull Context context, @NonNull Request.Builder request,
+        public ParamBuild(@NonNull Request.Builder request,
                           @NonNull OkHttpClient _client, int requestType, String url) {
             this.requestBuilder = request;
             this.client = _client;
-            this.mContext = context;
             this.requestType = requestType;
             this.url = url;
             params = new HashMap<>();
@@ -269,7 +369,7 @@ public class OKUtil {
                     break;
             }
 
-            return new Execute(mContext, requestBuilder, client);
+            return new Execute(requestBuilder, client);
         }
 
         public void execute(@NonNull BaseBack mainCall) {
@@ -332,7 +432,7 @@ public class OKUtil {
                         break;
                 }
             }
-            new Execute(mContext, requestBuilder, client).execute(mainCall);
+            new Execute(requestBuilder, client).execute(mainCall);
         }
 
         /**
@@ -443,12 +543,10 @@ public class OKUtil {
 
         protected Request.Builder requestBuilder;
         protected OkHttpClient client;
-        protected Context mContext;
 
-        public Execute(Context context, Request.Builder request, OkHttpClient _client) {
+        public Execute(Request.Builder request, OkHttpClient _client) {
             this.requestBuilder = request;
             this.client = _client;
-            this.mContext = context;
         }
 
         /**
@@ -476,7 +574,7 @@ public class OKUtil {
      */
     class MainCall implements Callback {
 
-        private static final String TAG = "MainCall";
+        private final String TAG = "MainCall";
         /**
          * 回调
          */
@@ -543,23 +641,13 @@ public class OKUtil {
 
         private OkHttpClient client; //主要创建的网络请求client
         private Config config; //配置参数
-        private Context mContext; //上下文
-
-        public RxHttpClient(@NonNull Context context) {
-            this.mContext = context;
-            this.config = new Config.Builder()
-                    .isReConnect(true)
-                    .build();
-        }
 
         /**
          * 传入构建参数创建OkHttpClient
          *
-         * @param context 上下文
          * @param _config 基本配置
          */
-        public RxHttpClient(@NonNull Context context, @NonNull Config _config) {
-            this.mContext = context;
+        public RxHttpClient(@NonNull Config _config) {
             this.config = _config;
         }
 
@@ -583,65 +671,84 @@ public class OKUtil {
                     builder.cookieJar(cookieJar);
                 }
                 //设置缓存
-                if (!TextUtils.isEmpty(config.getCacheFolder())) {
-                    File cacheFile = new File(config.getCacheFolder());
-                    if (cacheFile != null && !cacheFile.exists()) {
-                        cacheFile.mkdirs();
+                if (config.isCache()) {
+                    File cacheFile = new File(config.getCachePath());
+                    if (cacheFile == null) {
+                        Log.e(TAG, "请检查OKHttp缓存文件夹路径：" + config.getCachePath());
+                    } else if (!cacheFile.exists()) {
+                        if (!cacheFile.mkdirs()) {
+                            Log.e(TAG, "创建OKHttp缓存文件夹失败，文件夹路径：" + config.getCachePath());
+                        }
                     }
-                    //设置缓存大小
-                    Cache cache = new Cache(cacheFile, config.getMaxCacheSize());
-                    builder.cache(cache);
+                    if (cacheFile.exists()) {//设置缓存大小
+                        Cache cache = new Cache(cacheFile, config.getCacheSize());
+                        builder.cache(cache);
+                    }
+                    //设置缓存拦截器，实现网络缓存(有网络的时候不缓存，没有网络的时候缓存)
+                    builder.addInterceptor(new OfflineInterceptor(mContext, config))
+                            .addNetworkInterceptor(new NetworkInterceptor(config));
                 }
-                //设置缓存拦截器，实现网络缓存(有网络的时候不缓存，没有网络的时候缓存)
-                builder.addInterceptor(new CacheInterceptor(mContext))
-                        .addNetworkInterceptor(new CacheInterceptor(mContext));
-                //添加请求头
                 client = builder.build();
             }
             return client;
         }
 
-
         /**
-         * Created by YuanYe on 2017/7/20.
+         * 描述：有网络时请求拦截器
          * <p>
-         * OKHttp拦截器，实现拦截后的缓存实现（有网络的时候不缓存，没有网络的时候缓存）
+         * 缓存策略
+         * 有网络时，从网络中读取数据
+         * 无网络时，从缓存中读取数据
+         *
+         * @author yuanye
+         * @date 2019/4/19 14:43
          */
-        class CacheInterceptor implements Interceptor {
-            private Context context;
+        class NetworkInterceptor implements Interceptor {
 
-            public CacheInterceptor(Context context) {
-                this.context = context;
+            private Config config; //配置参数
+
+            protected NetworkInterceptor(Config config) {
+                this.config = config;
             }
 
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();//获取请求
-                //这里就是说判读我们的网络条件，要是有网络的话我么就直接获取网络上面的数据，要是没有网络的话我么就去缓存里面取数据
+                Request request = chain.request();
+                okhttp3.Response response = chain.proceed(request);
+                return response.newBuilder()
+                        //在线的时候的缓存过期时间，如果想要不缓存，直接时间设置为0
+                        .header("Cache-Control", "public, max-age=" + config.getOnlineCacheTime())
+                        .removeHeader("Pragma")
+                        .build();
+            }
+        }
+
+        /**
+         * 描述：无网络时响应拦截器
+         *
+         * @author yuanye
+         * @date 2019/4/19 14:52
+         */
+        class OfflineInterceptor implements Interceptor {
+
+            private Context context;
+            private Config config;
+
+            public OfflineInterceptor(Context context, Config config) {
+                this.context = context;
+                this.config = config;
+            }
+
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
                 if (!isConnect(context)) {
                     request = request.newBuilder()
-                            //这个的话内容有点多啊，大家记住这么写就是只从缓存取，想要了解这个东西我等下在
-                            // 给大家写连接吧。大家可以去看下，获取大家去找拦截器资料的时候就可以看到这个方面的东西反正也就是缓存策略。
-                            .cacheControl(CacheControl.FORCE_CACHE)
+                            //离线的时候的缓存的过期时间
+                            .header("Cache-Control", "public, only-if-cached, max-stale=" + config.getOfflineCacheTime())
                             .build();
                 }
-                okhttp3.Response originalResponse = chain.proceed(request);
-                if (isConnect(context)) {
-                    //这里大家看点开源码看看.header .removeHeader做了什么操作很简答，就是的加字段和减字段的。
-                    String cacheControl = request.cacheControl().toString();
-                    return originalResponse.newBuilder()
-                            //这里设置的为0就是说不进行缓存，我们也可以设置缓存时间
-                            .header("Cache-Control", "public, max-age=" + 0)
-                            .removeHeader("Pragma")
-                            .build();
-                } else {
-                    int maxTime = 7 * 24 * 60 * 60;
-                    return originalResponse.newBuilder()
-                            //这里的设置的是我们的没有网络的缓存时间，想设置多少就是多少。
-                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxTime)
-                            .removeHeader("Pragma")
-                            .build();
-                }
+                return chain.proceed(request);
             }
 
 
@@ -661,7 +768,6 @@ public class OKUtil {
                 } else {
                     // 建立网络数组
                     NetworkInfo[] net_info = connectivityManager.getAllNetworkInfo();
-
                     if (net_info != null) {
                         for (int i = 0; i < net_info.length; i++) {
                             // 判断获得的网络状态是否是处于连接状态
@@ -704,7 +810,7 @@ public class OKUtil {
      * 支持的json说明：
      * 1、当setUseNetBean（）为空时，T代表完整Json的实体对象
      */
-    public static abstract class JsonBack<T> implements BaseBack {
+    public abstract static class JsonBack<T> implements BaseBack {
 
         private final static String TAG = "JsonBack";
         /**
@@ -782,7 +888,7 @@ public class OKUtil {
      * Created by YuanYe on 2017/9/13.
      * 文件下载
      */
-    public static abstract class FileBack implements BaseBack {
+    public abstract static class FileBack implements BaseBack {
 
         /**
          * 文件保存的地址
@@ -981,17 +1087,20 @@ public class OKUtil {
 
         private final static long CONNECTTIMEOUT = 10 * 1000l; //链接超时，单位：毫秒
         private final static long READTIMEOUT = 10 * 1000l;//读取超时， 单位：毫秒
-        private final static String CACHEFOLDER = "okCache"; //默认网络缓存文件夹
 
         private long connectTimeout; //连接超时时间
         private long readTimeout;//读取超时时间
-        private CookieJar cookie;//设置Cookie
         private boolean isReConnect; //是否重新连接
 
         private HashMap<String, String> commonHead;//公共头部
+        private CookieJar cookie;//设置Cookie
 
-        private String cacheFolder;//OKHttp缓存文件存放的文件夹位置
-        private long maxCacheSize;//最大缓存的大小
+        private long cacheSize;//本地缓存的大小
+        private boolean isCache;//是否开启OKHttp本地缓存
+        private String cachePath;//OKHttp缓存文件存放路径
+        private long onlineCacheTime;//网络在线时使用的缓存时长(单位：秒)
+        private long offlineCacheTime;//网络离线时使用的网络缓存时长(单位：秒)
+
 
         private Config(Builder builder) {
             connectTimeout = builder.connectTimeout;
@@ -999,8 +1108,12 @@ public class OKUtil {
             cookie = builder.cookie;
             isReConnect = builder.isReConnect;
             commonHead = builder.commonHead;
-            cacheFolder = builder.cacheFolder;
-            maxCacheSize = builder.maxCacheSize;
+
+            cachePath = builder.cachePath;
+            cacheSize = builder.cacheSize;
+            isCache = builder.isCache;
+            onlineCacheTime = builder.onlineCacheTime;
+            offlineCacheTime = builder.offlineCacheTime;
         }
 
         public long getConnectTimeout() {
@@ -1023,12 +1136,24 @@ public class OKUtil {
             return commonHead;
         }
 
-        public String getCacheFolder() {
-            return cacheFolder;
+        public long getCacheSize() {
+            return cacheSize;
         }
 
-        public long getMaxCacheSize() {
-            return maxCacheSize;
+        public boolean isCache() {
+            return isCache;
+        }
+
+        public String getCachePath() {
+            return cachePath;
+        }
+
+        public long getOnlineCacheTime() {
+            return onlineCacheTime;
+        }
+
+        public long getOfflineCacheTime() {
+            return offlineCacheTime;
         }
 
         public final static class Builder {
@@ -1037,50 +1162,72 @@ public class OKUtil {
             private CookieJar cookie;
             private boolean isReConnect;
             private HashMap<String, String> commonHead;
-            private String cacheFolder;
-            private long maxCacheSize;
+            private long cacheSize;
+            private boolean isCache;
+            private String cachePath;
+            private long onlineCacheTime;
+            private long offlineCacheTime;
 
             public Builder() {
                 connectTimeout = CONNECTTIMEOUT;
                 readTimeout = READTIMEOUT;
-                cacheFolder = CACHEFOLDER;
                 //默认缓存大小为当先线程的八分之一
-                maxCacheSize = Runtime.getRuntime().maxMemory() / 8;
+                cacheSize = Runtime.getRuntime().maxMemory() / 8;
                 commonHead = new HashMap<>();
+                //默认缓存地址
+                cachePath = Environment.getExternalStorageDirectory().getPath() + "/OkUtil/";
+                onlineCacheTime = 0;
+                //离线缓存默认7天
+                offlineCacheTime = 7 * 24 * 60 * 60;
             }
 
-            public Builder connectTimeout(long val) {
-                connectTimeout = val;
+            public Builder setConnectTimeout(long connectTimeout) {
+                this.connectTimeout = connectTimeout;
                 return this;
             }
 
-            public Builder readTimeout(long val) {
-                readTimeout = val;
+            public Builder setReadTimeout(long readTimeout) {
+                this.readTimeout = readTimeout;
                 return this;
             }
 
-            public Builder cookie(CookieJar val) {
-                cookie = val;
+            public Builder setCookie(CookieJar cookie) {
+                this.cookie = cookie;
                 return this;
             }
 
-            public Builder isReConnect(boolean val) {
-                isReConnect = val;
+            public Builder setReConnect(boolean reConnect) {
+                isReConnect = reConnect;
                 return this;
             }
 
-            public Builder commonHead(@NonNull String val, @NonNull String value) {
+            public Builder setCacheSize(long cacheSize) {
+                this.cacheSize = cacheSize;
+                return this;
+            }
+
+            public Builder setCache(boolean cache) {
+                isCache = cache;
+                return this;
+            }
+
+            public Builder setCachePath(String cachePath) {
+                this.cachePath = cachePath;
+                return this;
+            }
+
+            public Builder setCommonHead(@NonNull String val, @NonNull String value) {
                 commonHead.put(val, value);
                 return this;
             }
 
-            public Builder cacheFolder(@NonNull String val) {
-                cacheFolder = val;
+            public Builder setOnlineCacheTime(long onlineCacheTime) {
+                this.onlineCacheTime = onlineCacheTime;
                 return this;
             }
 
-            public Builder maxCacheSize(long val) {
-                maxCacheSize = val;
+            public Builder setOfflineCacheTime(long offlineCacheTime) {
+                this.offlineCacheTime = offlineCacheTime;
                 return this;
             }
 
@@ -1096,7 +1243,7 @@ public class OKUtil {
      * @author yuanye
      * @date 2018/11/28 11:47
      */
-    public static class Response {
+    public class Response {
 
         public ResponseBody body;
         /**
@@ -1116,6 +1263,5 @@ public class OKUtil {
          * 请求状态码
          */
         public int code;
-
     }
 }

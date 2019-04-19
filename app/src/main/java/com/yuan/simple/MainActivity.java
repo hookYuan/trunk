@@ -47,6 +47,8 @@ public class MainActivity extends BaseActivity {
             RouteUtil.openPermission(mContext, new String[]{
                     Manifest.permission.CAMERA
                     , Manifest.permission.CALL_PHONE
+                    , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    , Manifest.permission.READ_EXTERNAL_STORAGE
             }, new RouteUtil.OnPermissionListener() {
                 @Override
                 public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {

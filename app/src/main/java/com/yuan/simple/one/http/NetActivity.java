@@ -49,6 +49,9 @@ public class NetActivity extends RLVActivity<PNet> {
             case 0:
                 getP().get();
                 break;
+            case 2:
+                getP().get2();
+                break;
         }
     }
 

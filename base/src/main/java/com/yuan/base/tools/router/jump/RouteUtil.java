@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 
 import java.io.File;
 import java.io.Serializable;
@@ -234,6 +235,21 @@ public class RouteUtil {
         intent.setDataAndType(uri, type);
         activity.startActivity(intent);
         activity.overridePendingTransition(0, 0);
+    }
+
+    /**
+     * 查询是否有相应的权限
+     *
+     * @param activity
+     * @param permission 需要检查的权限
+     * @return
+     */
+    public static boolean checkePermission(Activity activity, String permission) {
+        // 相机的权限申请逻辑
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

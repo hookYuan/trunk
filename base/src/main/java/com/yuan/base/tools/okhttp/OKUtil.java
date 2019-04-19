@@ -82,7 +82,6 @@ public class OKUtil {
     private Request.Builder requestBuilder;
     private Context mContext;
 
-
     /**
      * 全局参数初始化
      *
@@ -93,7 +92,7 @@ public class OKUtil {
     }
 
     /**
-     * 获取配置参数
+     * 获取缓存文件夹大小
      *
      * @return
      */

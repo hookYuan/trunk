@@ -49,8 +49,14 @@ public class NetActivity extends RLVActivity<PNet> {
             case 0:
                 getP().get();
                 break;
-            case 2:
+            case 1:
                 getP().get2();
+                break;
+            case 4:
+                getP().showCacheSize();
+                break;
+            case 5:
+                getP().delCache();
                 break;
         }
     }
@@ -63,6 +69,8 @@ public class NetActivity extends RLVActivity<PNet> {
             mData.add("Post请求");
             mData.add("上传文件");
             mData.add("下载文件");
+            mData.add("获取缓存文件大小");
+            mData.add("删除缓存文件");
         }
         return mData;
     }

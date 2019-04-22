@@ -34,7 +34,9 @@ public class PNet extends Presenter<NetActivity> {
     }
 
     public void get2() {
-        OKUtil.with(getContext())
+        OKUtil.with(getContext(), new OKUtil.Config.Builder()
+                .setCache(true)
+                .build())
                 .get("http://mobile.weather.com.cn/data/sk/101010100.html?_=1381891661455")
                 .put("yuanye", "123123")
                 .execute(new OKUtil.JsonBack() {
@@ -49,5 +51,15 @@ public class PNet extends Presenter<NetActivity> {
                         ToastUtil.showShort(getContext(), e.getMessage());
                     }
                 });
+    }
+
+    public void showCacheSize() {
+        long size = OKUtil.getCacheSize();
+        ToastUtil.showShort(getContext(), size + "B");
+    }
+
+    public void delCache() {
+        OKUtil.delCache();
+        ToastUtil.showShort(getContext(), "删除成功");
     }
 }

@@ -94,17 +94,49 @@ public class OKUtil {
     /**
      * 获取缓存文件夹大小
      *
-     * @return
+     * @return 字节大小
      */
     public static long getCacheSize() {
+        long total = 0;
+        if (cachePaths != null && cachePaths.size() > 0) {
+            for (String path : cachePaths) {
+                total = total + getFolderSize(new File(path));
+            }
+        }
+        return total;
+    }
 
-        return 0;
+
+    /**
+     * 获取文件夹大小
+     *
+     * @param file File实例
+     * @return long
+     */
+    private static long getFolderSize(java.io.File file) {
+        long size = 0;
+        try {
+            java.io.File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+
+                } else {
+                    size = size + fileList[i].length();
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //return size/1048576;
+        return size;
     }
 
     /**
      * 删除缓存
      */
-    public static void deleteCache() {
+    public static void delCache() {
         if (cachePaths != null && cachePaths.size() > 0) {
             for (String path : cachePaths) {
                 delFolder(path);

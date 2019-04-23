@@ -1,4 +1,4 @@
-package com.yuan.base.widget.title.titlebar;
+package com.yuan.base.widget.title;
 
 import android.view.View;
 

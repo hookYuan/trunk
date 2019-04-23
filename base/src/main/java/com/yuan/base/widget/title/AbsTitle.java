@@ -1,12 +1,9 @@
-package com.yuan.base.widget.title.titlebar;
+package com.yuan.base.widget.title;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -14,10 +11,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.yuan.base.R;
-import com.yuan.base.tools.glide.GlideUtil;
-
 /**
  * Created by YuanYe on 2018/8/4.
  * 如果需要自定义Title,可以继承AbsTitle
@@ -44,9 +37,6 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
     public AbsTitle(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AbsTitle);
-        CharSequence bgImg = ta.getText(R.styleable.AbsTitle_backgroundImg);
-        setBackgroundImg((String) bgImg);
         init();
     }
 
@@ -180,34 +170,4 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
      * *********************设置背景颜色、背景图片***********************************************************
      */
 
-    /**
-     * 设置Title的背景图片
-     * 替换系统的设置背景图，采用Glide加载，不会使图片变形
-     *
-     * @return
-     */
-    public T setBackgroundImg(String imgUrl) {
-        if (!TextUtils.isEmpty(imgUrl) && background != null)
-            GlideUtil.load(imgUrl, background);
-        return (T) this;
-    }
-
-    @Override
-    public void setBackgroundDrawable(Drawable drawable) {
-        if (background != null) background.setImageDrawable(drawable);
-    }
-
-    @Override
-    public void setBackgroundResource(int resid) {
-        GlideUtil.load(resid, background);
-    }
-
-    @Override
-    public void setBackgroundColor(int color) {
-        super.setBackgroundColor(color);
-        Bitmap bitmap = Bitmap.createBitmap(10, 10,
-                Bitmap.Config.ARGB_4444);
-        bitmap.eraseColor(color);//填充颜色
-        background.setImageBitmap(bitmap);
-    }
 }

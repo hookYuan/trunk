@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.yuan.base.widget.title.titlebar.TitleBar
+    <com.yuan.base.widget.title.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_50"
@@ -13,7 +13,7 @@
         app:centerText="简介"
         app:centerTextColor="@color/colorFont33">
 
-    </com.yuan.base.widget.title.titlebar.TitleBar>
+    </com.yuan.base.widget.title.TitleBar>
 
     <EditText
         android:id="@+id/tv_two_name"

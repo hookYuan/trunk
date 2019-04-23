@@ -12,7 +12,7 @@ import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.router.jump.RouteUtil;
-import com.yuan.base.ui.fragment.RLVFragment;
+import com.yuan.base.ui.recycler.RLVFragment;
 import com.yuan.simple.R;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;

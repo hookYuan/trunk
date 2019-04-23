@@ -18,13 +18,12 @@ import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.ui.activity.RLVActivity;
+import com.yuan.base.ui.recycler.RLVActivity;
 import com.yuan.base.widget.dialog.v7.DialogUtil;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * AlertDialog使用示例

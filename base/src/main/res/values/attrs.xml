@@ -2,7 +2,7 @@
 <resources>
 
     <!--状态控制器属性标注-->
-    <declare-styleable name="StateController">
+    <declare-styleable name="StateLayout">
         <attr name="x_contentLayoutId" format="reference" />
         <attr name="x_loadingLayoutId" format="reference" />
         <attr name="x_emptyLayoutId" format="reference" />
@@ -135,12 +135,6 @@
     <attr name="leftTextSize" format="dimension"></attr>
     <attr name="centerTextSize" format="dimension"></attr>
     <attr name="rightTextSize" format="dimension"></attr>
-    <!--TitleBar背景-->
-    <attr name="backgroundImg" format="string"></attr>
-    <attr name="backgroundColor" format="color"></attr>
-    <!--status-->
-    <attr name="statusBgColor" format="color"></attr>
-    <attr name="statusVisibility" format="boolean"></attr>
 
     <!--更具Type选择Title的类型-->
     <attr name="titleBarType" format="enum">
@@ -162,28 +156,6 @@
         <attr name="leftTextSize"></attr>
         <attr name="centerTextSize"></attr>
         <attr name="rightTextSize"></attr>
-        <attr name="backgroundColor"></attr>
-    </declare-styleable>
-    <declare-styleable name="Title">
-        <attr name="leftText"></attr>
-        <attr name="centerText"></attr>
-        <attr name="rightText"></attr>
-        <attr name="leftDrawable"></attr>
-        <attr name="rightDrawable"></attr>
-        <attr name="leftClickFinish"></attr>
-        <attr name="leftTextColor"></attr>
-        <attr name="centerTextColor"></attr>
-        <attr name="rightTextColor"></attr>
-        <attr name="titleBarType"></attr>
-        <attr name="leftTextSize"></attr>
-        <attr name="centerTextSize"></attr>
-        <attr name="rightTextSize"></attr>
-        <attr name="statusBgColor"></attr>
-        <attr name="statusVisibility"></attr>
-    </declare-styleable>
-
-    <declare-styleable name="AbsTitle">
-        <attr name="backgroundImg"></attr>
     </declare-styleable>
 
 </resources>

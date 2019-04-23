@@ -6,9 +6,9 @@ import android.widget.ImageView;
 
 import com.yuan.base.tools.glide.GlideUtil;
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.ui.extra.ISwipeBack;
+import com.yuan.base.tools.extra.ISwipeBack;
 import com.yuan.base.ui.kernel.BaseActivity;
-import com.yuan.base.widget.title.statusbar.StatusUtil;
+import com.yuan.base.widget.title.StatusUtil;
 import com.yuan.simple.R;
 
 public class TitleDemo1 extends BaseActivity implements ISwipeBack {

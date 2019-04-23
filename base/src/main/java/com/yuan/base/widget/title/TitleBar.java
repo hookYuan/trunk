@@ -1,4 +1,4 @@
-package com.yuan.base.widget.title.titlebar;
+package com.yuan.base.widget.title;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -52,8 +52,6 @@ public class TitleBar extends AbsTitle<TitleBar> {
     private float centerFontSize = 18 * context.getResources().getDisplayMetrics().scaledDensity; //中间文字大小
     private float rightFontSize = 16 * context.getResources().getDisplayMetrics().scaledDensity; //右侧文字大小
 
-    private int backgroundColor = ContextCompat.getColor(context, android.R.color.transparent); //titleBar背景颜色
-
     private boolean leftClickFinish;//点击左侧图标返回
 
     protected TextView leftTextView;//左侧
@@ -90,7 +88,6 @@ public class TitleBar extends AbsTitle<TitleBar> {
         leftFontColor = ta.getColor(R.styleable.TitleBar_leftTextColor, ContextCompat.getColor(context, R.color.colorFont33));
         centerFontColor = ta.getColor(R.styleable.TitleBar_centerTextColor, ContextCompat.getColor(context, R.color.colorFont33));
         rightFontColor = ta.getColor(R.styleable.TitleBar_rightTextColor, ContextCompat.getColor(context, R.color.colorFont33));
-        backgroundColor = ta.getColor(R.styleable.TitleBar_backgroundColor, ContextCompat.getColor(context, android.R.color.transparent));
         leftFontSize = ta.getDimension(R.styleable.TitleBar_leftTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
         centerFontSize = ta.getDimension(R.styleable.TitleBar_centerTextSize, 18 * context.getResources().getDisplayMetrics().scaledDensity);
         rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
@@ -138,8 +135,6 @@ public class TitleBar extends AbsTitle<TitleBar> {
         setRightText(rightText);
 
         if (leftClickFinish) setLeftClickFinish();
-
-        setBackgroundColor(backgroundColor);
     }
 
 

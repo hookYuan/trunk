@@ -12,7 +12,6 @@ import android.view.animation.TranslateAnimation;
  */
 public class RxTranslateAnimation implements IDialogAnimation {
 
-
     public static final int leftToRight = 0;//左向右平移
     public static final int rightToLeft = 1;//右向左平移
     public static final int topToBottom = 2; //上向下平移

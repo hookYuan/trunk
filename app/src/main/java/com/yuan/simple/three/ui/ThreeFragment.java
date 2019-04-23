@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yuan.base.tools.layout.Views;
-import com.yuan.base.widget.title.titlebar.TitleBar;
+import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 import com.yuan.simple.one.BaseFragment;
 

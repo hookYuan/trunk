@@ -6,9 +6,9 @@ import com.yuan.base.tools.adapter.recycler.RLVAdapter;
 import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.log.ToastUtil;
 import com.yuan.base.tools.router.jump.RouteUtil;
-import com.yuan.base.ui.fragment.RLVFragment;
-import com.yuan.base.widget.title.statusbar.StatusUtil;
-import com.yuan.base.widget.title.titlebar.TitleBar;
+import com.yuan.base.ui.recycler.RLVFragment;
+import com.yuan.base.widget.title.StatusUtil;
+import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 
 import android.os.Bundle;

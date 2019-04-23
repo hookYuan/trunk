@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.ui.activity.RLVActivity;
+import com.yuan.base.ui.recycler.RLVActivity;
 import com.yuan.base.widget.fold.FoldTextView;
 import com.yuan.simple.R;
 

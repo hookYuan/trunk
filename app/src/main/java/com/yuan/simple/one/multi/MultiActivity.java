@@ -9,7 +9,7 @@ import android.view.View;
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.MultiAdapter;
 import com.yuan.base.ui.kernel.BaseActivity;
-import com.yuan.base.widget.title.titlebar.TitleBar;
+import com.yuan.base.widget.title.TitleBar;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;

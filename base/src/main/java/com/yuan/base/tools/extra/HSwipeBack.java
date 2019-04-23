@@ -1,4 +1,4 @@
-package com.yuan.base.ui.extra;
+package com.yuan.base.tools.extra;
 
 import android.app.Activity;
 import android.graphics.Color;

@@ -19,7 +19,7 @@ import com.yuan.base.R;
  * 状态控制切换
  * 使用方法： 初始化各个状态，显示各种状态
  */
-public class StateController extends FrameLayout {
+public class StateLayout extends FrameLayout {
 
     View loadingView, errorView, emptyView, contentView;
 
@@ -57,25 +57,25 @@ public class StateController extends FrameLayout {
     private Handler handler;
 
 
-    public StateController(Context context) {
+    public StateLayout(Context context) {
         this(context, null);
     }
 
-    public StateController(Context context, AttributeSet attrs) {
+    public StateLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public StateController(Context context, AttributeSet attrs, int defStyleAttr) {
+    public StateLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setupAttrs(context, attrs);
     }
 
     private void setupAttrs(Context context, AttributeSet attrs) {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StateController);
-        loadingLayoutId = typedArray.getResourceId(R.styleable.StateController_x_loadingLayoutId, RES_NONE);
-        errorLayoutId = typedArray.getResourceId(R.styleable.StateController_x_errorLayoutId, RES_NONE);
-        emptyLayoutId = typedArray.getResourceId(R.styleable.StateController_x_emptyLayoutId, RES_NONE);
-        contentLayoutId = typedArray.getResourceId(R.styleable.StateController_x_contentLayoutId, RES_NONE);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StateLayout);
+        loadingLayoutId = typedArray.getResourceId(R.styleable.StateLayout_x_loadingLayoutId, RES_NONE);
+        errorLayoutId = typedArray.getResourceId(R.styleable.StateLayout_x_errorLayoutId, RES_NONE);
+        emptyLayoutId = typedArray.getResourceId(R.styleable.StateLayout_x_emptyLayoutId, RES_NONE);
+        contentLayoutId = typedArray.getResourceId(R.styleable.StateLayout_x_contentLayoutId, RES_NONE);
         typedArray.recycle();
         handler = new Handler();
     }
@@ -219,7 +219,7 @@ public class StateController extends FrameLayout {
 
     }
 
-    public StateController loadingView(View loadingView) {
+    public StateLayout loadingView(View loadingView) {
         if (this.loadingView != null) {
             removeView(this.loadingView);
         }
@@ -229,7 +229,7 @@ public class StateController extends FrameLayout {
         return this;
     }
 
-    public StateController errorView(View errorView) {
+    public StateLayout errorView(View errorView) {
         if (this.errorView != null) {
             removeView(this.errorView);
         }
@@ -239,7 +239,7 @@ public class StateController extends FrameLayout {
         return this;
     }
 
-    public StateController emptyView(View emptyView) {
+    public StateLayout emptyView(View emptyView) {
         if (this.emptyView != null) {
             removeView(this.emptyView);
         }
@@ -249,7 +249,7 @@ public class StateController extends FrameLayout {
         return this;
     }
 
-    public StateController contentView(View contentView) {
+    public StateLayout contentView(View contentView) {
         if (this.contentView != null) {
             removeView(this.contentView);
         }

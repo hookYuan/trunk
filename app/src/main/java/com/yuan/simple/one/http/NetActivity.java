@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.yuan.base.tools.adapter.recycler.GridDivider;
 import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.ui.activity.RLVActivity;
+import com.yuan.base.ui.recycler.RLVActivity;
 
 import java.util.ArrayList;
 import java.util.List;

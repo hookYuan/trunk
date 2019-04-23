@@ -1,4 +1,4 @@
-package com.yuan.base.widget.title.statusbar;
+package com.yuan.base.widget.title;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

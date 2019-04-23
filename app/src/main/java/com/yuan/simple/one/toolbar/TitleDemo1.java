@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.yuan.base.tools.glide.GlideUtil;
-import com.yuan.base.tools.layout.Views;
-import com.yuan.base.tools.extra.ISwipeBack;
-import com.yuan.base.ui.kernel.BaseActivity;
-import com.yuan.base.widget.title.StatusUtil;
+import com.yuan.kernel.tools.glide.GlideUtil;
+import com.yuan.kernel.tools.layout.Views;
+import com.yuan.kernel.tools.extra.ISwipeBack;
+import com.yuan.kernel.ui.kernel.BaseActivity;
+import com.yuan.kernel.widget.title.StatusUtil;
 import com.yuan.simple.R;
 
 public class TitleDemo1 extends BaseActivity implements ISwipeBack {

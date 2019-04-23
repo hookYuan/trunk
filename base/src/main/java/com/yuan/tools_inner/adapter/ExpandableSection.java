@@ -1,4 +1,4 @@
-package com.yuan.tools_depend.adapter;
+package com.yuan.tools_inner.adapter;
 
 /**
  * 作者：yuanYe创建于2016/10/26

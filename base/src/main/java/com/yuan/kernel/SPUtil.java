@@ -1,4 +1,4 @@
-package com.yuan.tools.cache;
+package com.yuan.kernel;
 
 import android.content.Context;
 import android.content.SharedPreferences;

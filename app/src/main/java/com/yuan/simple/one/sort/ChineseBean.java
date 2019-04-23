@@ -1,6 +1,6 @@
 package com.yuan.simple.one.sort;
 
-import com.yuan.base.tools.sort.IPinyinSort;
+import com.yuan.kernel.tools.sort.IPinyinSort;
 
 /**
  * Created by YuanYe on 2018/8/11.

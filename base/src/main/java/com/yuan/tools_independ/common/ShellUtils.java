@@ -1,4 +1,4 @@
-package com.yuan.tools.common;
+package com.yuan.tools_independ.common;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

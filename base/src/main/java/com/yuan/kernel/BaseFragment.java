@@ -1,4 +1,4 @@
-package com.yuan.base;
+package com.yuan.kernel;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

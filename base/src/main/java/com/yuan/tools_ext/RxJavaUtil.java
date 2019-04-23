@@ -1,4 +1,6 @@
-package com.yuan.tools_independ.common;
+package com.yuan.tools_ext;
+
+import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;

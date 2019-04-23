@@ -9,9 +9,9 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.ui.recycler.RLVActivity;
-import com.yuan.base.widget.fold.FoldTextView;
+import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
+import com.yuan.kernel.ui.recycler.RLVActivity;
+import com.yuan.kernel.widget.fold.FoldTextView;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.yuan.kernel;
+package com.yuan.tools_ext;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -30,6 +30,9 @@ import com.bumptech.glide.request.target.Target;
 /**
  * 描述： 整合Glide基本使用
  * 圆角图片，圆形图片加载
+ * <p>
+ * 依赖库：
+ * Glide
  *
  * @author yuanye
  * @date 2019/4/4 8:53

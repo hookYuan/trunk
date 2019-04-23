@@ -1,3 +1,5 @@
+此包为核心工具包，主要依赖外部包有v7/okhttp3/gson/Glide,彼此之间不互相依赖，提高独立性
+
 OKHttpUtil使用说明（依赖okhttp3和Gson）
 
 1、OkHttpUtil有两种使用方式：

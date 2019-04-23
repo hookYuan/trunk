@@ -1,4 +1,4 @@
-package com.yuan.widget.dialog.custom;
+package com.yuan.widget.dialog;
 
 import android.animation.ValueAnimator;
 import android.graphics.Color;

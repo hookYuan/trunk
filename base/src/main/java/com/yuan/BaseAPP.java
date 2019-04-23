@@ -3,7 +3,6 @@ package com.yuan;
 import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.yuan.base.BuildConfig;
 
 /**
  * Created by YuanYe on 2017/7/19.

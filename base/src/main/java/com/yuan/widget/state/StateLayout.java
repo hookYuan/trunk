@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.yuan.base.R;
+import com.yuan.R;
 
 /**
  * Created by wanglei on 2016/1/21.

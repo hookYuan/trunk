@@ -1,4 +1,4 @@
-package com.yuan.tools_independ.extra;
+package com.yuan.tools_ext;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -16,9 +16,9 @@ import com.jude.swipbackhelper.SwipeListener;
  * 依赖库：
  * com.jude:swipebackhelper
  */
-public class HSwipeBack {
+public class SwipeBackUtil {
 
-    private HSwipeBack() {
+    private SwipeBackUtil() {
 
     }
 

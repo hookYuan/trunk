@@ -1,4 +1,4 @@
-package com.yuan.kernel;
+package com.yuan.tools_ext;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -57,6 +57,9 @@ import okhttp3.ResponseBody;
  * 2.支持json,file,byte上传
  * 3.文件下载，自动Gson解析，支持扩展解析
  * 4.支持全局设置head/配置okHttp信息
+ * <p>
+ * 依赖库：
+ * okHttp / Gson
  *
  * @author yuanye
  * @date 2019/4/4 13:10

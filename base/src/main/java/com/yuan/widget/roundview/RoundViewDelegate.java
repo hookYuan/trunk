@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import com.yuan.base.R;
+import com.yuan.R;
 
 public class RoundViewDelegate {
     private View view;

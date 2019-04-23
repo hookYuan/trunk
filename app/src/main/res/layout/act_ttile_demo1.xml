@@ -18,7 +18,7 @@
         android:alpha="0.3"
         android:background="@color/black"></View>
 
-    <com.yuan.base.widget.title.Title
+    <com.yuan.kernel.widget.title.Title
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         app:statusBgColor="@color/transparent"
         app:statusVisibility="true">
 
-    </com.yuan.base.widget.title.Title>
+    </com.yuan.kernel.widget.title.Title>
 
 
     <android.support.v4.widget.NestedScrollView

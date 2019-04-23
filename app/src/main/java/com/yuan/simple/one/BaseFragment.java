@@ -8,11 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.base.tools.adapter.recycler.GridDivider;
-import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.tools.common.Kits;
-import com.yuan.base.tools.router.jump.RouteUtil;
-import com.yuan.base.ui.recycler.RLVFragment;
+import com.yuan.kernel.tools.adapter.recycler.GridDivider;
+import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
+import com.yuan.kernel.tools.common.Kits;
+import com.yuan.kernel.tools.router.jump.RouteUtil;
+import com.yuan.kernel.ui.recycler.RLVFragment;
 import com.yuan.simple.R;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;

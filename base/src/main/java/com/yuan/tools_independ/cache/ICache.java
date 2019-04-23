@@ -1,4 +1,4 @@
-package com.yuan.tools.cache;
+package com.yuan.tools_independ.cache;
 
 /**
  * Created by wanglei on 2016/11/27.

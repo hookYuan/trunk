@@ -1,12 +1,12 @@
-package com.yuan.tools.cache;
+package com.yuan.tools_independ.cache;
 
 import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 
 import com.yuan.TrunkConfig;
-import com.yuan.tools.common.Codec;
-import com.yuan.tools.common.Kits;
+import com.yuan.tools_independ.common.Codec;
+import com.yuan.tools_independ.common.Kits;
 
 import java.io.File;
 import java.io.IOException;

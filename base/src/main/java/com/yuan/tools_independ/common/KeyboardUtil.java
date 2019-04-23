@@ -1,10 +1,11 @@
-package com.yuan.tools.common;
+package com.yuan.tools_independ.common;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -13,8 +14,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import java.lang.reflect.Field;
-
-import io.reactivex.annotations.NonNull;
 
 /**
  * <pre>

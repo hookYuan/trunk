@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.yuan.base.tools.adapter.recycler.MultiAdapter;
+import com.yuan.kernel.tools.adapter.recycler.MultiAdapter;
 import com.yuan.simple.R;
 
 /**

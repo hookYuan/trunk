@@ -6,12 +6,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.yuan.base.tools.adapter.recycler.GridDivider;
-import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.tools.layout.Views;
-import com.yuan.base.tools.sort.ChineseSortUtil;
-import com.yuan.base.ui.kernel.BaseActivity;
-import com.yuan.base.widget.sideBar.SideBar;
+import com.yuan.kernel.tools.adapter.recycler.GridDivider;
+import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
+import com.yuan.kernel.tools.layout.Views;
+import com.yuan.kernel.tools.sort.ChineseSortUtil;
+import com.yuan.kernel.ui.kernel.BaseActivity;
+import com.yuan.kernel.widget.sideBar.SideBar;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;

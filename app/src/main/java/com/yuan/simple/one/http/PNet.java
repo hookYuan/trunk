@@ -1,9 +1,9 @@
 package com.yuan.simple.one.http;
 
 
-import com.yuan.base.tools.okhttp.OKUtil;
-import com.yuan.base.tools.log.ToastUtil;
-import com.yuan.base.ui.kernel.Presenter;
+import com.yuan.kernel.tools.okhttp.OKUtil;
+import com.yuan.kernel.tools.log.ToastUtil;
+import com.yuan.kernel.ui.kernel.Presenter;
 
 /**
  * Created by YuanYe on 2018/8/15.

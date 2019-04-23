@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yuan.tools.cache;
+package com.yuan.tools_independ.cache;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;

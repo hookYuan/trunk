@@ -1,4 +1,4 @@
-package com.yuan.widget.dialog.v7;
+package com.yuan.kernel;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;

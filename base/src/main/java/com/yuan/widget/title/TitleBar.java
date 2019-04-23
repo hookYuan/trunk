@@ -24,7 +24,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.yuan.base.R;
+import com.yuan.R;
 
 import java.util.List;
 

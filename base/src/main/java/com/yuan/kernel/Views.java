@@ -1,4 +1,4 @@
-package com.yuan.tools.layout;
+package com.yuan.kernel;
 
 import android.app.Activity;
 import android.content.Context;

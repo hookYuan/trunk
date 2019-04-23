@@ -1,4 +1,4 @@
-package com.yuan.tools.database;
+package com.yuan.tools_independ.database;
 
 /**
  * Created by YuanYe on 2018/1/5.

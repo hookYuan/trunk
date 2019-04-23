@@ -15,9 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.yuan.base.R;
-import com.yuan.tools.common.Kits;
-import com.yuan.tools.sort.IPinyinSort;
+import com.yuan.R;
+import com.yuan.tools_independ.common.Kits;
+import com.yuan.tools_independ.sort.IPinyinSort;
 
 import java.util.ArrayList;
 import java.util.Arrays;

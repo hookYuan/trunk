@@ -7,9 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.base.tools.adapter.recycler.GridDivider;
-import com.yuan.base.tools.adapter.recycler.RLVAdapter;
-import com.yuan.base.ui.recycler.RLVActivity;
+import com.yuan.kernel.tools.adapter.recycler.GridDivider;
+import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
+import com.yuan.kernel.ui.recycler.RLVActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +27,10 @@ public class NetActivity extends RLVActivity<PNet> {
         rlvList.addItemDecoration(new GridDivider(mContext));
         getTitleBar().setTitleText("OKUtil")
                 .setLeftClickFinish()
-                .setTextColor(getResources().getColor(com.yuan.base.R.color.white))
-                .setLeftIcon(getResources().getDrawable(com.yuan.base.R.drawable.ic_base_back_white))
+                .setTextColor(getResources().getColor(com.yuan.kernel.R.color.white))
+                .setLeftIcon(getResources().getDrawable(com.yuan.kernel.R.drawable.ic_base_back_white))
                 .setBackgroundColor(
-                        getResources().getColor(com.yuan.base.R.color.colorPrimary));
+                        getResources().getColor(com.yuan.kernel.R.color.colorPrimary));
     }
 
     @Override

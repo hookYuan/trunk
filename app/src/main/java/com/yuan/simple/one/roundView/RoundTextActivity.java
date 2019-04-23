@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
-import com.yuan.base.tools.adapter.BaseListAdapter;
-import com.yuan.base.ui.kernel.BaseActivity;
+import com.yuan.kernel.tools.adapter.BaseListAdapter;
+import com.yuan.kernel.ui.kernel.BaseActivity;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.yuan.tools.cache;
+package com.yuan.tools_independ.cache;
 
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;

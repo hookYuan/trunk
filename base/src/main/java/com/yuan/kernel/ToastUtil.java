@@ -1,4 +1,4 @@
-package com.yuan.tools.log;
+package com.yuan.kernel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

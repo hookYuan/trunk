@@ -1,4 +1,4 @@
-package com.yuan.widget.dialog.custom;
+package com.yuan.widget.dialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.yuan.kernel.R;
+import com.yuan.R;
 import com.yuan.kernel.Views;
 
 /**

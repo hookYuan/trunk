@@ -1,4 +1,4 @@
-package com.yuan.ui;
+package com.yuan.ui_inner;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;

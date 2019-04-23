@@ -1,4 +1,4 @@
-package com.yuan.ui;
+package com.yuan.ui_inner;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".one.input.InputActivity">
 
-    <com.yuan.base.widget.title.Title
+    <com.yuan.kernel.widget.title.Title
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -17,7 +17,7 @@
         app:leftDrawable="@drawable/ic_base_back_white">
 
 
-    </com.yuan.base.widget.title.Title>
+    </com.yuan.kernel.widget.title.Title>
 
     <!--<com.yuan.base.widget.input.InputScrollView-->
     <!--android:layout_width="match_parent"-->

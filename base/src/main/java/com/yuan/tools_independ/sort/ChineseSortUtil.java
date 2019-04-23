@@ -1,4 +1,4 @@
-package com.yuan.tools.sort;
+package com.yuan.tools_independ.sort;
 
 import java.util.Collections;
 import java.util.Comparator;

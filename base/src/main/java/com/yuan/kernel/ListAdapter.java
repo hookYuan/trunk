@@ -1,4 +1,4 @@
-package com.yuan.tools.adapter;
+package com.yuan.kernel;
 
 import android.content.Context;
 import android.util.SparseArray;
@@ -16,13 +16,13 @@ import java.util.List;
 /**
  * Created by YuanYe on 2016/8/1.
  */
-public abstract class BaseListAdapter<T> extends BaseAdapter {
+public abstract class ListAdapter<T> extends BaseAdapter {
 
     protected List<T> mData;
     private int mLayoutRes;//布局id
     private ViewGroup parent;
 
-    public BaseListAdapter(List<T> mData, int mLayoutRes) {
+    public ListAdapter(List<T> mData, int mLayoutRes) {
         this.mData = mData;
         this.mLayoutRes = mLayoutRes;
     }

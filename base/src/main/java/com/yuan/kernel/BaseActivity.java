@@ -1,4 +1,4 @@
-package com.yuan.base;
+package com.yuan.kernel;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;

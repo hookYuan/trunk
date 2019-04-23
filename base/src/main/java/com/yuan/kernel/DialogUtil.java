@@ -228,6 +228,10 @@ public class DialogUtil {
         alertList(title, mData, true, listener);
     }
 
+    public void alertList(String[] mData, DialogInterface.OnClickListener listener) {
+        alertList("", mData, true, listener);
+    }
+
 
     /**
      * ************************单选Dialog*****************************************************************

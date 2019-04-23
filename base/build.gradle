@@ -70,7 +70,6 @@ dependencies {
     api "com.android.support:design:$support"
 
     api "org.greenrobot:eventbus:$eventbus"
-    api "io.reactivex.rxjava2:rxandroid:$rxandroid"
     api "com.scwang.smartrefresh:SmartRefreshLayout:$SmartRefreshLayout"
     api "com.scwang.smartrefresh:SmartRefreshHeader:$SmartRefreshLayout"
     api "com.github.bumptech.glide:glide:$glide"

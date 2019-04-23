@@ -9,10 +9,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.yuan.kernel.tools.layout.Views;
-import com.yuan.kernel.tools.okhttp.OKUtil;
-import com.yuan.kernel.tools.router.jump.RouteUtil;
-import com.yuan.kernel.ui.kernel.BaseActivity;
+import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.RouteUtil;
+import com.yuan.kernel.Views;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
 import com.yuan.simple.two.ui.TwoFragment;

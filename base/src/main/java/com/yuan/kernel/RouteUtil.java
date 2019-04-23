@@ -244,7 +244,7 @@ public class RouteUtil {
      * @param permission 需要检查的权限
      * @return
      */
-    public static boolean checkePermission(Activity activity, String permission) {
+    public static boolean checkPermission(Activity activity, String permission) {
         // 相机的权限申请逻辑
         if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
             return false;

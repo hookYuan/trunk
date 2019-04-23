@@ -108,7 +108,6 @@ public class BaseFragment extends RLVFragment {
         mData.add(new OneListBean("input", InputActivity.class));
         mData.add(new OneListBean("okHttp", NetActivity.class));
         mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
-        mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
         mData.add(new OneListBean("multiAdapter", MultiActivity.class));
         return mData;
     }

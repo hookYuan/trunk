@@ -325,7 +325,6 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
      */
     protected final void runOnUiThread(Runnable runnable) {
         if (mainHandler != null) mainHandler.post(runnable);
-
     }
 
     /**

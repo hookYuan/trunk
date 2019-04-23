@@ -19,9 +19,7 @@ import com.yuan.base.tools.common.Kits;
 import com.yuan.base.tools.layout.Views;
 import com.yuan.base.tools.log.ToastUtil;
 import com.yuan.base.ui.activity.RLVActivity;
-import com.yuan.base.widget.dialog.v7.DialogHelper;
-import com.yuan.base.widget.dialog.v7.DialogHelperParams;
-import com.yuan.base.widget.dialog.v7.OnMultiListener;
+import com.yuan.base.widget.dialog.v7.DialogUtil;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class AlertDialogActivity extends RLVActivity {
     private ArrayList<DialogBean> mData;
     int i = 0;
 
-    DialogHelper helper;
+    private DialogUtil helper;
 
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
@@ -47,7 +45,7 @@ public class AlertDialogActivity extends RLVActivity {
                 .setBackgroundColor(getColor2(R.color.colorPrimary));
         rlvList.setLayoutManager(new LinearLayoutManager(this));
         rlvList.addItemDecoration(new GridDivider(this));
-        helper = new DialogHelper(this);
+        helper = DialogUtil.create(mContext);
     }
 
     @Override
@@ -67,7 +65,7 @@ public class AlertDialogActivity extends RLVActivity {
                 helper.alertText("这是一个简单提示");
                 break;
             case 2:
-                DialogHelperParams params1 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params1 = new DialogUtil.DialogParams.Builder()
                         .matchHeight(false)
                         .matchWidth(true)
                         .paddingTop(0)
@@ -77,77 +75,80 @@ public class AlertDialogActivity extends RLVActivity {
                         .gravity(Gravity.BOTTOM)
                         .windowBackground(getColor2(R.color.white))
                         .build();
-                DialogHelper helper = new DialogHelper(this, params1);
+                helper.setStyle(params1);
                 helper.alertText("最大宽度的Dialog");
                 break;
             case 3:
-                DialogHelperParams params2 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params2 = new DialogUtil.DialogParams.Builder()
                         .gravity(Gravity.BOTTOM)
                         .build();
-                new DialogHelper(this, params2).alertText("Dialog居下显示");
+                helper.setStyle(params2);
+                helper.alertText("Dialog居下显示");
                 break;
             case 4:
-                DialogHelperParams params3 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params3 = new DialogUtil.DialogParams.Builder()
                         .windowBackground(getColor2(R.color.colorPrimary))
                         .build();
-                new DialogHelper(this, params3).alertText("Dialog背景透明");
+                DialogUtil.setStyle(params3);
+                DialogUtil.create(this).alertText("Dialog背景透明");
                 break;
             case 5:
-                DialogHelperParams params4 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params4 = new DialogUtil.DialogParams.Builder()
                         .dialogBehindAlpha(0.8f)
                         .build();
-                new DialogHelper(this, params4).alertText("灰色背景透明度");
+                DialogUtil.setStyle(params4);
+                DialogUtil.create(this).alertText("灰色背景透明度");
                 break;
             case 6:
-                DialogHelperParams params5 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params5 = new DialogUtil.DialogParams.Builder()
                         .dialogFrontAlpha(0.5f)
                         .build();
-                new DialogHelper(this, params5).alertText("前景背景透明度");
+                DialogUtil.setStyle(params5);
+                DialogUtil.create(this).alertText("前景背景透明度");
                 break;
             case 7:
-                DialogHelperParams params6 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params6 = new DialogUtil.DialogParams.Builder()
                         .titleColor(getColor2(R.color.colorPrimary))
                         .titleSize(20)
                         .contentSize(16)
                         .positiveColor(getColor2(R.color.colorPrimary))
                         .build();
-                new DialogHelper(this, params6).alertText("字体颜色大小");
+                DialogUtil.setStyle(params6);
+                DialogUtil.create(this).alertText("字体颜色大小");
                 break;
             case 8:
                 View dialogView = Views.inflate(this, R.layout.my_dialog_view);
 
-                DialogHelperParams params7 = new DialogHelperParams.Builder()
+                DialogUtil.DialogParams params7 = new DialogUtil.DialogParams.Builder()
                         .height(Kits.Dimens.dpToPxInt(this, 200))
                         .width(Kits.Dimens.dpToPxInt(this, 250))
                         .windowBackground(getColor2(R.color.transparent))
                         .build();
-                new DialogHelper(this, params7)
-                        .alertView(dialogView);
+                DialogUtil.setStyle(params7);
+                DialogUtil.create(this).alertView(dialogView);
                 break;
             case 9:
-                this.helper.alertDate(new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                ToastUtil.showShort(AlertDialogActivity.this, (year + "--" + month + "--" + dayOfMonth));
-                            }
-                        });
+                helper.alertDate(2019, 4, 23, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        ToastUtil.showShort(AlertDialogActivity.this, (year + "--" + month + "--" + dayOfMonth));
+                    }
+                });
                 break;
             case 10:
-                new DialogHelper(this)
-                        .alertTime(new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                ToastUtil.showShort(AlertDialogActivity.this, (hourOfDay + "--" + minute));
-                            }
-                        });
+                helper.alertTime(13, 23, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        ToastUtil.showShort(AlertDialogActivity.this, (hourOfDay + "--" + minute));
+                    }
+                });
                 break;
             case 11:
-                new DialogHelper(this)
-                        .alertWait("提示", "加载中...");
+                helper.alertWait("提示", "加载中...");
                 break;
             case 12:
                 if (i >= 100) {
-                    new DialogHelper(mContext).alertText("已经下载完成，是否重新下载？", new DialogInterface.OnClickListener() {
+                    helper.alertText("已经下载完成，是否重新下载？", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int pos) {
                             i = 0;
@@ -155,18 +156,17 @@ public class AlertDialogActivity extends RLVActivity {
                     });
                     return;
                 }
-                final DialogHelper dialog = new DialogHelper(mContext);
-                dialog.alertProgress("下载", 100);
+                helper.alertProgress("下载", 100);
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         while (true) {
                             if (i >= 100) {
-                                dialog.dismiss();
+                                helper.dismiss();
                                 return;
                             }
-                            dialog.setProgressCurrent(i);
+                            helper.setProgressCurrent(i);
                             i = i + 1;
                             try {
                                 Thread.sleep(100);
@@ -179,7 +179,7 @@ public class AlertDialogActivity extends RLVActivity {
                 break;
             case 13:
                 final String[] singleData = {"长春", "重庆", "北京", "上海", "成都"};
-                new DialogHelper(mContext).alertSingle("城市", singleData, new DialogInterface.OnClickListener() {
+                helper.alertSingle("城市", singleData, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ToastUtil.showShort(mContext, "您选择的是" + singleData[i]);
@@ -188,22 +188,25 @@ public class AlertDialogActivity extends RLVActivity {
                 break;
             case 14:
                 final String[] mData = {"长春", "重庆", "北京", "上海", "成都"};
-                new DialogHelper(mContext).alertMulti("城市", mData, new OnMultiListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, Map<Integer, String> selects) {
-                        ToastUtil.showShort(mContext, "选中的有" + selects.toString());
-                    }
-                });
+//                helper.alertMulti("城市", mData, new DialogUtil.OnMultiListener() {
+//                    @Override
+//                    public <T extends DialogUtil.IDialog> void onClick(DialogInterface dialog, List<T> selects) {
+//                        ToastUtil.showShort(mContext, "选中的有" + selects.toString());
+//                    }
+//                });
                 break;
             case 15:
                 final String[] listData = {"长春", "重庆", "北京", "上海", "成都", "开封", "广东",
                         "长春", "重庆", "北京", "上海", "成都", "开封"};
-                new DialogHelper(mContext).alertList("城市", listData, new DialogInterface.OnClickListener() {
+                helper.alertList("城市", listData, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ToastUtil.showShort(mContext, "您选择了" + listData[i]);
                     }
                 });
+                break;
+            case 16:
+                DialogUtil.dismiss();
                 break;
 
         }
@@ -227,6 +230,7 @@ public class AlertDialogActivity extends RLVActivity {
         mData.add(new DialogBean("单选弹窗", 13));
         mData.add(new DialogBean("多选弹窗", 14));
         mData.add(new DialogBean("列表弹窗", 15));
+        mData.add(new DialogBean("取消弹窗", 16));
         return mData;
     }
 

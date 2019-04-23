@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.yuan.base.widget.state.StateLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yuan.widget.state.StateLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sc_state"
     android:layout_width="match_parent"
@@ -18,4 +18,4 @@
         </android.support.v7.widget.RecyclerView>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-</com.yuan.base.widget.state.StateLayout>
+</com.yuan.widget.state.StateLayout>

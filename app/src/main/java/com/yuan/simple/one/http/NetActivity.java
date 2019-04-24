@@ -7,9 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.tools.adapter.recycler.GridDivider;
-import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
-import com.yuan.kernel.ui.recycler.RLVActivity;
+import com.yuan.kernel.GridDivider;
+import com.yuan.kernel.RLVAdapter;
+import com.yuan.simple.tool.ListActivity;
+import com.yuan.simple.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * 使用OKHttpUtil的一个事例
  */
-public class NetActivity extends RLVActivity<PNet> {
+public class NetActivity extends ListActivity<PNet> {
 
     private ArrayList<String> mData;
 
@@ -27,10 +28,10 @@ public class NetActivity extends RLVActivity<PNet> {
         rlvList.addItemDecoration(new GridDivider(mContext));
         getTitleBar().setTitleText("OKUtil")
                 .setLeftClickFinish()
-                .setTextColor(getResources().getColor(com.yuan.kernel.R.color.white))
-                .setLeftIcon(getResources().getDrawable(com.yuan.kernel.R.drawable.ic_base_back_white))
+                .setTextColor(getResources().getColor(R.color.white))
+                .setLeftIcon(getResources().getDrawable(R.drawable.ic_base_back_white))
                 .setBackgroundColor(
-                        getResources().getColor(com.yuan.kernel.R.color.colorPrimary));
+                        getResources().getColor(R.color.colorPrimary));
     }
 
     @Override
@@ -80,8 +81,4 @@ public class NetActivity extends RLVActivity<PNet> {
 
     }
 
-    @Override
-    public void setListener() {
-
-    }
 }

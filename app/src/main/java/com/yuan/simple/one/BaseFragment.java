@@ -8,11 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.tools.adapter.recycler.GridDivider;
-import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
-import com.yuan.kernel.tools.common.Kits;
-import com.yuan.kernel.tools.router.jump.RouteUtil;
-import com.yuan.kernel.ui.recycler.RLVFragment;
+import com.yuan.kernel.GridDivider;
+import com.yuan.kernel.RLVAdapter;
+import com.yuan.kernel.RouteUtil;
 import com.yuan.simple.R;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;
@@ -22,6 +20,8 @@ import com.yuan.simple.one.multi.MultiActivity;
 import com.yuan.simple.one.roundView.RoundTextActivity;
 import com.yuan.simple.one.sort.SortActivity;
 import com.yuan.simple.one.toolbar.TitleBarActivity;
+import com.yuan.simple.tool.ListFragment;
+import com.yuan.tools_independ.common.Kits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by YuanYe on 2018/4/13.
  */
-public class BaseFragment extends RLVFragment {
+public class BaseFragment extends ListFragment {
 
     private ArrayList<OneListBean> mData;
 
@@ -39,48 +39,15 @@ public class BaseFragment extends RLVFragment {
         rlvList.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
                 ContextCompat.getColor(mContext, R.color.colorDivider)));
 
-        getTitleBar().setTitleText("基础功能")
-                .setTextColor(ContextCompat.getColor(mContext, R.color.white))
-                .setRightText("线程")
-                .setRightOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        new Thread(new Runnable() {
-//                            @Override
-//                            public void run() {
+//        getTitleBar().setTitleText("基础功能")
+//                .setTextColor(ContextCompat.getColor(mContext, R.color.colorFont33))
+//                .setRightText("线程")
+//                .setRightOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
 //
-//                            }
-//                        }).start();
-//                        RxThread.onCreate().newThread(new RxThread.CallBack() {
-//                            @Override
-//                            public void run(Message message) {
-//
-//                            }
-//                        });
-
-//                        RxThread.onCreate().mainThread(new RxThread.CallBack() {
-//                            @Override
-//                            public void run(Message message) {
-//
-//                            }
-//                        });
-//                        RxThread.onCreate().newThread(new RxThread.CallBack() {
-//                            @Override
-//                            public void run(Message message) {
-//
-//                            }
-//                        });
-
-//                        RxThread.onCreate()
-//                                .currentThread(new RxThread.CallBack() {
-//                                    @Override
-//                                    public void run(Message message) {
-//
-//                                    }
-//                                });
-                    }
-                })
-                .setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+//                    }
+//                });
     }
 
     @Override
@@ -114,11 +81,6 @@ public class BaseFragment extends RLVFragment {
 
     @Override
     public void parseBundle(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void setListener() {
 
     }
 }

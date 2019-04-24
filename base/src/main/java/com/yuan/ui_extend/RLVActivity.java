@@ -1,7 +1,5 @@
 package com.yuan.ui_extend;
 
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,18 +19,68 @@ import java.util.List;
  */
 public abstract class RLVActivity<T extends Presenter> extends BaseActivity<T> {
 
-    protected RecyclerView rlvList;
+    /**
+     * recyclerView
+     */
+    private RecyclerView rlvList;
+
+    /**
+     * 适配器
+     */
+    private RLVAdapter adapter;
+
+    @Override
+    public int getLayoutId() {
+        return 0;
+    }
+
+    /**
+     * 绑定RecyclerView
+     *
+     * @return
+     */
+    protected RecyclerView bindRecyclerView() {
+        return null;
+    }
+
+    @Override
+    public View getLayoutView() {
+        //如果有指定RecyclerView，使用指定布局，否则采用默认布局
+        if (bindRecyclerView() != null) {
+            rlvList = new RecyclerView(mContext);
+            return rlvList;
+        }
+        return null;
+    }
 
     @Override
     public void findViews() {
-        rlvList = findViewById(getRecyclerId());
+        if (rlvList == null) rlvList = bindRecyclerView();
     }
-
 
     @Override
     public void initData() {
+        if (rlvList == null) {
+            throw new NullPointerException("RecyclerView为null: 使用getLayoutId()重新绑定布局后，必须调用bindRecyclerView()绑定recyclerView");
+        }
         initRecyclerView(rlvList);
         rlvList.setAdapter(getAdapter());
+    }
+
+    @Override
+    public void setListener() {
+
+    }
+
+    /**
+     * 初始化RecyclerView，可以设置RecyclerView的列数
+     * 设置LayoutManager
+     *
+     * @param rlvList
+     */
+    protected void initRecyclerView(RecyclerView rlvList) {
+        rlvList.setLayoutManager(new LinearLayoutManager(mContext));
+        rlvList.addItemDecoration(new GridDivider(mContext));
     }
 
     /**
@@ -40,8 +88,11 @@ public abstract class RLVActivity<T extends Presenter> extends BaseActivity<T> {
      *
      * @return
      */
-    private RLVAdapter getAdapter() {
-        RLVAdapter adapter = new RLVAdapter(mContext) {
+    protected RLVAdapter getAdapter() {
+        if (adapter != null) {
+            return adapter;
+        }
+        return adapter = new RLVAdapter(mContext) {
             @Override
             public int getItemLayout(ViewGroup parent, int viewType) {
                 return RLVActivity.this.getItemLayout(parent, viewType);
@@ -62,27 +113,8 @@ public abstract class RLVActivity<T extends Presenter> extends BaseActivity<T> {
                 RLVActivity.this.onItemClick(holder, view, position);
             }
         };
-        return adapter;
     }
 
-    /**
-     * 获取RecyclerId
-     *
-     * @return
-     */
-    protected abstract @IdRes
-    int getRecyclerId();
-
-    /**
-     * 初始化RecyclerView，可以设置RecyclerView的列数
-     * 设置LayoutManager
-     *
-     * @param rlvList
-     */
-    protected void initRecyclerView(RecyclerView rlvList) {
-        rlvList.setLayoutManager(new LinearLayoutManager(mContext));
-        rlvList.addItemDecoration(new GridDivider(mContext));
-    }
 
     /**
      * 绑定item数据
@@ -99,8 +131,7 @@ public abstract class RLVActivity<T extends Presenter> extends BaseActivity<T> {
      * @param viewType
      * @return
      */
-    protected abstract @LayoutRes
-    int getItemLayout(ViewGroup parent, int viewType);
+    protected abstract int getItemLayout(ViewGroup parent, int viewType);
 
     /**
      * item点击事件
@@ -110,6 +141,7 @@ public abstract class RLVActivity<T extends Presenter> extends BaseActivity<T> {
      * @param position
      */
     protected void onItemClick(RLVAdapter.ViewHolder holder, View view, int position) {
+
     }
 
     /**

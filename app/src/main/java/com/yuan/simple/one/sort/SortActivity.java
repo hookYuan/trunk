@@ -6,13 +6,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.tools.adapter.recycler.GridDivider;
-import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
-import com.yuan.kernel.tools.layout.Views;
-import com.yuan.kernel.tools.sort.ChineseSortUtil;
-import com.yuan.kernel.ui.kernel.BaseActivity;
-import com.yuan.kernel.widget.sideBar.SideBar;
+import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.GridDivider;
+import com.yuan.kernel.RLVAdapter;
+import com.yuan.kernel.Views;
 import com.yuan.simple.R;
+import com.yuan.tools_independ.sort.ChineseSortUtil;
+import com.yuan.widget.sideBar.SideBar;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,10 @@ public class SortActivity extends BaseActivity {
 
     private ArrayList<ChineseBean> data = new ArrayList<>();
 
+    private RecyclerView recyclerView;
+
+    private SideBar sideBar;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_sort;
@@ -32,15 +36,8 @@ public class SortActivity extends BaseActivity {
     @Override
     public void findViews() {
         ChineseSortUtil.sortData(createData());
-//        Views.find();
-        RecyclerView recyclerView = Views.find(this,R.id.rlv_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new GridDivider(mContext));
-        recyclerView.setAdapter(createAdapter());
-
-        SideBar sideBar = findViewById(R.id.sideBar);
-        sideBar.setRecyclerView(recyclerView, data);
-        sideBar.setSortData(data);
+        recyclerView = Views.find(this, R.id.rlv_list);
+        sideBar = findViewById(R.id.sideBar);
     }
 
     @Override
@@ -50,7 +47,11 @@ public class SortActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.addItemDecoration(new GridDivider(mContext));
+        recyclerView.setAdapter(createAdapter());
+        sideBar.setRecyclerView(recyclerView, data);
+        sideBar.setSortData(data);
     }
 
     @Override

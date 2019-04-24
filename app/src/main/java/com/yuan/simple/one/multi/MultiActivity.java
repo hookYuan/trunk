@@ -6,11 +6,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.yuan.kernel.tools.adapter.recycler.GridDivider;
-import com.yuan.kernel.tools.adapter.recycler.MultiAdapter;
-import com.yuan.kernel.ui.kernel.BaseActivity;
-import com.yuan.kernel.widget.title.TitleBar;
+import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.GridDivider;
 import com.yuan.simple.R;
+import com.yuan.tools_extend.adapter.MultiAdapter;
+import com.yuan.widget.title.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;

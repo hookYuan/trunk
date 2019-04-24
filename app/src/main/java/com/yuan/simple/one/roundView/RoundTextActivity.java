@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 
-import com.yuan.kernel.tools.adapter.BaseListAdapter;
-import com.yuan.kernel.ui.kernel.BaseActivity;
+import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.ListAdapter;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;
@@ -47,10 +46,10 @@ public class RoundTextActivity extends BaseActivity {
 
 
     private ListAdapter getAdapter() {
-        return new BaseListAdapter<String>(getData(), R.layout.shape_gv_item) {
+        return new ListAdapter(getData(), R.layout.shape_gv_item) {
             @Override
-            public void bindView(final ViewHolder holder, String obj) {
-                holder.setText(R.id.rtv_text, obj);
+            public void bindView(final ViewHolder holder, Object obj) {
+                holder.setText(R.id.rtv_text, (String) obj);
                 if (selecte == holder.getItemPosition()) {
                     holder.getView(R.id.rtv_text).setSelected(true);
                 } else {

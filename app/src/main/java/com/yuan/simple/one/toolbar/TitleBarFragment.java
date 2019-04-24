@@ -1,15 +1,16 @@
 package com.yuan.simple.one.toolbar;
 
 
-import com.yuan.kernel.tools.adapter.recycler.GridDivider;
-import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
-import com.yuan.kernel.tools.common.Kits;
-import com.yuan.kernel.tools.log.ToastUtil;
-import com.yuan.kernel.tools.router.jump.RouteUtil;
-import com.yuan.kernel.ui.recycler.RLVFragment;
-import com.yuan.kernel.widget.title.StatusUtil;
-import com.yuan.kernel.widget.title.TitleBar;
+import com.yuan.kernel.GridDivider;
+import com.yuan.kernel.RLVAdapter;
+import com.yuan.kernel.RouteUtil;
+import com.yuan.kernel.ToastUtil;
 import com.yuan.simple.R;
+import com.yuan.simple.tool.ListFragment;
+import com.yuan.tools_independ.common.Kits;
+import com.yuan.ui_extend.RLVFragment;
+import com.yuan.widget.title.StatusUtil;
+import com.yuan.widget.title.TitleBar;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,7 +27,7 @@ import java.util.List;
  * create by Yuan ye.
  * download truck before use this
  */
-public class TitleBarFragment extends RLVFragment {
+public class TitleBarFragment extends ListFragment {
 
     private List<TitleBarBean> mData;
 
@@ -92,7 +93,7 @@ public class TitleBarFragment extends RLVFragment {
                 StatusUtil.setFloat(mContext);
                 break;
             case 2001:
-                getTitleBar().setBackgroundImg("http://img1.imgtn.bdimg.com/it/u=626186099,3046696268&fm=27&gp=0.jpg");
+//                getTitleBar().setBackground("http://img1.imgtn.bdimg.com/it/u=626186099,3046696268&fm=27&gp=0.jpg");
                 break;
             case 2002:
                 getTitleBar().setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
@@ -116,7 +117,7 @@ public class TitleBarFragment extends RLVFragment {
                 getTitleBar().setRightIcon(R.drawable.ic_base_menu_more_black);
                 break;
             case 2008:
-                ArrayList<String> menuData = new ArrayList<String>();
+                final ArrayList<String> menuData = new ArrayList<String>();
                 menuData.add("选项一");
                 menuData.add("选项二");
                 menuData.add("选项三");
@@ -137,16 +138,16 @@ public class TitleBarFragment extends RLVFragment {
                 getTitleBar().setLeftClickFinish();
                 break;
             case 3001:
-                getStatusBar().setVisibility(View.VISIBLE);
+//                getStatusBar().setVisibility(View.VISIBLE);
                 break;
             case 3002:
-                getStatusBar().setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+//                getStatusBar().setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                 break;
             case 3003:
-                getStatusBar().setBackgroundImg("http://img1.imgtn.bdimg.com/it/u=626186099,3046696268&fm=27&gp=0.jpg");
+//                getStatusBar().setBackgroundImg("http://img1.imgtn.bdimg.com/it/u=626186099,3046696268&fm=27&gp=0.jpg");
                 break;
             case 3004:
-                getStatusBar().setVisibility(View.GONE);
+//                getStatusBar().setVisibility(View.GONE);
                 break;
             case 4001:
                 RouteUtil.open(mContext, TitleDemo1.class);

@@ -7,19 +7,18 @@
     android:orientation="vertical"
     tools:context=".one.multi.MultiActivity">
 
-    <com.yuan.kernel.widget.title.TitleBar
+    <com.yuan.widget.title.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_50"
-        app:backgroundColor="@color/colorPrimary"
         app:centerText="MultiAdapter"
         app:centerTextColor="@color/white"
         app:leftClickFinish="true"
         app:leftDrawable="@drawable/ic_base_back_white"
         app:rightText="样式一"
-        app:rightTextColor="@color/white">
+        app:rightTextColor="@color/white"/>
 
-    </com.yuan.kernel.widget.title.TitleBar>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv_list"

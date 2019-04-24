@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -325,6 +326,19 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
     protected final void runOnUiThread(Runnable runnable) {
         if (mainHandler != null) mainHandler.post(runnable);
     }
+
+    /**
+     * 加载View
+     *
+     * @param id
+     * @param <T>
+     * @return
+     */
+    public <T extends View> T findViewById(@IdRes int id) {
+        if (mView == null) return null;
+        return mView.findViewById(id);
+    }
+
 
     /**
      * 反射泛型生成对象

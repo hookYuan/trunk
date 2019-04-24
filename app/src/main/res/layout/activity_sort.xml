@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".one.sort.SortActivity">
 
-    <com.yuan.kernel.widget.title.Title
+    <com.yuan.widget.title.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -16,7 +16,7 @@
         app:leftClickFinish="true"
         app:leftDrawable="@drawable/ic_base_back_white">
 
-    </com.yuan.kernel.widget.title.Title>
+    </com.yuan.widget.title.TitleBar>
 
 
     <RelativeLayout
@@ -32,7 +32,7 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <com.yuan.kernel.widget.sideBar.SideBar
+        <com.yuan.widget.sideBar.SideBar
             android:id="@+id/sideBar"
             android:layout_width="@dimen/size_26"
             android:layout_height="match_parent"
@@ -41,6 +41,4 @@
             android:paddingBottom="@dimen/size_32"
             android:paddingTop="@dimen/size_32" />
     </RelativeLayout>
-
-
 </LinearLayout>

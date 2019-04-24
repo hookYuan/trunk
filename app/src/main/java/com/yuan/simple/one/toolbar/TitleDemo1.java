@@ -4,18 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.yuan.kernel.tools.glide.GlideUtil;
-import com.yuan.kernel.tools.layout.Views;
-import com.yuan.kernel.tools.extra.ISwipeBack;
-import com.yuan.kernel.ui.kernel.BaseActivity;
-import com.yuan.kernel.widget.title.StatusUtil;
+import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.Views;
 import com.yuan.simple.R;
+import com.yuan.tools_extra.GlideUtil;
+import com.yuan.widget.title.StatusUtil;
 
-public class TitleDemo1 extends BaseActivity implements ISwipeBack {
+public class TitleDemo1 extends BaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.act_ttile_demo1;
+        return R.layout.act_title_demo1;
     }
 
     @Override

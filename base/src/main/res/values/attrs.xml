@@ -127,7 +127,6 @@
     <attr name="rightText" format="string"></attr>
     <attr name="leftDrawable" format="reference"></attr>
     <attr name="rightDrawable" format="reference"></attr>
-    <!--Left点击结束当前界面-->
     <attr name="leftClickFinish" format="boolean"></attr>
     <attr name="leftTextColor" format="color"></attr>
     <attr name="centerTextColor" format="color"></attr>
@@ -156,6 +155,8 @@
         <attr name="leftTextSize"></attr>
         <attr name="centerTextSize"></attr>
         <attr name="rightTextSize"></attr>
+        <attr name="android:background"></attr>
+        <attr name="android:textColor"></attr>
     </declare-styleable>
 
 </resources>

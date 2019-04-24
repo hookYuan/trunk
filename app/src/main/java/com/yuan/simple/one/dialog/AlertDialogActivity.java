@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.yuan.kernel.tools.adapter.recycler.GridDivider;
-import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
-import com.yuan.kernel.tools.common.Kits;
-import com.yuan.kernel.tools.layout.Views;
-import com.yuan.kernel.tools.log.ToastUtil;
-import com.yuan.kernel.ui.recycler.RLVActivity;
-import com.yuan.kernel.widget.dialog.v7.DialogUtil;
+import com.yuan.kernel.DialogUtil;
+import com.yuan.kernel.GridDivider;
+import com.yuan.kernel.RLVAdapter;
+import com.yuan.kernel.ToastUtil;
+import com.yuan.kernel.Views;
+import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
+import com.yuan.tools_independ.common.Kits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * AlertDialog使用示例
  */
-public class AlertDialogActivity extends RLVActivity {
+public class AlertDialogActivity extends ListActivity {
 
     private ArrayList<DialogBean> mData;
     int i = 0;
@@ -235,11 +235,6 @@ public class AlertDialogActivity extends RLVActivity {
 
     @Override
     public void parseBundle(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void setListener() {
 
     }
 

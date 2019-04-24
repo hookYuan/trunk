@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.yuan.kernel.widget.title.TitleBar
+    <com.yuan.widget.title.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_50"
         app:centerText="关于"
         >
 
-    </com.yuan.kernel.widget.title.TitleBar>
+    </com.yuan.widget.title.TitleBar>
 
     <TextView
         android:id="@+id/tv_three_name"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,12 +21,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.yuan.R;
+import com.yuan.tools_independ.common.Kits;
 
 import java.util.List;
 
@@ -38,15 +43,19 @@ import java.util.List;
  */
 public class TitleBar extends AbsTitle<TitleBar> {
 
+
+    private static int DEFAULTCOLOR; //默认字体颜色
+
     private CharSequence leftText = ""; //左侧文字
     private CharSequence centerText = "";//中间文字
     private CharSequence rightText = "";//右边文字
     private Drawable leftIcon;//左侧图标
     private Drawable rightIcon;//右侧图标
+    private Drawable background;//整体背景
 
-    private int leftFontColor = ContextCompat.getColor(context, R.color.colorFont33); //左侧文字颜色
-    private int centerFontColor = ContextCompat.getColor(context, R.color.colorFont33);//中间文字颜色
-    private int rightFontColor = ContextCompat.getColor(context, R.color.colorFont33);//右侧间文字颜色
+    private int leftFontColor; //左侧文字颜色
+    private int centerFontColor;//中间文字颜色
+    private int rightFontColor;//右侧间文字颜色
 
     private float leftFontSize = 16 * context.getResources().getDisplayMetrics().scaledDensity; //左侧文字大小
     private float centerFontSize = 18 * context.getResources().getDisplayMetrics().scaledDensity; //中间文字大小
@@ -64,6 +73,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
     public TitleBar(@NonNull Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
         this.context = _context;
+        DEFAULTCOLOR = ContextCompat.getColor(getContext(), R.color.colorFont33);
         obtainAttributes(_context, attrs);
     }
 
@@ -71,6 +81,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
     public TitleBar(Context _context) {
         super(_context);
         this.context = _context;
+        DEFAULTCOLOR = ContextCompat.getColor(getContext(), R.color.colorFont33);
         drawTitle();
     }
 
@@ -79,19 +90,23 @@ public class TitleBar extends AbsTitle<TitleBar> {
      */
     public void obtainAttributes(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
+        int textColor = ta.getColor(R.styleable.TitleBar_android_textColor, 0);
+
         leftText = ta.getText(R.styleable.TitleBar_leftText);
         centerText = ta.getText(R.styleable.TitleBar_centerText);
         rightText = ta.getText(R.styleable.TitleBar_rightText);
         leftIcon = ta.getDrawable(R.styleable.TitleBar_leftDrawable);
         rightIcon = ta.getDrawable(R.styleable.TitleBar_rightDrawable);
         leftClickFinish = ta.getBoolean(R.styleable.TitleBar_leftClickFinish, false);
-        leftFontColor = ta.getColor(R.styleable.TitleBar_leftTextColor, ContextCompat.getColor(context, R.color.colorFont33));
-        centerFontColor = ta.getColor(R.styleable.TitleBar_centerTextColor, ContextCompat.getColor(context, R.color.colorFont33));
-        rightFontColor = ta.getColor(R.styleable.TitleBar_rightTextColor, ContextCompat.getColor(context, R.color.colorFont33));
-        leftFontSize = ta.getDimension(R.styleable.TitleBar_leftTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
-        centerFontSize = ta.getDimension(R.styleable.TitleBar_centerTextSize, 18 * context.getResources().getDisplayMetrics().scaledDensity);
-        rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
-        rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, 16 * context.getResources().getDisplayMetrics().scaledDensity);
+
+        leftFontColor = ta.getColor(R.styleable.TitleBar_leftTextColor, textColor == 0 ? DEFAULTCOLOR : textColor);
+        centerFontColor = ta.getColor(R.styleable.TitleBar_centerTextColor, textColor == 0 ? DEFAULTCOLOR : textColor);
+        rightFontColor = ta.getColor(R.styleable.TitleBar_rightTextColor, textColor == 0 ? DEFAULTCOLOR : textColor);
+        leftFontSize = ta.getDimension(R.styleable.TitleBar_leftTextSize, dp2Dx(16));
+        centerFontSize = ta.getDimension(R.styleable.TitleBar_centerTextSize, dp2Dx(18));
+        rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, dp2Dx(16));
+        rightFontSize = ta.getDimension(R.styleable.TitleBar_rightTextSize, dp2Dx(16));
+        background = ta.getDrawable(R.styleable.TitleBar_android_background);
         ta.recycle();
         drawTitle();
     }
@@ -101,10 +116,15 @@ public class TitleBar extends AbsTitle<TitleBar> {
      * 在Abs布局添加默认需要添加的内容
      */
     private void drawTitle() {
+        setBackground(background);
+
         if (leftTextView == null) {
             leftTextView = new TextView(context);
-            leftTextView.setPadding((int) (16 * context.getResources()
-                    .getDisplayMetrics().scaledDensity), 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            leftTextView.setLayoutParams(params);
+            leftTextView.setPadding(dp2Dx(15), 0, dp2Dx(15), 0);
+            leftTextView.setGravity(Gravity.CENTER_VERTICAL);
+            setClickStyle(leftTextView);
             addLeftView(leftTextView);
         }
         setLeftTextColor(leftFontColor);
@@ -125,9 +145,13 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
         if (rightTextView == null) {
             rightTextView = new TextView(context);
-            rightTextView.setPadding(0, 0,
-                    (int) (16 * context.getResources().getDisplayMetrics().scaledDensity), 0);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            rightTextView.setLayoutParams(params);
+            rightTextView.setPadding(dp2Dx(15), 0, dp2Dx(15), 0);
+            rightTextView.setGravity(Gravity.CENTER_VERTICAL);
             addRightView(rightTextView);
+            setClickStyle(rightTextView);
         }
         setRightTextColor(rightFontColor);
         setRightTextSize(rightFontSize);
@@ -135,6 +159,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
         setRightText(rightText);
 
         if (leftClickFinish) setLeftClickFinish();
+
     }
 
 
@@ -169,9 +194,9 @@ public class TitleBar extends AbsTitle<TitleBar> {
         setLeftOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Activity activity = (Activity) context;
-                if (activity != null)
-                    activity.finish();
+                if (context != null && context instanceof Activity) {
+                    ((Activity) context).finish();
+                }
             }
         });
         return this;
@@ -347,11 +372,9 @@ public class TitleBar extends AbsTitle<TitleBar> {
         return this;
     }
 
-
     public interface OnMenuItemClickListener {
         void onItemClick(int position);
     }
-
 
     /**
      * menu菜单适配器
@@ -397,5 +420,10 @@ public class TitleBar extends AbsTitle<TitleBar> {
         public class ViewHolder {
             private TextView content;
         }
+    }
+
+    private int dp2Dx(int dp) {
+        return (int) (dp * context.getResources()
+                .getDisplayMetrics().scaledDensity);
     }
 }

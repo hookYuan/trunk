@@ -20,17 +20,57 @@ import java.util.List;
  */
 public abstract class RLVFragment<T extends Presenter> extends BaseFragment<T> {
 
-    protected RecyclerView rlvList;
+    /**
+     * recyclerView
+     */
+    private RecyclerView rlvList;
+
+    /**
+     * 适配器
+     */
+    private RLVAdapter adapter;
+
+    @Override
+    public int getLayoutId() {
+        return 0;
+    }
+
+    /**
+     * 绑定RecyclerView
+     *
+     * @return
+     */
+    protected RecyclerView bindRecyclerView() {
+        return null;
+    }
+
+    @Override
+    public View getLayoutView() {
+        //如果有指定RecyclerView，使用指定布局，否则采用默认布局
+        if (bindRecyclerView() != null) {
+            rlvList = new RecyclerView(mContext);
+            return rlvList;
+        }
+        return null;
+    }
 
     @Override
     public void findViews() {
-        rlvList = mView.findViewById(getRecyclerId());
+        if (rlvList == null) rlvList = bindRecyclerView();
     }
 
     @Override
     public void initData() {
+        if (rlvList == null) {
+            throw new NullPointerException("RecyclerView为null: 使用getLayoutId()重新绑定布局后，必须调用bindRecyclerView()绑定recyclerView");
+        }
         initRecyclerView(rlvList);
         rlvList.setAdapter(getAdapter());
+    }
+
+    @Override
+    public void setListener() {
+
     }
 
     /**
@@ -39,7 +79,10 @@ public abstract class RLVFragment<T extends Presenter> extends BaseFragment<T> {
      * @return
      */
     private RLVAdapter getAdapter() {
-        RLVAdapter adapter = new RLVAdapter(mContext) {
+        if (adapter != null) {
+            return adapter;
+        }
+        return adapter = new RLVAdapter(mContext) {
             @Override
             public int getItemLayout(ViewGroup parent, int viewType) {
                 return RLVFragment.this.getItemLayout(parent, viewType);
@@ -60,16 +103,7 @@ public abstract class RLVFragment<T extends Presenter> extends BaseFragment<T> {
                 RLVFragment.this.onItemClick(holder, view, position);
             }
         };
-        return adapter;
     }
-
-    /**
-     * 获取RecyclerId
-     *
-     * @return
-     */
-    protected abstract @IdRes
-    int getRecyclerId();
 
     /**
      * 初始化RecyclerView，可以设置RecyclerView的列数

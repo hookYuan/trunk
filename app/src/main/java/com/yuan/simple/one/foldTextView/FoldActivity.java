@@ -9,18 +9,19 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.tools.adapter.recycler.RLVAdapter;
-import com.yuan.kernel.ui.recycler.RLVActivity;
-import com.yuan.kernel.widget.fold.FoldTextView;
+import com.yuan.kernel.RLVAdapter;
+import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
+import com.yuan.widget.fold.FoldTextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoldActivity extends RLVActivity {
+public class FoldActivity extends ListActivity {
 
     private List<String> data;
     private SparseBooleanArray collapsedStatus = new SparseBooleanArray();
+
 
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
@@ -41,11 +42,6 @@ public class FoldActivity extends RLVActivity {
     @Override
     public int getItemLayout(ViewGroup parent, int viewType) {
         return R.layout.item_fold;
-    }
-
-    @Override
-    public void onItemClick(RLVAdapter.ViewHolder holder, View view, int position) {
-
     }
 
     @Override
@@ -82,11 +78,6 @@ public class FoldActivity extends RLVActivity {
 
     @Override
     public void parseBundle(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void setListener() {
 
     }
 }

@@ -301,16 +301,28 @@ public class RouteUtil {
                 Object val = entry.getValue();
                 if (val instanceof String) {
                     intent.putExtra(key, (String) val);
+                } else if (val instanceof String[]) {
+                    intent.putExtra(key, (String[]) val);
                 } else if (val instanceof Boolean) {
                     intent.putExtra(key, (boolean) val);
+                } else if (val instanceof Boolean[]) {
+                    intent.putExtra(key, (boolean[]) val);
                 } else if (val instanceof Integer) {
                     intent.putExtra(key, (int) val);
+                } else if (val instanceof Integer[]) {
+                    intent.putExtra(key, (int[]) val);
                 } else if (val instanceof Long) {
                     intent.putExtra(key, (long) val);
+                } else if (val instanceof Long[]) {
+                    intent.putExtra(key, (long[]) val);
                 } else if (val instanceof Float) {
                     intent.putExtra(key, (float) val);
+                } else if (val instanceof Float[]) {
+                    intent.putExtra(key, (float[]) val);
                 } else if (val instanceof Double) {
                     intent.putExtra(key, (double) val);
+                } else if (val instanceof Double[]) {
+                    intent.putExtra(key, (double[]) val);
                 } else if (val instanceof Serializable) {
                     intent.putExtra(key, (Serializable) val);
                 } else if (val instanceof Bundle) {

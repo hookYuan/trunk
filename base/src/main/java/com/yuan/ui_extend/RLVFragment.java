@@ -1,6 +1,5 @@
 package com.yuan.ui_extend;
 
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

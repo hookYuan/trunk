@@ -1,59 +1,105 @@
 package com.yuan.tools_independ.database;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by YuanYe on 2018/1/5.
- * 管理SQLHelper  简化SQL语句操作
- * 1、实现数据库连接
- * 2、创建库
- * 3、创建表
- * 4、更新表字段
- * 5、删除表字段
- * 6、按id查询数据库
- * 7、模糊查询
+ * 描述：数据库操作工具类
+ *
+ * @author yuanye
+ * @date 2019/4/26 13:56
  */
+public class DBUtil {
 
-public class SQLManager {
-
-    private final static String TAG = "SQLManager";
-
-    private SQLiteDatabase writDB; //写操作
+    private static final String TAG = "DBUtil";
+    /**
+     * 单例
+     */
+    private static DBUtil manager;
+    /**
+     * 默认自增字段名
+     */
+    private static final String PRIMARYKEY = "id";
+    /**
+     * 上下文
+     */
+    private static Context mContext;
+    /**
+     * 写操作
+     */
+    private SQLiteDatabase writDB;
+    /**
+     * Android 原生数据库操作对象
+     */
     private SQLHelper helper;
 
-    private int errorCode = 0; //错误码
 
-    private static SQLManager manager;
+    /**
+     * 初始化绑定Application
+     *
+     * @param context
+     * @return
+     */
+    public static void init(Application context) {
+        if (manager == null) {
+            synchronized (DBUtil.class) {
+                if (manager == null) {
+                    manager = new DBUtil();
+                }
+            }
+        }
+        mContext = context;
+    }
 
-    public static SQLManager getInstance() {
-        if (manager == null) manager = new SQLManager();
+    /**
+     * 获取实例
+     *
+     * @return
+     */
+    public static DBUtil getDB() {
+        if (manager == null) {
+            throw new NullPointerException("请先调用init()方法初始化");
+        }
         return manager;
     }
 
-    private SQLManager() {
+    private DBUtil() {
     }
 
     /**
      * 新建并打开数据库，数据库文件保存在项目目录下
      * 进行数据库操作必须先打开数据库才能操作
      */
-    public void create(Context context, String name, int version) {
+    public void createLib(String name, int version) {
         if (helper == null) {
-            helper = new SQLHelper(context, name, null, version);
+            helper = new SQLHelper(mContext, name, null, version);
             writDB = helper.getWritableDatabase();
         } else {
             checkWritDB();
         }
+    }
+
+    /**
+     * 获取数据库版本
+     */
+    public int getVersion() {
+        checkWritDB();
+        return writDB.getVersion();
     }
 
     /*
@@ -61,29 +107,76 @@ public class SQLManager {
      */
 
     /**
+     * 创建数据表
+     * <p>
+     * 根据数据类型反射创建数据表
+     *
+     * @param clazz
+     */
+    public synchronized void createTable(Class clazz) {
+        if (helper == null || writDB == null) {
+            PackageManager pm = mContext.getPackageManager();
+            String dbName = mContext.getApplicationInfo().loadLabel(pm).toString();
+            createLib(dbName, 1);
+        }
+        Field[] fields = clazz.getDeclaredFields();//获取该类所有的属性
+        HashMap<String, String> map = new HashMap<>();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (field.getType() == String.class) {
+                map.put(field.getName(), "text");
+            } else if (field.getType() == Integer.class || field.getType() == int.class) {
+                map.put(field.getName(), "integer");
+            } else if (field.getType() == Float.class || field.getType() == float.class) {
+                map.put(field.getName(), "real");
+            } else if (field.getType() == Double.class || field.getType() == double.class) {
+                map.put(field.getName(), "real");
+            } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
+                map.put(field.getName(), "bit");
+            } else if (field.getType() == Long.class || field.getType() == long.class) {
+                map.put(field.getName(), "integer");
+            } else if (field.getType() == char.class) {
+                map.put(field.getName(), "blob");
+            } else if (field.getType() == byte.class || field.getType() == Byte.class) {
+                map.put(field.getName(), "blob");
+            } else if (field.getType() == short.class || field.getType() == Short.class) {
+                map.put(field.getName(), "integer");
+            } else {
+                createTable(field.getType());
+            }
+            field.setAccessible(false);
+        }
+        createTable(getClazzName(clazz), PRIMARYKEY, map);
+    }
+
+    /**
      * 创建表
      *
      * @param tableName      表名
      * @param primaryKeyName 自定义主键名称
-     * @param map            表字段
+     * @param map            表字段<字段名，字段类型>
      */
-    public void createTable(String tableName, String primaryKeyName, Map<String, String> map) {
+    public synchronized void createTable(String tableName, String primaryKeyName, Map<String, String> map) {
         checkWritDB();
-        String sql = "create table if not exists " + tableName + "(";//创建表
-        sql = sql + primaryKeyName + " integer " + " not null primary key autoincrement,";
+        String sql = "create table if not exists " + tableName + "( '";//创建表
+        sql = sql + primaryKeyName + "' integer" + " not null primary key autoincrement,";
         int i = 0;
         //默认添加主键
         for (Map.Entry<String, String> entry : map.entrySet()) {
             i++;
             if (entry.getKey().equals(primaryKeyName)) continue;
             if (i != map.size()) {
-                sql = sql + entry.getKey() + " " + entry.getValue() + ",";
+                sql = sql +"'"+ entry.getKey() + "' " + entry.getValue() + ",";
             } else {
-                sql = sql + entry.getKey() + " " + entry.getValue();
+                sql = sql+"'" + entry.getKey() + "' " + entry.getValue();
             }
         }
         sql = sql + ")";
-        writDB.execSQL(sql);
+        try {
+            writDB.execSQL(sql);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "DBUtil createTable execSQL error:  \r\nsql=" + sql + "\r\n" + e.getMessage());
+        }
         writDB.close();
     }
 
@@ -95,7 +188,7 @@ public class SQLManager {
      *                             .默认主键为_id,自增
      */
     public void createTable(String tableName, Map<String, String> map) {
-        createTable(tableName, "_id", map);
+        createTable(tableName, PRIMARYKEY, map);
     }
 
 
@@ -107,11 +200,16 @@ public class SQLManager {
      * 批量插入数据
      * 采用事务处理，一次提交，提高数据库读写速度
      */
-    public void insert(String tableName, String primaryKeyName, List<Object> list) {
-        checkWritDB();
+    public synchronized void insert(List<Object> list) {
+        if (helper == null || writDB == null) {
+            //创建表
+            if (list != null && list.size() > 0) {
+                createTable(list.get(0).getClass());
+            }
+        }
         writDB.beginTransaction(); // 手动设置开始事务
         for (int i = 0; i < list.size(); i++) {
-            insert(tableName, primaryKeyName, list.get(i));
+            insert(list.get(i));
         }
         writDB.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
         writDB.endTransaction(); // 处理完成
@@ -120,41 +218,50 @@ public class SQLManager {
 
     /**
      * 插入一条数据
-     *
-     * @param tableName 表名
-     * @param object    插入对象
      */
-    public void insert(String tableName, String primaryKeyName, Object object) {
-        checkWritDB();
+    public synchronized void insert(Object object) {
+        if (helper == null || writDB == null) {
+            //创建表
+            createTable(object.getClass());
+        }
         Class clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();//获取该类所有的属性
         ContentValues value = new ContentValues();
         for (Field field : fields) {
-            if (!primaryKeyName.equals(field.getName())) {
-                try {
-                    field.setAccessible(true); //取消对age属性的修饰符的检查访问，以便为属性赋值
-                    Object content = field.get(object);//获取该属性的内容
-                    if (field.getType() == String.class) {
-                        value.put(field.getName(), (String) content);
-                    } else if (field.getType() == Integer.class || field.getType() == int.class) {
-                        value.put(field.getName(), (int) content);
-                    } else if (field.getType() == Float.class || field.getType() == float.class) {
-                        value.put(field.getName(), (float) content);
-                    } else if (field.getType() == Double.class || field.getType() == double.class) {
-                        value.put(field.getName(), (double) content);
-                    } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
-                        value.put(field.getName(), (boolean) content);
-                    } else if (field.getType() == Long.class || field.getType() == long.class) {
-                        value.put(field.getName(), (long) content);
-                    }
-                    field.setAccessible(false);//恢复对age属性的修饰符的检查访问
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, "DBUtil insert Error:" + e.getMessage());
+            if (PRIMARYKEY.equals(field.getName())) {
+                //跳过自增字段
+                continue;
+            }
+            try {
+                field.setAccessible(true); //取消对age属性的修饰符的检查访问，以便为属性赋值
+                Object content = field.get(object);//获取该属性的内容
+                if (field.getType() == String.class) {
+                    value.put(field.getName(), (String) content);
+                } else if (field.getType() == Integer.class || field.getType() == int.class) {
+                    value.put(field.getName(), (int) content);
+                } else if (field.getType() == Float.class || field.getType() == float.class) {
+                    value.put(field.getName(), (float) content);
+                } else if (field.getType() == Double.class || field.getType() == double.class) {
+                    value.put(field.getName(), (double) content);
+                } else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
+                    value.put(field.getName(), (boolean) content);
+                } else if (field.getType() == Long.class || field.getType() == long.class) {
+                    value.put(field.getName(), (long) content);
+                } else if (field.getType() == byte.class || field.getType() == Byte.class) {
+                    value.put(field.getName(), (Byte) content);
+                } else if (field.getType() == short.class || field.getType() == Short.class) {
+                    value.put(field.getName(), (Short) content);
+                } else {
+                    insert(content);
                 }
+                field.setAccessible(false);//恢复对age属性的修饰符的检查访问
+            } catch (IllegalAccessException e) {
+                Log.e(TAG, "DBUtil insert Error:" + e.getMessage());
             }
         }
-        writDB.insert(tableName, null, value);
+        writDB.insert(getClazzName(object.getClass()), null, value);
     }
+
 
     /*
      * ************************************查询数据**************************************************
@@ -163,35 +270,26 @@ public class SQLManager {
     /**
      * 查询整张表
      *
-     * @param tableName 表名
+     * @param clazz
+     * @param <T>
+     * @return
      */
-    public <T> ArrayList<T> queryTableAll(String tableName, Class<T> clazz) {
-        return query(tableName, null, null, null, null, clazz);
+    public <T> ArrayList<T> query(Class<T> clazz) {
+        return query(null, null, null, null, clazz);
     }
 
     /**
      * 条件查询
      *
-     * @param tableName     表名
      * @param columns       要想显示的列，例如 new String[]{"id","body"}
      * @param selection     where子句，例如 id=?
      * @param selectionArgs where子句对应的条件值    new String[]{"1"}
+     * @param orderBy       排序字段名
      * @param clazz
      * @param <T>
      * @return
      */
-    public <T> ArrayList<T> queryCondition(String tableName, String[] columns, String selection,
-                                           String[] selectionArgs, Class<T> clazz) {
-        return query(tableName, columns, selection, selectionArgs, null, clazz);
-    }
-
-    /**
-     * 查询
-     *
-     * @param tableName 表名
-     * @param orderBy   排序字段名
-     */
-    public <T> ArrayList<T> query(String tableName, String[] columns, String selection,
+    public <T> ArrayList<T> query(String[] columns, String selection,
                                   String[] selectionArgs, String orderBy, Class<T> clazz) {
         checkWritDB();
         String orderby = null;
@@ -199,7 +297,7 @@ public class SQLManager {
         if (!TextUtils.isEmpty(orderBy)) orderby = orderBy + " desc";
         //查询获得游标
         try {
-            Cursor cursor = writDB.query(tableName, columns, selection, selectionArgs, null, null, orderby);
+            Cursor cursor = writDB.query(getClazzName(clazz), columns, selection, selectionArgs, null, null, orderby);
             list = handleCursor(cursor, clazz);
             cursor.close();
             writDB.close();
@@ -291,12 +389,12 @@ public class SQLManager {
 
     /**
      * 查询最新插入的一条数据的id
-     * ***注意，只在当前进程插入有效
-     * 需要在插入后调用，否则查询到的数据不匹配
+     * <p>
+     * 注意，只在当前进程插入有效,需要在插入后调用,否则查询到的数据不匹配
      */
-    public int searchLastInsertRowID(String tableName) {
+    public synchronized int queryLastId(Class clazz) {
         checkWritDB();
-        String sql = "select last_insert_rowid() from " + tableName;
+        String sql = "select last_insert_rowid() from " + getClazzName(clazz);
         Cursor cursor = writDB.rawQuery(sql, null);
         int a = -1;
         if (cursor.moveToFirst()) {
@@ -309,14 +407,18 @@ public class SQLManager {
      * ************************************删除数据**************************************************
      */
 
-    public void deleteTable(String tableName) {
-        //清空表
+    /**
+     * 按照表名删除，删除整张表
+     *
+     * @param tableName
+     */
+    public void delete(String tableName) {
         try {
             checkWritDB();
-            writDB.execSQL("delete from " + tableName);
+            writDB.execSQL("delete from " + getClazzName(tableName));
             writDB.close();
         } catch (Exception e) {
-            Log.e(TAG, "DBUtil deleteTable Error:" + e.getMessage());
+            Log.e(TAG, "DBUtil delete Error:" + e.getMessage());
         }
     }
 
@@ -351,7 +453,14 @@ public class SQLManager {
         writDB.close();
     }
 
-    public void update(String table, Object object, String whereClause, String[] whereArgs) {
+    /**
+     * 更新数据
+     *
+     * @param object      更新数据实体
+     * @param whereClause 更新条件
+     * @param whereArgs
+     */
+    public void update(Object object, String whereClause, String[] whereArgs) {
         ContentValues values = new ContentValues();
         Class clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();//获取该类所有的属性
@@ -364,13 +473,14 @@ public class SQLManager {
                 }
                 field.setAccessible(false);//恢复对age属性的修饰符的检查访问
             } catch (IllegalAccessException e) {
-                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
             }
         }
         checkWritDB();
-        writDB.update(table, values, whereClause, whereArgs);
+        writDB.update(object.getClass().getName(), values, whereClause, whereArgs);
         writDB.close();
     }
+
 
     /**
      * 检验Db是否开启
@@ -381,4 +491,20 @@ public class SQLManager {
             writDB = helper.getWritableDatabase();
         }
     }
+
+    /**
+     * 解析名字
+     */
+    private String getClazzName(Class clazz) {
+        return getClazzName(clazz.getName());
+    }
+
+    private String getClazzName(String clazz) {
+        String[] names = clazz.split("\\.");
+        if (names.length > 0) {
+            return names[names.length - 1];
+        }
+        return "";
+    }
+
 }

@@ -3,8 +3,6 @@
     package="com.yuan.simple">
 
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,6 +30,7 @@
         <activity android:name=".one.http.NetActivity" />
         <activity android:name=".one.dialog.AlertDialogActivity" />
         <activity android:name=".one.multi.MultiActivity"></activity>
+        <activity android:name=".one.db.DBActivity"></activity>
 
     </application>
 

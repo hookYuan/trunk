@@ -12,6 +12,7 @@ import com.yuan.kernel.GridDivider;
 import com.yuan.kernel.RLVAdapter;
 import com.yuan.kernel.RouteUtil;
 import com.yuan.simple.R;
+import com.yuan.simple.one.db.DBActivity;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;
 import com.yuan.simple.one.http.NetActivity;
@@ -76,6 +77,7 @@ public class BaseFragment extends ListFragment {
         mData.add(new OneListBean("okHttp", NetActivity.class));
         mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
         mData.add(new OneListBean("multiAdapter", MultiActivity.class));
+        mData.add(new OneListBean("DBUtil", DBActivity.class));
         return mData;
     }
 

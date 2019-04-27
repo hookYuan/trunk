@@ -55,14 +55,14 @@ public class SwipeBackUtil {
      *
      * @param activity Activity
      */
-    public static void onPostCreate(@NonNull Activity activity) {
+    public static void bindOnCreate(@NonNull Activity activity) {
         SwipeBackHelper.onPostCreate(activity);
     }
 
     /**
      * 销毁
      */
-    public static void onDestroy(Activity activity) {
+    public static void bindOnDestroy(Activity activity) {
         SwipeBackHelper.onDestroy(activity);
     }
 }

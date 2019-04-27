@@ -34,7 +34,7 @@ import java.util.Date;
  * @author yuanye
  * @date 2019/4/23
  */
-public class LocalLauncher {
+public class PhotoGetUtil {
     /**
      * 启动图片选择
      * 拍照默认保存在Camera文件夹中

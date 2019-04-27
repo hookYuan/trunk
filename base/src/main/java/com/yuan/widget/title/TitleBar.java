@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
@@ -21,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
@@ -29,8 +27,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.yuan.R;
-import com.yuan.tools_independ.common.Kits;
-
 import java.util.List;
 
 /**

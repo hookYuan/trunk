@@ -53,6 +53,9 @@ public class NetActivity extends ListActivity<PNet> {
             case 1:
                 getP().get2();
                 break;
+            case 3:
+                getP().downloadFile();
+                break;
             case 4:
                 getP().showCacheSize();
                 break;

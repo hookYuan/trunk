@@ -72,22 +72,7 @@ public class SelectUtil {
         // 使用IO流将照片写入指定文件 getExternalFilesDir(null)
         String DCIMPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
         final String DIRECTORY = DCIMPath + "/Camera" + "/IMG_" + time + "_" + 0 + ".jpg";
-        //将要保存图片的路径
-        File file = new File(DIRECTORY);
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdir();
-        }
-        //优先创建文件
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        //必须要先创建文件后才可以转化
-        Uri photoUri = PathUtil.file2Uri(context, file);
-        startCamera(context, photoUri, selectBack);
+        startCamera(context, DIRECTORY, selectBack);
     }
 
 
@@ -96,34 +81,69 @@ public class SelectUtil {
      *
      * @param context
      * @param selectBack
-     * @param fileUri    需要保存的拍照文件的路径
+     * @param path       需要保存的拍照文件的路径
      */
-    public static void startCamera(Context context, final Uri fileUri, SelectBack selectBack) {
-        if (!(Boolean) RouteUtil.checkPermission((Activity) context, Manifest.permission.CAMERA)) {
+    public static void startCamera(Context context, final String path, SelectBack selectBack) {
+        if (!RouteUtil.checkPermission((Activity) context, Manifest.permission.CAMERA)
+                || !RouteUtil.checkPermission((Activity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                || !RouteUtil.checkPermission((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 return;
             }
             RouteUtil.openPermission(context, new String[]{
-                    Manifest.permission.CAMERA
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
             }, new RouteUtil.OnPermissionListener() {
                 @Override
                 public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {
-                    if (result.length > 0 && result[0] == false) {
+                    for (boolean check : result) {
+                        if (check == true) continue;
                         DialogUtil.create(context)
-                                .alertText("请在设置中开启相机权限", new DialogInterface.OnClickListener() {
+                                .alertText("请在设置中开启相机和存储权限", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         RouteUtil.openSetting(context, RouteUtil.APPLICATION3);
                                     }
                                 });
-                    } else if (result.length > 0) {
-                        Intent thumbIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        thumbIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                        handlerResult(context, thumbIntent, fileUri, selectBack);
+                        return;
                     }
+                    //将要保存图片的路径
+                    File file = new File(path);
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdir();
+                    }
+                    //优先创建文件
+                    if (!file.exists()) {
+                        try {
+                            file.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Uri fileUri = PathUtil.file2Uri(context, file);
+                    Intent thumbIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    thumbIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                    handlerResult(context, thumbIntent, fileUri, selectBack);
                 }
             });
         } else {
+            //将要保存图片的路径
+            File file = new File(path);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdir();
+            }
+            //优先创建文件
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //必须要先创建文件后才可以转化
+            Uri fileUri = PathUtil.file2Uri(context, file);
             Intent thumbIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             thumbIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             handlerResult(context, thumbIntent, fileUri, selectBack);

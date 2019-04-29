@@ -19,6 +19,7 @@ import com.yuan.simple.one.http.NetActivity;
 import com.yuan.simple.one.input.InputActivity;
 import com.yuan.simple.one.multi.MultiActivity;
 import com.yuan.simple.one.roundView.RoundTextActivity;
+import com.yuan.simple.one.select.SelectActivity;
 import com.yuan.simple.one.sort.SortActivity;
 import com.yuan.simple.one.toolbar.TitleBarActivity;
 import com.yuan.simple.tool.ListFragment;
@@ -78,6 +79,7 @@ public class BaseFragment extends ListFragment {
         mData.add(new OneListBean("alertDialog", AlertDialogActivity.class));
         mData.add(new OneListBean("multiAdapter", MultiActivity.class));
         mData.add(new OneListBean("DBUtil", DBActivity.class));
+        mData.add(new OneListBean("SelectUtil", SelectActivity.class));
         return mData;
     }
 

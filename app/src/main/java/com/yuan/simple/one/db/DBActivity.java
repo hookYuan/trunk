@@ -57,29 +57,35 @@ public class DBActivity extends ListActivity {
     @Override
     protected void onItemClick(RLVAdapter.ViewHolder holder, View view, int position) {
         switch (position) {
-            case 0:
-                DBUtil.init(getApplication());
-                break;
             case 1:
-                DBUtil.getDB().createTable(UserBean.class);
+                DBUtil.getDB(mContext).createTable(UserBean.class);
                 break;
             case 2:
+                ArrayList<UserBean> list = new ArrayList<>();
                 UserBean bean = new UserBean();
                 bean.setAge(27);
                 bean.setName("袁冶");
-                DBUtil.getDB().insert(bean);
+                UserBean bea2 = new UserBean();
+                bea2.setAge(23);
+                List<String> data = new ArrayList<>();
+                data.add("真的假的");
+//                bea2.setData(data);
+                bea2.setName("袁2冶");
+                list.add(bean);
+                list.add(bea2);
+                DBUtil.getDB(mContext).insertList(list);
                 break;
             case 3:
                 UserBean bean2 = new UserBean();
                 bean2.setAge(26);
-                DBUtil.getDB().update(bean2, "age=?", new String[]{"27"});
+                DBUtil.getDB(mContext).update(bean2, "age=?", new String[]{"27"});
                 break;
             case 4:
-                DBUtil.getDB().delete(UserBean.class.getName());
+                DBUtil.getDB(mContext).delete(UserBean.class.getName());
                 break;
             case 5:
-                List<UserBean> list = DBUtil.getDB().query(UserBean.class);
-                ToastUtil.showShort(mContext, list.toString());
+                List<UserBean> list2 = DBUtil.getDB(mContext).querySQL("SELECT * FROM UserBean", null, UserBean.class);
+                ToastUtil.showShort(mContext, list2.toString());
                 break;
         }
     }

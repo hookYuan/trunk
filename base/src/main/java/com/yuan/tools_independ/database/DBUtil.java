@@ -1,18 +1,15 @@
 package com.yuan.tools_independ.database;
 
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,17 +25,21 @@ public class DBUtil {
 
     private static final String TAG = "DBUtil";
     /**
-     * 单例
-     */
-    private static DBUtil manager;
-    /**
      * 默认自增字段名
      */
     private static final String PRIMARYKEY = "id";
     /**
-     * 上下文
+     * 单例
      */
-    private static Context mContext;
+    private static DBUtil manager;
+    /**
+     * 数据库名
+     */
+    private static String dbName;
+    /**
+     * 数据库版本
+     */
+    private static int dbVersion;
     /**
      * 写操作
      */
@@ -48,22 +49,31 @@ public class DBUtil {
      */
     private SQLHelper helper;
 
-
     /**
-     * 初始化绑定Application
+     * 获取实例
+     * 当前数据版本号为1
+     * 操作数据库名称为当前项目名数据库
      *
      * @param context
      * @return
      */
-    public static void init(Application context) {
-        if (manager == null) {
-            synchronized (DBUtil.class) {
-                if (manager == null) {
-                    manager = new DBUtil();
-                }
-            }
-        }
-        mContext = context;
+    public static DBUtil getDB(Context context) {
+        dbVersion = 1;
+        return getDB(context, dbVersion);
+    }
+
+    /**
+     * 获取实例
+     * 操作数据库名称为当前项目名数据库
+     *
+     * @param context
+     * @return
+     */
+    public static DBUtil getDB(Context context, int version) {
+        PackageManager pm = context.getPackageManager();
+        dbName = context.getApplicationInfo().loadLabel(pm).toString();
+        dbVersion = version;
+        return getDB(context, dbName, dbVersion);
     }
 
     /**
@@ -71,27 +81,38 @@ public class DBUtil {
      *
      * @return
      */
-    public static DBUtil getDB() {
+    /**
+     * @param context
+     * @param name    数据库名称
+     * @param version 数据库版本
+     * @return
+     */
+    public static DBUtil getDB(Context context, String name, int version) {
         if (manager == null) {
-            throw new NullPointerException("请先调用init()方法初始化");
+            synchronized (DBUtil.class) {
+                if (manager == null || name != dbName || version != dbVersion) {
+                    manager = new DBUtil(context, name, version);
+                }
+            }
         }
         return manager;
     }
 
-    private DBUtil() {
-    }
-
     /**
-     * 新建并打开数据库，数据库文件保存在项目目录下
-     * 进行数据库操作必须先打开数据库才能操作
+     * 初始化
+     *
+     * @param context
+     * @param name
+     * @param version
      */
-    public void createLib(String name, int version) {
-        if (helper == null) {
-            helper = new SQLHelper(mContext, name, null, version);
-            writDB = helper.getWritableDatabase();
-        } else {
-            checkWritDB();
-        }
+    private DBUtil(Context context, String name, int version) {
+        if (context == null) throw new NullPointerException("Context 不能为空，请先调用init初始化");
+        if (TextUtils.isEmpty(name)) throw new NullPointerException("请先指定操作数据库名称");
+        //获取数据库操作对象
+        helper = new SQLHelper(context, name, null, version);
+        writDB = helper.getWritableDatabase();
+        dbName = name;
+        dbVersion = version;
     }
 
     /**
@@ -100,6 +121,15 @@ public class DBUtil {
     public int getVersion() {
         checkWritDB();
         return writDB.getVersion();
+    }
+
+    /**
+     * 关闭数据库
+     */
+    public void closeDB() {
+        if (helper != null && writDB != null) {
+            writDB.close();
+        }
     }
 
     /*
@@ -113,12 +143,8 @@ public class DBUtil {
      *
      * @param clazz
      */
-    public synchronized void createTable(Class clazz) {
-        if (helper == null || writDB == null) {
-            PackageManager pm = mContext.getPackageManager();
-            String dbName = mContext.getApplicationInfo().loadLabel(pm).toString();
-            createLib(dbName, 1);
-        }
+    public void createTable(Class clazz) {
+        checkWritDB();
         Field[] fields = clazz.getDeclaredFields();//获取该类所有的属性
         HashMap<String, String> map = new HashMap<>();
         for (Field field : fields) {
@@ -142,42 +168,12 @@ public class DBUtil {
             } else if (field.getType() == short.class || field.getType() == Short.class) {
                 map.put(field.getName(), "integer");
             } else {
-                createTable(field.getType());
+
             }
             field.setAccessible(false);
         }
-        createTable(getClazzName(clazz), PRIMARYKEY, map);
-    }
-
-    /**
-     * 创建表
-     *
-     * @param tableName      表名
-     * @param primaryKeyName 自定义主键名称
-     * @param map            表字段<字段名，字段类型>
-     */
-    public synchronized void createTable(String tableName, String primaryKeyName, Map<String, String> map) {
-        checkWritDB();
-        String sql = "create table if not exists " + tableName + "( '";//创建表
-        sql = sql + primaryKeyName + "' integer" + " not null primary key autoincrement,";
-        int i = 0;
-        //默认添加主键
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            i++;
-            if (entry.getKey().equals(primaryKeyName)) continue;
-            if (i != map.size()) {
-                sql = sql +"'"+ entry.getKey() + "' " + entry.getValue() + ",";
-            } else {
-                sql = sql+"'" + entry.getKey() + "' " + entry.getValue();
-            }
-        }
-        sql = sql + ")";
-        try {
-            writDB.execSQL(sql);
-        } catch (SQLiteException e) {
-            Log.e(TAG, "DBUtil createTable execSQL error:  \r\nsql=" + sql + "\r\n" + e.getMessage());
-        }
-        writDB.close();
+        _createTable(getClazzName(clazz), PRIMARYKEY, map);
+        if (writDB != null) writDB.close();
     }
 
     /**
@@ -188,7 +184,51 @@ public class DBUtil {
      *                             .默认主键为_id,自增
      */
     public void createTable(String tableName, Map<String, String> map) {
-        createTable(tableName, PRIMARYKEY, map);
+        _createTable(tableName, PRIMARYKEY, map);
+        if (writDB != null) writDB.close();
+    }
+
+    /**
+     * 创建表
+     *
+     * @param tableName      表名
+     * @param primaryKeyName 自定义主键名称
+     * @param map            表字段<字段名，字段类型>
+     */
+    public void createTable(String tableName, String primaryKeyName, Map<String, String> map) {
+        _createTable(tableName, primaryKeyName, map);
+        if (writDB != null) writDB.close();
+    }
+
+    /**
+     * 创建表
+     *
+     * @param tableName      表名
+     * @param primaryKeyName 自定义主键名称
+     * @param map            表字段<字段名，字段类型>
+     */
+    private void _createTable(String tableName, String
+            primaryKeyName, Map<String, String> map) {
+        checkWritDB();
+        String sql = "create table if not exists " + tableName + "( '";//创建表
+        sql = sql + primaryKeyName + "' integer" + " not null primary key autoincrement,";
+        int i = 0;
+        //默认添加主键
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            i++;
+            if (entry.getKey().equals(primaryKeyName)) continue;
+            if (i != map.size()) {
+                sql = sql + "'" + entry.getKey() + "' " + entry.getValue() + ",";
+            } else {
+                sql = sql + "'" + entry.getKey() + "' " + entry.getValue();
+            }
+        }
+        sql = sql + ")";
+        try {
+            writDB.execSQL(sql);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "DBUtil createTable execSQL error:  \r\nsql=" + sql + "\r\n" + e.getMessage());
+        }
     }
 
 
@@ -197,19 +237,16 @@ public class DBUtil {
      */
 
     /**
-     * 批量插入数据
-     * 采用事务处理，一次提交，提高数据库读写速度
+     * 插入多条数据
+     *
+     * @param object
      */
-    public synchronized void insert(List<Object> list) {
-        if (helper == null || writDB == null) {
-            //创建表
-            if (list != null && list.size() > 0) {
-                createTable(list.get(0).getClass());
-            }
-        }
+    public void insertList(List object) {
+        checkWritDB();
         writDB.beginTransaction(); // 手动设置开始事务
-        for (int i = 0; i < list.size(); i++) {
-            insert(list.get(i));
+        List list = (List) object;
+        for (Object obj : list) {
+            insertData(obj);
         }
         writDB.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
         writDB.endTransaction(); // 处理完成
@@ -217,13 +254,27 @@ public class DBUtil {
     }
 
     /**
-     * 插入一条数据
+     * 插入数据
+     * <p>
+     * 如果传入List,则批量插入
      */
-    public synchronized void insert(Object object) {
+    public void insert(Object object) {
         if (helper == null || writDB == null) {
             //创建表
             createTable(object.getClass());
         }
+
+        checkWritDB();
+        insertData(object);
+        writDB.close();
+    }
+
+    /**
+     * 通过反射插入一条数据
+     *
+     * @param object
+     */
+    private void insertData(Object object) {
         Class clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();//获取该类所有的属性
         ContentValues value = new ContentValues();
@@ -252,7 +303,7 @@ public class DBUtil {
                 } else if (field.getType() == short.class || field.getType() == Short.class) {
                     value.put(field.getName(), (Short) content);
                 } else {
-                    insert(content);
+
                 }
                 field.setAccessible(false);//恢复对age属性的修饰符的检查访问
             } catch (IllegalAccessException e) {
@@ -302,13 +353,11 @@ public class DBUtil {
             cursor.close();
             writDB.close();
         } catch (IllegalAccessException e) {
-            Log.e(TAG, "DBUtil query Error:" + e.getMessage());
-        } catch (NoSuchFieldException e) {
-            Log.e(TAG, "DBUtil query Error:" + e.getMessage());
+            Log.e(TAG, "DBUtil query异常 Error:" + e.getMessage());
         } catch (InstantiationException e) {
-            Log.e(TAG, "DBUtil query Error:" + e.getMessage());
+            Log.e(TAG, "DBUtil query异常 Error:" + e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, "DBUtil query Error:" + e.getMessage());
+            Log.e(TAG, "DBUtil query异常 Error:" + e.getMessage());
         }
         return list;
     }
@@ -327,18 +376,34 @@ public class DBUtil {
     public <T> ArrayList<T> querySQL(String sql, String[] selectionArgs, Class<T> clazz) {
         checkWritDB();
         ArrayList<T> list = null;
-        Cursor cursor = writDB.rawQuery(sql, selectionArgs);
         try {
+            Cursor cursor = writDB.rawQuery(sql, selectionArgs);
             list = handleCursor(cursor, clazz);
             cursor.close();
         } catch (IllegalAccessException e) {
-            Log.e(TAG, "DBUtil querySQL Error:" + e.getMessage());
+            Log.e(TAG, "DBUtil querySQL异常 Error:" + e.getMessage());
         } catch (InstantiationException e) {
-            Log.e(TAG, "DBUtil querySQL Error:" + e.getMessage());
-        } catch (NoSuchFieldException e) {
-            Log.e(TAG, "DBUtil querySQL Error:" + e.getMessage());
+            Log.e(TAG, "DBUtil querySQL异常 Error:" + e.getMessage());
         }
+        if (writDB != null) writDB.close();
         return list;
+    }
+
+    /**
+     * 查询最新插入的一条数据的id
+     * <p>
+     * 注意，只在当前进程插入有效,需要在插入后调用,否则查询到的数据不匹配
+     */
+    public int queryLastId(Class clazz) {
+        checkWritDB();
+        String sql = "select last_insert_rowid() from " + getClazzName(clazz);
+        Cursor cursor = writDB.rawQuery(sql, null);
+        int a = -1;
+        if (cursor.moveToFirst()) {
+            a = cursor.getInt(0);
+        }
+        if (writDB != null) writDB.close();
+        return a;
     }
 
     /**
@@ -352,7 +417,8 @@ public class DBUtil {
      * @throws InstantiationException
      * @throws NoSuchFieldException
      */
-    private <T> ArrayList<T> handleCursor(Cursor cursor, Class<T> clazz) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
+    private <T> ArrayList<T> handleCursor(Cursor cursor, Class<T> clazz) throws
+            IllegalAccessException, InstantiationException {
         ArrayList<T> list = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -360,7 +426,13 @@ public class DBUtil {
             for (int i = 0; i < cursor.getColumnCount(); i++) {
                 String content = cursor.getString(i);//获得获取的数据记录第i条字段的内容
                 String columnName = cursor.getColumnName(i);// 获取数据记录第i条字段名的
-                Field field = t.getClass().getDeclaredField(columnName);//获取该字段名的Field对象。
+                Field field = null;
+                try {
+                    field = clazz.getDeclaredField(columnName);//获取该字段名的Field对象。
+                } catch (NoSuchFieldException e) {
+                    //如果不存在该字段，跳过
+                    continue;
+                }
                 field.setAccessible(true);//取消对age属性的修饰符的检查访问，以便为属性赋值
                 //属性名和字段名相同
                 if (columnName.equals(field.getName())) {
@@ -384,23 +456,6 @@ public class DBUtil {
             cursor.moveToNext();
         }
         return list;
-    }
-
-
-    /**
-     * 查询最新插入的一条数据的id
-     * <p>
-     * 注意，只在当前进程插入有效,需要在插入后调用,否则查询到的数据不匹配
-     */
-    public synchronized int queryLastId(Class clazz) {
-        checkWritDB();
-        String sql = "select last_insert_rowid() from " + getClazzName(clazz);
-        Cursor cursor = writDB.rawQuery(sql, null);
-        int a = -1;
-        if (cursor.moveToFirst()) {
-            a = cursor.getInt(0);
-        }
-        return a;
     }
 
     /**
@@ -447,10 +502,10 @@ public class DBUtil {
      * @param whereClause where子句，例如 id=?
      * @param whereArgs   where子句对应的条件值    new String[]{"1"}
      */
-    public void update(String table, ContentValues values, String whereClause, String[] whereArgs) {
+    public void update(String table, ContentValues values, String whereClause, String[]
+            whereArgs) {
         checkWritDB();
         writDB.update(table, values, whereClause, whereArgs);
-        writDB.close();
     }
 
     /**
@@ -467,9 +522,27 @@ public class DBUtil {
         for (Field field : fields) {
             try {
                 field.setAccessible(true); //取消对age属性的修饰符的检查访问，以便为属性赋值
-                String content = field.get(object) + "";//获取该属性的内容
-                if (!TextUtils.isEmpty(content)) {
-                    values.put(field.getName(), content);
+                Object content = field.get(object);//获取该属性的内容
+                if (content != null) {
+                    if (content.getClass() == String.class || content.getClass() == char.class) {
+                        values.put(field.getName(), (String) content);
+                    } else if (content.getClass() == Integer.class || content.getClass() == int.class) {
+                        values.put(field.getName(), (int) content);
+                    } else if (content.getClass() == Float.class || content.getClass() == float.class) {
+                        values.put(field.getName(), (float) content);
+                    } else if (content.getClass() == Double.class || content.getClass() == double.class) {
+                        values.put(field.getName(), (double) content);
+                    } else if (content.getClass() == Boolean.class || content.getClass() == boolean.class) {
+                        values.put(field.getName(), (boolean) content);
+                    } else if (content.getClass() == Long.class || content.getClass() == long.class) {
+                        values.put(field.getName(), (long) content);
+                    } else if (content.getClass() == byte.class || content.getClass() == Byte.class) {
+                        values.put(field.getName(), (byte[]) content);
+                    } else if (content.getClass() == short.class || content.getClass() == Short.class) {
+                        values.put(field.getName(), (short) content);
+                    } else {
+                        update(content, whereClause, whereArgs);
+                    }
                 }
                 field.setAccessible(false);//恢复对age属性的修饰符的检查访问
             } catch (IllegalAccessException e) {
@@ -477,16 +550,15 @@ public class DBUtil {
             }
         }
         checkWritDB();
-        writDB.update(object.getClass().getName(), values, whereClause, whereArgs);
+        writDB.update(getClazzName(object.getClass().getName()), values, whereClause, whereArgs);
         writDB.close();
     }
-
 
     /**
      * 检验Db是否开启
      */
     private void checkWritDB() {
-        if (helper == null || writDB == null) throw new NullPointerException("请先创建数据库");
+        if (helper == null || writDB == null) throw new NullPointerException("请先打开数据库");
         if (!writDB.isOpen()) {
             writDB = helper.getWritableDatabase();
         }
@@ -495,16 +567,15 @@ public class DBUtil {
     /**
      * 解析名字
      */
-    private String getClazzName(Class clazz) {
+    private static String getClazzName(Class clazz) {
         return getClazzName(clazz.getName());
     }
 
-    private String getClazzName(String clazz) {
+    private static String getClazzName(String clazz) {
         String[] names = clazz.split("\\.");
         if (names.length > 0) {
             return names[names.length - 1];
         }
         return "";
     }
-
 }

@@ -186,13 +186,21 @@ public class AlertDialogActivity extends ListActivity {
                 });
                 break;
             case 14:
-                final String[] mData = {"长春", "重庆", "北京", "上海", "成都"};
-//                helper.alertMulti("城市", mData, new DialogUtil.OnMultiListener() {
-//                    @Override
-//                    public <T extends DialogUtil.IDialog> void onClick(DialogInterface dialog, List<T> selects) {
-//                        ToastUtil.showShort(mContext, "选中的有" + selects.toString());
-//                    }
-//                });
+                List<MultiBean> mData = new ArrayList<>();
+                MultiBean bean = new MultiBean("长春");
+                bean.setSelect(true);
+                mData.add(bean);
+                mData.add(new MultiBean("重庆"));
+                mData.add(new MultiBean("北京"));
+                mData.add(new MultiBean("上海"));
+                mData.add(new MultiBean("成都"));
+
+                helper.alertMulti("城市", mData, new DialogUtil.OnMultiListener() {
+                    @Override
+                    public <T extends DialogUtil.MultiItem> void onClick(DialogInterface dialog, List<T> selects) {
+                        ToastUtil.showShort(mContext, "选中的有" + selects.toString());
+                    }
+                });
                 break;
             case 15:
                 final String[] listData = {"长春", "重庆", "北京", "上海", "成都", "开封", "广东",
@@ -236,6 +244,27 @@ public class AlertDialogActivity extends ListActivity {
     @Override
     public void parseBundle(@Nullable Bundle bundle) {
 
+    }
+
+    public class MultiBean extends DialogUtil.MultiItem {
+
+        private String name;
+
+        public MultiBean(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getText() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return "MultiBean{" +
+                    "name='" + name + '\'' +
+                    '}';
+        }
     }
 
     public class DialogBean {

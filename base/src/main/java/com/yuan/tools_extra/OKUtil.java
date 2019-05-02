@@ -921,11 +921,14 @@ public class OKUtil {
      * 文件下载
      */
     public abstract static class FileBack implements BaseBack {
-
         /**
          * 文件保存的地址
          */
-        private String saveDir = ""; //下载文件保存目录
+        private String saveDir; //下载文件保存目录
+        /**
+         * 文件保存本地文件名
+         */
+        private String fileName;
         /**
          * 是否保存文件 true:保存， false:不保存
          */
@@ -934,37 +937,78 @@ public class OKUtil {
          * 主线程
          */
         private Handler mainHandler;
+        /**
+         * 文件当前已下载大小
+         */
+        private long currentSum = 0;
 
         /**
-         * @param fileDir 需要保存的完整地址
+         * 初始化
+         *
+         * @param fileName 保存本地的文件名称
+         * @param fileDir  需要保存的完整地址
          */
-        public FileBack(String fileDir) {
+        public FileBack(String fileDir, String fileName) {
             this.saveDir = fileDir;
+            this.fileName = fileName;
             init(saveDir);
         }
 
         /**
-         * 默认不保存
+         * 默认以请求路径结尾字段作为文件名
+         *
+         * @param fileDir 保存路径
+         */
+        public FileBack(String fileDir) {
+            this(fileDir, null);
+        }
+
+        /**
+         * 默认不保存文件
          */
         public FileBack() {
-            init(saveDir);
+            this(null);
         }
 
         /**
          * 初始化
          */
         private void init(String fileDir) {
-            //校验地址是否可用|
+            //创建线程切换
+            mainHandler = new Handler(Looper.getMainLooper());
+            //判断是否保存本地文件
             if (TextUtils.isEmpty(saveDir)) {
                 isSave = false;
-            } else {
-                File cacheFile = new File(fileDir);
-                if (cacheFile.getParentFile().exists()) {
-                    cacheFile.mkdirs();
-                }
-                isSave = true;
+                return;
             }
-            mainHandler = new Handler(Looper.getMainLooper());
+            isSave = true;
+            File cacheFile = new File(fileDir);
+            //校验地址是否可用
+            if (cacheFile.exists()) {
+                if (cacheFile.isFile()) {
+                    saveDir = cacheFile.getParentFile().getAbsolutePath();
+                    fileName = cacheFile.getName();
+                } else {
+                    saveDir = fileDir;
+                }
+            } else if (cacheFile.getName().contains(".")) {
+                //默认包含扩展名的为文件
+                cacheFile.getParentFile().mkdirs();
+                try {
+                    cacheFile.createNewFile();
+                } catch (IOException e) {
+                    onFail(e);
+                }
+                saveDir = cacheFile.getParentFile().getAbsolutePath();
+                fileName = cacheFile.getName();
+            } else {
+                cacheFile.mkdirs();
+                saveDir = fileDir;
+            }
+        }
+
+        @Override
+        public void onFail(Exception e) {
         }
 
         /**
@@ -988,94 +1032,43 @@ public class OKUtil {
 
         @Override
         public void onResponse(Response response) throws Exception {
-            if (!isSave) {
-                byte[] buffer = new byte[2048];
-                int len;
-                long sum = 0;
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                final long total = response.contentLength;
-                InputStream is = response.body.byteStream();
-                while ((len = is.read(buffer)) != -1) {
-                    bos.write(buffer, 0, len);
-                    sum += len;
-                    final int progress = (int) (sum * 1.0f / total * 100);
-                    final long temp = sum;
-                    //切换到主线程
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 下载中
-                            onDowning(progress, total, temp);
-                        }
-                    });
-                }
-                bos.close();
-                runMainSuccess(saveDir, bos.toByteArray());
-            } else {
-                InputStream is = null;
-                byte[] buf = new byte[2048];
-                int len = 0;
-                FileOutputStream fos = null;
-                // 储存下载文件的目录
-                final String savePath = isExistDir(saveDir);
-                try {
-                    is = response.body.byteStream();
-                    final long total = response.contentLength;
-
-                    //TODO 如果传入的路径是文件夹，取url做文件名，否则取传入文件名
-                    String fileName = getNameFromUrl(response.requestUrl); //文件名
-
-                    File file = new File(savePath, fileName);
-                    fos = new FileOutputStream(file);
-                    long sum = 0;
-                    while ((len = is.read(buf)) != -1) {
-                        fos.write(buf, 0, len);
-                        sum += len;
-                        final long temp = sum;
-                        final int progress = (int) (sum * 1.0f / total * 100);
-                        //切换到主线程
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 下载中
-                                onDowning(progress, total, temp);
-                            }
-                        });
-                    }
-                    fos.flush();
-                    runMainSuccess(savePath + File.separator + fileName, null);
-                } catch (final Exception ioE) {
-                    runMainException(ioE);
-                } finally {
-                    try {
-                        if (is != null)
-                            is.close();
-                    } catch (IOException e) {
-                        runMainException(e);
-                    }
-                    try {
-                        if (fos != null)
-                            fos.close();
-                    } catch (IOException e) {
-                        runMainException(e);
-                    }
-                }
+            byte[] buffer = new byte[2048];
+            //当前缓存文件大小
+            int len;
+            currentSum = 0;
+            final long total = response.contentLength;
+            InputStream is = response.body.byteStream();
+            //保存到本地文件
+            FileOutputStream fos = null;
+            if (isSave) {
+                // 如果传入的路径是文件夹，取url做文件名，否则取传入文件名
+                if (TextUtils.isEmpty(fileName)) fileName = getNameFromUrl(response.requestUrl);
+                File file = new File(saveDir, fileName);
+                if (!file.exists()) file.createNewFile();
+                fos = new FileOutputStream(file);
             }
-        }
-
-        /**
-         * @param saveDir
-         * @return
-         * @throws IOException 判断下载目录是否存在
-         */
-        private String isExistDir(String saveDir) throws IOException {
-            // 下载位置
-            File downloadFile = new File(saveDir);
-            if (!downloadFile.mkdirs()) {
-                downloadFile.createNewFile();
+            //缓存到内存中
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            while ((len = is.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
+                if (isSave) fos.write(buffer, 0, len);
+                currentSum += len;
+                //切换到主线程
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 下载中
+                        onDowning((int) (currentSum * 1.0f / total * 100), total, currentSum);
+                    }
+                });
             }
-            String savePath = downloadFile.getAbsolutePath();
-            return savePath;
+            if (fos != null) {
+                fos.flush();
+                fos.close();
+            }
+            bos.close();
+            is.close();
+            runMainSuccess(isSave ? saveDir + File.separator + fileName : null, bos.toByteArray());
         }
 
         /**
@@ -1085,16 +1078,6 @@ public class OKUtil {
         @NonNull
         private String getNameFromUrl(String url) {
             return url.substring(url.lastIndexOf("/") + 1);
-        }
-
-
-        private void runMainException(final Exception exception) {
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    onFail(exception);
-                }
-            });
         }
 
         private void runMainSuccess(final String saveDir, final byte[] bytes) {
@@ -1107,7 +1090,6 @@ public class OKUtil {
                 }
             });
         }
-
     }
 
     /**

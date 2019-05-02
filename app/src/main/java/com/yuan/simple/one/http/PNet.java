@@ -1,6 +1,9 @@
 package com.yuan.simple.one.http;
 
 
+import android.os.Environment;
+import android.util.Log;
+
 import com.yuan.kernel.Presenter;
 import com.yuan.kernel.ToastUtil;
 import com.yuan.tools_extra.OKUtil;
@@ -61,5 +64,21 @@ public class PNet extends Presenter<NetActivity> {
     public void delCache() {
         OKUtil.delCache();
         ToastUtil.showShort(getContext(), "删除成功");
+    }
+
+    public void downloadFile() {
+        OKUtil.with(getContext())
+                .get("http://cp-dev.yqcx.faw.cn/ftp/file/signDownlaodUrl?fileKey=FgpjStJHE2bL7_gWao5Umfpe6RLs")
+                .execute(new OKUtil.FileBack(Environment.getExternalStorageDirectory() + "/Download/", "232.pptx") {
+                    @Override
+                    public void onSuccess(String fileDir, byte[] bytes) {
+                        ToastUtil.showShort(getV(), "文件大小：" + bytes.length);
+                    }
+
+                    @Override
+                    public void onFail(Exception e) {
+                        ToastUtil.showShort(getV(), "下载异常：" + e.getMessage());
+                    }
+                });
     }
 }

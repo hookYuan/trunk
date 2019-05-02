@@ -31,6 +31,7 @@
         <activity android:name=".one.dialog.AlertDialogActivity" />
         <activity android:name=".one.multi.MultiActivity"></activity>
         <activity android:name=".one.db.DBActivity"></activity>
+        <activity android:name=".one.select.SelectActivity"></activity>
 
     </application>
 

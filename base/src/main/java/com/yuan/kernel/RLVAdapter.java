@@ -49,7 +49,9 @@ public abstract class RLVAdapter extends RecyclerView.Adapter<RLVAdapter.ViewHol
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setOnClickListener(new OnClickListener(holder, position));
+        if (listeners != null && listeners.size() > 0) {
+            holder.itemView.setOnClickListener(new OnClickListener(holder, position));
+        }
         onBindHolder(holder, position);
     }
 

@@ -68,7 +68,6 @@ public class DialogUtil {
      */
     private int themeResId = 0;
 
-
     /**
      * 单例
      *
@@ -293,13 +292,13 @@ public class DialogUtil {
      * ************************多选Dialog*****************************************************************
      */
 
-    public <T extends IDialog> void alertMulti(String title, T[] mData, OnMultiListener listener) {
+    public <T extends MultiItem> void alertMulti(String title, T[] mData, OnMultiListener listener) {
         List<T> list = Arrays.asList(mData);
         alertMulti(title, list, true, listener);
     }
 
 
-    public <T extends IDialog> void alertMulti(String title, List<T> mData, OnMultiListener listener) {
+    public <T extends MultiItem> void alertMulti(String title, List<T> mData, OnMultiListener listener) {
         alertMulti(title, mData, true, listener);
     }
 
@@ -309,9 +308,9 @@ public class DialogUtil {
      * @param isCancel         是否点击外部取消
      * @param positiveListener 选中数据回调
      */
-    public <T extends IDialog> void alertMulti(String title, final List<T> data,
-                                               boolean isCancel,
-                                               final OnMultiListener positiveListener) {
+    public <T extends MultiItem> void alertMulti(String title, final List<T> data,
+                                                 boolean isCancel,
+                                                 final OnMultiListener positiveListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId);
 
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
@@ -322,6 +321,7 @@ public class DialogUtil {
         for (T bean : data) {
             strData[i] = bean.getText();
             choiceItem[i] = bean.isSelect();
+            bean.setPosition(i);
             i++;
         }
 
@@ -960,20 +960,38 @@ public class DialogUtil {
 
 
     public interface OnMultiListener {
-        <T extends IDialog> void onClick(DialogInterface dialog, List<T> selects);
+        <T extends MultiItem> void onClick(DialogInterface dialog, List<T> selects);
     }
 
 
-    public interface IDialog {
+    public static abstract class MultiItem {
+
+        private boolean isSelect = false;
+
+        /**
+         * 赋值时的位置
+         */
+        private int position;
+
         /**
          * 获取需要展示的文字
          */
-        String getText();
+        public abstract String getText();
 
         /**
          * 是否被选中
          */
-        boolean isSelect();
+        public final boolean isSelect() {
+            return isSelect;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
 
         /**
          * 设置选中状态
@@ -981,7 +999,9 @@ public class DialogUtil {
          * @param isSelect
          * @return
          */
-        void setSelect(boolean isSelect);
+        public final void setSelect(boolean isSelect) {
+            this.isSelect = isSelect;
+        }
     }
 
 }

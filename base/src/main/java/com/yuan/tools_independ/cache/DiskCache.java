@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 /**
  * Created by wanglei on 2016/11/28.
  */
-
 public class DiskCache implements ICache {
     private DiskLruCache cache;
 

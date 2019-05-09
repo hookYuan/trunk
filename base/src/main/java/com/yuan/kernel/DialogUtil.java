@@ -110,6 +110,17 @@ public class DialogUtil {
         }
     }
 
+    /**
+     * 设置当前进度
+     *
+     * @param current
+     */
+    public static void setProgressCurrent(int current) {
+        if (appAlertDialog != null && appAlertDialog instanceof ProgressDialog) {
+            ((ProgressDialog) appAlertDialog).setProgress(current);
+        }
+    }
+
     private DialogUtil() {
     }
 
@@ -409,17 +420,6 @@ public class DialogUtil {
         appAlertDialog.setCancelable(isCancel);
         // 显示
         initCreate(diaLogParams, appAlertDialog);
-    }
-
-    /**
-     * 设置当前进度
-     *
-     * @param current
-     */
-    public void setProgressCurrent(int current) {
-        if (appAlertDialog != null && appAlertDialog instanceof ProgressDialog) {
-            ((ProgressDialog) appAlertDialog).setProgress(current);
-        }
     }
 
     /**

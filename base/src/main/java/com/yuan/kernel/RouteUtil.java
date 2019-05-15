@@ -101,7 +101,7 @@ public class RouteUtil {
     /**
      * 提供的默认请求码
      */
-    public static final int PERMISSIONREQUESTCODE = 10021;
+    public static final int REQUESTCODE = 10021;
     /**
      * 启动等待时间，200毫秒内只启动一次
      */
@@ -110,6 +110,11 @@ public class RouteUtil {
      * 上次启动时间，用于就判断重复启动
      */
     private static long lastStartTime = 0;
+
+    /**
+     * Activity跳转参数
+     */
+    private static RouteParam param;
 
 
     public static void open(Context mContext, Class clazz) {
@@ -141,7 +146,7 @@ public class RouteUtil {
     }
 
     public static void openResult(Context mContext, Class clazz, OnActivityResultListener listener) {
-        openResult(mContext, clazz, PERMISSIONREQUESTCODE, listener);
+        openResult(mContext, clazz, REQUESTCODE, listener);
     }
 
     public static void openResult(Context mContext, Class clazz, RouteParam param, int requestCode, OnActivityResultListener listener) {
@@ -149,7 +154,7 @@ public class RouteUtil {
     }
 
     public static void openResult(Context mContext, Intent intent, OnActivityResultListener listener) {
-        openResult(mContext, intent, PERMISSIONREQUESTCODE, listener);
+        openResult(mContext, intent, REQUESTCODE, listener);
     }
 
     public static void openResult(Context context, Intent intent, int requestCode, OnActivityResultListener listener) {
@@ -252,15 +257,17 @@ public class RouteUtil {
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public static void openPermission(Context mContext, String[] permissions, int requestCode, OnPermissionListener listener) {
-        ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
-        jumpResult.getFragment().startPermission(permissions, requestCode, listener);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
+            jumpResult.getFragment().startPermission(permissions, requestCode, listener);
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public static void openPermission(Context mContext, String[] permissions, OnPermissionListener listener) {
-        openPermission(mContext, permissions, PERMISSIONREQUESTCODE, listener);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            openPermission(mContext, permissions, REQUESTCODE, listener);
+        }
     }
 
     /**
@@ -365,6 +372,10 @@ public class RouteUtil {
         void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result);
     }
 
+    public static RouteParam buildParam() {
+        param = new RouteParam();
+        return param;
+    }
 
     /**
      * Created by YuanYe on 2018/5/14.
@@ -373,18 +384,11 @@ public class RouteUtil {
     public static class RouteParam {
 
         private HashMap<String, Object> attr;
-        private static RouteParam param;
+
         private String stringListKey;
         private ArrayList<String> stringList;
         private String parcelableKey;
         private ArrayList<Parcelable> ParcelableList;
-
-        public static RouteParam getInstance() {
-            if (param == null) {
-                param = new RouteParam();
-            }
-            return param;
-        }
 
         private RouteParam() {
             if (attr == null) attr = new HashMap<>();

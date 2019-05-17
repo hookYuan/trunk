@@ -200,7 +200,7 @@ public class SelectUtil {
         RouteUtil.openResult(context, intent, new RouteUtil.OnActivityResultListener() {
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                if (resultCode == Activity.RESULT_OK && requestCode == RouteUtil.PERMISSIONREQUESTCODE) {
+                if (resultCode == Activity.RESULT_OK && requestCode == RouteUtil.REQUESTCODE) {
                     String path = "";
                     if (saveUri != null) {
                         path = PathUtil.uri2Path(context, saveUri);
@@ -257,7 +257,7 @@ public class SelectUtil {
         RouteUtil.openResult(context, intent, new RouteUtil.OnActivityResultListener() {
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                if (resultCode == Activity.RESULT_OK && requestCode == RouteUtil.PERMISSIONREQUESTCODE) {
+                if (resultCode == Activity.RESULT_OK && requestCode == RouteUtil.REQUESTCODE) {
                     if (data == null) {
                         return;
                     }

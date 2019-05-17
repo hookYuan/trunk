@@ -1,6 +1,7 @@
 package com.yuan.kernel;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +20,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Handler;
 
 /**
  * 新版RecyclerView适配器，简化使用
@@ -84,6 +84,9 @@ public abstract class LightAdapter<T, K extends LightAdapter.ViewHolder> extends
         mData = new ArrayList<>();
         mCatalog = new HashMap<>();
         mTypeLayout = new SparseIntArray();
+
+        //注册RecyclerView数据发生变化监听
+        registerAdapterDataObserver(new DataObservable());
     }
 //
 //    /**
@@ -167,9 +170,7 @@ public abstract class LightAdapter<T, K extends LightAdapter.ViewHolder> extends
      * @param type 类型
      */
     private final void saveTypePosition(int type) {
-
         mData.get(type);
-
         mCatalog.put(mPosition, type);
         mPosition = mData.size();
     }
@@ -222,8 +223,7 @@ public abstract class LightAdapter<T, K extends LightAdapter.ViewHolder> extends
     @Override
     public void onBindViewHolder(K holder, int position) {
         int type = mCatalog.get(position);
-        onBindHolder(holder, mData.get(type));
-
+//        onBindHolder(holder, mData.get(type));
     }
 
     /**
@@ -411,29 +411,42 @@ public abstract class LightAdapter<T, K extends LightAdapter.ViewHolder> extends
         }
     }
 
-//    /**
-//     * 点击事件处理
-//     */
-//    public class OnClickListener implements View.OnClickListener {
-//
-//        private T holder;
-//        private int position;
-//
-//        public OnClickListener(ViewHolder holder, int position) {
-//            this.holder = holder;
-//            this.position = position;
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            onItemClick(holder, view, position);
-//            if (listeners != null && listeners.size() > 0) {
-//                for (OnItemClickListener listener : listeners) {
-//                    listener.onItemClick(holder, view, position);
-//                }
-//            }
-//        }
-//    }
+    /**
+     * 监听RecyclerView数据发生变化
+     */
+    public class DataObservable extends RecyclerView.AdapterDataObserver {
+
+        public void onChanged() {
+            // Do nothing
+
+        }
+
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            // do nothing
+
+        }
+
+        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+            // fallback to onItemRangeChanged(positionStart, itemCount) if app
+            // does not override this method.
+            onItemRangeChanged(positionStart, itemCount);
+        }
+
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            // do nothing
+
+        }
+
+        public void onItemRangeRemoved(int positionStart, int itemCount) {
+            // do nothing
+
+        }
+
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+            // do nothing
+
+        }
+    }
 
     public interface OnItemClickListener {
         void onItemClick(ViewHolder holder, View view, int position);

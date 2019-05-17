@@ -116,19 +116,46 @@ public class RouteUtil {
      */
     private static RouteParam param;
 
-
+    /**
+     * 跳转Activity
+     *
+     * @param mContext 上下文
+     * @param clazz    目标Activity
+     */
     public static void open(Context mContext, Class clazz) {
         open(mContext, clazz, null, false);
     }
 
+    /**
+     * 跳转Activity
+     *
+     * @param mContext 上下文
+     * @param clazz    目标Activity
+     * @param param    参数传递，通过getIntent()获取参数
+     */
     public static void open(Context mContext, Class clazz, RouteParam param) {
         open(mContext, clazz, param, false);
     }
 
+    /**
+     * 跳转Activity
+     *
+     * @param mContext   上下文
+     * @param clazz      目标Activity
+     * @param finishSelf 是否结束当前Activity
+     */
     public static void open(Context mContext, Class clazz, boolean finishSelf) {
         open(mContext, clazz, null, finishSelf);
     }
 
+    /**
+     * 跳转Activity
+     *
+     * @param mContext   上下文
+     * @param clazz      目标Activity
+     * @param param      参数传递，通过getIntent()获取参数
+     * @param finishSelf 是否结束当前Activity
+     */
     public static void open(Context mContext, Class clazz, RouteParam param, boolean finishSelf) {
         //取消重复跳转，200毫秒内只跳转一次
         if (System.currentTimeMillis() - lastStartTime > SPACETIME) {
@@ -141,26 +168,95 @@ public class RouteUtil {
         }
     }
 
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext    上下文
+     * @param clazz       目标Activity
+     * @param requestCode 请求码
+     * @param listener    返回结果监听
+     */
     public static void openResult(Context mContext, Class clazz, int requestCode, OnActivityResultListener listener) {
         openResult(mContext, clazz, null, requestCode, listener);
     }
 
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext 上下文
+     * @param clazz    目标Activity
+     * @param listener 返回结果监听
+     */
     public static void openResult(Context mContext, Class clazz, OnActivityResultListener listener) {
         openResult(mContext, clazz, REQUESTCODE, listener);
     }
 
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext    上下文
+     * @param clazz       目标Activity
+     * @param param       参数传递，通过getIntent()获取参数
+     * @param requestCode 请求码
+     * @param listener    返回结果监听
+     */
     public static void openResult(Context mContext, Class clazz, RouteParam param, int requestCode, OnActivityResultListener listener) {
         openResult(mContext, getIntent(mContext, clazz, param), requestCode, listener);
     }
 
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext        上下文
+     * @param clazz           目标Activity
+     * @param param           参数传递，通过getIntent()获取参数
+     * @param requestCode     请求码
+     * @param listener        返回结果监听
+     * @param ignoreSpaceTime 是否忽略连续点击时间间隔
+     */
+    public static void openResult(Context mContext, Class clazz, RouteParam param, int requestCode, OnActivityResultListener listener, boolean ignoreSpaceTime) {
+        openResult(mContext, getIntent(mContext, clazz, param), requestCode, listener, ignoreSpaceTime);
+    }
+
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext 上下文
+     * @param intent   intent
+     * @param listener 返回结果监听
+     */
     public static void openResult(Context mContext, Intent intent, OnActivityResultListener listener) {
         openResult(mContext, intent, REQUESTCODE, listener);
     }
 
-    public static void openResult(Context context, Intent intent, int requestCode, OnActivityResultListener listener) {
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext    上下文
+     * @param intent      intent
+     * @param requestCode 请求码
+     * @param listener    返回结果监听
+     */
+    public static void openResult(Context mContext, Intent intent, int requestCode, OnActivityResultListener listener) {
         //取消重复跳转，200毫秒内只跳转一次
         if (System.currentTimeMillis() - lastStartTime > SPACETIME) {
-            ResultFragmentManager jumpResult = new ResultFragmentManager(context);
+            ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
+        }
+    }
+
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext        上下文
+     * @param intent          intent
+     * @param requestCode     请求码
+     * @param listener        返回结果监听
+     * @param ignoreSpaceTime 是否忽略连续点击时间间隔
+     */
+    public static void openResult(Context mContext, Intent intent, int requestCode, OnActivityResultListener listener, boolean ignoreSpaceTime) {
+        //取消重复跳转，200毫秒内只跳转一次
+        if ((System.currentTimeMillis() - lastStartTime > SPACETIME) || ignoreSpaceTime) {
+            ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
             jumpResult.getFragment().startForResult(intent, requestCode, listener);
             lastStartTime = System.currentTimeMillis();
         }
@@ -170,8 +266,8 @@ public class RouteUtil {
     /**
      * 跳转对应的设置界面
      *
-     * @param mContext
-     * @param action
+     * @param mContext 上下文
+     * @param action   目标页面对应的常量
      */
     public static void openSetting(@NonNull Context mContext, String action) {
         switch (action) {
@@ -231,7 +327,7 @@ public class RouteUtil {
     /**
      * 用系统默认的软件播放文件
      *
-     * @param file
+     * @param file 需要打开的文件
      */
     public static void openPlay(@NonNull Activity activity, @NonNull File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -245,18 +341,26 @@ public class RouteUtil {
     /**
      * 查询是否有相应的权限
      *
-     * @param activity
+     * @param mContext
      * @param permission 需要检查的权限
      * @return
      */
-    public static boolean checkPermission(Activity activity, String permission) {
+    public static boolean checkPermission(Context mContext, String permission) {
         // 相机的权限申请逻辑
-        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(mContext, permission) != PackageManager.PERMISSION_GRANTED) {
             return false;
         }
         return true;
     }
 
+    /**
+     * 申请打开权限
+     *
+     * @param mContext
+     * @param permissions 申请权限数组
+     * @param requestCode 请求码
+     * @param listener    返回监听
+     */
     public static void openPermission(Context mContext, String[] permissions, int requestCode, OnPermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
@@ -264,6 +368,13 @@ public class RouteUtil {
         }
     }
 
+    /**
+     * 申请打开权限
+     *
+     * @param mContext
+     * @param permissions 申请权限数组
+     * @param listener    返回监听
+     */
     public static void openPermission(Context mContext, String[] permissions, OnPermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             openPermission(mContext, permissions, REQUESTCODE, listener);
@@ -539,13 +650,13 @@ public class RouteUtil {
          * @param listener
          */
         public void startForResult(Intent intent, int requestCode, OnActivityResultListener listener) {
-            resultListeners.put(requestCode, listener);
+            if (listener != null) resultListeners.put(requestCode, listener);
             startActivityForResult(intent, requestCode);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void startPermission(String[] permissions, int requestCode, OnPermissionListener listener) {
-            permissionListeners.put(requestCode, listener);
+            if (listener != null) permissionListeners.put(requestCode, listener);
             requestPermissions(permissions, requestCode);
         }
 

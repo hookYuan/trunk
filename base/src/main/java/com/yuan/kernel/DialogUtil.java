@@ -627,6 +627,9 @@ public class DialogUtil {
         } catch (IllegalAccessException e) {
             Log.e(TAG, "设置失败：" + e.getMessage());
         }
+
+        //设置Window的进出场动画
+//        windowParams.windowAnimations =
     }
 
 

@@ -133,5 +133,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable:27.0.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.0.3@jar" level="project" />
     <orderEntry type="module" module-name="base" />
+    <orderEntry type="module" module-name="base" />
   </component>
 </module>

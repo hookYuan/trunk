@@ -239,9 +239,7 @@ public class RouteUtil {
      */
     public static void openResult(Context mContext, Intent intent, int requestCode, OnActivityResultListener listener) {
         //取消重复跳转，200毫秒内只跳转一次
-        if (System.currentTimeMillis() - lastStartTime > SPACETIME) {
-            ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
-        }
+        openResult(mContext, intent, requestCode, listener, false);
     }
 
     /**

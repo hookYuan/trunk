@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.function.CallbackManager;
 import com.yuan.simple.R;
 
 /**
@@ -34,5 +35,11 @@ public class TitleBarActivity extends BaseActivity {
     @Override
     public void setListener() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CallbackManager.get().invoke("123");
     }
 }

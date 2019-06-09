@@ -110,6 +110,17 @@ public class DialogUtil {
         }
     }
 
+    /**
+     * 设置当前进度
+     *
+     * @param current
+     */
+    public static void setProgressCurrent(int current) {
+        if (appAlertDialog != null && appAlertDialog instanceof ProgressDialog) {
+            ((ProgressDialog) appAlertDialog).setProgress(current);
+        }
+    }
+
     private DialogUtil() {
     }
 
@@ -412,17 +423,6 @@ public class DialogUtil {
     }
 
     /**
-     * 设置当前进度
-     *
-     * @param current
-     */
-    public void setProgressCurrent(int current) {
-        if (appAlertDialog != null && appAlertDialog instanceof ProgressDialog) {
-            ((ProgressDialog) appAlertDialog).setProgress(current);
-        }
-    }
-
-    /**
      * ************************自定义Dialog*****************************************************************
      */
     public void alertView(final String title, View view, boolean isCancel) {
@@ -627,6 +627,9 @@ public class DialogUtil {
         } catch (IllegalAccessException e) {
             Log.e(TAG, "设置失败：" + e.getMessage());
         }
+
+        //设置Window的进出场动画
+//        windowParams.windowAnimations =
     }
 
 

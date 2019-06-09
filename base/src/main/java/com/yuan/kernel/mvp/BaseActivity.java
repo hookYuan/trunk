@@ -1,4 +1,4 @@
-package com.yuan.kernel;
+package com.yuan.kernel.mvp;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,12 +42,12 @@ import java.util.List;
  */
 public abstract class BaseActivity<P extends Presenter> extends AppCompatActivity implements Contract.View {
 
-    private static final String TAG = "BaseActivity";
+    protected static final String TAG = Thread.currentThread().getStackTrace()[1].getClassName();
 
     /**
      * 保存上次显示的位置
      */
-    private static final String SAVE_SHOWPOSITION = "showPosition";
+    private static final String SAVE_SHOW_POSITION = "showPosition";
 
     /**
      * 上下文对象
@@ -79,14 +80,15 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         this.mContext = this;
         this.savedInstanceState = savedInstanceState;
         if (savedInstanceState != null) {
-            showIndex = savedInstanceState.getInt(SAVE_SHOWPOSITION, 0);
+            showIndex = savedInstanceState.getInt(SAVE_SHOW_POSITION, 0);
         }
         //反射获取Presenter
-        presenter = getT(this, 0);
+        presenter = createPresenter();
         if (presenter != null) {
             presenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
+
         View layoutView = getLayoutView();
         int layoutId = getLayoutId();
         if (layoutId != 0) {
@@ -94,14 +96,30 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         } else if (layoutView != null) {
             setContentView(layoutView);
         } else {
-            Log.e(TAG, "没有给Activity设置显示视图");
+            throw new NullPointerException("没有给Activity设置显示视图");
         }
+
         findViews();
         parseBundle(savedInstanceState);
         initData();
         setListener();
 
         if (presenter != null) presenter.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View getLayoutView() {
+        return null;
+    }
+
+    @Override
+    public void findViews() {
+
+    }
+
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
     }
 
     @Override
@@ -126,7 +144,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
             }
         }
         //保存上次Fragment的位置
-        outState.putInt(SAVE_SHOWPOSITION, showIndex);
+        outState.putInt(SAVE_SHOW_POSITION, showIndex);
     }
 
     @Override
@@ -284,17 +302,37 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         return presenter;
     }
 
-//    返回泛型冲突
-//    /**
-//     * 代替findViewById
-//     *
-//     * @param viewId
-//     * @param <T>
-//     * @return
-//     */
-//    protected final <T extends View> T find(@IdRes int viewId) {
-//        return (T) findViewById(viewId);
-//    }
+    /**
+     * 获取Presenter实例
+     * <p>
+     * 默认反射第一个泛型创建Presenter
+     * 如果未指定泛型，请重写该方法
+     *
+     * @return Presenter的实例化对象
+     */
+    protected <T> T createPresenter() {
+        //只获取当前类的泛型参数
+        Type type = this.getClass().getGenericSuperclass();
+        if (!(type instanceof ParameterizedType)) {
+            return null;
+        }
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type[] types = parameterizedType.getActualTypeArguments();
+        //当前class有泛型参数
+        for (Type currentType : types) {
+            if (currentType instanceof Presenter) {
+                Class<T> entityClass = (Class<T>) currentType.getClass();
+                try {
+                    return entityClass.newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * 获取颜色
@@ -343,11 +381,6 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         });
     }
 
-    @Override
-    public View getLayoutView() {
-        return null;
-    }
-
     /**
      * 反射 Fragment
      *
@@ -376,26 +409,4 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         return child;
     }
 
-    /**
-     * 反射泛型生成对象
-     *
-     * @param o   包含泛型的对象
-     * @param i   泛型的position
-     * @param <T> 任意泛型
-     * @return
-     */
-    private <T> T getT(Object o, int i) {
-        try {
-            return ((Class<T>) ((ParameterizedType) (o.getClass()
-                    .getGenericSuperclass())).getActualTypeArguments()[i])
-                    .newInstance();
-        } catch (InstantiationException e) {
-            Log.i("TUtil", e.getMessage());
-        } catch (IllegalAccessException e) {
-            Log.i("TUtil", e.getMessage());
-        } catch (ClassCastException e) {
-            Log.i("TUtil", e.getMessage());
-        }
-        return null;
-    }
 }

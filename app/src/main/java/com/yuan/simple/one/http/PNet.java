@@ -2,9 +2,8 @@ package com.yuan.simple.one.http;
 
 
 import android.os.Environment;
-import android.util.Log;
 
-import com.yuan.kernel.Presenter;
+import com.yuan.kernel.mvp.Presenter;
 import com.yuan.kernel.ToastUtil;
 import com.yuan.tools_extra.OKUtil;
 

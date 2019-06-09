@@ -9,7 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.mvp.BaseActivity;
 import com.yuan.kernel.RouteUtil;
 import com.yuan.kernel.Views;
 import com.yuan.simple.one.BaseFragment;

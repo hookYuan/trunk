@@ -1,4 +1,4 @@
-package com.yuan.kernel;
+package com.yuan.kernel.mvp;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,8 +16,14 @@ import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
+import java.time.temporal.WeekFields;
+
 /**
  * 描述：Presenter
+ * <p>
+ * <p>
+ * <p>
  * 接管Activity或Fragment中的逻辑操作，优化View中的代码逻辑
  * <p>
  * 特性：
@@ -31,7 +37,12 @@ import android.widget.Toast;
  */
 public class Presenter<V extends Contract.View> implements Contract.IPresenter {
 
-    private V view;
+    /**
+     * 弱引用持有Activity引用，防止内存泄漏
+     * 当Activity结束时因该调用Presenter的结束destroy
+     * 释放对Activity的引用
+     */
+    private WeakReference<V> mView;
 
     /**
      * 切换到主线程
@@ -39,22 +50,21 @@ public class Presenter<V extends Contract.View> implements Contract.IPresenter {
     private Handler mainHandler;
 
     /**
-     * 传递加载View
-     *
-     * @param View
+     * BaseActivity采用反射无参构造函数生产Presenter,
+     * 所以一定确保所有继承Presenter中必须有一个无参构造函数
      */
-    public final void attachView(V View) {
-        this.view = View;
+    public Presenter() {
         mainHandler = new Handler(Looper.getMainLooper());
     }
 
     /**
-     * 获取 view实例
+     * 传递加载View
+     * 此方法一定要在
      *
-     * @return
+     * @param view 需要绑定的View对象
      */
-    protected final V getV() {
-        return view;
+    public final void attachView(V view) {
+        this.mView = new WeakReference<V>(view);
     }
 
     @Override
@@ -69,71 +79,35 @@ public class Presenter<V extends Contract.View> implements Contract.IPresenter {
 
     @Override
     public void onDestroy() {
-
+        if (mView != null) mView.clear();
     }
+
 
     @Override
-    public Context getContext() {
-        if (view != null && view instanceof Activity) {
-            return (Activity) view;
+    public final Context getContext() {
+        if (mView == null) return null;
+
+        if (mView.get() instanceof Activity) {
+            return (Activity) mView.get();
         }
 
-        if (view != null && view instanceof Fragment) {
-            return ((Fragment) view).getActivity();
+        if (mView.get() instanceof Fragment) {
+            return ((Fragment) mView.get()).getActivity();
         }
 
-        if (view != null && view instanceof android.support.v4.app.Fragment) {
-            return ((android.support.v4.app.Fragment) view).getActivity();
+        if (mView.get() instanceof android.support.v4.app.Fragment) {
+            return ((android.support.v4.app.Fragment) mView.get()).getContext();
         }
-
-        throw new NullPointerException("没有找到Context，请检查View是否为空");
+        return null;
     }
 
     /**
-     * 获取颜色
+     * 获取 view实例
      *
-     * @param colorId
      * @return
      */
-    @ColorInt
-    protected final int getColor2(@ColorRes int colorId) {
-        return ContextCompat.getColor(getContext(), colorId);
-    }
-
-    /**
-     * 获取Drawable
-     *
-     * @param drawableId
-     * @return
-     */
-    @Nullable
-    protected final Drawable getDrawable2(@DrawableRes int drawableId) {
-        return ContextCompat.getDrawable(getContext(), drawableId);
-    }
-
-    /**
-     * 获取String
-     *
-     * @param id
-     * @return
-     */
-    @NonNull
-    protected final String getString2(@StringRes int id) {
-        return getContext().getResources().getString(id);
-    }
-
-    /**
-     * Toast,系统默认样式
-     *
-     * @param msg 提示内容
-     */
-    protected final void showToast(String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+    protected final V getView() {
+        return mView.get();
     }
 
     /**

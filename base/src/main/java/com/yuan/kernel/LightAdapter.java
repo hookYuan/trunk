@@ -139,7 +139,7 @@ public abstract class LightAdapter<T extends Object, K extends LightAdapter.View
     @Override
     public int getItemViewType(int position) {
 
-        return
+        return 0;
     }
 
     @Override
@@ -164,8 +164,8 @@ public abstract class LightAdapter<T extends Object, K extends LightAdapter.View
                 baseViewHolder = createBaseViewHolder(mFooterLayout);
                 break;
             default:
-                baseViewHolder = onCreateDefViewHolder(parent, viewType);
-                bindViewClickListener(baseViewHolder);
+//                baseViewHolder = onCreateDefViewHolder(parent, viewType);
+//                bindViewClickListener(baseViewHolder);
         }
         return baseViewHolder;
     }

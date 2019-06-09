@@ -7,10 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.yuan.kernel.GridDivider;
 import com.yuan.kernel.RLVAdapter;
 import com.yuan.kernel.RouteUtil;
+import com.yuan.kernel.ToastUtil;
+import com.yuan.kernel.function.CallbackManager;
+import com.yuan.kernel.function.CallbackNoParamNoResult;
 import com.yuan.simple.R;
 import com.yuan.simple.one.db.DBActivity;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
@@ -50,6 +54,13 @@ public class BaseFragment extends ListFragment {
 //
 //                    }
 //                });
+        CallbackManager.get().addCallback("123",
+                new CallbackNoParamNoResult() {
+                    @Override
+                    public void callback() {
+                        ToastUtil.showShort(mContext, "返回了");
+                    }
+                });
     }
 
     @Override

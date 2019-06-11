@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 
 import com.yuan.kernel.GridDivider;
 import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.BaseActivity;
-import com.yuan.kernel.Presenter;
+import com.yuan.kernel.mvp.BaseActivity;
+import com.yuan.kernel.mvp.Presenter;
 
 import java.util.List;
 

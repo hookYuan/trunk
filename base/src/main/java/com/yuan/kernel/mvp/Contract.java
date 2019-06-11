@@ -1,4 +1,4 @@
-package com.yuan.kernel;
+package com.yuan.kernel.mvp;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ class Contract {
     public interface View {
         /**
          * 加载的布局文件
+         * 优先于getLayoutView，只有当返回值为0时触发getLayoutView
          */
         @LayoutRes
         int getLayoutId();

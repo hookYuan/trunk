@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.mvp.BaseActivity;
 import com.yuan.kernel.RLVAdapter;
 import com.yuan.simple.R;
 

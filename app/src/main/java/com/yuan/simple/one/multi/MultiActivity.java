@@ -6,7 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.mvp.BaseActivity;
 import com.yuan.kernel.GridDivider;
 import com.yuan.simple.R;
 import com.yuan.tools_extend.adapter.MultiAdapter;

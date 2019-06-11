@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.yuan.kernel.BaseActivity;
+import com.yuan.kernel.mvp.BaseActivity;
 import com.yuan.kernel.Views;
 import com.yuan.simple.R;
 import com.yuan.tools_extra.GlideUtil;

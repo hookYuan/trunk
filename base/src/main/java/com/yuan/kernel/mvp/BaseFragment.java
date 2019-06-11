@@ -1,4 +1,4 @@
-package com.yuan.kernel;
+package com.yuan.kernel.mvp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -26,6 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * 描述：Fragment的基础封装
@@ -83,7 +84,7 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         //反射获取Presenter
-        presenter = getT(this, 0);
+        presenter = createPresenter();
         if (presenter != null) {
             presenter.attachView(this);
         }
@@ -259,18 +260,6 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         return presenter;
     }
 
-//    返回泛型冲突
-//    /**
-//     * 代替findViewById
-//     *
-//     * @param viewId
-//     * @param <T>
-//     * @return
-//     */
-//    protected <T extends View> T find(@IdRes int viewId) {
-//        return (T) mView.findViewById(viewId);
-//    }
-
     /**
      * 获取颜色
      *
@@ -339,29 +328,35 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         return mView.findViewById(id);
     }
 
-
     /**
-     * 反射泛型生成对象
+     * 获取Presenter实例
+     * <p>
+     * 默认反射第一个泛型创建Presenter
+     * 如果未指定泛型，请重写该方法
      *
-     * @param o   包含泛型的对象
-     * @param i   泛型的position
-     * @param <T> 任意泛型
-     * @return
+     * @return Presenter的实例化对象
      */
-    private <T> T getT(Object o, int i) {
-        try {
-            return ((Class<T>) ((ParameterizedType) (o.getClass()
-                    .getGenericSuperclass())).getActualTypeArguments()[i])
-                    .newInstance();
-        } catch (java.lang.InstantiationException e) {
-            Log.i("TUtil", e.getMessage());
-        } catch (IllegalAccessException e) {
-            Log.i("TUtil", e.getMessage());
-        } catch (ClassCastException e) {
-            Log.i("TUtil", e.getMessage());
+    protected <T> T createPresenter() {
+        //只获取当前类的泛型参数
+        Type type = this.getClass().getGenericSuperclass();
+        if (!(type instanceof ParameterizedType)) {
+            return null;
+        }
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type[] types = parameterizedType.getActualTypeArguments();
+        //当前class有泛型参数
+        for (Type currentType : types) {
+            if (currentType instanceof Presenter) {
+                Class<T> entityClass = (Class<T>) currentType.getClass();
+                try {
+                    return entityClass.newInstance();
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
-
-
 }

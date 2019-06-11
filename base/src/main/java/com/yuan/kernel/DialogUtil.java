@@ -158,7 +158,7 @@ public class DialogUtil {
             builder.setNegativeButton(negativeText, negativeListener);
         builder.setCancelable(isCancel);
         // 显示
-        initCreate(diaLogParams, builder);
+        create(diaLogParams, builder);
     }
 
     public void alertText(String message, boolean isCancel, DialogInterface.OnClickListener positiveListener) {
@@ -221,7 +221,7 @@ public class DialogUtil {
         builder.setItems(mData, listener);
         builder.setCancelable(isCancel);
         // 显示
-        initCreate(diaLogParams, builder);
+        create(diaLogParams, builder);
     }
 
     public void alertList(String title, List<String> mData, boolean isCancel, DialogInterface.OnClickListener listener) {
@@ -296,7 +296,7 @@ public class DialogUtil {
         }
         builder.setCancelable(isCancel);
         // 显示
-        initCreate(diaLogParams, builder);
+        create(diaLogParams, builder);
     }
 
     /**
@@ -363,7 +363,7 @@ public class DialogUtil {
                 });
         builder.setCancelable(isCancel);
         // 显示
-        initCreate(diaLogParams, builder);
+        create(diaLogParams, builder);
     }
 
     /**
@@ -399,7 +399,7 @@ public class DialogUtil {
         }
         appAlertDialog.setCancelable(isCancel);
         // 显示
-        initCreate(diaLogParams, appAlertDialog);
+        create(diaLogParams, appAlertDialog);
     }
 
     /**
@@ -419,7 +419,7 @@ public class DialogUtil {
         appAlertDialog.setTitle(title);
         appAlertDialog.setCancelable(isCancel);
         // 显示
-        initCreate(diaLogParams, appAlertDialog);
+        create(diaLogParams, appAlertDialog);
     }
 
     /**
@@ -430,7 +430,7 @@ public class DialogUtil {
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
         builder.setView(view);
         builder.setCancelable(isCancel);
-        initCreate(diaLogParams, builder);
+        create(diaLogParams, builder);
     }
 
     public void alertView(View view) {
@@ -458,7 +458,7 @@ public class DialogUtil {
             ((DatePickerDialog) appAlertDialog).updateDate(year, month, dayOfMonth);
             appAlertDialog.setCancelable(isCancel);
         }
-        initCreate(diaLogParams, appAlertDialog);
+        create(diaLogParams, appAlertDialog);
     }
 
 
@@ -488,7 +488,7 @@ public class DialogUtil {
             ((TimePickerDialog) appAlertDialog).updateTime(hourOfDay, minute);
             appAlertDialog.setCancelable(isCancel);
         }
-        initCreate(diaLogParams, appAlertDialog);
+        create(diaLogParams, appAlertDialog);
     }
 
     public void alertTime(int hourOfDay, int minute, TimePickerDialog.OnTimeSetListener listener) {
@@ -511,13 +511,13 @@ public class DialogUtil {
     /**
      * 全局统一设置显示，可以控制dialog显示位置
      */
-    private void initCreate(DialogParams params, Object dialog) {
+    private void create(DialogParams params, Object dialog) {
         if (dialog instanceof AlertDialog.Builder) {
             v7AlertDialog = ((AlertDialog.Builder) dialog).show();
-            initParams(params, v7AlertDialog.getWindow(), v7AlertDialog);
+            initWindow(params, v7AlertDialog.getWindow(), v7AlertDialog);
         } else if (dialog instanceof android.app.AlertDialog) {
             ((android.app.AlertDialog) dialog).show();
-            initParams(params, ((android.app.AlertDialog) dialog).getWindow(), null);
+            initWindow(params, ((android.app.AlertDialog) dialog).getWindow(), null);
         }
     }
 
@@ -528,7 +528,7 @@ public class DialogUtil {
      * @param window
      * @param object
      */
-    private void initParams(DialogParams diaLogParams, Window window, AlertDialog object) {
+    private void initWindow(DialogParams diaLogParams, Window window, AlertDialog object) {
         //设置背景颜色，通常为透明
         if (diaLogParams.getWindowBackground() != null) {
             window.setBackgroundDrawable(diaLogParams.getWindowBackground());

@@ -71,12 +71,12 @@ public class PNet extends Presenter<NetActivity> {
                 .execute(new OKUtil.FileBack(Environment.getExternalStorageDirectory() + "/Download/", "232.pptx") {
                     @Override
                     public void onSuccess(String fileDir, byte[] bytes) {
-                        ToastUtil.showShort(getV(), "文件大小：" + bytes.length);
+//                        ToastUtil.showShort(getV(), "文件大小：" + bytes.length);
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        ToastUtil.showShort(getV(), "下载异常：" + e.getMessage());
+//                        ToastUtil.showShort(getV(), "下载异常：" + e.getMessage());
                     }
                 });
     }

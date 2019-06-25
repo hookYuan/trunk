@@ -1,12 +1,12 @@
 package com.yuan.simple.one.sort;
 
 
-import com.yuan.tools_independ.sort.IPinyinSort;
+import com.yuan.tools_independ.sort.IChineseSort;
 
 /**
  * Created by YuanYe on 2018/8/11.
  */
-public class ChineseBean implements IPinyinSort {
+public class ChineseBean implements IChineseSort {
 
     private String name;
 

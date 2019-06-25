@@ -16,7 +16,7 @@ public class ChineseSortUtil {
      * @param data 传入的数据需要集成SortBean
      * @return
      */
-    public static <T extends IPinyinSort> List<T> sortData(List<T> data) {
+    public static <T extends IChineseSort> List<T> sortData(List<T> data) {
         if (data != null) {
             //对数据重新排序
             PinyinComparator pinyinComparator = new PinyinComparator();
@@ -159,9 +159,9 @@ public class ChineseSortUtil {
      * 作者：yuanYe创建于2016/9/26
      * QQ：962851730
      */
-    static class PinyinComparator implements Comparator<IPinyinSort> {
+    static class PinyinComparator implements Comparator<IChineseSort> {
 
-        public int compare(IPinyinSort o1, IPinyinSort o2) {
+        public int compare(IChineseSort o1, IChineseSort o2) {
             if (o1.getFirstLetters().equals("@") || o2.getFirstLetters().equals("#")) {
                 return -1;
             } else if (o1.getFirstLetters().equals("#")

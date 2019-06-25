@@ -8,7 +8,7 @@ import android.os.Build;
  * 需要排序的实体
  * default关键字使用，需要在jDK 8以上，Android N以上
  */
-public interface IPinyinSort {
+public interface IChineseSort {
 
     String getSortText(); //需要排序的文字
 

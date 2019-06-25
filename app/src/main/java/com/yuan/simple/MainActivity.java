@@ -41,7 +41,16 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
+//        addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
+
+        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+//        android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.commit();
+        addFragment(R.id.content, new BaseFragment(), new BaseFragment(), new ThreeFragment());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             RouteUtil.openPermission(mContext, new String[]{
                     Manifest.permission.CAMERA

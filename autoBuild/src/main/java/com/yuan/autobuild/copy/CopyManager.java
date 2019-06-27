@@ -1,4 +1,4 @@
-package com.yuan.autobuild.copybuild;
+package com.yuan.autobuild.copy;
 
 
 import java.io.BufferedReader;
@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * 文件创建任务
+ *
  * @author yuanye
  * @date 2019/6/24
  */
@@ -22,7 +24,15 @@ public class CopyManager {
      */
     private List<ICopy> mBuildTask;
 
-    public CopyManager() {
+    private static class CopyManagerInstance {
+        private static CopyManager manager = new CopyManager();
+    }
+
+    public static CopyManager getInstance() {
+        return CopyManagerInstance.manager;
+    }
+
+    private CopyManager() {
         mBuildTask = new ArrayList<>();
     }
 
@@ -31,8 +41,9 @@ public class CopyManager {
      *
      * @param iAutoBuild
      */
-    public void addTask(ICopy iAutoBuild) {
+    public CopyManager addTask(ICopy iAutoBuild) {
         mBuildTask.add(iAutoBuild);
+        return CopyManagerInstance.manager;
     }
 
     /**

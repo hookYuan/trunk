@@ -1,4 +1,4 @@
-package com.yuan.autobuild.copybuild;
+package com.yuan.autobuild.copy;
 
 import java.util.HashMap;
 

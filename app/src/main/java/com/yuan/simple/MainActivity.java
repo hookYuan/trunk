@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.yuan.kernel.dialog.DialogUtil;
 import com.yuan.kernel.mvp.BaseActivity;
 import com.yuan.kernel.RouteUtil;
 import com.yuan.kernel.Views;
@@ -38,6 +39,11 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DialogUtil.create(mContext);
+    }
 
     @Override
     public void initData() {

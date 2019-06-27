@@ -1,6 +1,7 @@
-package com.yuan.kernel;
+package com.yuan.kernel.dialog;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,66 +39,56 @@ public class DialogUtil {
     /**
      * 默认文字
      */
-    private final static String POSITIVETEXT = "确定";
-    private final static String NEGATIVETEXT = "取消";
-    private final static String TITLETEXT = "提示";
+    private final static String POSITIVE_TEXT = "确定";
+    private final static String NEGATIVE_TEXT = "取消";
+    private final static String TITLE_TEXT = "提示";
     /**
-     * context
+     * Dialog
      */
-    private static Context mContext;
+    private WeakReference<Dialog> mDialog;
     /**
-     * 单例
+     * 上下文
      */
-    private static DialogUtil util;
-    /**
-     * 全局配置参数
-     */
-    private static DialogParams allParams;
-    /**
-     * 当前配置参数
-     */
-    private static DialogParams diaLogParams;
-    /**
-     * app包下dialog
-     */
-    private static android.app.AlertDialog appAlertDialog;
-    /**
-     * v7包下dialog
-     */
-    private static AlertDialog v7AlertDialog;
+    private WeakReference<Context> mContext;
     /**
      * 主题样式
      */
     private int themeResId = 0;
-
     /**
-     * 单例
-     *
-     * @param context
-     * @return
+     * 配置参数
      */
+    private Params mParams;
+
+    private static class DialogUtilInstance {
+        private static DialogUtil util = new DialogUtil();
+    }
+
+    public static DialogUtil create(Context context, Params params) {
+        DialogUtilInstance.util.init(context, params);
+        return DialogUtilInstance.util;
+    }
+
     public static DialogUtil create(Context context) {
-        return create(context, null);
+        DialogUtilInstance.util.init(context, null);
+        return DialogUtilInstance.util;
+    }
+
+    private DialogUtil() {
+        Log.i(TAG, "初始化");
     }
 
     /**
+     * 初始化
+     *
      * @param context
-     * @param params  优先于全局生效
-     * @return
+     * @param params
      */
-    public static DialogUtil create(Context context, DialogParams params) {
-        if (util == null) {
-            util = new DialogUtil();
-        }
-        if (params != null) {
-            diaLogParams = params;
-        } else if (allParams != null) {
-            diaLogParams = allParams;
-        } else {
-            diaLogParams = new DialogParams.Builder().build();
-        }
-        mContext = context;
-        return util;
+    private void init(Context context, Params params) {
+        //释放Context
+        releaseContext();
+        mContext = new WeakReference<>(context);
+        if (params == null) mParams = new Params.Builder().build();
+        else mParams = params;
     }
 
     /**
@@ -104,10 +96,9 @@ public class DialogUtil {
      *
      * @param params
      */
-    public static void setStyle(DialogParams params) {
+    public void setParams(Params params) {
         if (params != null) {
-            allParams = params;
-            diaLogParams = params;
+            mParams = params;
         }
     }
 
@@ -116,13 +107,51 @@ public class DialogUtil {
      *
      * @param current
      */
-    public static void setProgressCurrent(int current) {
-        if (appAlertDialog != null && appAlertDialog instanceof ProgressDialog) {
-            ((ProgressDialog) appAlertDialog).setProgress(current);
+    public void setProgressCurrent(int current) {
+        if (mDialog != null && mDialog.get() != null &&
+                mDialog.get() instanceof ProgressDialog) {
+            ProgressDialog dialog = (ProgressDialog) mDialog.get();
+            dialog.setProgress(current);
+        } else {
+            Log.e(TAG, "设置进度失败");
         }
     }
 
-    private DialogUtil() {
+    /**
+     * 关闭弹窗,释放资源
+     * <p>
+     */
+    public void destroy() {
+        releaseDialog();
+        releaseContext();
+    }
+
+    /**
+     * 隐藏弹窗
+     * 和show配合使用，不用频繁创建Dialog
+     *
+     * @return 是否隐藏成功
+     */
+    public boolean dismiss() {
+        if (mDialog != null && mDialog.get() != null) {
+            mDialog.get().dismiss();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 显示弹窗
+     * 显示最近一次创建的并且没有被销毁的Dialog
+     *
+     * @return 是否显示成功
+     */
+    public boolean show() {
+        if (mDialog != null && mDialog.get() != null) {
+            mDialog.get().show();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -132,38 +161,40 @@ public class DialogUtil {
     /**
      * @param title            标题
      * @param message          正文
-     * @param positiveText     右侧按钮
+     * @param POSITIVE_TEXT     右侧按钮
      * @param neutralText      中间按钮
-     * @param negativeText     左侧按钮
+     * @param NEGATIVE_TEXT     左侧按钮
      * @param positiveListener
      * @param neutralListener
      * @param negativeListener
      * @param isCancel         是否点击外部可以取消  false--不可取消
      */
     public void alertText(String title, String message
-            , String positiveText, String neutralText, String negativeText
+            , String POSITIVE_TEXT, String neutralText, String NEGATIVE_TEXT
             , DialogInterface.OnClickListener positiveListener
             , DialogInterface.OnClickListener neutralListener
             , DialogInterface.OnClickListener negativeListener
             , boolean isCancel) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId);
+        checkContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(),
+                themeResId);
         //可以通过R.style.MaterialDialog修改Dialog颜色等
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
         if (!TextUtils.isEmpty(message)) builder.setMessage(message);
-        if (!TextUtils.isEmpty(positiveText))
-            builder.setPositiveButton(positiveText, positiveListener);
+        if (!TextUtils.isEmpty(POSITIVE_TEXT))
+            builder.setPositiveButton(POSITIVE_TEXT, positiveListener);
         if (!TextUtils.isEmpty(neutralText))
             builder.setNeutralButton(neutralText, neutralListener);
-        if (!TextUtils.isEmpty(negativeText))
-            builder.setNegativeButton(negativeText, negativeListener);
+        if (!TextUtils.isEmpty(NEGATIVE_TEXT))
+            builder.setNegativeButton(NEGATIVE_TEXT, negativeListener);
         builder.setCancelable(isCancel);
         // 显示
-        create(diaLogParams, builder);
+        mDialog = new WeakReference(builder.create());
+        initWindow(mParams, mDialog.get().getWindow());
     }
 
     public void alertText(String message, boolean isCancel, DialogInterface.OnClickListener positiveListener) {
-        alertText(TITLETEXT, message, POSITIVETEXT, "", NEGATIVETEXT, positiveListener, null, new DialogInterface.OnClickListener() {
+        alertText(TITLE_TEXT, message, POSITIVE_TEXT, "", NEGATIVE_TEXT, positiveListener, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -177,7 +208,7 @@ public class DialogUtil {
 
 
     public void alertText(String title, String message, DialogInterface.OnClickListener positiveListener) {
-        alertText(title, message, POSITIVETEXT, "", "", positiveListener, null, new DialogInterface.OnClickListener() {
+        alertText(title, message, POSITIVE_TEXT, "", "", positiveListener, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -186,7 +217,7 @@ public class DialogUtil {
     }
 
     public void alertText(String title, String message, DialogInterface.OnClickListener positiveListener, boolean isCancel) {
-        alertText(title, message, POSITIVETEXT, "", "", positiveListener, null, new DialogInterface.OnClickListener() {
+        alertText(title, message, POSITIVE_TEXT, "", "", positiveListener, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -195,7 +226,7 @@ public class DialogUtil {
     }
 
     public void alertText(String message, boolean isCancel) {
-        alertText(TITLETEXT, message, POSITIVETEXT, "", "", null, null, new DialogInterface.OnClickListener() {
+        alertText(TITLE_TEXT, message, POSITIVE_TEXT, "", "", null, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -204,7 +235,7 @@ public class DialogUtil {
     }
 
     public void alertText(String message) {
-        alertText(TITLETEXT, message, POSITIVETEXT, "", "", null, null, new DialogInterface.OnClickListener() {
+        alertText(TITLE_TEXT, message, POSITIVE_TEXT, "", "", null, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -216,13 +247,14 @@ public class DialogUtil {
      * ************************列表Dialog*****************************************************************
      */
     public void alertList(String title, String[] mData, boolean isCancel, DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId);
-
+        checkContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
         builder.setItems(mData, listener);
         builder.setCancelable(isCancel);
         // 显示
-        create(diaLogParams, builder);
+        mDialog = new WeakReference(builder.create());
+        initWindow(mParams, mDialog.get().getWindow());
     }
 
     public void alertList(String title, List<String> mData, boolean isCancel, DialogInterface.OnClickListener listener) {
@@ -243,7 +275,6 @@ public class DialogUtil {
         alertList("", mData, true, listener);
     }
 
-
     /**
      * ************************单选Dialog*****************************************************************
      */
@@ -253,30 +284,17 @@ public class DialogUtil {
      */
     private int defPos = 0;
 
-    public void alertSingle(String title, List<String> mData, int defPosition, final DialogInterface.OnClickListener listener) {
-        alertSingle(title, mData, POSITIVETEXT, defPosition, listener);
-    }
-
-    public void alertSingle(String title, List<String> mData, final String positiveText, int defPosition, final DialogInterface.OnClickListener listener) {
-        int size = mData.size();
-        String[] array = mData.toArray(new String[size]);
-        alertSingle(title, array, positiveText, defPosition, true, listener);
-    }
-
-    public void alertSingle(String title, String[] mData, int defPosition, final DialogInterface.OnClickListener listener) {
-        alertSingle(title, mData, POSITIVETEXT, defPosition, true, listener);
-    }
-
     /**
      * @param title        标题
      * @param mData        数据源
-     * @param positiveText 确定按钮
+     * @param POSITIVE_TEXT 确定按钮
      * @param defPosition  默认选中位置
      * @param isCancel     是否点击外部取消
      * @param listener     监听
      */
-    public void alertSingle(String title, String[] mData, final String positiveText, int defPosition, boolean isCancel, final DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId);
+    public void alertSingle(String title, String[] mData, final String POSITIVE_TEXT, int defPosition, boolean isCancel, final DialogInterface.OnClickListener listener) {
+        checkContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
         defPos = defPosition;
         //点击Item按钮
@@ -287,8 +305,8 @@ public class DialogUtil {
             }
         });
         //点击确定按钮
-        if (!TextUtils.isEmpty(positiveText)) {
-            builder.setPositiveButton(positiveText, new DialogInterface.OnClickListener() {
+        if (!TextUtils.isEmpty(POSITIVE_TEXT)) {
+            builder.setPositiveButton(POSITIVE_TEXT, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     listener.onClick(dialog, defPos);
@@ -297,22 +315,27 @@ public class DialogUtil {
         }
         builder.setCancelable(isCancel);
         // 显示
-        create(diaLogParams, builder);
+        mDialog = new WeakReference(builder.create());
+        initWindow(mParams, mDialog.get().getWindow());
+    }
+
+    public void alertSingle(String title, List<String> mData, int defPosition, final DialogInterface.OnClickListener listener) {
+        alertSingle(title, mData, POSITIVE_TEXT, defPosition, listener);
+    }
+
+    public void alertSingle(String title, List<String> mData, final String POSITIVE_TEXT, int defPosition, final DialogInterface.OnClickListener listener) {
+        int size = mData.size();
+        String[] array = mData.toArray(new String[size]);
+        alertSingle(title, array, POSITIVE_TEXT, defPosition, true, listener);
+    }
+
+    public void alertSingle(String title, String[] mData, int defPosition, final DialogInterface.OnClickListener listener) {
+        alertSingle(title, mData, POSITIVE_TEXT, defPosition, true, listener);
     }
 
     /**
      * ************************多选Dialog*****************************************************************
      */
-
-    public <T extends MultiItem> void alertMulti(String title, T[] mData, OnMultiListener listener) {
-        List<T> list = Arrays.asList(mData);
-        alertMulti(title, list, true, listener);
-    }
-
-
-    public <T extends MultiItem> void alertMulti(String title, List<T> mData, OnMultiListener listener) {
-        alertMulti(title, mData, true, listener);
-    }
 
     /**
      * @param title            标题
@@ -323,8 +346,8 @@ public class DialogUtil {
     public <T extends MultiItem> void alertMulti(String title, final List<T> data,
                                                  boolean isCancel,
                                                  final OnMultiListener positiveListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId);
-
+        checkContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
         //解析数据源
         String[] strData = new String[data.size()];
@@ -336,7 +359,6 @@ public class DialogUtil {
             bean.setPosition(i);
             i++;
         }
-
         builder.setMultiChoiceItems(strData, choiceItem,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -349,7 +371,7 @@ public class DialogUtil {
                         }
                     }
                 });
-        builder.setPositiveButton(POSITIVETEXT,
+        builder.setPositiveButton(POSITIVE_TEXT,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -364,21 +386,22 @@ public class DialogUtil {
                 });
         builder.setCancelable(isCancel);
         // 显示
-        create(diaLogParams, builder);
+        mDialog = new WeakReference(builder.create());
+        initWindow(mParams, mDialog.get().getWindow());
+    }
+
+    public <T extends MultiItem> void alertMulti(String title, T[] mData, OnMultiListener listener) {
+        List<T> list = Arrays.asList(mData);
+        alertMulti(title, list, true, listener);
+    }
+
+    public <T extends MultiItem> void alertMulti(String title, List<T> mData, OnMultiListener listener) {
+        alertMulti(title, mData, true, listener);
     }
 
     /**
      * ************************等待Dialog*****************************************************************
      */
-
-    /**
-     * @param title   标题
-     * @param message 提示文字
-     */
-    public void alertWait(String title, String message) {
-        alertWait(title, message, true);
-    }
-
     /**
      * 未知进度Dialog
      *
@@ -391,16 +414,33 @@ public class DialogUtil {
          * @setCancelable 为使屏幕不可点击，设置为不可取消(false)
          * 下载等事件完成后，主动调用函数关闭该Dialog
          */
-        appAlertDialog = new ProgressDialog(mContext, themeResId);
-        if (!TextUtils.isEmpty(title)) appAlertDialog.setTitle(title);
-        if (!TextUtils.isEmpty(message)) appAlertDialog.setMessage(message);
-        if (appAlertDialog instanceof ProgressDialog) {
-            ((ProgressDialog) appAlertDialog).setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            ((ProgressDialog) appAlertDialog).setIndeterminate(true);
+        checkContext();
+        mDialog = new WeakReference(new ProgressDialog(mContext.get(), themeResId));
+        if (!TextUtils.isEmpty(title)) mDialog.get().setTitle(title);
+        if (mDialog.get() instanceof ProgressDialog) {
+            ProgressDialog dialog = (ProgressDialog) mDialog.get();
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setIndeterminate(true);
+            if (!TextUtils.isEmpty(message)) dialog.setMessage(message);
         }
-        appAlertDialog.setCancelable(isCancel);
+        mDialog.get().setCancelable(isCancel);
         // 显示
-        create(diaLogParams, appAlertDialog);
+        initWindow(mParams, mDialog.get().getWindow());
+    }
+
+    /**
+     * @param title   标题
+     * @param message 提示文字
+     */
+    public void alertWait(String title, String message) {
+        alertWait(title, message, true);
+    }
+
+    /**
+     * @param message 提示文字
+     */
+    public void alertWait(String message) {
+        alertWait(TITLE_TEXT, message, true);
     }
 
     /**
@@ -411,33 +451,44 @@ public class DialogUtil {
     }
 
     public void alertProgress(String title, int max, int current, boolean isCancel) {
-        appAlertDialog = new ProgressDialog(mContext, themeResId);
-        if (appAlertDialog instanceof ProgressDialog) {
-            ((ProgressDialog) appAlertDialog).setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            ((ProgressDialog) appAlertDialog).setProgress(current);
-            ((ProgressDialog) appAlertDialog).setMax(max);
+        checkContext();
+        mDialog = new WeakReference(new ProgressDialog(mContext.get(), themeResId));
+        mDialog.get().setTitle(title);
+        if (mDialog.get() instanceof ProgressDialog) {
+            ProgressDialog dialog = (ProgressDialog) mDialog.get();
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.setProgress(current);
+            dialog.setMax(max);
         }
-        appAlertDialog.setTitle(title);
-        appAlertDialog.setCancelable(isCancel);
+        mDialog.get().setCancelable(isCancel);
         // 显示
-        create(diaLogParams, appAlertDialog);
+        initWindow(mParams, mDialog.get().getWindow());
     }
 
     /**
      * ************************自定义Dialog*****************************************************************
      */
+
+    /**
+     * 自定布局Dialog
+     *
+     * @param title
+     * @param view
+     * @param isCancel
+     */
     public void alertView(final String title, View view, boolean isCancel) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId);
+        checkContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);
         builder.setView(view);
         builder.setCancelable(isCancel);
-        create(diaLogParams, builder);
+        mDialog = new WeakReference(builder.create());
+        initWindow(mParams, mDialog.get().getWindow());
     }
 
     public void alertView(View view) {
         alertView("", view, true);
     }
-
 
     /**
      * ************************日期选择Dialog*****************************************************************
@@ -450,16 +501,15 @@ public class DialogUtil {
      * @param listener   回调
      */
     public void alertDate(int year, int month, int dayOfMonth, boolean isCancel, DatePickerDialog.OnDateSetListener listener) {
-        if (appAlertDialog == null || !(appAlertDialog instanceof DatePickerDialog)) {
-            appAlertDialog = new DatePickerDialog(mContext, themeResId,
-                    listener, year, month, dayOfMonth);
+        checkContext();
+        mDialog = new WeakReference(new DatePickerDialog(mContext.get(), themeResId,
+                listener, year, month, dayOfMonth));
+        if (mDialog.get() instanceof DatePickerDialog) {
+            DatePickerDialog dialog = (DatePickerDialog) mDialog.get();
+            dialog.updateDate(year, month, dayOfMonth);
+            dialog.setCancelable(isCancel);
         }
-
-        if (appAlertDialog instanceof DatePickerDialog) {
-            ((DatePickerDialog) appAlertDialog).updateDate(year, month, dayOfMonth);
-            appAlertDialog.setCancelable(isCancel);
-        }
-        create(diaLogParams, appAlertDialog);
+        initWindow(mParams, mDialog.get().getWindow());
     }
 
 
@@ -480,166 +530,185 @@ public class DialogUtil {
      */
     public void alertTime(int hourOfDay, int minute, boolean is24HourView,
                           boolean isCancel, TimePickerDialog.OnTimeSetListener listener) {
-        if (appAlertDialog == null || !(appAlertDialog instanceof TimePickerDialog)) {
-            appAlertDialog = new TimePickerDialog(mContext, themeResId, listener,
-                    hourOfDay, minute, is24HourView);
+        checkContext();
+        mDialog = new WeakReference(new TimePickerDialog(mContext.get(), themeResId, listener,
+                hourOfDay, minute, is24HourView));
+        if (mDialog.get() instanceof TimePickerDialog) {
+            TimePickerDialog dialog = (TimePickerDialog) mDialog.get();
+            dialog.updateTime(hourOfDay, minute);
+            dialog.setCancelable(isCancel);
         }
-
-        if (appAlertDialog instanceof TimePickerDialog) {
-            ((TimePickerDialog) appAlertDialog).updateTime(hourOfDay, minute);
-            appAlertDialog.setCancelable(isCancel);
-        }
-        create(diaLogParams, appAlertDialog);
+        initWindow(mParams, mDialog.get().getWindow());
     }
 
     public void alertTime(int hourOfDay, int minute, TimePickerDialog.OnTimeSetListener listener) {
         alertTime(hourOfDay, minute, true, true, listener);
     }
 
-
     /**
-     * 关闭弹窗
+     * 释放上下文
      */
-    public static void dismiss() {
-        if (v7AlertDialog != null) {
-            v7AlertDialog.dismiss();
-        }
-        if (appAlertDialog != null) {
-            appAlertDialog.dismiss();
+    private void releaseContext() {
+        if (mContext != null && mContext.get() != null) {
+            mContext.clear();
+            mContext = null;
         }
     }
 
     /**
-     * 全局统一设置显示，可以控制dialog显示位置
+     * 释放Dialog
      */
-    private void create(DialogParams params, Object dialog) {
-        if (dialog instanceof AlertDialog.Builder) {
-            v7AlertDialog = ((AlertDialog.Builder) dialog).show();
-            initWindow(params, v7AlertDialog.getWindow(), v7AlertDialog);
-        } else if (dialog instanceof android.app.AlertDialog) {
-            ((android.app.AlertDialog) dialog).show();
-            initWindow(params, ((android.app.AlertDialog) dialog).getWindow(), null);
+    private void releaseDialog() {
+        if (mDialog != null && mDialog.get() != null) {
+            mDialog.get().dismiss();
+            mDialog.clear();
+            mDialog = null;
         }
     }
 
     /**
-     * 设置弹窗窗体界面
+     * 创建Dialog时，校验上下文
+     */
+    private void checkContext() {
+        if (mContext.get() == null) {
+            Log.e(TAG, "请检查Context是否已经被回收");
+            return;
+        }
+        //释放资源
+        releaseDialog();
+    }
+
+    /**
+     * 设置Dialog窗口属性
+     * #background
+     * #gravity
+     * #padding
+     * #height
+     * #width
+     * #x,y
+     * #alpha
      *
-     * @param diaLogParams
+     * @param params
      * @param window
-     * @param object
      */
-    private void initWindow(DialogParams diaLogParams, Window window, AlertDialog object) {
+    private void initWindow(Params params, Window window) {
         //设置背景颜色，通常为透明
-        if (diaLogParams.getWindowBackground() != null) {
-            window.setBackgroundDrawable(diaLogParams.getWindowBackground());
+        if (params.getWindowBackground() != null) {
+            window.setBackgroundDrawable(params.getWindowBackground());
         }
         //设置Dialog相对于屏幕的位置
-        window.setGravity(diaLogParams.getGravity());
+        window.setGravity(params.getGravity());
         //设置padding
-        int paddingLeft = diaLogParams.getPaddingLeft() != -1 ? diaLogParams.getPaddingLeft()
+        int paddingLeft = params.getPaddingLeft() != -1 ? params.getPaddingLeft()
                 : window.getDecorView().getPaddingLeft();
-        int paddingTop = diaLogParams.getPaddingTop() != -1 ? diaLogParams.getPaddingTop()
+        int paddingTop = params.getPaddingTop() != -1 ? params.getPaddingTop()
                 : window.getDecorView().getPaddingTop();
-        int paddingRight = diaLogParams.getPaddingRight() != -1 ? diaLogParams.getPaddingRight()
+        int paddingRight = params.getPaddingRight() != -1 ? params.getPaddingRight()
                 : window.getDecorView().getPaddingRight();
-        int paddingBottom = diaLogParams.getPaddingBottom() != -1 ? diaLogParams.getPaddingBottom()
+        int paddingBottom = params.getPaddingBottom() != -1 ? params.getPaddingBottom()
                 : window.getDecorView().getPaddingBottom();
         window.getDecorView().setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
 
         WindowManager.LayoutParams windowParams = window.getAttributes();
         //最大高度
-        if (diaLogParams.isMatchHeight()) {
+        if (params.isMatchHeight()) {
             windowParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-        } else if (diaLogParams.getHeight() > 0) {
-            windowParams.height = diaLogParams.getHeight();
+        } else if (params.getHeight() > 0) {
+            windowParams.height = params.getHeight();
         }
-
         //最大宽度
-        if (diaLogParams.isMatchWidth()) {
+        if (params.isMatchWidth()) {
             windowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        } else if (diaLogParams.getWidth() > 0) {
-            windowParams.width = diaLogParams.getWidth();
+        } else if (params.getWidth() > 0) {
+            windowParams.width = params.getWidth();
         }
-
         /*实例化Window*/
-        windowParams.x = diaLogParams.getPosX();
-        windowParams.y = diaLogParams.getPosY();
-
+        windowParams.x = params.getPosX();
+        windowParams.y = params.getPosY();
         //弹窗布局的alpha值  1.0表示完全不透明，0.0表示没有变暗。
-        windowParams.alpha = diaLogParams.getDialogFrontAlpha();
+        windowParams.alpha = params.getDialogFrontAlpha();
         // 当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。1.0表示完全不透明，0.0表示没有变暗。
-        windowParams.dimAmount = diaLogParams.getDialogBehindAlpha();
-        //屏幕亮度 用来覆盖用户设置的屏幕亮度。表示应用用户设置的屏幕亮度。从0到1调整亮度从暗到最亮发生变化。
-        //layoutParams.screenBrightness = 0.7f;
+        windowParams.dimAmount = params.getDialogBehindAlpha();
+        //设置Window的进出场动画
+//        windowParams.windowAnimations =
         window.setAttributes(windowParams);
         window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
+        //反射设置AlertDialog属性
+        if (mDialog.get() instanceof AlertDialog) {
+            reflexAlert((AlertDialog) mDialog.get(), params, true);
+        }
+    }
+
+
+    /**
+     * 通过反射更改v7包下AlertDialog按钮/字体颜色大小
+     * #不建议使用#
+     *
+     * @param alertDialog
+     * @param params
+     * @param isAvailable true-使用改方法，false-不使用
+     */
+    private void reflexAlert(AlertDialog alertDialog, Params params, boolean isAvailable) {
+        if (alertDialog == null || params == null || !isAvailable) return;
         //通过反射设置字体颜色及大小
         Field mAlert = null;
         try {
-            if (object != null && object instanceof AlertDialog) {
-                mAlert = AlertDialog.class.getDeclaredField("mAlert");
-                mAlert.setAccessible(true);
-                Object mAlertController = null;
-                mAlertController = mAlert.get(object);
-                Field mTitle = mAlertController.getClass().getDeclaredField("mTitleView");
-                Field mMessage = mAlertController.getClass().getDeclaredField("mMessageView");
-                Field mPositive = mAlertController.getClass().getDeclaredField("mButtonPositive");
-                Field mNegative = mAlertController.getClass().getDeclaredField("mButtonNegative");
-                mTitle.setAccessible(true);
-                mMessage.setAccessible(true);
-                mPositive.setAccessible(true);
-                mNegative.setAccessible(true);
+            mAlert = AlertDialog.class.getDeclaredField("mAlert");
+            mAlert.setAccessible(true);
+            Object mAlertController = null;
+            mAlertController = mAlert.get(alertDialog);
+            Field mTitle = mAlertController.getClass().getDeclaredField("mTitleView");
+            Field mMessage = mAlertController.getClass().getDeclaredField("mMessageView");
+            Field mPositive = mAlertController.getClass().getDeclaredField("mButtonPositive");
+            Field mNegative = mAlertController.getClass().getDeclaredField("mButtonNegative");
+            mTitle.setAccessible(true);
+            mMessage.setAccessible(true);
+            mPositive.setAccessible(true);
+            mNegative.setAccessible(true);
+            if (mTitle != null) {
+                TextView titleView = (TextView) mTitle.get(mAlertController);
+                if (params.getTitleColor() != 0)
+                    titleView.setTextColor(params.getTitleColor());
+                if (params.getTitleSize() != 0)
+                    titleView.setTextSize(params.getTitleSize());
+            }
 
-                if (mTitle != null) {
-                    TextView titleView = (TextView) mTitle.get(mAlertController);
-                    if (diaLogParams.getTitleColor() != 0)
-                        titleView.setTextColor(diaLogParams.getTitleColor());
-                    if (diaLogParams.getTitleSize() != 0)
-                        titleView.setTextSize(diaLogParams.getTitleSize());
-                }
+            if (mMessage != null) {
+                TextView tvMessage = (TextView) mMessage.get(mAlertController);
+                if (params.getContentColor() != 0)
+                    tvMessage.setTextColor(params.getContentColor());
+                if (params.getContentSize() != 0)
+                    tvMessage.setTextSize(params.getContentSize());
+            }
 
-                if (mMessage != null) {
-                    TextView tvMessage = (TextView) mMessage.get(mAlertController);
-                    if (diaLogParams.getContentColor() != 0)
-                        tvMessage.setTextColor(diaLogParams.getContentColor());
-                    if (diaLogParams.getContentSize() != 0)
-                        tvMessage.setTextSize(diaLogParams.getContentSize());
-                }
-
-                if (mPositive != null) {
-                    Button btnPositive = (Button) mPositive.get(mAlertController);
-                    if (diaLogParams.getPositiveColor() != 0)
-                        btnPositive.setTextColor(diaLogParams.getPositiveColor());
-                    if (diaLogParams.getPositiveSize() != 0)
-                        btnPositive.setTextSize(diaLogParams.getPositiveSize());
-                }
-                if (mNegative != null) {
-                    Button btnNegative = (Button) mNegative.get(mAlertController);
-                    if (diaLogParams.getNegativeColor() != 0)
-                        btnNegative.setTextColor(diaLogParams.getNegativeColor());
-                    if (diaLogParams.getNegativeSize() != 0)
-                        btnNegative.setTextSize(diaLogParams.getNegativeSize());
-                }
+            if (mPositive != null) {
+                Button btnPositive = (Button) mPositive.get(mAlertController);
+                if (params.getPositiveColor() != 0)
+                    btnPositive.setTextColor(params.getPositiveColor());
+                if (params.getPositiveSize() != 0)
+                    btnPositive.setTextSize(params.getPositiveSize());
+            }
+            if (mNegative != null) {
+                Button btnNegative = (Button) mNegative.get(mAlertController);
+                if (params.getNegativeColor() != 0)
+                    btnNegative.setTextColor(params.getNegativeColor());
+                if (params.getNegativeSize() != 0)
+                    btnNegative.setTextSize(params.getNegativeSize());
             }
         } catch (NoSuchFieldException e) {
             Log.e(TAG, "设置失败：" + e.getMessage());
         } catch (IllegalAccessException e) {
             Log.e(TAG, "设置失败：" + e.getMessage());
         }
-
-        //设置Window的进出场动画
-//        windowParams.windowAnimations =
     }
-
 
     /**
      * Created by YuanYe on 2018/1/15.
      * AlertDialog 简单统一配置文件
      */
 
-    public static class DialogParams {
+    public static class Params {
 
         private int gravity;
         private Drawable windowBackground;
@@ -676,7 +745,7 @@ public class DialogUtil {
         int negativeColor;
         private int negativeSize;
 
-        private DialogParams(DialogParams.Builder builder) {
+        private Params(Params.Builder builder) {
             gravity = builder.gravity;
 
             windowBackground = builder.windowBackground;
@@ -840,133 +909,127 @@ public class DialogUtil {
             public Builder() {
             }
 
-            public DialogParams.Builder gravity(int val) {
+            public Params.Builder gravity(int val) {
                 gravity = val;
                 return this;
             }
 
-            public DialogParams.Builder windowBackground(GradientDrawable val) {
+            public Params.Builder windowBackground(GradientDrawable val) {
                 windowBackground = val;
                 return this;
             }
 
-            public DialogParams.Builder windowBackground(@ColorInt int val) {
+            public Params.Builder windowBackground(@ColorInt int val) {
                 windowBackground = new GradientDrawable();
                 windowBackground.setColor(val);
                 return this;
             }
 
-            public DialogParams.Builder dialogBehindAlpha(float val) {
+            public Params.Builder dialogBehindAlpha(float val) {
                 dialogBehindAlpha = val;
                 return this;
             }
 
-            public DialogParams.Builder dialogFrontAlpha(float val) {
+            public Params.Builder dialogFrontAlpha(float val) {
                 dialogFrontAlpha = val;
                 return this;
             }
 
-            public DialogParams.Builder matchWidth(boolean val) {
+            public Params.Builder matchWidth(boolean val) {
                 matchWidth = val;
                 return this;
             }
 
-            public DialogParams.Builder matchHeight(boolean val) {
+            public Params.Builder matchHeight(boolean val) {
                 matchHeight = val;
                 return this;
             }
 
-            public DialogParams.Builder paddingTop(int val) {
+            public Params.Builder paddingTop(int val) {
                 paddingTop = val;
                 return this;
             }
 
-            public DialogParams.Builder paddingRight(int val) {
+            public Params.Builder paddingRight(int val) {
                 paddingRight = val;
                 return this;
             }
 
-            public DialogParams.Builder paddingLeft(int val) {
+            public Params.Builder paddingLeft(int val) {
                 paddingLeft = val;
                 return this;
             }
 
-            public DialogParams.Builder paddingBottom(int val) {
+            public Params.Builder paddingBottom(int val) {
                 paddingBottom = val;
                 return this;
             }
 
-            public DialogParams.Builder width(int val) {
+            public Params.Builder width(int val) {
                 width = val;
                 return this;
             }
 
-            public DialogParams.Builder height(int val) {
+            public Params.Builder height(int val) {
                 height = val;
                 return this;
             }
 
-            public DialogParams.Builder posX(int val) {
+            public Params.Builder posX(int val) {
                 posX = val;
                 return this;
             }
 
-            public DialogParams.Builder posY(int val) {
+            public Params.Builder posY(int val) {
                 posY = val;
                 return this;
             }
 
-            public DialogParams.Builder titleColor(int val) {
+            public Params.Builder titleColor(int val) {
                 titleColor = val;
                 return this;
             }
 
-            public DialogParams.Builder titleSize(int val) {
+            public Params.Builder titleSize(int val) {
                 titleSize = val;
                 return this;
             }
 
-            public DialogParams.Builder contentColor(int val) {
+            public Params.Builder contentColor(int val) {
                 contentColor = val;
                 return this;
             }
 
-            public DialogParams.Builder contentSize(int val) {
+            public Params.Builder contentSize(int val) {
                 contentSize = val;
                 return this;
             }
 
-            public DialogParams.Builder positiveColor(int val) {
+            public Params.Builder positiveColor(int val) {
                 positiveColor = val;
                 return this;
             }
 
-            public DialogParams.Builder positiveSize(int val) {
+            public Params.Builder positiveSize(int val) {
                 positiveSize = val;
                 return this;
             }
 
-            public DialogParams.Builder negativeColor(int val) {
+            public Params.Builder negativeColor(int val) {
                 negativeColor = val;
                 return this;
             }
 
-            public DialogParams.Builder negativeSize(int val) {
+            public Params.Builder negativeSize(int val) {
                 negativeSize = val;
                 return this;
             }
 
-            public DialogParams build() {
-                return new DialogParams(this);
+            public Params build() {
+                return new Params(this);
             }
         }
     }
-
-
-    public interface OnMultiListener {
-        <T extends MultiItem> void onClick(DialogInterface dialog, List<T> selects);
-    }
-
 
     public static abstract class MultiItem {
 
@@ -1006,6 +1069,10 @@ public class DialogUtil {
         public final void setSelect(boolean isSelect) {
             this.isSelect = isSelect;
         }
+    }
+
+    public interface OnMultiListener {
+        <T extends MultiItem> void onClick(DialogInterface dialog, List<T> selects);
     }
 
 }

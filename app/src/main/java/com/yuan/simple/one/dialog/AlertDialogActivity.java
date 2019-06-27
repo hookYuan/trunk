@@ -64,7 +64,7 @@ public class AlertDialogActivity extends ListActivity {
                 helper.alertText("这是一个简单提示");
                 break;
             case 2:
-                DialogUtil.DialogParams params1 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params1 = new DialogUtil.Params.Builder()
                         .matchHeight(false)
                         .matchWidth(true)
                         .paddingTop(0)
@@ -74,56 +74,49 @@ public class AlertDialogActivity extends ListActivity {
                         .gravity(Gravity.BOTTOM)
                         .windowBackground(getColor2(R.color.white))
                         .build();
-                helper.setStyle(params1);
-                helper.alertText("最大宽度的Dialog");
+                DialogUtil.create(mContext).alertText("最大宽度的Dialog");
                 break;
             case 3:
-                DialogUtil.DialogParams params2 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params2 = new DialogUtil.Params.Builder()
                         .gravity(Gravity.BOTTOM)
                         .build();
-                helper.setStyle(params2);
                 helper.alertText("Dialog居下显示");
                 break;
             case 4:
-                DialogUtil.DialogParams params3 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params3 = new DialogUtil.Params.Builder()
                         .windowBackground(getColor2(R.color.colorPrimary))
                         .build();
-                DialogUtil.setStyle(params3);
                 DialogUtil.create(this).alertText("Dialog背景透明");
                 break;
             case 5:
-                DialogUtil.DialogParams params4 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params4 = new DialogUtil.Params.Builder()
                         .dialogBehindAlpha(0.8f)
                         .build();
-                DialogUtil.setStyle(params4);
                 DialogUtil.create(this).alertText("灰色背景透明度");
                 break;
             case 6:
-                DialogUtil.DialogParams params5 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params5 = new DialogUtil.Params.Builder()
                         .dialogFrontAlpha(0.5f)
                         .build();
-                DialogUtil.setStyle(params5);
                 DialogUtil.create(this).alertText("前景背景透明度");
                 break;
             case 7:
-                DialogUtil.DialogParams params6 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params6 = new DialogUtil.Params.Builder()
                         .titleColor(getColor2(R.color.colorPrimary))
                         .titleSize(20)
                         .contentSize(16)
                         .positiveColor(getColor2(R.color.colorPrimary))
                         .build();
-                DialogUtil.setStyle(params6);
                 DialogUtil.create(this).alertText("字体颜色大小");
                 break;
             case 8:
                 View dialogView = Views.inflate(this, R.layout.my_dialog_view);
 
-                DialogUtil.DialogParams params7 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params7 = new DialogUtil.Params.Builder()
                         .height(Kits.Dimens.dpToPxInt(this, 200))
                         .width(Kits.Dimens.dpToPxInt(this, 250))
                         .windowBackground(getColor2(R.color.transparent))
                         .build();
-                DialogUtil.setStyle(params7);
                 DialogUtil.create(this).alertView(dialogView);
                 break;
             case 9:

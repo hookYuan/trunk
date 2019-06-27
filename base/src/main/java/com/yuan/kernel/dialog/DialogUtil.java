@@ -96,9 +96,9 @@ public class DialogUtil {
      *
      * @param params
      */
-    public void setParams(Params params) {
+    public static void setParams(Params params) {
         if (params != null) {
-            mParams = params;
+            DialogUtilInstance.util.mParams = params;
         }
     }
 
@@ -107,10 +107,11 @@ public class DialogUtil {
      *
      * @param current
      */
-    public void setProgressCurrent(int current) {
-        if (mDialog != null && mDialog.get() != null &&
-                mDialog.get() instanceof ProgressDialog) {
-            ProgressDialog dialog = (ProgressDialog) mDialog.get();
+    public static void setProgressCurrent(int current) {
+        if (DialogUtilInstance.util.mDialog != null &&
+                DialogUtilInstance.util.mDialog.get() != null &&
+                DialogUtilInstance.util.mDialog.get() instanceof ProgressDialog) {
+            ProgressDialog dialog = (ProgressDialog) DialogUtilInstance.util.mDialog.get();
             dialog.setProgress(current);
         } else {
             Log.e(TAG, "设置进度失败");
@@ -121,7 +122,7 @@ public class DialogUtil {
      * 关闭弹窗,释放资源
      * <p>
      */
-    public void destroy() {
+    public static void destroy() {
         releaseDialog();
         releaseContext();
     }
@@ -132,9 +133,10 @@ public class DialogUtil {
      *
      * @return 是否隐藏成功
      */
-    public boolean dismiss() {
-        if (mDialog != null && mDialog.get() != null) {
-            mDialog.get().dismiss();
+    public static boolean dismiss() {
+        if (DialogUtilInstance.util.mDialog != null &&
+                DialogUtilInstance.util.mDialog.get() != null) {
+            DialogUtilInstance.util.mDialog.get().dismiss();
             return true;
         }
         return false;
@@ -146,9 +148,9 @@ public class DialogUtil {
      *
      * @return 是否显示成功
      */
-    public boolean show() {
-        if (mDialog != null && mDialog.get() != null) {
-            mDialog.get().show();
+    public static boolean show() {
+        if (DialogUtilInstance.util.mDialog != null && DialogUtilInstance.util.mDialog.get() != null) {
+            DialogUtilInstance.util.mDialog.get().show();
             return true;
         }
         return false;
@@ -161,9 +163,9 @@ public class DialogUtil {
     /**
      * @param title            标题
      * @param message          正文
-     * @param POSITIVE_TEXT     右侧按钮
+     * @param POSITIVE_TEXT    右侧按钮
      * @param neutralText      中间按钮
-     * @param NEGATIVE_TEXT     左侧按钮
+     * @param NEGATIVE_TEXT    左侧按钮
      * @param positiveListener
      * @param neutralListener
      * @param negativeListener
@@ -191,6 +193,7 @@ public class DialogUtil {
         // 显示
         mDialog = new WeakReference(builder.create());
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     public void alertText(String message, boolean isCancel, DialogInterface.OnClickListener positiveListener) {
@@ -255,6 +258,7 @@ public class DialogUtil {
         // 显示
         mDialog = new WeakReference(builder.create());
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     public void alertList(String title, List<String> mData, boolean isCancel, DialogInterface.OnClickListener listener) {
@@ -285,12 +289,12 @@ public class DialogUtil {
     private int defPos = 0;
 
     /**
-     * @param title        标题
-     * @param mData        数据源
+     * @param title         标题
+     * @param mData         数据源
      * @param POSITIVE_TEXT 确定按钮
-     * @param defPosition  默认选中位置
-     * @param isCancel     是否点击外部取消
-     * @param listener     监听
+     * @param defPosition   默认选中位置
+     * @param isCancel      是否点击外部取消
+     * @param listener      监听
      */
     public void alertSingle(String title, String[] mData, final String POSITIVE_TEXT, int defPosition, boolean isCancel, final DialogInterface.OnClickListener listener) {
         checkContext();
@@ -317,6 +321,7 @@ public class DialogUtil {
         // 显示
         mDialog = new WeakReference(builder.create());
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     public void alertSingle(String title, List<String> mData, int defPosition, final DialogInterface.OnClickListener listener) {
@@ -388,6 +393,7 @@ public class DialogUtil {
         // 显示
         mDialog = new WeakReference(builder.create());
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     public <T extends MultiItem> void alertMulti(String title, T[] mData, OnMultiListener listener) {
@@ -426,6 +432,7 @@ public class DialogUtil {
         mDialog.get().setCancelable(isCancel);
         // 显示
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     /**
@@ -463,6 +470,7 @@ public class DialogUtil {
         mDialog.get().setCancelable(isCancel);
         // 显示
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     /**
@@ -484,6 +492,7 @@ public class DialogUtil {
         builder.setCancelable(isCancel);
         mDialog = new WeakReference(builder.create());
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     public void alertView(View view) {
@@ -510,6 +519,7 @@ public class DialogUtil {
             dialog.setCancelable(isCancel);
         }
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
 
@@ -539,6 +549,7 @@ public class DialogUtil {
             dialog.setCancelable(isCancel);
         }
         initWindow(mParams, mDialog.get().getWindow());
+        show();
     }
 
     public void alertTime(int hourOfDay, int minute, TimePickerDialog.OnTimeSetListener listener) {
@@ -548,21 +559,23 @@ public class DialogUtil {
     /**
      * 释放上下文
      */
-    private void releaseContext() {
-        if (mContext != null && mContext.get() != null) {
-            mContext.clear();
-            mContext = null;
+    private static void releaseContext() {
+        if (DialogUtilInstance.util.mContext != null &&
+                DialogUtilInstance.util.mContext.get() != null) {
+            DialogUtilInstance.util.mContext.clear();
+            DialogUtilInstance.util.mContext = null;
         }
     }
 
     /**
      * 释放Dialog
      */
-    private void releaseDialog() {
-        if (mDialog != null && mDialog.get() != null) {
-            mDialog.get().dismiss();
-            mDialog.clear();
-            mDialog = null;
+    private static void releaseDialog() {
+        if (DialogUtilInstance.util.mDialog != null &&
+                DialogUtilInstance.util.mDialog.get() != null) {
+            DialogUtilInstance.util.mDialog.get().dismiss();
+            DialogUtilInstance.util.mDialog.clear();
+            DialogUtilInstance.util.mDialog = null;
         }
     }
 

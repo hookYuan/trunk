@@ -632,10 +632,9 @@ public class DialogUtil {
         // 当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。1.0表示完全不透明，0.0表示没有变暗。
         windowParams.dimAmount = params.getDialogBehindAlpha();
         //设置Window的进出场动画
-//        windowParams.windowAnimations =
+        windowParams.windowAnimations = params.windowAnimations;
         window.setAttributes(windowParams);
         window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
         //反射设置AlertDialog属性
         if (mDialog.get() instanceof AlertDialog) {
             reflexAlert((AlertDialog) mDialog.get(), params, true);
@@ -707,9 +706,8 @@ public class DialogUtil {
 
     /**
      * Created by YuanYe on 2018/1/15.
-     * AlertDialog 简单统一配置文件
+     * Dialog 简单统一配置文件
      */
-
     public static class Params {
 
         private int gravity;
@@ -747,6 +745,8 @@ public class DialogUtil {
         int negativeColor;
         private int negativeSize;
 
+        private int windowAnimations;
+
         private Params(Params.Builder builder) {
             gravity = builder.gravity;
 
@@ -761,6 +761,7 @@ public class DialogUtil {
             paddingRight = builder.paddingRight;
             paddingTop = builder.paddingTop;
             paddingBottom = builder.paddingBottom;
+            windowAnimations = builder.windowAnimations;
 
             width = builder.width;
             height = builder.height;
@@ -869,6 +870,10 @@ public class DialogUtil {
             return negativeSize;
         }
 
+        public int getWindowAnimations() {
+            return windowAnimations;
+        }
+
         public static final class Builder {
 
             private int gravity = Gravity.CENTER;//相对位置
@@ -907,6 +912,8 @@ public class DialogUtil {
             private @ColorInt
             int negativeColor = 0; //取消按钮颜色
             private int negativeSize = 0; //取消按钮字体大小
+
+            private int windowAnimations;
 
             public Builder() {
             }
@@ -1024,6 +1031,11 @@ public class DialogUtil {
 
             public Params.Builder negativeSize(int val) {
                 negativeSize = val;
+                return this;
+            }
+
+            public Params.Builder windowAnimations(int val) {
+                windowAnimations = val;
                 return this;
             }
 

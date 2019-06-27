@@ -38,26 +38,26 @@ public class HttpUtil implements IHttpRequest {
 
     @Override
     public IHttpRequest get(String url) {
-        return null;
+        return mRequest.get(url);
     }
 
     @Override
     public IHttpRequest put(String url) {
-        return null;
+        return mRequest.put(url);
     }
 
     @Override
     public IHttpRequest delete(String url) {
-        return null;
+        return mRequest.delete(url);
     }
 
     @Override
     public IHttpRequest trace(String url) {
-        return null;
+        return mRequest.trace(url);
     }
 
     @Override
     public IHttpRequest post(String url, Map params) {
-        return null;
+        return mRequest.post(url, params);
     }
 }

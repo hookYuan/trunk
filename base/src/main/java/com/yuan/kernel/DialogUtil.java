@@ -913,7 +913,7 @@ public class DialogUtil {
             int negativeColor = 0; //取消按钮颜色
             private int negativeSize = 0; //取消按钮字体大小
 
-            private int windowAnimations;
+            private int windowAnimations; //动画文件
 
             public Builder() {
             }

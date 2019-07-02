@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.GridView;
 
-import com.yuan.kernel.mvp.BaseActivity;
-import com.yuan.kernel.ListAdapter;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.list.ListAdapter;
 import com.yuan.simple.R;
 
 import java.util.ArrayList;

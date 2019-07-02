@@ -1,6 +1,6 @@
 package com.yuan.simple.one.multi;
 
-import com.yuan.tools_extend.adapter.ExpandableItem;
+import yuan.tools_extend.adapter.ExpandableItem;
 
 /**
  * @author yuanye

@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.mvp.BaseActivity;
-import com.yuan.kernel.RLVAdapter;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.list.RLVAdapter;
 import com.yuan.simple.R;
 
 /**

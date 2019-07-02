@@ -6,11 +6,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.yuan.kernel.mvp.BaseActivity;
-import com.yuan.kernel.GridDivider;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.list.DecorationDivider;
 import com.yuan.simple.R;
-import com.yuan.tools_extend.adapter.MultiAdapter;
-import com.yuan.widget.title.TitleBar;
+import yuan.tools_extend.adapter.MultiAdapter;
+import yuan.widget.title.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,13 +67,13 @@ public class MultiActivity extends BaseActivity {
 
                     rlvList.setLayoutManager(new GridLayoutManager(mContext, 2));
                     rlvList.setAdapter(getAdapter(MultiAdapter.MultiBean.TYPE_NORMAL, 1));
-                    rlvList.addItemDecoration(new GridDivider(mContext));
+                    rlvList.addItemDecoration(new DecorationDivider(mContext));
                     titleBar.setRightText("样式一");
                 } else {
                     for (int i = 0; i < rlvList.getItemDecorationCount(); i++) {
                         rlvList.removeItemDecorationAt(i);
                     }
-                    rlvList.addItemDecoration(new GridDivider(mContext));
+                    rlvList.addItemDecoration(new DecorationDivider(mContext));
 
                     rlvList.setLayoutManager(new GridLayoutManager(mContext, 1));
                     rlvList.setAdapter(getAdapter(MultiAdapter.MultiBean.TYPE_FLOAT, 1));

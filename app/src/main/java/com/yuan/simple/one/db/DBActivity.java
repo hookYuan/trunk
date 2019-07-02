@@ -5,11 +5,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.ToastUtil;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.ToastUtil;
 import com.yuan.simple.R;
 import com.yuan.simple.tool.ListActivity;
-import com.yuan.tools_independ.database.DBUtil;
+import yuan.tools_independ.database.DBUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,13 +9,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.yuan.kernel.dialog.DialogUtil;
-import com.yuan.kernel.mvp.BaseActivity;
-import com.yuan.kernel.RouteUtil;
-import com.yuan.kernel.Views;
+import yuan.core.dialog.DialogUtil;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.tool.RouteUtil;
+import yuan.core.tool.Views;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
-import com.yuan.simple.two.ui.TwoFragment;
 
 public class MainActivity extends BaseActivity {
 

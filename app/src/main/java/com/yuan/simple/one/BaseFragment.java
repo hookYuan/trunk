@@ -9,14 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.RouteUtil;
-import com.yuan.kernel.ToastUtil;
-import com.yuan.kernel.function.CallbackManager;
-import com.yuan.kernel.function.CallbackNoParamNoResult;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.RouteUtil;
+import yuan.core.tool.ToastUtil;
+import yuan.core.function.CallbackManager;
+import yuan.core.function.CallbackNoParamNoResult;
 import com.yuan.simple.R;
 import com.yuan.simple.one.db.DBActivity;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
@@ -29,7 +28,7 @@ import com.yuan.simple.one.select.SelectActivity;
 import com.yuan.simple.one.sort.SortActivity;
 import com.yuan.simple.one.toolbar.TitleBarActivity;
 import com.yuan.simple.tool.ListFragment;
-import com.yuan.tools_independ.common.Kits;
+import yuan.core.tool.Kits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class BaseFragment extends ListFragment {
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
         rlvList.setLayoutManager(new LinearLayoutManager(mContext));
-        rlvList.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
+        rlvList.addItemDecoration(new DecorationDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
                 ContextCompat.getColor(mContext, R.color.colorDivider)));
 
 //        getTitleBar().setTitleText("基础功能")

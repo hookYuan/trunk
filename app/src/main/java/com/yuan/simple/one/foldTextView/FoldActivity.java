@@ -6,13 +6,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.RLVAdapter;
+import yuan.core.list.RLVAdapter;
 import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
-import com.yuan.widget.fold.FoldTextView;
+import yuan.widget.fold.FoldTextView;
 
 import java.util.ArrayList;
 import java.util.List;

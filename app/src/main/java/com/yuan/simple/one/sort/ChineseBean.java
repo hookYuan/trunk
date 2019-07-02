@@ -1,7 +1,7 @@
 package com.yuan.simple.one.sort;
 
 
-import com.yuan.tools_independ.sort.IChineseSort;
+import yuan.core.sort.IChineseSort;
 
 /**
  * Created by YuanYe on 2018/8/11.

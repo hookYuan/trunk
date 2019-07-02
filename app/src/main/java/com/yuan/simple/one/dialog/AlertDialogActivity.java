@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.yuan.kernel.DialogUtil;
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.ToastUtil;
-import com.yuan.kernel.Views;
+import yuan.core.dialog.DialogUtil;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.ToastUtil;
+import yuan.core.tool.Views;
 import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
-import com.yuan.tools_independ.common.Kits;
+import yuan.core.tool.Kits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class AlertDialogActivity extends ListActivity {
                 .setLeftIcon(getDrawable2(R.drawable.ic_base_back_white))
                 .setBackgroundColor(getColor2(R.color.colorPrimary));
         rlvList.setLayoutManager(new LinearLayoutManager(this));
-        rlvList.addItemDecoration(new GridDivider(this));
+        rlvList.addItemDecoration(new DecorationDivider(this));
         helper = DialogUtil.create(mContext);
     }
 

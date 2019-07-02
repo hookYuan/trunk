@@ -2,10 +2,10 @@ package com.yuan.simple.tool;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.yuan.kernel.mvp.Presenter;
+import yuan.core.mvp.Presenter;
 import com.yuan.simple.R;
-import com.yuan.ui_extend.RLVFragment;
-import com.yuan.widget.title.TitleBar;
+import yuan.ui_extend.RLVFragment;
+import yuan.widget.title.TitleBar;
 
 
 public abstract class ListFragment<T extends Presenter> extends RLVFragment<T> {

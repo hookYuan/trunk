@@ -3,10 +3,10 @@ package com.yuan.simple.three.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yuan.kernel.Views;
+import yuan.core.tool.Views;
 import com.yuan.simple.R;
 import com.yuan.simple.one.BaseFragment;
-import com.yuan.widget.title.TitleBar;
+import yuan.widget.title.TitleBar;
 
 /**
  * Created by YuanYe on 2018/4/13.

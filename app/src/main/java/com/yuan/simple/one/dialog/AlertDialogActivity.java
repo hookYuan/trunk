@@ -14,12 +14,15 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import yuan.core.dialog.DialogUtil;
+import yuan.core.function.CallbackManager;
 import yuan.core.list.DecorationDivider;
 import yuan.core.list.RLVAdapter;
 import yuan.core.tool.ToastUtil;
 import yuan.core.tool.Views;
+
 import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
+
 import yuan.core.tool.Kits;
 
 import java.util.ArrayList;
@@ -74,31 +77,32 @@ public class AlertDialogActivity extends ListActivity {
                         .gravity(Gravity.BOTTOM)
                         .windowBackground(getColor2(R.color.white))
                         .build();
-                DialogUtil.create(mContext).alertText("最大宽度的Dialog");
+                DialogUtil.create(mContext, params1).alertText("最大宽度的Dialog");
                 break;
             case 3:
                 DialogUtil.Params params2 = new DialogUtil.Params.Builder()
                         .gravity(Gravity.BOTTOM)
                         .build();
-                helper.alertText("Dialog居下显示");
+                DialogUtil.create(mContext, params2).alertText("Dialog居下显示");
                 break;
             case 4:
                 DialogUtil.Params params3 = new DialogUtil.Params.Builder()
                         .windowBackground(getColor2(R.color.colorPrimary))
                         .build();
-                DialogUtil.create(this).alertText("Dialog背景透明");
+                DialogUtil.create(this, params3)
+                        .alertText("Dialog背景透明");
                 break;
             case 5:
                 DialogUtil.Params params4 = new DialogUtil.Params.Builder()
                         .dialogBehindAlpha(0.8f)
                         .build();
-                DialogUtil.create(this).alertText("灰色背景透明度");
+                DialogUtil.create(this, params4).alertText("灰色背景透明度");
                 break;
             case 6:
                 DialogUtil.Params params5 = new DialogUtil.Params.Builder()
                         .dialogFrontAlpha(0.5f)
                         .build();
-                DialogUtil.create(this).alertText("前景背景透明度");
+                DialogUtil.create(this, params5).alertText("前景背景透明度");
                 break;
             case 7:
                 DialogUtil.Params params6 = new DialogUtil.Params.Builder()
@@ -107,7 +111,7 @@ public class AlertDialogActivity extends ListActivity {
                         .contentSize(16)
                         .positiveColor(getColor2(R.color.colorPrimary))
                         .build();
-                DialogUtil.create(this).alertText("字体颜色大小");
+                DialogUtil.create(this, params6).alertText("字体颜色大小");
                 break;
             case 8:
                 View dialogView = Views.inflate(this, R.layout.my_dialog_view);
@@ -117,7 +121,7 @@ public class AlertDialogActivity extends ListActivity {
                         .width(Kits.Dimens.dpToPxInt(this, 250))
                         .windowBackground(getColor2(R.color.transparent))
                         .build();
-                DialogUtil.create(this).alertView(dialogView);
+                DialogUtil.create(this, params7).alertView(dialogView);
                 break;
             case 9:
                 helper.alertDate(2019, 4, 23, new DatePickerDialog.OnDateSetListener() {
@@ -208,6 +212,14 @@ public class AlertDialogActivity extends ListActivity {
             case 16:
                 DialogUtil.dismiss();
                 break;
+            case 17:
+                DialogUtil.Params params17 = new DialogUtil.Params.Builder()
+                        .windowAnimations(R.anim.dialog_in)
+                        .build();
+                DialogUtil.create(this, params17).alertText("动画弹窗");
+                break;
+            case 18:
+                break;
 
         }
     }
@@ -231,6 +243,7 @@ public class AlertDialogActivity extends ListActivity {
         mData.add(new DialogBean("多选弹窗", 14));
         mData.add(new DialogBean("列表弹窗", 15));
         mData.add(new DialogBean("取消弹窗", 16));
+        mData.add(new DialogBean("平移动画", 17));
         return mData;
     }
 

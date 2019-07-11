@@ -17,6 +17,7 @@ import yuan.core.tool.ToastUtil;
 import yuan.core.function.CallbackManager;
 import yuan.core.function.CallbackNoParamNoResult;
 import com.yuan.simple.R;
+import com.yuan.simple.one.callback.CallbackActivity;
 import com.yuan.simple.one.db.DBActivity;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;
@@ -71,13 +72,6 @@ public class BaseFragment extends ListFragment {
 //
 //                    }
 //                });
-        CallbackManager.get().addCallback("123",
-                new CallbackNoParamNoResult() {
-                    @Override
-                    public void callback() {
-                        ToastUtil.showShort(mContext, "返回了");
-                    }
-                });
     }
 
     @Override
@@ -108,6 +102,7 @@ public class BaseFragment extends ListFragment {
         mData.add(new OneListBean("multiAdapter", MultiActivity.class));
         mData.add(new OneListBean("DBUtil", DBActivity.class));
         mData.add(new OneListBean("SelectUtil", SelectActivity.class));
+        mData.add(new OneListBean("CallbackManager", CallbackActivity.class));
         return mData;
     }
 

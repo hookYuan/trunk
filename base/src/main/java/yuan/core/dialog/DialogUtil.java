@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.AnimRes;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -16,6 +17,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,6 +31,10 @@ import java.util.List;
 /**
  * 描述：对v7包下的AlertDialog进行简单封装，方便使用
  * 整体风格采用Material原生风格
+ * <p>
+ * Dialog根布局是一个PhoneWindow
+ * <p>
+ * DialogUtil采用单例模式，属性设置时需要注意
  *
  * @author yuanye
  * @modify 2019/6/27 解决Context容易引起的内存泄露,使用单例节约内存
@@ -643,9 +650,12 @@ public class DialogUtil {
         // 当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。1.0表示完全不透明，0.0表示没有变暗。
         windowParams.dimAmount = params.getDialogBehindAlpha();
         //设置Window的进出场动画
-//        windowParams.windowAnimations =
+        windowParams.windowAnimations = params.getWindowAnimations();
+        windowParams.rotationAnimation = params.getRotationAnimation();
+
         window.setAttributes(windowParams);
         window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        window.setWindowAnimations(params.getWindowAnimations());
 
         //反射设置AlertDialog属性
         if (mDialog.get() instanceof AlertDialog) {
@@ -679,35 +689,49 @@ public class DialogUtil {
             mMessage.setAccessible(true);
             mPositive.setAccessible(true);
             mNegative.setAccessible(true);
+
+            //设置title
             if (mTitle != null) {
                 TextView titleView = (TextView) mTitle.get(mAlertController);
-                if (params.getTitleColor() != 0)
-                    titleView.setTextColor(params.getTitleColor());
-                if (params.getTitleSize() != 0)
-                    titleView.setTextSize(params.getTitleSize());
+                if (titleView != null) {
+                    if (params.getTitleColor() != 0)
+                        titleView.setTextColor(params.getTitleColor());
+                    if (params.getTitleSize() != 0)
+                        titleView.setTextSize(params.getTitleSize());
+                }
             }
 
+            //设置Message
             if (mMessage != null) {
                 TextView tvMessage = (TextView) mMessage.get(mAlertController);
-                if (params.getContentColor() != 0)
-                    tvMessage.setTextColor(params.getContentColor());
-                if (params.getContentSize() != 0)
-                    tvMessage.setTextSize(params.getContentSize());
+                if (tvMessage != null) {
+                    if (params.getContentColor() != 0)
+                        tvMessage.setTextColor(params.getContentColor());
+                    if (params.getContentSize() != 0)
+                        tvMessage.setTextSize(params.getContentSize());
+                }
             }
 
+            //设置 positive(左侧)按钮
             if (mPositive != null) {
                 Button btnPositive = (Button) mPositive.get(mAlertController);
-                if (params.getPositiveColor() != 0)
-                    btnPositive.setTextColor(params.getPositiveColor());
-                if (params.getPositiveSize() != 0)
-                    btnPositive.setTextSize(params.getPositiveSize());
+                if (btnPositive != null) {
+                    if (params.getPositiveColor() != 0)
+                        btnPositive.setTextColor(params.getPositiveColor());
+                    if (params.getPositiveSize() != 0)
+                        btnPositive.setTextSize(params.getPositiveSize());
+                }
             }
+
+            //设置 negative(右侧)按钮
             if (mNegative != null) {
                 Button btnNegative = (Button) mNegative.get(mAlertController);
-                if (params.getNegativeColor() != 0)
-                    btnNegative.setTextColor(params.getNegativeColor());
-                if (params.getNegativeSize() != 0)
-                    btnNegative.setTextSize(params.getNegativeSize());
+                if (btnNegative != null) {
+                    if (params.getNegativeColor() != 0)
+                        btnNegative.setTextColor(params.getNegativeColor());
+                    if (params.getNegativeSize() != 0)
+                        btnNegative.setTextSize(params.getNegativeSize());
+                }
             }
         } catch (NoSuchFieldException e) {
             Log.e(TAG, "设置失败：" + e.getMessage());
@@ -758,6 +782,11 @@ public class DialogUtil {
         int negativeColor;
         private int negativeSize;
 
+        private @AnimRes
+        int rotationAnimation;
+        private @AnimRes
+        int windowAnimations;
+
         private Params(Params.Builder builder) {
             gravity = builder.gravity;
 
@@ -790,6 +819,9 @@ public class DialogUtil {
 
             negativeColor = builder.negativeColor;
             negativeSize = builder.negativeSize;
+
+            rotationAnimation = builder.rotationAnimation;
+            windowAnimations = builder.windowAnimations;
         }
 
         public int getGravity() {
@@ -880,17 +912,28 @@ public class DialogUtil {
             return negativeSize;
         }
 
+        public int getRotationAnimation() {
+            return rotationAnimation;
+        }
+
+        public int getWindowAnimations() {
+            return windowAnimations;
+        }
+
         public static final class Builder {
 
-            private int gravity = Gravity.CENTER;//相对位置
-
-            private GradientDrawable windowBackground;//弹窗白色部分背景
-
-            private float dialogBehindAlpha = 0.5f;//弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
-            private float dialogFrontAlpha = 1f;//弹窗白色部分背景透明度，范围0.0-1：透明-不透明
-
-            private boolean matchWidth = false; //最大宽度
-            private boolean matchHeight = false;//最大高度
+            //相对位置
+            private int gravity = Gravity.CENTER;
+            //弹窗白色部分背景
+            private GradientDrawable windowBackground;
+            //弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
+            private float dialogBehindAlpha = 0.5f;
+            //弹窗白色部分背景透明度，范围0.0-1：透明-不透明
+            private float dialogFrontAlpha = 1f;
+            //最大宽度
+            private boolean matchWidth = false;
+            //最大高度
+            private boolean matchHeight = false;
 
             private int paddingLeft = -1;
             private int paddingRight = -1;
@@ -918,6 +961,11 @@ public class DialogUtil {
             private @ColorInt
             int negativeColor = 0; //取消按钮颜色
             private int negativeSize = 0; //取消按钮字体大小
+
+            private @AnimRes
+            int rotationAnimation; //旋转动画
+            private @AnimRes
+            int windowAnimations; //window动画
 
             public Builder() {
             }
@@ -1035,6 +1083,16 @@ public class DialogUtil {
 
             public Params.Builder negativeSize(int val) {
                 negativeSize = val;
+                return this;
+            }
+
+            public Params.Builder rotationAnimation(int val) {
+                rotationAnimation = val;
+                return this;
+            }
+
+            public Params.Builder windowAnimations(int val) {
+                windowAnimations = val;
                 return this;
             }
 

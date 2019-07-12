@@ -1,13 +1,11 @@
 package com.yuan.simple.one.callback;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
 
 import com.yuan.simple.R;
 
-import java.util.logging.Handler;
 
 import yuan.core.function.CallbackManager;
 import yuan.core.function.CallbackNoParamNoResult;
@@ -33,17 +31,17 @@ public class CallbackActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Log.i("yuanye", Activity);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(10000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.i("yuanye", Activity);
+//            }
+//        }).start();
     }
 
     @Override
@@ -66,7 +64,6 @@ public class CallbackActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        LoginManager.getInstance(mContext);
         super.onDestroy();
         CallbackManager.get().remove(this);
     }

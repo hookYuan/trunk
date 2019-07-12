@@ -11,11 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
 /**
@@ -33,6 +36,8 @@ import java.lang.reflect.Field;
  *     blog  : http://blankj.com
  *     time  : 2016/09/29
  *     desc  : utils about sToast
+ *
+ *     2019-07-12 修复Context引起内存泄漏
  * </pre>
  */
 public final class ToastUtil {
@@ -236,8 +241,10 @@ public final class ToastUtil {
             @SuppressLint("ShowToast")
             @Override
             public void run() {
+                if (context == null) return;
+                WeakReference<Context> weakContext = new WeakReference(context);
                 cancel();
-                sToast = Toast.makeText(context, text, duration);
+                sToast = Toast.makeText(weakContext.get(), text, duration);
                 final TextView tvMessage = sToast.getView().findViewById(android.R.id.message);
                 if (sMsgColor != COLOR_DEFAULT) {
                     tvMessage.setTextColor(sMsgColor);
@@ -249,7 +256,7 @@ public final class ToastUtil {
                     sToast.setGravity(sGravity, sXOffset, sYOffset);
                 }
                 setBg(tvMessage);
-                showToast(context);
+                showToast(weakContext.get());
             }
         });
     }
@@ -258,15 +265,17 @@ public final class ToastUtil {
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
+                if (context == null) return;
+                WeakReference<Context> weakContext = new WeakReference(context);
                 cancel();
-                sToast = new Toast(context);
+                sToast = new Toast(weakContext.get());
                 sToast.setView(view);
                 sToast.setDuration(duration);
                 if (sGravity != -1 || sXOffset != -1 || sYOffset != -1) {
                     sToast.setGravity(sGravity, sXOffset, sYOffset);
                 }
                 setBg();
-                showToast(context);
+                showToast(weakContext.get());
             }
         });
     }

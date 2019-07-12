@@ -1,6 +1,6 @@
 package yuan.tools_independ.cache;
 
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.text.TextUtils;
 
 /**

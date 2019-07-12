@@ -1,11 +1,11 @@
 package com.yuan.simple.one;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +13,7 @@ import android.view.ViewGroup;
 import yuan.core.list.DecorationDivider;
 import yuan.core.list.RLVAdapter;
 import yuan.core.tool.RouteUtil;
-import yuan.core.tool.ToastUtil;
-import yuan.core.function.CallbackManager;
-import yuan.core.function.CallbackNoParamNoResult;
+
 import com.yuan.simple.R;
 import com.yuan.simple.one.callback.CallbackActivity;
 import com.yuan.simple.one.db.DBActivity;

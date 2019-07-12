@@ -1,7 +1,7 @@
 package com.yuan.simple.three.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import yuan.core.tool.Views;
 import com.yuan.simple.R;

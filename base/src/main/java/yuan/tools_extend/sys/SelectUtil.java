@@ -12,7 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import yuan.core.dialog.DialogUtil;
 import yuan.core.tool.RouteUtil;

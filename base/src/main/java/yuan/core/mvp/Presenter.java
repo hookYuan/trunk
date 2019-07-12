@@ -85,8 +85,8 @@ public class Presenter<V extends Contract.View> implements Contract.IPresenter {
             return ((Fragment) mView.get()).getActivity();
         }
 
-        if (mView.get() instanceof android.support.v4.app.Fragment) {
-            return ((android.support.v4.app.Fragment) mView.get()).getContext();
+        if (mView.get() instanceof androidx.fragment.app.Fragment) {
+            return ((androidx.fragment.app.Fragment) mView.get()).getContext();
         }
         return null;
     }

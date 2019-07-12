@@ -1,7 +1,7 @@
 package com.yuan.simple.one.toolbar;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import yuan.core.mvp.BaseActivity;
 import yuan.core.function.CallbackManager;
@@ -40,6 +40,5 @@ public class TitleBarActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CallbackManager.get().invoke("123");
     }
 }

@@ -1,6 +1,6 @@
 package com.yuan.simple.tool;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import yuan.core.mvp.Presenter;
 import com.yuan.simple.R;

@@ -3,12 +3,13 @@ package com.yuan.simple;
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.fragment.app.FragmentManager;
 import yuan.core.dialog.DialogUtil;
 import yuan.core.mvp.BaseActivity;
 import yuan.core.tool.RouteUtil;
@@ -48,7 +49,7 @@ public class MainActivity extends BaseActivity {
     public void initData() {
 //        addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
 
-        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
 //        android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
 //        transaction.add(R.id.content,new BaseFragment());
 //        transaction.add(R.id.content,new BaseFragment());

@@ -1,10 +1,13 @@
 package com.yuan.simple.one.callback;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 
 import com.yuan.simple.R;
+
+import java.util.logging.Handler;
 
 import yuan.core.function.CallbackManager;
 import yuan.core.function.CallbackNoParamNoResult;
@@ -21,6 +24,7 @@ import yuan.core.tool.ToastUtil;
  */
 public class CallbackActivity extends BaseActivity {
 
+    private String Activity = "CallbackActivity";
 
     @Override
     public int getLayoutId() {
@@ -29,7 +33,17 @@ public class CallbackActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.i("yuanye", Activity);
+            }
+        }).start();
     }
 
     @Override

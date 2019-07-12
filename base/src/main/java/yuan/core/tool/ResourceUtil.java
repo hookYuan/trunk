@@ -1,8 +1,8 @@
 package yuan.core.tool;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.RawRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

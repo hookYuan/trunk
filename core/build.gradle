@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 apply from: 'novoda.gradle'
 
-ext.support = '28.0.0'
+ext.support = '1.0.0-beta01'
 
 android {
     compileSdkVersion 28
@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //增加对vector文件的支持
         vectorDrawables.useSupportLibrary = true
     }
@@ -49,10 +49,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:$support"
-    implementation "com.android.support:recyclerview-v7:$support"
-    implementation "com.android.support:support-v4:$support"
+    implementation "androidx.appcompat:appcompat:$support"
+    implementation "androidx.recyclerview:recyclerview:$support"
+    implementation "androidx.legacy:legacy-support-v4:$support"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 }

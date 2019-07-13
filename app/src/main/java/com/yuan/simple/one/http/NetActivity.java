@@ -1,18 +1,18 @@
 package com.yuan.simple.one.http;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.ToastUtil;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.ToastUtil;
 import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
-import com.yuan.tools_extend.sys.SelectUtil;
+import yuan.tools_extend.sys.SelectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class NetActivity extends ListActivity<PNet> {
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
         rlvList.setLayoutManager(new LinearLayoutManager(mContext));
-        rlvList.addItemDecoration(new GridDivider(mContext));
+        rlvList.addItemDecoration(new DecorationDivider(mContext));
         getTitleBar().setTitleText("OKUtil")
                 .setLeftClickFinish()
                 .setTextColor(getResources().getColor(R.color.white))

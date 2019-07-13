@@ -3,9 +3,9 @@ package com.yuan.simple.one.http;
 
 import android.os.Environment;
 
-import com.yuan.kernel.mvp.Presenter;
-import com.yuan.kernel.ToastUtil;
-import com.yuan.tools_extra.OKUtil;
+import yuan.core.mvp.Presenter;
+import yuan.core.tool.ToastUtil;
+import yuan.tools_extra.OKUtil;
 
 /**
  * Created by YuanYe on 2018/8/15.

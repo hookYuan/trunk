@@ -1,22 +1,21 @@
 package com.yuan.simple.one.toolbar;
 
 
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.RouteUtil;
-import com.yuan.kernel.ToastUtil;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.RouteUtil;
+import yuan.core.tool.ToastUtil;
 import com.yuan.simple.R;
 import com.yuan.simple.tool.ListFragment;
-import com.yuan.tools_independ.common.Kits;
-import com.yuan.ui_extend.RLVFragment;
-import com.yuan.widget.title.StatusUtil;
-import com.yuan.widget.title.TitleBar;
+import yuan.core.tool.Kits;
+import yuan.widget.title.StatusUtil;
+import yuan.widget.title.TitleBar;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -53,7 +52,7 @@ public class TitleBarFragment extends ListFragment {
         });
         rlvList.setLayoutManager(manager);
         //add divider.
-        rlvList.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f)
+        rlvList.addItemDecoration(new DecorationDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f)
                 , ContextCompat.getColor(mContext, R.color.colorDivider)));
     }
 

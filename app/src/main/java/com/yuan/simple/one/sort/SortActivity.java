@@ -1,18 +1,18 @@
 package com.yuan.simple.one.sort;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.mvp.BaseActivity;
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.Views;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.Views;
 import com.yuan.simple.R;
-import com.yuan.tools_independ.sort.ChineseSortUtil;
-import com.yuan.widget.sideBar.SideBar;
+import yuan.core.sort.ChineseSortUtil;
+import yuan.widget.sideBar.SideBar;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class SortActivity extends BaseActivity {
     @Override
     public void initData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new GridDivider(mContext));
+        recyclerView.addItemDecoration(new DecorationDivider(mContext));
         recyclerView.setAdapter(createAdapter());
         sideBar.setRecyclerView(recyclerView, data);
         sideBar.setSortData(data);

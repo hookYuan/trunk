@@ -1,14 +1,14 @@
 package com.yuan.simple.one.toolbar;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.yuan.kernel.mvp.BaseActivity;
-import com.yuan.kernel.Views;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.tool.Views;
 import com.yuan.simple.R;
-import com.yuan.tools_extra.GlideUtil;
-import com.yuan.widget.title.StatusUtil;
+import yuan.tools_extra.GlideUtil;
+import yuan.widget.title.StatusUtil;
 
 public class TitleDemo1 extends BaseActivity {
 

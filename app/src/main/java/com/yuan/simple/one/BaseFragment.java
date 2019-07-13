@@ -1,23 +1,21 @@
 package com.yuan.simple.one;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.RouteUtil;
-import com.yuan.kernel.ToastUtil;
-import com.yuan.kernel.function.CallbackManager;
-import com.yuan.kernel.function.CallbackNoParamNoResult;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.RouteUtil;
+
 import com.yuan.simple.R;
+import com.yuan.simple.one.callback.CallbackActivity;
 import com.yuan.simple.one.db.DBActivity;
 import com.yuan.simple.one.dialog.AlertDialogActivity;
 import com.yuan.simple.one.foldTextView.FoldActivity;
@@ -29,7 +27,7 @@ import com.yuan.simple.one.select.SelectActivity;
 import com.yuan.simple.one.sort.SortActivity;
 import com.yuan.simple.one.toolbar.TitleBarActivity;
 import com.yuan.simple.tool.ListFragment;
-import com.yuan.tools_independ.common.Kits;
+import yuan.core.tool.Kits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +58,7 @@ public class BaseFragment extends ListFragment {
     @Override
     public void initRecyclerView(RecyclerView rlvList) {
         rlvList.setLayoutManager(new LinearLayoutManager(mContext));
-        rlvList.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
+        rlvList.addItemDecoration(new DecorationDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
                 ContextCompat.getColor(mContext, R.color.colorDivider)));
 
 //        getTitleBar().setTitleText("基础功能")
@@ -72,13 +70,6 @@ public class BaseFragment extends ListFragment {
 //
 //                    }
 //                });
-        CallbackManager.get().addCallback("123",
-                new CallbackNoParamNoResult() {
-                    @Override
-                    public void callback() {
-                        ToastUtil.showShort(mContext, "返回了");
-                    }
-                });
     }
 
     @Override
@@ -109,6 +100,7 @@ public class BaseFragment extends ListFragment {
         mData.add(new OneListBean("multiAdapter", MultiActivity.class));
         mData.add(new OneListBean("DBUtil", DBActivity.class));
         mData.add(new OneListBean("SelectUtil", SelectActivity.class));
+        mData.add(new OneListBean("CallbackManager", CallbackActivity.class));
         return mData;
     }
 

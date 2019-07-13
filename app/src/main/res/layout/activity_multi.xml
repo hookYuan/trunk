@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".one.multi.MultiActivity">
 
-    <com.yuan.widget.title.TitleBar
+    <yuan.widget.title.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_50"
@@ -20,10 +20,10 @@
 
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rlv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

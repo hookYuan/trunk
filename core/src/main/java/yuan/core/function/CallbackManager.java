@@ -1,7 +1,8 @@
 package yuan.core.function;
 
-import android.text.TextUtils;
+import android.util.Log;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,16 +19,39 @@ import java.util.Map;
  * 2.有返回值、无参数类型
  * 3.无返回值、有参数类型
  * 4.有返回值、有参数类型
+ * <p>
+ * setCallback()方法与invoke()方法对应执行
+ * 当调用setCallback方法后，调用对应的invoke方法，即可触发setCallback
+ * invoke方法和setCallback通过 Object 来关联，因此invoke和setCallback
+ * 方法中的object必须一致才能只能
  *
  * @author yuanye
  * @date 2019/6/7
  */
 public class CallbackManager {
 
-    private Map<String, CallbackNoParamNoResult> mCallbackNoParamNoResult;
-    private Map<String, CallbackParamNoResult> mCallbackParamNoResult;
-    private Map<String, CallbackNoParamResult> mCallbackNoParamResult;
-    private Map<String, CallbackParamResult> mCallbackParamResult;
+    private static final String TAG = "CallbackManager";
+
+    /**
+     * 无参无返回值缓存
+     */
+    private Map<WeakReference<Object>, CallbackNoParamNoResult> mCallbackNoParamNoResult;
+
+    /**
+     * 有参无返回值缓存
+     */
+    private Map<WeakReference<Object>, CallbackParamNoResult> mCallbackParamNoResult;
+
+    /**
+     * 无参有返回值缓存
+     */
+    private Map<WeakReference<Object>, CallbackNoParamResult> mCallbackNoParamResult;
+
+    /**
+     * 有参有返回值缓存
+     */
+    private Map<WeakReference<Object>, CallbackParamResult> mCallbackParamResult;
+
 
     private static class CallbackManagerSingle {
         private final static CallbackManager manager = new CallbackManager();
@@ -47,36 +71,38 @@ public class CallbackManager {
     /**
      * 添加无返回/无参回调
      *
-     * @param tag
+     * @param tag      注册监听对象
      * @param callback
      */
-    public final CallbackManager addCallback(String tag, CallbackNoParamNoResult callback) {
-        if (TextUtils.isEmpty(tag)) {
+    public final CallbackManager setCallback(Object tag, CallbackNoParamNoResult callback) {
+        if (tag == null) {
             throw new NullPointerException("添加callback必须指定tag名称不能为空");
         }
-
         if (callback == null) {
             throw new NullPointerException("添加callback不能为空");
         }
-        mCallbackNoParamNoResult.put(tag, callback);
+        WeakReference key = new WeakReference(tag);
+        mCallbackNoParamNoResult.put(key, callback);
         return CallbackManagerSingle.manager;
     }
 
     /**
      * 添加无返回/有参回调
+     * 添加监听，执行后
      *
      * @param tag
      * @param callback
      */
-    public final CallbackManager addCallback(String tag, CallbackParamNoResult callback) {
-        if (TextUtils.isEmpty(tag)) {
+    public final CallbackManager setCallback(Object tag, CallbackParamNoResult callback) {
+        if (tag == null) {
             throw new NullPointerException("添加callback必须指定tag名称不能为空");
         }
 
         if (callback == null) {
             throw new NullPointerException("添加callback不能为空");
         }
-        mCallbackParamNoResult.put(tag, callback);
+        WeakReference key = new WeakReference(tag);
+        mCallbackParamNoResult.put(key, callback);
         return CallbackManagerSingle.manager;
     }
 
@@ -86,15 +112,16 @@ public class CallbackManager {
      * @param tag
      * @param callback
      */
-    public final CallbackManager addCallback(String tag, CallbackParamResult callback) {
-        if (TextUtils.isEmpty(tag)) {
+    public final CallbackManager setCallback(Object tag, CallbackParamResult callback) {
+        if (tag == null) {
             throw new NullPointerException("添加callback必须指定tag名称不能为空");
         }
 
         if (callback == null) {
             throw new NullPointerException("添加callback不能为空");
         }
-        mCallbackParamResult.put(tag, callback);
+        WeakReference key = new WeakReference(tag);
+        mCallbackParamResult.put(key, callback);
         return CallbackManagerSingle.manager;
     }
 
@@ -104,52 +131,49 @@ public class CallbackManager {
      * @param tag
      * @param callback
      */
-    public final CallbackManager addCallback(String tag, CallbackNoParamResult callback) {
-        if (TextUtils.isEmpty(tag)) {
+    public final CallbackManager setCallback(Object tag, CallbackNoParamResult callback) {
+        if (tag == null) {
             throw new NullPointerException("添加callback必须指定tag名称不能为空");
         }
 
         if (callback == null) {
             throw new NullPointerException("添加callback不能为空");
         }
-        mCallbackNoParamResult.put(tag, callback);
+        WeakReference key = new WeakReference(tag);
+        mCallbackNoParamResult.put(key, callback);
         return CallbackManagerSingle.manager;
     }
-
-    /**
-     * 移除指定tag callback
-     *
-     * @param tag
-     */
-    public void remove(String tag) {
-        if (TextUtils.isEmpty(tag)) {
-            throw new NullPointerException("添加callback必须指定tag名称不能为空");
-        }
-        mCallbackNoParamNoResult.remove(tag);
-        mCallbackParamNoResult.remove(tag);
-        mCallbackNoParamResult.remove(tag);
-        mCallbackParamResult.remove(tag);
-    }
-
 
     /**
      * 执行无返回值且没有参数
      *
      * @param tag
      */
-    public final <Result> Result invoke(String tag, Class<Result> result) {
-        if (TextUtils.isEmpty(tag)) {
+    public final <Result> Result invoke(Object tag, Class<Result> result) {
+        if (tag == null) {
             throw new NullPointerException("tag名称不能为空");
         }
-        if (mCallbackNoParamResult.get(tag) == null) {
+
+        CallbackNoParamResult callback = null;
+        for (WeakReference<Object> key : mCallbackNoParamResult.keySet()) {
+            if (tag == key.get()) {
+                callback = mCallbackNoParamResult.get(key);
+            }
+            //如果tag已经被销毁，则移除缓存集合
+            if (key.get() == null) {
+                mCallbackNoParamResult.remove(key);
+            }
+        }
+
+        //未设置回调函数，抛出异常
+        if (callback == null) {
             throw new NullPointerException("未找到指定tag=" + tag + "的callback回调");
         }
-        CallbackNoParamResult callback = mCallbackNoParamResult.get(tag);
 
         if (result != null) {
-            return result.cast(CallbackNoParamResult.class.cast(callback).callback());
+            return result.cast(callback.callback());
         } else {
-            return (Result) CallbackNoParamResult.class.cast(callback).callback();
+            return (Result) callback.callback();
         }
     }
 
@@ -158,14 +182,26 @@ public class CallbackManager {
      *
      * @param tag
      */
-    public final <Param, Result> Result invoke(String tag, Param param, Class<Result> result) {
-        if (TextUtils.isEmpty(tag)) {
+    public final <Param, Result> Result invoke(Object tag, Param param, Class<Result> result) {
+        if (tag == null) {
             throw new NullPointerException("tag名称不能为空");
         }
-        if (mCallbackParamResult.get(tag) == null) {
+
+        CallbackParamResult callback = null;
+
+        for (WeakReference<Object> key : mCallbackParamResult.keySet()) {
+            if (tag == key.get()) {
+                callback = mCallbackParamResult.get(tag);
+            }
+            //如果tag已经被销毁，则移除缓存集合
+            if (key.get() == null) {
+                mCallbackParamResult.remove(key);
+            }
+        }
+
+        if (callback == null) {
             throw new NullPointerException("未找到指定tag=" + tag + "的callback回调");
         }
-        CallbackParamResult callback = mCallbackParamResult.get(tag);
 
         if (result != null) {
             return result.cast(callback.callback(param));
@@ -179,14 +215,26 @@ public class CallbackManager {
      *
      * @param tag
      */
-    public final <Param> void invoke(String tag, Param param) {
-        if (TextUtils.isEmpty(tag)) {
+    public final <Param> void invoke(Object tag, Param param) {
+        if (tag == null) {
             throw new NullPointerException("tag名称不能为空");
         }
-        if (mCallbackParamNoResult.get(tag) == null) {
+
+        CallbackParamNoResult callback = null;
+        for (WeakReference<Object> key : mCallbackParamNoResult.keySet()) {
+            if (tag == key.get()) {
+                callback = mCallbackParamNoResult.get(tag);
+            }
+            //如果tag已经被销毁，则移除缓存集合
+            if (key.get() == null) {
+                mCallbackParamNoResult.remove(key);
+            }
+        }
+
+        if (callback == null) {
             throw new NullPointerException("未找到指定tag=" + tag + "的callback回调");
         }
-        CallbackParamNoResult callback = mCallbackParamNoResult.get(tag);
+
         callback.callback(param);
     }
 
@@ -195,14 +243,91 @@ public class CallbackManager {
      *
      * @param tag
      */
-    public final void invoke(String tag) {
-        if (TextUtils.isEmpty(tag)) {
+    public final void invoke(Object tag) {
+        if (tag == null) {
             throw new NullPointerException("tag名称不能为空");
         }
-        if (mCallbackNoParamNoResult.get(tag) == null) {
+
+        CallbackNoParamNoResult callback = null;
+
+        for (WeakReference<Object> key : mCallbackNoParamNoResult.keySet()) {
+            if (tag == key.get()) {
+                callback = mCallbackNoParamNoResult.get(key);
+            }
+            //如果tag已经被销毁，则移除缓存集合
+            if (key.get() == null) {
+                mCallbackNoParamNoResult.remove(key);
+            }
+        }
+
+        if (callback == null) {
             throw new NullPointerException("未找到指定tag=" + tag + "的callback回调");
         }
-        CallbackNoParamNoResult callback = mCallbackNoParamNoResult.get(tag);
+
         callback.callback();
+    }
+
+    /**
+     * 移除已经回收的数据
+     */
+    public final void removeRecyclerData() {
+        for (WeakReference<Object> key : mCallbackNoParamNoResult.keySet()) {
+            if (key.get() == null) {
+                mCallbackNoParamNoResult.remove(key);
+            }
+        }
+
+        for (WeakReference<Object> key : mCallbackParamNoResult.keySet()) {
+            if (key.get() == null) {
+                mCallbackParamNoResult.remove(key);
+            }
+        }
+
+        for (WeakReference<Object> key : mCallbackNoParamResult.keySet()) {
+            if (key.get() == null) {
+                mCallbackNoParamResult.remove(key);
+            }
+        }
+
+        for (WeakReference<Object> key : mCallbackParamResult.keySet()) {
+            if (key.get() == null) {
+                mCallbackParamResult.remove(key);
+            }
+        }
+    }
+
+    /**
+     * 移除指定tag callback
+     *
+     * @param tag
+     */
+    public final void remove(Object tag) {
+        if (tag == null) {
+            Log.e(TAG, "添加callback必须指定tag名称不能为空");
+            return;
+        }
+        for (WeakReference<Object> key : mCallbackNoParamNoResult.keySet()) {
+            if (key.get() == tag) {
+                mCallbackNoParamNoResult.remove(key);
+            }
+        }
+
+        for (WeakReference<Object> key : mCallbackParamNoResult.keySet()) {
+            if (key.get() == tag) {
+                mCallbackParamNoResult.remove(key);
+            }
+        }
+
+        for (WeakReference<Object> key : mCallbackNoParamResult.keySet()) {
+            if (key.get() == tag) {
+                mCallbackNoParamResult.remove(key);
+            }
+        }
+
+        for (WeakReference<Object> key : mCallbackParamResult.keySet()) {
+            if (key.get() == tag) {
+                mCallbackParamResult.remove(key);
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 package yuan.core.http;
 
-import com.yuan.kernel.http.IRequestBody;
-
 import java.util.Map;
 
 /**

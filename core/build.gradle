@@ -1,13 +1,11 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
-apply from: 'novoda.gradle'
+//apply plugin: 'com.novoda.bintray-release'
+//apply from: 'novoda.gradle'
 
 ext.support = '1.0.0-beta01'
 
 android {
     compileSdkVersion 28
-
-
 
     defaultConfig {
         minSdkVersion 19
@@ -48,11 +46,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$support"
     implementation "androidx.recyclerview:recyclerview:$support"
     implementation "androidx.legacy:legacy-support-v4:$support"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 }

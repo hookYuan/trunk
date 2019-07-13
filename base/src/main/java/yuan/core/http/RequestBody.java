@@ -1,6 +1,7 @@
-package com.yuan.kernel.http;
+package yuan.core.http;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.Map;
 

@@ -37,18 +37,19 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.annotation.RequiresPermission;
-import androidx.collection.LongSparseArray;
-import androidx.collection.SimpleArrayMap;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
+
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.RequiresPermission;
+import androidx.collection.LongSparseArray;
+import androidx.collection.SimpleArrayMap;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -1318,7 +1319,7 @@ public class Kits {
          * 是否有网络连接
          */
         public static boolean isDisConnect(@NonNull Context context) {
-            return Kits.NetWork.NETWORK_TYPE_DISCONNECT.equals(Kits.NetWork.getNetworkTypeName(context));
+            return NetWork.NETWORK_TYPE_DISCONNECT.equals(NetWork.getNetworkTypeName(context));
         }
 
         /**

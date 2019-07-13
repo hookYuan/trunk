@@ -8,7 +8,7 @@ import java.util.Map;
  * @author yuanye
  * @date 2019/6/9
  */
-public interface IHttpRequest<T extends IHttpRequest> {
+public interface IHttpRequest<T extends IRequestBody> {
 
     /**
      * 通常用于查询服务器支持的方法

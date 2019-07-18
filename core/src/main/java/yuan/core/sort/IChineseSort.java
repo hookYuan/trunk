@@ -13,13 +13,11 @@ public interface IChineseSort {
     String getSortText(); //需要排序的文字
 
     //获取汉字全拼
-    @TargetApi(Build.VERSION_CODES.N)
     default String getPinyin() {
         return ChineseSortUtil.CharacterParser.getInstance().getSelling(getSortText());
     }
 
     //获取首字母
-    @TargetApi(Build.VERSION_CODES.N)
     default String getFirstLetters() {
         String pinyin = getPinyin();
         String firstLetters = "";

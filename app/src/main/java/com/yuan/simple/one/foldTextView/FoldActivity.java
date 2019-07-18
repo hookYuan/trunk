@@ -1,18 +1,17 @@
 package com.yuan.simple.one.foldTextView;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseBooleanArray;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.yuan.kernel.RLVAdapter;
+import yuan.core.list.RLVAdapter;
 import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
-import com.yuan.widget.fold.FoldTextView;
+import yuan.widget.fold.FoldTextView;
 
 import java.util.ArrayList;
 import java.util.List;

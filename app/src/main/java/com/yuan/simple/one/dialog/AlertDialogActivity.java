@@ -4,23 +4,25 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.yuan.kernel.DialogUtil;
-import com.yuan.kernel.GridDivider;
-import com.yuan.kernel.RLVAdapter;
-import com.yuan.kernel.ToastUtil;
-import com.yuan.kernel.Views;
+import yuan.core.dialog.DialogUtil;
+import yuan.core.list.DecorationDivider;
+import yuan.core.list.RLVAdapter;
+import yuan.core.tool.ToastUtil;
+import yuan.core.tool.Views;
+
 import com.yuan.simple.tool.ListActivity;
 import com.yuan.simple.R;
-import com.yuan.tools_independ.common.Kits;
+
+import yuan.core.tool.Kits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class AlertDialogActivity extends ListActivity {
                 .setLeftIcon(getDrawable2(R.drawable.ic_base_back_white))
                 .setBackgroundColor(getColor2(R.color.colorPrimary));
         rlvList.setLayoutManager(new LinearLayoutManager(this));
-        rlvList.addItemDecoration(new GridDivider(this));
+        rlvList.addItemDecoration(new DecorationDivider(this));
         helper = DialogUtil.create(mContext);
     }
 
@@ -64,7 +66,7 @@ public class AlertDialogActivity extends ListActivity {
                 helper.alertText("这是一个简单提示");
                 break;
             case 2:
-                DialogUtil.DialogParams params1 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params1 = new DialogUtil.Params.Builder()
                         .matchHeight(false)
                         .matchWidth(true)
                         .paddingTop(0)
@@ -74,57 +76,51 @@ public class AlertDialogActivity extends ListActivity {
                         .gravity(Gravity.BOTTOM)
                         .windowBackground(getColor2(R.color.white))
                         .build();
-                helper.setStyle(params1);
-                helper.alertText("最大宽度的Dialog");
+                DialogUtil.create(mContext, params1).alertText("最大宽度的Dialog");
                 break;
             case 3:
-                DialogUtil.DialogParams params2 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params2 = new DialogUtil.Params.Builder()
                         .gravity(Gravity.BOTTOM)
                         .build();
-                helper.setStyle(params2);
-                helper.alertText("Dialog居下显示");
+                DialogUtil.create(mContext, params2).alertText("Dialog居下显示");
                 break;
             case 4:
-                DialogUtil.DialogParams params3 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params3 = new DialogUtil.Params.Builder()
                         .windowBackground(getColor2(R.color.colorPrimary))
                         .build();
-                DialogUtil.setStyle(params3);
-                DialogUtil.create(this).alertText("Dialog背景透明");
+                DialogUtil.create(this, params3)
+                        .alertText("Dialog背景透明");
                 break;
             case 5:
-                DialogUtil.DialogParams params4 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params4 = new DialogUtil.Params.Builder()
                         .dialogBehindAlpha(0.8f)
                         .build();
-                DialogUtil.setStyle(params4);
-                DialogUtil.create(this).alertText("灰色背景透明度");
+                DialogUtil.create(this, params4).alertText("灰色背景透明度");
                 break;
             case 6:
-                DialogUtil.DialogParams params5 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params5 = new DialogUtil.Params.Builder()
                         .dialogFrontAlpha(0.5f)
                         .build();
-                DialogUtil.setStyle(params5);
-                DialogUtil.create(this).alertText("前景背景透明度");
+                DialogUtil.create(this, params5).alertText("前景背景透明度");
                 break;
             case 7:
-                DialogUtil.DialogParams params6 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params6 = new DialogUtil.Params.Builder()
                         .titleColor(getColor2(R.color.colorPrimary))
                         .titleSize(20)
                         .contentSize(16)
                         .positiveColor(getColor2(R.color.colorPrimary))
                         .build();
-                DialogUtil.setStyle(params6);
-                DialogUtil.create(this).alertText("字体颜色大小");
+                DialogUtil.create(this, params6).alertText("字体颜色大小");
                 break;
             case 8:
                 View dialogView = Views.inflate(this, R.layout.my_dialog_view);
 
-                DialogUtil.DialogParams params7 = new DialogUtil.DialogParams.Builder()
+                DialogUtil.Params params7 = new DialogUtil.Params.Builder()
                         .height(Kits.Dimens.dpToPxInt(this, 200))
                         .width(Kits.Dimens.dpToPxInt(this, 250))
                         .windowBackground(getColor2(R.color.transparent))
                         .build();
-                DialogUtil.setStyle(params7);
-                DialogUtil.create(this).alertView(dialogView);
+                DialogUtil.create(this, params7).alertView(dialogView);
                 break;
             case 9:
                 helper.alertDate(2019, 4, 23, new DatePickerDialog.OnDateSetListener() {
@@ -215,6 +211,14 @@ public class AlertDialogActivity extends ListActivity {
             case 16:
                 DialogUtil.dismiss();
                 break;
+            case 17:
+                DialogUtil.Params params17 = new DialogUtil.Params.Builder()
+                        .windowAnimations(R.anim.dialog_in)
+                        .build();
+                DialogUtil.create(this, params17).alertText("动画弹窗");
+                break;
+            case 18:
+                break;
 
         }
     }
@@ -238,6 +242,7 @@ public class AlertDialogActivity extends ListActivity {
         mData.add(new DialogBean("多选弹窗", 14));
         mData.add(new DialogBean("列表弹窗", 15));
         mData.add(new DialogBean("取消弹窗", 16));
+        mData.add(new DialogBean("平移动画", 17));
         return mData;
     }
 

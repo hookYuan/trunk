@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="3000"
+    android:fillAfter="true"
+    android:interpolator="@android:anim/overshoot_interpolator">
+    <!--
+    android:fillAfter="true" 设置是否保留最终状态 如果是集合，需要在set节点中设置
+    android:interpolator="@android:anim/overshoot_interpolator"  如果有集合，插值器要放在集合的属性中-->
+    <translate
+        android:fromXDelta="0"
+        android:fromYDelta="0"
+        android:toXDelta="400"
+        android:toYDelta="0"
+        >
+        <!-- android:repeatCount="infinite" 无限重复 只能在子节点中单独设置-->
+    </translate>
+</set>

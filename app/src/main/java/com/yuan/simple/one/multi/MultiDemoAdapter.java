@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yuan.simple.R;
-import com.yuan.tools_extend.adapter.MultiAdapter;
+import yuan.tools_extend.adapter.MultiAdapter;
 
 /**
  * @author yuanye

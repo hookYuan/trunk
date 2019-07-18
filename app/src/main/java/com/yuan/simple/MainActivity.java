@@ -3,18 +3,19 @@ package com.yuan.simple;
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.yuan.kernel.BaseActivity;
-import com.yuan.kernel.RouteUtil;
-import com.yuan.kernel.Views;
+import androidx.fragment.app.FragmentManager;
+import yuan.core.dialog.DialogUtil;
+import yuan.core.mvp.BaseActivity;
+import yuan.core.tool.RouteUtil;
+import yuan.core.tool.Views;
 import com.yuan.simple.one.BaseFragment;
 import com.yuan.simple.three.ui.ThreeFragment;
-import com.yuan.simple.two.ui.TwoFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -38,10 +39,24 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DialogUtil.create(mContext);
+    }
 
     @Override
     public void initData() {
-        addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
+//        addFragment(R.id.content, BaseFragment.class, TwoFragment.class, ThreeFragment.class);
+
+        FragmentManager manager = getSupportFragmentManager();
+//        android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.add(R.id.content,new BaseFragment());
+//        transaction.commit();
+        addFragment(R.id.content, new BaseFragment(), new BaseFragment(), new ThreeFragment());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             RouteUtil.openPermission(mContext, new String[]{
                     Manifest.permission.CAMERA

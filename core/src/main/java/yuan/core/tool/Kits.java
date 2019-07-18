@@ -466,11 +466,11 @@ public class Kits {
         }
 
         private static String getMacAddressByFile() {
-            ShellUtils.CommandResult result = ShellUtils.execCmd("getprop wifi.interface", false);
+            ShellUtil.CommandResult result = ShellUtil.execCmd("getprop wifi.interface", false);
             if (result.result == 0) {
                 String name = result.successMsg;
                 if (name != null) {
-                    result = ShellUtils.execCmd("cat /sys/class/net/" + name + "/address", false);
+                    result = ShellUtil.execCmd("cat /sys/class/net/" + name + "/address", false);
                     if (result.result == 0) {
                         String address = result.successMsg;
                         if (address != null && address.length() > 0) {
@@ -510,7 +510,7 @@ public class Kits {
          * in manifest.</p>
          */
         public static void shutdown(Context context) {
-            ShellUtils.execCmd("reboot -p", true);
+            ShellUtil.execCmd("reboot -p", true);
             Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
             intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
             context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -523,7 +523,7 @@ public class Kits {
          * or hold {@code android:sharedUserId="android.uid.system"} in manifest.</p>
          */
         public static void reboot(@NonNull Context context) {
-            ShellUtils.execCmd("reboot", true);
+            ShellUtil.execCmd("reboot", true);
             Intent intent = new Intent(Intent.ACTION_REBOOT);
             intent.putExtra("nowait", 1);
             intent.putExtra("interval", 1);

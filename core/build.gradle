@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.novoda.bintray-release'
-//apply from: 'novoda.gradle'
+apply plugin: 'com.novoda.bintray-release'
+apply from: 'novoda.gradle'
 
 ext.support = '1.0.0-beta01'
 
@@ -48,5 +48,6 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$support"
     implementation "androidx.recyclerview:recyclerview:$support"
+    implementation "androidx.cardview:cardview:$support"
     implementation "androidx.legacy:legacy-support-v4:$support"
 }

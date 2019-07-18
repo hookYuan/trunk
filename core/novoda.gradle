@@ -1,8 +1,8 @@
 publish {
-    userOrg = 'hookyuan'      //bintray注册的用户名
+    userOrg = 'ydroid'      //bintray注册的用户名
     groupId = 'yuan.core'         //compile引用时的第1部分groupId
     artifactId = 'core'     //compile引用时的第2部分项目名
-    publishVersion = '1.0.1-dev'    //compile引用时的第3部分版本号
+    publishVersion = '1.0.3'    //compile引用时的第3部分版本号
     desc = 'This is a base tools library '
     website = 'https://github.com/hookYuan/Trunk-Java-MVP'
 }

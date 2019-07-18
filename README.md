@@ -18,4 +18,4 @@ maven { url 'https://dl.bintray.com/ydroid/maven' }
 compile 'yuan.depend:depend:1.0.1'
 
 #### core 版本引用
-compile 'yuan.core:core:1.0.3'
+compile 'yuan.core:core:1.0.4'

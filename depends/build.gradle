@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
-apply from: 'novoda.gradle'
+apply from: 'ydroid.gradle'
 
 ext.support = '1.0.0-beta01'
 ext.glide = '4.6.1'
@@ -16,7 +16,6 @@ ext.arouter_api = '1.3.1'
 
 android {
     compileSdkVersion 28
-
 
 
     defaultConfig {
@@ -39,7 +38,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:28.0.0'
     api "org.greenrobot:eventbus:$eventbus"
     api "com.scwang.smartrefresh:SmartRefreshLayout:$SmartRefreshLayout"
     api "com.scwang.smartrefresh:SmartRefreshHeader:$SmartRefreshLayout"
@@ -51,5 +49,6 @@ dependencies {
     api 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     //图片选择器
     api 'com.cysion:ImagePicker:1.0.6'
-    implementation project(':core')
+    //依赖基础库
+    api 'yuan.core:core:1.0.4'
 }

@@ -1,1 +1,1 @@
-include ':app', ':base', ':autoBuild', ':core', ':depends'
+include ':app', ':base', ':autoBuild', ':core', ':depends', ':expand'

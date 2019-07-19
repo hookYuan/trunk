@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
  * @author yuanye
  * @date 2018/11/26
  */
-class Contract {
+public class Contract {
 
     /**
      * 约束 Activity/Fragment 中的方法

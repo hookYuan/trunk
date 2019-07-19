@@ -1,12 +1,14 @@
-package yuan.ui_extra;
+package yuan.depends.ui;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import yuan.core.widget.PinchImageView;
+import yuan.depends.glide.GlideUtil;
 
 /**
  * 描述：图片查看Fragment
@@ -25,14 +30,14 @@ import java.util.List;
  * @author yuanye
  * @date 2019/4/24 11:10
  */
-public abstract class BaseImagePagerFragment extends Fragment {
+public class ImagePagerFragment extends Fragment {
 
     private static final String EXTRA_SELECT_POS = "select_pos";
     private static final String EXTRA_SELECT_DATA = "select_data";
     /**
      * 当前选中的位置
      */
-    private int currentPosition = 0;
+    private int mCurrentPosition = 0;
 
     /**
      * 数据源
@@ -46,19 +51,11 @@ public abstract class BaseImagePagerFragment extends Fragment {
     private ViewPager ultraViewPager;
 
     /**
-     * 获取手势ImageView
-     * 缩放
-     *
-     * @return
+     * 通过Bundle 传入数据源与当前显示的位置
      */
-    abstract ImageView getGestureView();
+    public ImagePagerFragment() {
 
-    /**
-     * 获取图片加载器
-     *
-     * @return
-     */
-    abstract ImageLoader getImageLoader();
+    }
 
     /**
      * 显示当前页面
@@ -79,13 +76,13 @@ public abstract class BaseImagePagerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        currentPosition = getActivity().getIntent().getIntExtra(EXTRA_SELECT_POS, 0);
+        mCurrentPosition = getActivity().getIntent().getIntExtra(EXTRA_SELECT_POS, 0);
         mData = getActivity().getIntent().getStringArrayListExtra(EXTRA_SELECT_DATA);
         //Initializing ViewPager
         PhotoPagerAdapter adapter = new PhotoPagerAdapter(mData);
         ultraViewPager.setAdapter(adapter);
         ultraViewPager.addOnPageChangeListener(adapter);
-        ultraViewPager.setCurrentItem(currentPosition <= 0 ? 0 : currentPosition);
+        ultraViewPager.setCurrentItem(mCurrentPosition <= 0 ? 0 : mCurrentPosition);
         ultraViewPager.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.black));
         ultraViewPager.setPageMargin((int) (12 * getResources().getDisplayMetrics().density));
     }
@@ -112,7 +109,7 @@ public abstract class BaseImagePagerFragment extends Fragment {
             pageViews = new ArrayList<>();
             for (int i = 0; i < visibleNum; i++) {
                 //动态生成PageViews
-                ImageView imageView = getGestureView();
+                ImageView imageView = new PinchImageView(getContext());
                 if (imageView == null) imageView = new ImageView(getActivity());
                 pageViews.add(imageView);
             }
@@ -126,9 +123,7 @@ public abstract class BaseImagePagerFragment extends Fragment {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             int i = position % visibleNum;
-            getImageLoader().displayImage(container.getContext(),
-                    mAllPhotos.get(position), pageViews.get(i), pageViews.get(i).getWidth(),
-                    pageViews.get(i).getHeight());
+            GlideUtil.create().showImage(mAllPhotos.get(position), pageViews.get(i));
             ((ViewPager) container).addView(pageViews.get(i));
             return pageViews.get(i);
         }
@@ -166,7 +161,6 @@ public abstract class BaseImagePagerFragment extends Fragment {
             if (bm != null && !bm.isRecycled()) {
                 bm.recycle();
             }
-            getImageLoader().clearMemoryCache();
             imageView.setDrawingCacheEnabled(false);
         }
 
@@ -177,7 +171,7 @@ public abstract class BaseImagePagerFragment extends Fragment {
 
         @Override
         public void onPageSelected(int position) {
-            BaseImagePagerFragment.this.onPageSelected(pageViews.get(position), position);
+            ImagePagerFragment.this.onPageSelected(pageViews.get(position), position);
         }
 
         @Override

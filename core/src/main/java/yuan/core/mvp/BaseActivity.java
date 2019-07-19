@@ -3,17 +3,6 @@ package yuan.core.mvp;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +13,18 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
  * 描述：Activity的基础封装
@@ -40,7 +41,7 @@ import java.util.List;
  * @author yuanye
  * @date 2019/4/4 13:17
  */
-public abstract class BaseActivity<P extends Presenter> extends AppCompatActivity implements Contract.View {
+public abstract class BaseActivity<presenter extends Presenter> extends AppCompatActivity implements Contract.View {
 
     protected static final String TAG = Thread.currentThread().getStackTrace()[1].getClassName();
 
@@ -72,7 +73,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
     /**
      * presenter
      */
-    private P presenter;
+    private presenter mPresenter;
 
 
     @Override
@@ -83,9 +84,9 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
             showIndex = savedInstanceState.getInt(SAVE_SHOW_POSITION, 0);
         }
         //反射获取Presenter
-        presenter = createPresenter();
-        if (presenter != null) {
-            presenter.attachView(this);
+        mPresenter = createPresenter();
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
 
@@ -104,7 +105,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         initData();
         setListener();
 
-        if (presenter != null) presenter.onCreate(savedInstanceState);
+        if (mPresenter != null) mPresenter.onCreate(savedInstanceState);
     }
 
     @Override
@@ -127,7 +128,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         //防止当onActivityResult后mContext为空
         if (mContext == null) mContext = this;
         super.onResume();
-        if (presenter != null) presenter.onResume();
+        if (mPresenter != null) mPresenter.onResume();
     }
 
     @Override
@@ -157,7 +158,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         super.onDestroy();
-        if (presenter != null) presenter.onDestroy();
+        if (mPresenter != null) mPresenter.onDestroy();
     }
 
     /**
@@ -291,15 +292,15 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
      *
      * @return presenter实例
      */
-    public P getP() {
-        if (presenter == null) {
+    public presenter getPresenter() {
+        if (mPresenter == null) {
             try {
                 throw new NullPointerException("使用presenter,MVPActivity泛型不能为空");
             } catch (NullPointerException e) {
                 throw e;
             }
         }
-        return presenter;
+        return mPresenter;
     }
 
     /**
@@ -310,7 +311,7 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
      *
      * @return Presenter的实例化对象
      */
-    protected <T> T createPresenter() {
+    protected presenter createPresenter() {
         //只获取当前类的泛型参数
         Type type = this.getClass().getGenericSuperclass();
         if (!(type instanceof ParameterizedType)) {
@@ -320,14 +321,19 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         Type[] types = parameterizedType.getActualTypeArguments();
         //当前class有泛型参数
         for (Type currentType : types) {
-            if (currentType instanceof Presenter) {
-                Class<T> entityClass = (Class<T>) currentType.getClass();
-                try {
-                    return entityClass.newInstance();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+            /*遍历所有继承父类，判断是否包含Presenter类型*/
+            while (((Class) currentType).getSuperclass() != Object.class) {
+                if (((Class) currentType).getSuperclass() == Presenter.class) {
+                    String presenterName = ((Class) currentType).getName();
+                    try {
+                        return (presenter) Class.forName(presenterName).newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

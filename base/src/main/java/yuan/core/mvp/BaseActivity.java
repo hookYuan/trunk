@@ -320,14 +320,19 @@ public abstract class BaseActivity<P extends Presenter> extends AppCompatActivit
         Type[] types = parameterizedType.getActualTypeArguments();
         //当前class有泛型参数
         for (Type currentType : types) {
-            if (currentType instanceof Presenter) {
-                Class<T> entityClass = (Class<T>) currentType.getClass();
-                try {
-                    return entityClass.newInstance();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+            /*遍历所有继承父类，判断是否包含Presenter类型*/
+            while (((Class) currentType).getSuperclass() != Object.class) {
+                if (((Class) currentType).getSuperclass() == Presenter.class) {
+                    String presenterName = ((Class) currentType).getName();
+                    try {
+                        return (T) Class.forName(presenterName).newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

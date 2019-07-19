@@ -3,6 +3,7 @@ package yuan.core.mvp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,14 +26,14 @@ import java.lang.ref.WeakReference;
  * @author yuanye
  * @date 2019/4/4 13:21
  */
-public class Presenter<V extends Contract.View> implements Contract.IPresenter {
+public class Presenter<view extends Contract.View> implements Contract.IPresenter {
 
     /**
      * 弱引用持有Activity引用，防止内存泄漏
      * 当Activity结束时因该调用Presenter的结束destroy
      * 释放对Activity的引用
      */
-    private WeakReference<V> mView;
+    private WeakReference<view> mView;
 
     /**
      * 切换到主线程
@@ -53,8 +54,8 @@ public class Presenter<V extends Contract.View> implements Contract.IPresenter {
      *
      * @param view 需要绑定的View对象
      */
-    public final void attachView(V view) {
-        this.mView = new WeakReference<V>(view);
+    public final void attachView(view view) {
+        this.mView = new WeakReference<view>(view);
     }
 
     @Override
@@ -81,8 +82,10 @@ public class Presenter<V extends Contract.View> implements Contract.IPresenter {
             return (Activity) mView.get();
         }
 
-        if (mView.get() instanceof Fragment) {
-            return ((Fragment) mView.get()).getActivity();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (mView.get() instanceof Fragment) {
+                return ((Fragment) mView.get()).getActivity();
+            }
         }
 
         if (mView.get() instanceof androidx.fragment.app.Fragment) {
@@ -96,7 +99,7 @@ public class Presenter<V extends Contract.View> implements Contract.IPresenter {
      *
      * @return
      */
-    protected final V getView() {
+    protected final view getView() {
         return mView.get();
     }
 

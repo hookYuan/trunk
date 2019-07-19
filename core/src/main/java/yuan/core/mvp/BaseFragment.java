@@ -8,16 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +17,17 @@ import android.widget.Toast;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
  * 描述：Fragment的基础封装
@@ -41,7 +42,7 @@ import java.lang.reflect.Type;
  * @author yuanye
  * @date 2019/4/4 13:17
  */
-public abstract class BaseFragment<P extends Presenter> extends Fragment implements Contract.View {
+public abstract class BaseFragment<presenter extends Presenter> extends Fragment implements Contract.View {
 
     private final static String TAG = "BaseFragment";
     /**
@@ -79,14 +80,14 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
     /**
      * presenter
      */
-    private P presenter;
+    private presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         //反射获取Presenter
-        presenter = createPresenter();
-        if (presenter != null) {
-            presenter.attachView(this);
+        mPresenter = createPresenter();
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) { //获取上次显示状态
@@ -101,7 +102,7 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         }
         mainHandler = new Handler(Looper.getMainLooper());
 
-        if (presenter != null) presenter.onCreate(savedInstanceState);
+        if (mPresenter != null) mPresenter.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -201,7 +202,7 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
             }
         }
         super.onDestroy();
-        if (presenter != null) presenter.onDestroy();
+        if (mPresenter != null) mPresenter.onDestroy();
     }
 
     private synchronized void initPrepare() {
@@ -220,14 +221,14 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         parseBundle(getArguments());
         initData();
         setListener();
-        if (presenter != null) presenter.onResume();
+        if (mPresenter != null) mPresenter.onResume();
     }
 
     /**
      * fragment可见（切换回来或者onResume）
      */
     protected void onUserVisible() {
-        if (presenter != null) presenter.onResume();
+        if (mPresenter != null) mPresenter.onResume();
     }
 
     /**
@@ -249,15 +250,15 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
      *
      * @return presenter实例
      */
-    public P getP() {
-        if (presenter == null) {
+    public presenter getPresenter() {
+        if (mPresenter == null) {
             try {
                 throw new NullPointerException("使用presenter,MVPActivity泛型不能为空");
             } catch (NullPointerException e) {
                 throw e;
             }
         }
-        return presenter;
+        return mPresenter;
     }
 
     /**
@@ -336,7 +337,7 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
      *
      * @return Presenter的实例化对象
      */
-    protected <T> T createPresenter() {
+    protected presenter createPresenter() {
         //只获取当前类的泛型参数
         Type type = this.getClass().getGenericSuperclass();
         if (!(type instanceof ParameterizedType)) {
@@ -346,14 +347,19 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         Type[] types = parameterizedType.getActualTypeArguments();
         //当前class有泛型参数
         for (Type currentType : types) {
-            if (currentType instanceof Presenter) {
-                Class<T> entityClass = (Class<T>) currentType.getClass();
-                try {
-                    return entityClass.newInstance();
-                } catch (java.lang.InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+            /*遍历所有继承父类，判断是否包含Presenter类型*/
+            while (((Class) currentType).getSuperclass() != Object.class) {
+                if (((Class) currentType).getSuperclass() == Presenter.class) {
+                    String presenterName = ((Class) currentType).getName();
+                    try {
+                        return (presenter) Class.forName(presenterName).newInstance();
+                    } catch (java.lang.InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

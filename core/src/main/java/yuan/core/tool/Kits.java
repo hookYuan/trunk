@@ -44,13 +44,6 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
 
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.annotation.RequiresPermission;
-import androidx.collection.LongSparseArray;
-import androidx.collection.SimpleArrayMap;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -81,6 +74,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.RequiresPermission;
+import androidx.collection.LongSparseArray;
+import androidx.collection.SimpleArrayMap;
 
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 import static android.Manifest.permission.INTERNET;
@@ -1571,7 +1571,7 @@ public class Kits {
         /**
          * 匹配手机号的规则：[3578]是手机号第二位可能出现的数字
          */
-        private static final String REGEX_MOBILE = "^[1][3578][0-9]{9}$";
+        private static final String REGEX_MOBILE = "^[1][35678][0-9]{9}$";
 
         /**
          * 校验手机号
@@ -1597,6 +1597,17 @@ public class Kits {
             Pattern p = Pattern.compile(regExp);
             Matcher m = p.matcher(str);
             return m.matches();
+        }
+
+        /**
+         * 手机号用****号隐藏中间数字
+         *
+         * @param phone
+         * @return
+         */
+        public static String formatePhone(String phone) {
+            String phone_s = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+            return phone_s;
         }
 
         /*

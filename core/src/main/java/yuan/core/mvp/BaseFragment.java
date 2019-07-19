@@ -80,14 +80,14 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     /**
      * presenter
      */
-    private presenter mPresenter;
+    private presenter presenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         //反射获取Presenter
-        mPresenter = createPresenter();
-        if (mPresenter != null) {
-            mPresenter.attachView(this);
+        presenter = createPresenter();
+        if (presenter != null) {
+            presenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) { //获取上次显示状态
@@ -102,7 +102,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         }
         mainHandler = new Handler(Looper.getMainLooper());
 
-        if (mPresenter != null) mPresenter.onCreate(savedInstanceState);
+        if (presenter != null) presenter.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -202,7 +202,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
             }
         }
         super.onDestroy();
-        if (mPresenter != null) mPresenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 
     private synchronized void initPrepare() {
@@ -221,14 +221,14 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         parseBundle(getArguments());
         initData();
         setListener();
-        if (mPresenter != null) mPresenter.onResume();
+        if (presenter != null) presenter.onResume();
     }
 
     /**
      * fragment可见（切换回来或者onResume）
      */
     protected void onUserVisible() {
-        if (mPresenter != null) mPresenter.onResume();
+        if (presenter != null) presenter.onResume();
     }
 
     /**
@@ -251,14 +251,14 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
      * @return presenter实例
      */
     public presenter getPresenter() {
-        if (mPresenter == null) {
+        if (presenter == null) {
             try {
                 throw new NullPointerException("使用presenter,MVPActivity泛型不能为空");
             } catch (NullPointerException e) {
                 throw e;
             }
         }
-        return mPresenter;
+        return presenter;
     }
 
     /**
@@ -348,19 +348,21 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         //当前class有泛型参数
         for (Type currentType : types) {
             /*遍历所有继承父类，判断是否包含Presenter类型*/
-            while (((Class) currentType).getSuperclass() != Object.class) {
-                if (((Class) currentType).getSuperclass() == Presenter.class) {
+            Class superClass = ((Class) currentType).getSuperclass();
+            while (superClass != Object.class) {
+                if (superClass == Presenter.class) {
                     String presenterName = ((Class) currentType).getName();
                     try {
                         return (presenter) Class.forName(presenterName).newInstance();
                     } catch (java.lang.InstantiationException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     }
                 }
+                superClass = superClass.getSuperclass();
             }
         }
         return null;

@@ -73,7 +73,7 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
     /**
      * presenter
      */
-    private presenter mPresenter;
+    private presenter presenter;
 
 
     @Override
@@ -84,9 +84,9 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
             showIndex = savedInstanceState.getInt(SAVE_SHOW_POSITION, 0);
         }
         //反射获取Presenter
-        mPresenter = createPresenter();
-        if (mPresenter != null) {
-            mPresenter.attachView(this);
+        presenter = createPresenter();
+        if (presenter != null) {
+            presenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
 
@@ -105,7 +105,7 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
         initData();
         setListener();
 
-        if (mPresenter != null) mPresenter.onCreate(savedInstanceState);
+        if (presenter != null) presenter.onCreate(savedInstanceState);
     }
 
     @Override
@@ -128,7 +128,7 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
         //防止当onActivityResult后mContext为空
         if (mContext == null) mContext = this;
         super.onResume();
-        if (mPresenter != null) mPresenter.onResume();
+        if (presenter != null) presenter.onResume();
     }
 
     @Override
@@ -158,7 +158,7 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         super.onDestroy();
-        if (mPresenter != null) mPresenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 
     /**
@@ -293,14 +293,14 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
      * @return presenter实例
      */
     public presenter getPresenter() {
-        if (mPresenter == null) {
+        if (presenter == null) {
             try {
                 throw new NullPointerException("使用presenter,MVPActivity泛型不能为空");
             } catch (NullPointerException e) {
                 throw e;
             }
         }
-        return mPresenter;
+        return presenter;
     }
 
     /**
@@ -322,19 +322,21 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
         //当前class有泛型参数
         for (Type currentType : types) {
             /*遍历所有继承父类，判断是否包含Presenter类型*/
-            while (((Class) currentType).getSuperclass() != Object.class) {
-                if (((Class) currentType).getSuperclass() == Presenter.class) {
+            Class superClass = ((Class) currentType).getSuperclass();
+            while (superClass != Object.class) {
+                if (superClass == Presenter.class) {
                     String presenterName = ((Class) currentType).getName();
                     try {
                         return (presenter) Class.forName(presenterName).newInstance();
                     } catch (InstantiationException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     }
                 }
+                superClass = superClass.getSuperclass();
             }
         }
         return null;

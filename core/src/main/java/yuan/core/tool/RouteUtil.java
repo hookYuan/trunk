@@ -12,17 +12,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 
 /**
  * 描述：
@@ -406,7 +406,7 @@ public class RouteUtil {
     /**
      * 构造Intent
      */
-    private static Intent getIntent(Context mContext, Class clazz, RouteParam param) {
+    private static Intent getIntent(Context mContext, Class clazz, @Nullable RouteParam param) {
         Intent intent = new Intent(mContext, clazz);
         if (param != null) {
             //向Intent中添加参数
@@ -465,7 +465,7 @@ public class RouteUtil {
      * @date 2018/12/11
      */
     public interface OnActivityResultListener {
-        void onActivityResult(int requestCode, int resultCode, Intent data);
+        void onActivityResult(int requestCode, int resultCode, @Nullable Intent data);
     }
 
     /**

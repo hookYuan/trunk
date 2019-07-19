@@ -46,8 +46,8 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:$support"
-    implementation "androidx.recyclerview:recyclerview:$support"
-    implementation "androidx.cardview:cardview:$support"
-    implementation "androidx.legacy:legacy-support-v4:$support"
+    api "androidx.appcompat:appcompat:$support"
+    api "androidx.recyclerview:recyclerview:$support"
+    api "androidx.cardview:cardview:$support"
+    api "androidx.legacy:legacy-support-v4:$support"
 }

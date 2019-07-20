@@ -12,7 +12,6 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import androidx.annotation.NonNull;
-import yuan.depends.R;
 
 /**
  * Created by YuanYe on 2017/7/12.
@@ -30,7 +29,7 @@ public class RefreshUtil {
             @NonNull
             @Override
             public RefreshHeader createRefreshHeader(@NonNull Context context, @NonNull RefreshLayout layout) {
-                layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
+                layout.setPrimaryColorsId(android.R.color.white, android.R.color.black);//全局设置主题颜色
                 return new ClassicsHeader(context);//指定为经典Header，默认是 贝塞尔雷达Header
             }
         });

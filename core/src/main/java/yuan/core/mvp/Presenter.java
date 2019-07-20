@@ -3,10 +3,20 @@ package yuan.core.mvp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import java.lang.ref.WeakReference;
 
@@ -26,7 +36,7 @@ import java.lang.ref.WeakReference;
  * @author yuanye
  * @date 2019/4/4 13:21
  */
-public class Presenter<view extends Contract.View> implements Contract.IPresenter {
+public class Presenter<view extends BaseContract.View> implements BaseContract.IPresenter {
 
     /**
      * 弱引用持有Activity引用，防止内存泄漏
@@ -110,6 +120,53 @@ public class Presenter<view extends Contract.View> implements Contract.IPresente
      */
     protected final void runOnUiThread(Runnable runnable) {
         if (mainHandler != null) mainHandler.post(runnable);
+    }
+
+    /**
+     * 获取颜色
+     *
+     * @param colorId
+     * @return
+     */
+    @ColorInt
+    protected final int getColor2(@ColorRes int colorId) {
+        return ContextCompat.getColor(getContext(), colorId);
+    }
+
+    /**
+     * 获取Drawable
+     *
+     * @param drawableId
+     * @return
+     */
+    @Nullable
+    protected final Drawable getDrawable2(@DrawableRes int drawableId) {
+        return ContextCompat.getDrawable(getContext(), drawableId);
+    }
+
+    /**
+     * 获取String
+     *
+     * @param id
+     * @return
+     */
+    @NonNull
+    protected final String getString2(@StringRes int id) {
+        return getContext().getResources().getString(id);
+    }
+
+    /**
+     * Toast,系统默认样式
+     *
+     * @param msg 提示内容
+     */
+    protected final void showToast(String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

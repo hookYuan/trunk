@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package yuan.core.mvp;
 
 import android.annotation.TargetApi;
@@ -42,7 +57,7 @@ import androidx.fragment.app.FragmentTransaction;
  * @author yuanye
  * @date 2019/4/4 13:17
  */
-public abstract class BaseFragment<presenter extends Presenter> extends Fragment implements Contract.View {
+public abstract class BaseFragment<presenter extends Presenter> extends Fragment implements BaseContract.View {
 
     private final static String TAG = "BaseFragment";
     /**
@@ -80,14 +95,21 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     /**
      * presenter
      */
-    private presenter presenter;
+    private presenter mPresenter;
+
+    /**
+     * 默认构造方法
+     */
+    public BaseFragment() {
+
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         //反射获取Presenter
-        presenter = createPresenter();
-        if (presenter != null) {
-            presenter.attachView(this);
+        mPresenter = createPresenter();
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
         }
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) { //获取上次显示状态
@@ -102,7 +124,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         }
         mainHandler = new Handler(Looper.getMainLooper());
 
-        if (presenter != null) presenter.onCreate(savedInstanceState);
+        if (mPresenter != null) mPresenter.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -202,15 +224,68 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
             }
         }
         super.onDestroy();
-        if (presenter != null) presenter.onDestroy();
+        if (mPresenter != null) mPresenter.onDestroy();
     }
 
-    private synchronized void initPrepare() {
-        if (isPrepared) {
-            onFirstUserVisible();
-        } else {
-            isPrepared = true;
+    /**
+     * 调用此方法时会导致{@link #getLayoutId()}失效
+     * 默认返回空，需要替换时可以自行更新
+     *
+     * @return
+     */
+    @Override
+    public View getLayoutView() {
+        return null;
+    }
+
+    /**
+     * 此方法为标准代码风格设置，所有查找控件方法都应该放于这里
+     * 鉴于Kotlin已经不需要调用{@link #findViewById(int)},所以不是
+     * 必须实现方法
+     */
+    @Override
+    public void findViews() {
+
+    }
+
+    /**
+     * 此方法为标准代码风格设置，所有从bundle中取值方法都应该放于这里
+     * 非必须实现方法
+     *
+     * @param bundle
+     */
+    @Override
+    public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    /**
+     * 获取Presenter
+     *
+     * @return presenter实例
+     */
+    public presenter getPresenter() {
+        if (mPresenter == null) {
+            try {
+                throw new NullPointerException("使用presenter,MVPActivity泛型不能为空");
+            } catch (NullPointerException e) {
+                throw e;
+            }
         }
+        return mPresenter;
+    }
+
+
+    /**
+     * 加载View
+     *
+     * @param id
+     * @param <T>
+     * @return
+     */
+    public <T extends View> T findViewById(@IdRes int id) {
+        if (mView == null) return null;
+        return mView.findViewById(id);
     }
 
     /**
@@ -221,14 +296,14 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         parseBundle(getArguments());
         initData();
         setListener();
-        if (presenter != null) presenter.onResume();
+        if (mPresenter != null) mPresenter.onResume();
     }
 
     /**
      * fragment可见（切换回来或者onResume）
      */
     protected void onUserVisible() {
-        if (presenter != null) presenter.onResume();
+        if (mPresenter != null) mPresenter.onResume();
     }
 
     /**
@@ -243,22 +318,6 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
      */
     protected void onUserInvisible() {
 
-    }
-
-    /**
-     * 获取Presenter
-     *
-     * @return presenter实例
-     */
-    public presenter getPresenter() {
-        if (presenter == null) {
-            try {
-                throw new NullPointerException("使用presenter,MVPActivity泛型不能为空");
-            } catch (NullPointerException e) {
-                throw e;
-            }
-        }
-        return presenter;
     }
 
     /**
@@ -318,18 +377,6 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     }
 
     /**
-     * 加载View
-     *
-     * @param id
-     * @param <T>
-     * @return
-     */
-    public <T extends View> T findViewById(@IdRes int id) {
-        if (mView == null) return null;
-        return mView.findViewById(id);
-    }
-
-    /**
      * 获取Presenter实例
      * <p>
      * 默认反射第一个泛型创建Presenter
@@ -367,4 +414,17 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         }
         return null;
     }
+
+    /**
+     * 初始化
+     */
+    private synchronized void initPrepare() {
+        if (isPrepared) {
+            onFirstUserVisible();
+        } else {
+            isPrepared = true;
+        }
+    }
+
+
 }

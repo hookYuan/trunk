@@ -42,7 +42,7 @@ public abstract class RecyclerViewActivity<T extends Presenter, D> extends BaseA
     /**
      * 适配器
      */
-    protected RecyclerView.Adapter mAdapter;
+    protected RecyclerAdapter mAdapter;
 
     /**
      * 标题
@@ -83,6 +83,7 @@ public abstract class RecyclerViewActivity<T extends Presenter, D> extends BaseA
 
         createAdapter();
         init(mRecyclerView, mSmartRefreshLayout, mStateLayout);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -96,7 +97,6 @@ public abstract class RecyclerViewActivity<T extends Presenter, D> extends BaseA
                         StateLayout mStateLayout) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new GridDivider(mContext));
-        recyclerView.setAdapter(mAdapter);
     }
 
     protected void createAdapter() {

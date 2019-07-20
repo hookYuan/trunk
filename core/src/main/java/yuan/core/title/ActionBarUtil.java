@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import yuan.core.R;
 import yuan.core.tool.Views;
 
@@ -18,6 +19,11 @@ public class ActionBarUtil {
      * 标题
      */
     private TitleBar titleBar;
+
+    /**
+     * 全局主题样式
+     */
+    private DefaultTheme mDefaultTheme;
 
     private static class ActionBarUtilsInstance {
         private static ActionBarUtil instance = new ActionBarUtil();
@@ -50,7 +56,30 @@ public class ActionBarUtil {
     @SuppressLint("ResourceType")
     public static TitleBar create(AppCompatActivity activity) {
         ActionBarUtilsInstance.instance.init(activity);
+        if (ActionBarUtilsInstance.instance.mDefaultTheme != null) {
+            ActionBarUtilsInstance.instance.mDefaultTheme
+                    .defaultTheme(ActionBarUtilsInstance.instance.titleBar);
+        }
         return ActionBarUtilsInstance.instance.titleBar;
+    }
+
+    /**
+     * 设置全局样式
+     * 局部样式优先于全局样式
+     *
+     * @param defaultTheme
+     */
+    public static void setDefaultTheme(DefaultTheme defaultTheme) {
+        ActionBarUtilsInstance.instance.mDefaultTheme = defaultTheme;
+    }
+
+    /**
+     * 全局初始化
+     *
+     * @return
+     */
+    public interface DefaultTheme {
+        void defaultTheme(TitleBar titleBar);
     }
 
 }

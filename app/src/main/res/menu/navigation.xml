@@ -3,13 +3,13 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@mipmap/ic_launcher"
-        android:title="基础" />
+        android:title="核心库" />
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@mipmap/ic_launcher"
-        android:title="简介" />
+        android:title="三方库" />
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@mipmap/ic_launcher"
-        android:title="关于" />
+        android:title="扩展库" />
 </menu>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".one.sort.SortActivity">
+    tools:context=".core.ui.sort.SortActivity">
 
     <yuan.widget.title.TitleBar
         android:layout_width="match_parent"

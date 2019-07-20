@@ -13,7 +13,6 @@ import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
 import yuan.core.mvp.BaseFragment;
 import yuan.core.mvp.Presenter;
-import yuan.core.title.TitleBar;
 import yuan.core.widget.StateLayout;
 import yuan.depends.R;
 
@@ -40,12 +39,7 @@ public abstract class RecyclerViewFragment<T extends Presenter, D> extends BaseF
     /**
      * 适配器
      */
-    protected RecyclerView.Adapter mAdapter;
-
-    /**
-     * 标题
-     */
-    protected TitleBar mTitleBar;
+    protected RecyclerAdapter mAdapter;
 
     /**
      * 数据源
@@ -81,6 +75,7 @@ public abstract class RecyclerViewFragment<T extends Presenter, D> extends BaseF
 
         createAdapter();
         init(mRecyclerView, mSmartRefreshLayout, mStateLayout);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -94,7 +89,6 @@ public abstract class RecyclerViewFragment<T extends Presenter, D> extends BaseF
                         StateLayout mStateLayout) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new GridDivider(mContext));
-        recyclerView.setAdapter(mAdapter);
     }
 
     protected void createAdapter() {

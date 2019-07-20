@@ -35,4 +35,7 @@
 "在泼墨山水画里\n\n"
 "你从墨色深处被隐去\n\n"
     </string>
+
+
+    <string name="main_permission_dialog">权限获取失败，请前往系统设置开启权限</string>
 </resources>

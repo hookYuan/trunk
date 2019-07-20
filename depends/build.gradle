@@ -50,5 +50,5 @@ dependencies {
     //图片选择器
     api 'com.cysion:ImagePicker:1.0.6'
     //依赖基础库
-    api 'yuan.core:core:1.0.4'
+    api project(path: ':core')
 }

@@ -8,32 +8,30 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:appComponentFactory=""
-        tools:replace="android:appComponentFactory"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".one.callback.CallbackActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".core.ui.callback.CallbackActivity"></activity>
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".one.toolbar.TitleBarActivity" />
-        <activity android:name=".one.toolbar.TitleDemo1" />
-        <activity android:name=".one.roundView.RoundTextActivity" />
-        <activity android:name=".one.foldTextView.FoldActivity"></activity>
-        <activity android:name=".one.sort.SortActivity" />
+        <activity android:name=".core.ui.toolbar.TitleBarActivity" />
+        <activity android:name=".core.ui.toolbar.TitleFullScreenActivity" />
+        <activity android:name=".core.ui.roundview.RoundTextActivity" />
+        <activity android:name=".core.ui.foldtext.FoldActivity"></activity>
+        <activity android:name=".core.ui.sort.SortActivity" />
         <activity
-            android:name=".one.input.InputActivity"
+            android:name=".core.ui.input.InputActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".one.http.NetActivity" />
-        <activity android:name=".one.dialog.AlertDialogActivity" />
-        <activity android:name=".one.multi.MultiActivity" />
-        <activity android:name=".one.db.DBActivity" />
-        <activity android:name=".one.select.SelectActivity" />
+        <activity android:name=".core.ui.http.OKHttpActivity" />
+        <activity android:name=".core.ui.dialog.AlertDialogActivity" />
+        <activity android:name=".expand.ui.multi.MultiActivity" />
+        <activity android:name=".expand.ui.db.DBActivity" />
+        <activity android:name=".core.ui.picker.PickerActivity" />
     </application>
 
 </manifest>

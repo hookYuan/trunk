@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".one.multi.MultiActivity">
+    tools:context=".expand.ui.multi.MultiActivity">
 
     <yuan.widget.title.TitleBar
         android:id="@+id/title_bar"

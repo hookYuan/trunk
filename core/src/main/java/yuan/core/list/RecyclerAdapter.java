@@ -64,10 +64,6 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      */
     private List<T> mData;
 
-    public RecyclerAdapter() {
-        init();
-    }
-
     /**
      * 绑定布局文件
      *

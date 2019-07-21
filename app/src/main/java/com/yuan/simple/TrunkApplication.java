@@ -32,7 +32,7 @@ public class TrunkApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //
+        //调试检查内存泄漏
         LeakSentry.INSTANCE.getConfig().copy(true,
                 true,
                 true,

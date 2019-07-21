@@ -1,22 +1,45 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.yuan.simple.core.ui.roundview;
 
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageView;
+
+import androidx.core.content.ContextCompat;
 
 import yuan.core.mvp.BaseActivity;
-import yuan.core.list.ListAdapter;
+import yuan.core.title.ActionBarUtil;
+import yuan.core.title.TitleBar;
+
 import com.yuan.simple.R;
+import com.yuan.simple.core.adapter.RoundTextAdapter;
+import com.yuan.simple.core.presenter.RoundTextPresenter;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * 通过RoundView 实现各种常见按钮的各种样式
+ *
+ * @author YuanYe
+ * @date 2019/7/21  10:04
+ */
+public class RoundTextActivity extends BaseActivity<RoundTextPresenter> {
 
-public class RoundTextActivity extends BaseActivity {
-
-
+    /**
+     * gridView
+     */
     private GridView gridView;
-    int selecte = 0;
 
     @Override
     public int getLayoutId() {
@@ -26,16 +49,20 @@ public class RoundTextActivity extends BaseActivity {
     @Override
     public void findViews() {
         gridView = (GridView) findViewById(R.id.gv_simple_demo);
-        gridView.setAdapter(getAdapter());
-    }
-
-    @Override
-    public void parseBundle(@Nullable Bundle bundle) {
-
     }
 
     @Override
     public void initData() {
+
+        gridView.setAdapter(new RoundTextAdapter(getPresenter().loadData(), gridView));
+
+        ImageView imageView = findViewById(R.id.image_test);
+        imageView.setBackground(getResources().getDrawable(R.mipmap.ic_launcher));
+
+        TitleBar titleBar = findViewById(R.id.title_bar);
+        titleBar.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        titleBar.setLeftIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
+        titleBar.setTitleText("RoundView");
 
     }
 
@@ -43,38 +70,4 @@ public class RoundTextActivity extends BaseActivity {
     public void setListener() {
 
     }
-
-
-    private ListAdapter getAdapter() {
-        return new ListAdapter(getData(), R.layout.shape_gv_item) {
-            @Override
-            public void bindView(final ViewHolder holder, Object obj) {
-                holder.setText(R.id.rtv_text, (String) obj);
-                if (selecte == holder.getItemPosition()) {
-                    holder.getView(R.id.rtv_text).setSelected(true);
-                } else {
-                    holder.getView(R.id.rtv_text).setSelected(false);
-                }
-                holder.getItemView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        selecte = holder.getItemPosition();
-                        notifyDataSetChanged();
-                    }
-                });
-            }
-        };
-    }
-
-    private List<String> getData() {
-        List<String> data = new ArrayList<>();
-        data.add("28");
-        data.add("68");
-        data.add("128");
-        data.add("198");
-        data.add("298");
-        data.add("自定义");
-        return data;
-    }
-
 }

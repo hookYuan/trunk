@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package yuan.core.list;
 
 import android.content.Context;
@@ -18,8 +33,17 @@ import java.util.List;
  */
 public abstract class ListAdapter<T> extends BaseAdapter {
 
+    /**
+     * 数据源
+     */
     protected List<T> mData;
-    private int mLayoutRes;//布局id
+    /**
+     * 布局id
+     */
+    private int mLayoutRes;
+    /**
+     * ListView及其子布局，需要在初始化完成后有效
+     */
     private ViewGroup parent;
 
     public ListAdapter(List<T> mData, int mLayoutRes) {

@@ -19,7 +19,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.MenuItem;
@@ -63,7 +62,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initData() {
         addFragmentReflex(R.id.content, CoreFragment.class, DependsFragment.class, ExpandFragment.class);
-        requestPermission();
+//        requestPermission();
     }
 
     @Override

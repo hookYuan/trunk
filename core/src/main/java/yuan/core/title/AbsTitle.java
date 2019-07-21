@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2019 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package yuan.core.title;
 
 import android.content.Context;
@@ -19,18 +34,19 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 /**
- * Created by YuanYe on 2018/8/4.
  * 如果需要自定义Title,可以继承AbsTitle
+ *
+ * @author YuanYe
+ * @date 2018/8/4  10:33
  */
 abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements ITitle {
 
     public static final int EMPTY_RES = -1;
     public static final String EMPTY_TEXT = "";
 
-    private int defaultHeight = 50; //默认高度，单位dp
-
     protected Context context;
 
+    private int defaultHeight = 50; //默认高度，单位dp
     private LinearLayout leftRoot;//左侧根布局
     private LinearLayout centerRoot;//中间根布局
     private LinearLayout rightRoot;//右侧根布局
@@ -46,8 +62,6 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
         super(context, attrs);
         this.context = context;
         init(attrs);
-
-
     }
 
     @Override

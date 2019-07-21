@@ -7,18 +7,6 @@
     android:orientation="vertical"
     tools:context=".core.ui.input.InputActivity">
 
-    <yuan.widget.title.TitleBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:centerText="input"
-        app:centerTextColor="@color/white"
-        app:leftClickFinish="true"
-        app:leftDrawable="@drawable/ic_base_back_white">
-
-
-    </yuan.widget.title.TitleBar>
-
     <!--<com.yuan.base.widget.input.InputScrollView-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"-->

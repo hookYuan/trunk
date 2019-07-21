@@ -7,16 +7,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <yuan.widget.title.TitleBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:centerText="RoundView"
-        app:centerTextColor="@color/white"
-        app:leftClickFinish="true"
-        app:leftDrawable="@drawable/ic_base_back_white">
+    <yuan.core.title.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"></yuan.core.title.TitleBar>
 
-    </yuan.widget.title.TitleBar>
+    <ImageView
+        android:id="@+id/image_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Switch
         android:layout_width="wrap_content"

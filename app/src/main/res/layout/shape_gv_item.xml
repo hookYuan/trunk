@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <yuan.widget.roundview.RoundTextView
+    <yuan.core.roundview.RoundTextView
         android:id="@+id/rtv_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +24,6 @@
         app:rv_strokeColor="@color/colorPrimary"
         app:rv_strokeWidth="@dimen/size_1"
         app:rv_textPressColor="@color/white"
-        app:rv_textSelectedColor="@color/white"></yuan.widget.roundview.RoundTextView>
+        app:rv_textSelectedColor="@color/white"></yuan.core.roundview.RoundTextView>
 
 </LinearLayout>

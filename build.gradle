@@ -3,11 +3,11 @@
 buildscript {
 
     repositories {
-        maven {url 'https://maven.aliyun.com/repository/jcenter'}
-        maven {url 'https://maven.aliyun.com/repository/google'}
+//        maven {url 'https://maven.aliyun.com/repository/jcenter'}
+//        maven {url 'https://maven.aliyun.com/repository/google'}
+        jcenter()
+        google()
         maven { url 'https://dl.bintray.com/ydroid/maven' }
-//        jcenter()
-//        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
@@ -19,11 +19,11 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {url 'https://maven.aliyun.com/repository/jcenter'}
-        maven {url 'https://maven.aliyun.com/repository/google'}
+//        maven {url 'https://maven.aliyun.com/repository/jcenter'}
+//        maven {url 'https://maven.aliyun.com/repository/google'}
+        jcenter()
+        google()
         maven { url 'https://dl.bintray.com/ydroid/maven' }
-//        jcenter()
-//        google()
     }
 
     //加上这些

@@ -17,6 +17,7 @@ package yuan.core.title;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -46,10 +47,11 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
 
     protected Context context;
 
+    protected LinearLayout leftRoot;//左侧根布局
+    protected LinearLayout centerRoot;//中间根布局
+    protected LinearLayout rightRoot;//右侧根布局
+
     private int defaultHeight = 50; //默认高度，单位dp
-    private LinearLayout leftRoot;//左侧根布局
-    private LinearLayout centerRoot;//中间根布局
-    private LinearLayout rightRoot;//右侧根布局
     private ImageView background; //背景图片
 
     public AbsTitle(Context context) {
@@ -66,25 +68,29 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //设置宽度
-        int specMode = MeasureSpec.getMode(widthMeasureSpec);
-        int specSize = MeasureSpec.getSize(widthMeasureSpec);
-        //wrap_content
-        if (specMode == MeasureSpec.AT_MOST) {
-
+        //当设置宽度wrap_content是，设置宽度为match_parent
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+        int matchMeasureSpec = 0;
+        if (widthSpecMode == MeasureSpec.AT_MOST) {
+            matchMeasureSpec = MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY);
+            widthSpecSize = MeasureSpec.getSize(matchMeasureSpec);
         }
-        //获取高度
+
+        super.onMeasure(matchMeasureSpec == 0 ? widthMeasureSpec : matchMeasureSpec, heightMeasureSpec);
+        //当设置高度为wrap_content时设置默认高度50dp
         int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-        //wrap_content
         if (heightSpecMode == MeasureSpec.AT_MOST) {
             heightSpecSize = (int) (defaultHeight * context.getResources().getDisplayMetrics().density);
         }
-        setMeasuredDimension(specSize, heightSpecSize);
+        //更新子控件的高度
+        setTitleBarHeight(heightSpecSize);
+        setMeasuredDimension(widthSpecSize, heightSpecSize);
     }
 
     public void init(@Nullable AttributeSet attrs) {
+
         //创建背景布局
         if (background == null) background = new ImageView(context);
         background.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -95,7 +101,6 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
         leftRoot = new LinearLayout(context);
         LayoutParams leftParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         leftParams.addRule(ALIGN_PARENT_LEFT);
-        leftParams.addRule(CENTER_VERTICAL);
         leftParams.addRule(LEFT_OF, android.R.id.autofill);
         leftRoot.setLayoutParams(leftParams);
         leftRoot.setOrientation(LinearLayout.HORIZONTAL);
@@ -116,7 +121,7 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
         LayoutParams rightParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         rightParams.addRule(ALIGN_PARENT_RIGHT);
         rightParams.addRule(CENTER_VERTICAL);
-        leftParams.addRule(RIGHT_OF, android.R.id.autofill);
+        rightParams.addRule(RIGHT_OF, android.R.id.autofill);
         rightRoot.setLayoutParams(rightParams);
         rightRoot.setOrientation(LinearLayout.HORIZONTAL);
         rightRoot.setGravity(Gravity.RIGHT);
@@ -166,6 +171,22 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
     public T setTitleBarHeight(float height) {
         if (height >= 0) {
             this.getLayoutParams().height = (int) height;
+
+            RelativeLayout.LayoutParams leftRootParams = (LayoutParams) leftRoot.getLayoutParams();
+            leftRootParams.height = (int) height;
+            leftRoot.setLayoutParams(leftRootParams);
+
+            RelativeLayout.LayoutParams centerRootParams = (LayoutParams) centerRoot.getLayoutParams();
+            centerRootParams.height = (int) height;
+            centerRoot.setLayoutParams(centerRootParams);
+
+            RelativeLayout.LayoutParams rightRootParams = (LayoutParams) rightRoot.getLayoutParams();
+            rightRootParams.height = (int) height;
+            rightRoot.setLayoutParams(rightRootParams);
+
+            RelativeLayout.LayoutParams backgroundParams = (LayoutParams) background.getLayoutParams();
+            backgroundParams.height = (int) height;
+            background.setLayoutParams(backgroundParams);
         }
         return (T) this;
     }
@@ -225,30 +246,34 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
     }
 
     /**
+     * 获取TitleBar背景ImageView
+     *
+     * @return
+     */
+    public ImageView getBackgroundView() {
+        background.setVisibility(VISIBLE);
+        return background;
+    }
+
+    /**
      * *********************设置背景颜色、背景图片***********************************************************
      */
     @Override
     public void setBackgroundColor(int color) {
-        super.setBackgroundColor(0);
-        if (background != null) background.setBackgroundColor(color);
+        super.setBackgroundColor(color);
+        if (background != null) background.setVisibility(GONE);
     }
 
     @Override
-    public void setBackgroundResource(int resid) {
-        super.setBackgroundResource(0);
-        if (background != null) background.setBackgroundResource(resid);
+    public void setBackgroundResource(int resId) {
+        super.setBackgroundResource(resId);
+        if (background != null) background.setVisibility(GONE);
     }
 
     @Override
     public void setBackground(Drawable drawable) {
-        super.setBackground(null);
-        if (background != null) background.setBackground(drawable);
+        super.setBackground(drawable);
+        if (background != null) background.setVisibility(GONE);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void setBackgroundTintMode(@Nullable PorterDuff.Mode tintMode) {
-        super.setBackgroundTintMode(null);
-        if (background != null) background.setBackgroundTintMode(tintMode);
-    }
 }

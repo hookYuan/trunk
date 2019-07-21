@@ -62,7 +62,7 @@ public abstract class RecyclerViewFragment<T extends Presenter, D> extends BaseF
     public abstract void onBindHolder(BaseViewHolder holder, D item, int position);
 
     @Override
-    public final int getLayoutId() {
+    public int getLayoutId() {
         return R.layout.base_recycler_refresh_layout;
     }
 

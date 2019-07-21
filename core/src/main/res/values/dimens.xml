@@ -5,6 +5,9 @@
     <!--默认尺寸适配文件-->
     <dimen name="base_margin">16dp</dimen>
     <dimen name="title_margin">12dp</dimen>
+    <!--系统默认StatueBar高度,机型不同会有偏差-->
+    <dimen name="statue_bar_height">24dp</dimen>
+    <dimen name="action_bar_height">?attr/actionBarSize</dimen>
 
     <!--字体大小-->
     <dimen name="font_2">2sp</dimen>

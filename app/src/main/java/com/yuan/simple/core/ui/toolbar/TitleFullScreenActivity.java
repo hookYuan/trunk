@@ -18,6 +18,7 @@ package com.yuan.simple.core.ui.toolbar;
 import android.widget.ImageView;
 
 import yuan.core.mvp.BaseActivity;
+import yuan.core.title.ActionBarUtil;
 import yuan.core.title.StatusUtil;
 import yuan.core.tool.Views;
 import yuan.depends.glide.GlideUtil;
@@ -41,9 +42,10 @@ public class TitleFullScreenActivity extends BaseActivity {
     public void initData() {
         StatusUtil.setFloat(mContext);
         StatusUtil.setTransparent(mContext);
+        ActionBarUtil.hideActionBar(this);
         ImageView imageView = Views.find(mContext, R.id.iv_background);
         GlideUtil.create()
-                .showImage("http://static.oneplus.cn/data/attachment/forum/201701/05/165732nmebemxb1my1e08e.jpg", imageView);
+                .showImage("https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1563706162&di=e3977a38bfed8d389c1f20ba74dfd817&src=http://img.ph.126.net/v81Iaw5n-zOt0jzA1XWHNg==/2765773121175715604.jpg", imageView);
     }
 
     @Override

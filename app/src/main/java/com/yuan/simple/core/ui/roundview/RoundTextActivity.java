@@ -15,6 +15,8 @@
  */
 package com.yuan.simple.core.ui.roundview;
 
+import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -36,6 +38,7 @@ import com.yuan.simple.core.presenter.RoundTextPresenter;
  */
 public class RoundTextActivity extends BaseActivity<RoundTextPresenter> {
 
+    private static final String TAG = "RoundTextActivity";
     /**
      * gridView
      */
@@ -56,14 +59,10 @@ public class RoundTextActivity extends BaseActivity<RoundTextPresenter> {
 
         gridView.setAdapter(new RoundTextAdapter(getPresenter().loadData(), gridView));
 
-        ImageView imageView = findViewById(R.id.image_test);
-        imageView.setBackground(getResources().getDrawable(R.mipmap.ic_launcher));
-
-        TitleBar titleBar = findViewById(R.id.title_bar);
-        titleBar.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-        titleBar.setLeftIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
-        titleBar.setTitleText("RoundView");
-
+        ActionBarUtil.create(this)
+                .setLeftIcon(R.drawable.ic_base_back_white)
+                .setLeftClickFinish()
+                .setTitleText("RoundView");
     }
 
     @Override

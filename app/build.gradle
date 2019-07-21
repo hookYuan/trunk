@@ -11,9 +11,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-
-        //增加对vector文件的支持
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {

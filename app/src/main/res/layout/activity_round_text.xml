@@ -7,16 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <yuan.core.title.TitleBar
-        android:id="@+id/title_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"></yuan.core.title.TitleBar>
-
-    <ImageView
-        android:id="@+id/image_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

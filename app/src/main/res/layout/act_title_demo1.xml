@@ -18,16 +18,18 @@
         android:alpha="0.3"
         android:background="@color/black"></View>
 
-    <yuan.widget.title.TitleBar
+
+    <yuan.core.title.TitleBar
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/statue_bar_height"
         app:centerText=""
         app:centerTextColor="@color/white"
         app:leftClickFinish="true"
         app:leftDrawable="@drawable/ic_base_back_white">
 
-    </yuan.widget.title.TitleBar>
+    </yuan.core.title.TitleBar>
 
 
     <androidx.core.widget.NestedScrollView

@@ -34,9 +34,7 @@ public class TitleBarActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        ActionBarUtil.create(this).setTitleText("TitleBar")
-                .setTextColor(ContextCompat.getColor(mContext, R.color.white))
-                .setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+        ActionBarUtil.hideActionBar(this);
         addFragmentReflex(R.id.content, TitleBarFragment.class);
     }
 

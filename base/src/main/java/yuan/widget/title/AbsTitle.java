@@ -5,9 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -214,26 +216,23 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
      */
     @Override
     public void setBackgroundColor(int color) {
-        super.setBackgroundColor(0);
-        if (background != null) background.setBackgroundColor(color);
+        super.setBackgroundColor(color);
+//        if (background != null) background.setBackgroundColor(color);
+        if (background != null) background.setVisibility(GONE);
     }
 
     @Override
     public void setBackgroundResource(int resid) {
-        super.setBackgroundResource(0);
-        if (background != null) background.setBackgroundResource(resid);
+        super.setBackgroundResource(resid);
+//        if (background != null) background.setBackgroundResource(resid);
+        if (background != null) background.setVisibility(GONE);
     }
 
     @Override
     public void setBackground(Drawable drawable) {
-        super.setBackground(null);
-        if (background != null) background.setBackground(drawable);
+        super.setBackground(drawable);
+        if (background != null) background.setVisibility(GONE);
+//        if (background != null) background.setBackground(drawable);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void setBackgroundTintMode(@Nullable PorterDuff.Mode tintMode) {
-        super.setBackgroundTintMode(null);
-        if (background != null) background.setBackgroundTintMode(tintMode);
-    }
 }

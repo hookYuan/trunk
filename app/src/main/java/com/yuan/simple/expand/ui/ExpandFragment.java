@@ -15,6 +15,8 @@
  */
 package com.yuan.simple.expand.ui;
 
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import yuan.core.mvp.BaseFragment;
@@ -26,6 +28,7 @@ import com.yuan.simple.R;
  * Created by YuanYe on 2018/4/13.
  */
 public class ExpandFragment extends BaseFragment {
+    private static final String TAG = "ExpandFragment";
 
     @Override
     public int getLayoutId() {
@@ -33,13 +36,8 @@ public class ExpandFragment extends BaseFragment {
     }
 
     @Override
-    public void findViews() {
-
-    }
-
-    @Override
     public void initData() {
-
+        Log.i(TAG, "已经执行");
     }
 
     @Override

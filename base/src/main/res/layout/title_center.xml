@@ -19,4 +19,6 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/font_12"
         tools:text="副标题" />
+
+    <include layout="layout/title_layout"></include>
 </LinearLayout>

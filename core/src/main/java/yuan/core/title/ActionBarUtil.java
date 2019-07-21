@@ -16,9 +16,11 @@
 package yuan.core.title;
 
 import android.annotation.SuppressLint;
+import android.view.Gravity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import yuan.core.R;
 import yuan.core.tool.Views;
@@ -40,6 +42,11 @@ public class ActionBarUtil {
      */
     private DefaultTheme mDefaultTheme;
 
+    /**
+     * ActionBar 的高度
+     */
+    private int mElevation = 0;
+
     private static class ActionBarUtilsInstance {
         private static ActionBarUtil instance = new ActionBarUtil();
     }
@@ -53,14 +60,28 @@ public class ActionBarUtil {
      * @param activity
      */
     private void init(AppCompatActivity activity) {
-        titleBar = Views.inflate(activity, R.layout.action_bar_title_layout);
+        titleBar = Views.inflate(activity, R.layout.action_bar_title_bar_layout);
+
         ActionBar actionBar = activity.getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setElevation(0);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setElevation(mElevation);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(titleBar);
+
+        //去掉actionBar默认留白，使自定义view以最大宽高显示
+        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.MATCH_PARENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_HORIZONTAL;
+        actionBar.setCustomView(titleBar, layoutParams);
+        titleBar.getParent();
+        Toolbar parent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            parent = (Toolbar) titleBar.getParent();
+            //设置左右间隔为0
+            parent.setContentInsetsAbsolute(0, 0);
+        }
     }
 
     /**
@@ -86,6 +107,29 @@ public class ActionBarUtil {
      */
     public static void setDefaultTheme(DefaultTheme defaultTheme) {
         ActionBarUtilsInstance.instance.mDefaultTheme = defaultTheme;
+    }
+
+    /**
+     * 设置ActionBar高度
+     */
+    public static void setElevation(int elevation) {
+        ActionBarUtilsInstance.instance.mElevation = elevation;
+    }
+
+    /**
+     * 隐藏ActionBar
+     */
+    public static void hideActionBar(AppCompatActivity activity) {
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.hide();
+    }
+
+    /**
+     * 显示ActionBar
+     */
+    public static void showActionBar(AppCompatActivity activity) {
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.show();
     }
 
     /**

@@ -61,9 +61,9 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
     private static final String TAG = "BaseActivity";
 
     /**
-     * 保存上次显示的位置
+     * 保存上次显示的Fragment
      */
-    private static final String SAVE_SHOW_POSITION = "showPosition";
+    private static final String SAVE_SHOW_FRAGMENT = "save_show_fragment";
 
     /**
      * 上下文对象
@@ -149,12 +149,22 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
         super.onSaveInstanceState(outState);
         //保存Fragment的状态，防止Fragment被销毁
         if (mFragmentCache != null) {
+            int index = 0;
             for (Fragment fragment : mFragmentCache) {
                 if (fragment.isAdded()) {
-                    getSupportFragmentManager().putFragment(outState
-                            , fragment.getClass().getName()
-                            , fragment);
+                    //保存异常退出前显示的Fragment
+                    if (mDefaultShowPosition == index) {
+                        getSupportFragmentManager().putFragment(outState
+                                , SAVE_SHOW_FRAGMENT
+                                , fragment);
+                    } else {
+                        getSupportFragmentManager().putFragment(outState
+                                , fragment.getClass().getName()
+                                , fragment);
+                    }
+
                 }
+                index++;
             }
         }
     }
@@ -367,12 +377,26 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
         if (mFragmentCache == null) mFragmentCache = new ArrayList<>();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         for (T fragment : fragments) {
-            /*根据标记TAG寻找Fragment上次是否异常退出,如果有则优先显示改Fragment*/
+            /*根据标记TAG寻找Fragment上次是否异常退出,如果有则优先显示该Fragment*/
             if (savedInstanceState != null) {
+                //异常中断Fragment
                 T interruptFragment = (T) getSupportFragmentManager()
                         .getFragment(savedInstanceState, fragment.getClass().getName());
-                fragment = interruptFragment;
-                showFragment = fragment;
+
+                if (interruptFragment != null) {
+                    fragment = interruptFragment;
+                    mFragmentCache.add(fragment);
+                    Log.e(TAG, "异常Fragment--" + interruptFragment);
+                } else {
+                    //异常中断显示Fragment
+                    T interruptShowFragment = (T) getSupportFragmentManager()
+                            .getFragment(savedInstanceState, SAVE_SHOW_FRAGMENT);
+                    if (interruptShowFragment != null) {
+                        fragment = interruptShowFragment;
+                        showFragment = fragment;
+                        mFragmentCache.add(fragment);
+                    }
+                }
             }
             /*判断Fragment是否已经添加过，只添加未添加过的Fragment*/
             if (!fragment.isAdded()) {

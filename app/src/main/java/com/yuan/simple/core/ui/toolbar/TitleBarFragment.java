@@ -32,6 +32,7 @@ import com.yuan.simple.main.contract.MainContract;
 
 import yuan.core.tool.Kits;
 import yuan.core.widget.StateLayout;
+import yuan.depends.glide.GlideUtil;
 import yuan.depends.ui.RecyclerViewActivity;
 import yuan.depends.ui.RecyclerViewFragment;
 
@@ -54,6 +55,13 @@ import java.util.ArrayList;
 public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, SubjectBean>
         implements MainContract {
 
+    private TitleBar titleBar;
+
+    @Override
+    public int getLayoutId() {
+        return yuan.depends.R.layout.base_title_bar_recycler_refresh_layout;
+    }
+
     @Override
     protected int getItemLayoutId() {
         return android.R.layout.simple_list_item_2;
@@ -61,6 +69,7 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
 
     @Override
     protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
+        titleBar = findViewById(R.id.title_bar);
         GridLayoutManager manager = new GridLayoutManager(mContext, 2);
         //动态更改列数
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -81,6 +90,7 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                 , ContextCompat.getColor(mContext, R.color.colorDivider)));
 
         mStateLayout.showLoading();
+        getPresenter().loadData(mData);
     }
 
     @Override
@@ -117,36 +127,36 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                         StatusUtil.setFloat(mContext);
                         break;
                     case 2001:
-//                getTitleBar().setBackground("http://img1.imgtn.bdimg.com/it/u=626186099,3046696268&fm=27&gp=0.jpg");
+                        GlideUtil.create().showImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563715324851&di=c04d94030276f397232c05563d256ab7&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F8%2F59a61753a5a93.jpg",
+                                titleBar.getBackgroundView());
                         break;
                     case 2002:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+                        titleBar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
                         break;
                     case 2003:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setLeftText("取消");
+                        titleBar.setLeftText("取消");
                         break;
                     case 2004:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setLeftIcon(R.drawable.ic_base_back_black);
+                        titleBar.setLeftIcon(R.drawable.ic_base_back_black);
                         break;
                     case 2005:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setTitleText("Title");
+                        titleBar.setTitleText("Title");
                         break;
                     case 20051:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setSubtitleText("副标题");
+                        titleBar.setSubtitleText("副标题");
                         break;
                     case 2006:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setRightText("菜单");
+                        titleBar.setRightText("菜单");
                         break;
                     case 2007:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setRightIcon(R.drawable.ic_base_menu_more_black);
+                        titleBar.setRightIcon(R.drawable.ic_base_menu_more_black);
                         break;
                     case 2008:
                         final ArrayList<String> menuData = new ArrayList<String>();
                         menuData.add("选项一");
                         menuData.add("选项二");
                         menuData.add("选项三");
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext))
-                                .setRightMenu(menuData, new TitleBar.OnMenuItemClickListener() {
+                        titleBar.setRightMenu(menuData, new TitleBar.OnMenuItemClickListener() {
                                     @Override
                                     public void onItemClick(int position) {
                                         ToastUtil.showShort(mContext, menuData.get(position));
@@ -154,25 +164,13 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                                 });
                         break;
                     case 2009:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setAnimationIn();
+                        titleBar.setAnimationIn();
                         break;
                     case 2010:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setAnimationOut();
+                        titleBar.setAnimationOut();
                         break;
                     case 2011:
-                        ActionBarUtil.create(AppCompatActivity.class.cast(mContext)).setLeftClickFinish();
-                        break;
-                    case 3001:
-//                getStatusBar().setVisibility(View.VISIBLE);
-                        break;
-                    case 3002:
-//                getStatusBar().setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
-                        break;
-                    case 3003:
-//                getStatusBar().setBackgroundImg("http://img1.imgtn.bdimg.com/it/u=626186099,3046696268&fm=27&gp=0.jpg");
-                        break;
-                    case 3004:
-//                getStatusBar().setVisibility(View.GONE);
+                        titleBar.setLeftClickFinish();
                         break;
                     case 4001:
                         RouteUtil.open(mContext, TitleFullScreenActivity.class);

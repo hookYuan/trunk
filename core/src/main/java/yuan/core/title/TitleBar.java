@@ -19,7 +19,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -56,6 +58,7 @@ import yuan.core.R;
  */
 public class TitleBar extends AbsTitle<TitleBar> {
 
+    private static final String TAG = "TitleBar";
 
     private static int DEFAULTCOLOR; //默认字体颜色
 
@@ -133,11 +136,13 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
         if (leftTextView == null) {
             leftTextView = new TextView(context);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
             leftTextView.setLayoutParams(params);
+            leftTextView.setSingleLine();
             leftTextView.setPadding(dp2Dx(15), 0, dp2Dx(15), 0);
             leftTextView.setGravity(Gravity.CENTER_VERTICAL);
-            leftTextView.setBackground(getResources().getDrawable(R.drawable.nav_button_selector_background));
+            leftTextView.setVisibility(GONE);
+//            leftTextView.setBackground(getResources().getDrawable(R.drawable.nav_button_selector_background));
             setClickStyle(leftTextView);
             addLeftView(leftTextView);
         }
@@ -147,9 +152,11 @@ public class TitleBar extends AbsTitle<TitleBar> {
         setLeftIcon(leftIcon);
 
         if (titleTextView == null) {
-            View view = LayoutInflater.from(context).inflate(R.layout.title_center, this, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.title_bar_center, this, false);
             titleTextView = view.findViewById(R.id.tv_title);
+            titleTextView.setSingleLine();
             subtitleTextView = view.findViewById(R.id.tv_subtitle);
+            subtitleTextView.setSingleLine();
             subtitleTextView.setVisibility(GONE);
             addCenterView(view);
         }
@@ -159,12 +166,13 @@ public class TitleBar extends AbsTitle<TitleBar> {
 
         if (rightTextView == null) {
             rightTextView = new TextView(context);
-
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             rightTextView.setLayoutParams(params);
             rightTextView.setPadding(dp2Dx(15), 0, dp2Dx(15), 0);
+            rightTextView.setSingleLine();
             rightTextView.setGravity(Gravity.CENTER_VERTICAL);
-            rightTextView.setBackground(getResources().getDrawable(R.drawable.nav_button_selector_background));
+            rightTextView.setVisibility(GONE);
+//            rightTextView.setBackground(getResources().getDrawable(R.drawable.nav_button_selector_background));
             addRightView(rightTextView);
             setClickStyle(rightTextView);
         }
@@ -182,12 +190,16 @@ public class TitleBar extends AbsTitle<TitleBar> {
      * ------------------------------------左侧内容设置----------------------------------------
      **/
     public TitleBar setLeftText(@NonNull CharSequence text) {
-        leftTextView.setText(text);
+        if (leftTextView != null && text != null) {
+            leftTextView.setText(text);
+            leftTextView.setVisibility(VISIBLE);
+        }
         return this;
     }
 
     public TitleBar setLeftIcon(@NonNull Drawable icon) {
         if (icon != null) {
+            leftTextView.setVisibility(VISIBLE);
             icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
             leftTextView.setCompoundDrawables(icon, null, null, null);//画在左边
         }
@@ -243,6 +255,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
         if (rightTextView != null && icon != null) {
             icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
             rightTextView.setCompoundDrawables(icon, null, null, null);//画在左边
+            rightTextView.setVisibility(VISIBLE);
         }
         return this;
     }
@@ -253,7 +266,10 @@ public class TitleBar extends AbsTitle<TitleBar> {
     }
 
     public TitleBar setRightText(@NonNull CharSequence text) {
-        rightTextView.setText(text);
+        if (!TextUtils.isEmpty(text)) {
+            rightTextView.setText(text);
+            rightTextView.setVisibility(VISIBLE);
+        }
         return this;
     }
 
@@ -264,12 +280,35 @@ public class TitleBar extends AbsTitle<TitleBar> {
         return this;
     }
 
+    /**
+     * 设置右侧是否可以点击
+     *
+     * @param clickAble
+     * @return
+     */
     public TitleBar setRightClickEnable(@NonNull boolean clickAble) {
         rightTextView.setEnabled(clickAble);
         return this;
     }
 
+    /**
+     * 右侧默认按钮样式
+     *
+     * @return
+     */
+    public TitleBar setRightAsButton() {
+        setRightAsButton(R.drawable.selector_title_bar_as_button);
+        return this;
+    }
+
+    /**
+     * 右侧默认按钮样式
+     *
+     * @param res
+     * @return
+     */
     public TitleBar setRightAsButton(@DrawableRes int res) {
+        rightTextView.setVisibility(VISIBLE);
         rightTextView.setBackgroundResource(res);
         int left = (int) (8 * context.getResources().getDisplayMetrics().density);
         int top = (int) (4 * context.getResources().getDisplayMetrics().density);
@@ -302,7 +341,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
             //关闭popupWindow
             popupWindowMenu.dismiss();
         } else {
-            final View popupView = LayoutInflater.from(context).inflate(R.layout.title_menu, null);
+            final View popupView = LayoutInflater.from(context).inflate(R.layout.title_bar_menu, null);
             popupWindowMenu = new PopupWindow(popupView, ListPopupWindow.WRAP_CONTENT, ListPopupWindow.WRAP_CONTENT, true);
 
             //设置弹出的popupWindow不遮挡软键盘
@@ -422,7 +461,7 @@ public class TitleBar extends AbsTitle<TitleBar> {
             ViewHolder holder = null;
             if (view == null) {
                 holder = new ViewHolder();
-                view = LayoutInflater.from(context).inflate(R.layout.title_menu_item, viewGroup, false);
+                view = LayoutInflater.from(context).inflate(R.layout.title_bar_menu_item, viewGroup, false);
                 holder.content = view.findViewById(R.id.tv_item_content);
                 view.setTag(holder);
             } else {

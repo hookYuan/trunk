@@ -2,7 +2,7 @@ publish {
     userOrg = 'ydroid'      //bintray注册的用户名
     groupId = 'yuan.depend'         //compile引用时的第1部分groupId
     artifactId = 'depend'     //compile引用时的第2部分项目名
-    publishVersion = '1.0.2'    //compile引用时的第3部分版本号
+    publishVersion = '1.0.3'    //compile引用时的第3部分版本号
     desc = 'depend other Android library ,like glide , okhttp , core'
     website = 'https://github.com/hookYuan/Trunk-Java-MVP'
 }

@@ -16,8 +16,11 @@
 package com.yuan.simple;
 
 import android.app.Application;
+import android.content.Intent;
 
 import androidx.core.content.ContextCompat;
+
+import com.yuan.simple.main.MainActivity;
 
 import leakcanary.LeakSentry;
 import yuan.core.title.ActionBarUtil;
@@ -46,5 +49,16 @@ public class TrunkApplication extends Application {
 
         //设置全局SmartRefresh样式
         RefreshUtil.init();
+
+        //设置异常重启
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Intent intent = new Intent(TrunkApplication.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                TrunkApplication.this.startActivity(intent);
+                android.os.Process.killProcess(android.os.Process.myPid());  //结束进程之前可以把你程序的注销或者退出代码放在这段代码之前
+            }
+        });
     }
 }

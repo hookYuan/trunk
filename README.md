@@ -16,25 +16,25 @@
 ## core模块
 使用方式： 
   * 下载源码，修改需要依赖模块下的build.gradle文件。优点：可以修改源码，实现高度自定义；缺点：版本库升级项目不能平滑升级，编译时间长
-  ...
+···
     dependencies{
       implementation project(':base')
     }
-  ...
+···
   * jitpack在线依赖，修改需要依赖模块和工程下的build.gradle文件。优点：依赖简单；缺点：发现基础库bug会增大修改难度
-  ...
+···
     //项目根目录下build.gradle文件
     repositories{
        maven { url 'https://jitpack.io' }
     }
-  ...
+···
   
-  ...
+···
     //需要依赖模块下的build.gradle文件
     dependencies{
-       implementation 'com.github.hookYuan:Trunk-Java-MVP:develop-1.0.2'
+       implementation 'com.github.hookYuan.trunk:core:1.0.3'
     }
-  ...
+···
   
   
 

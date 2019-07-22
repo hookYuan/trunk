@@ -1,6 +1,6 @@
-## 简介 Trunk-Java-MVP 开发基础库
+## 简介trunk 开发基础库
 
-https://jitpack.io/v/hookYuan/Trunk-Java-MVP.svg
+[![](https://jitpack.io/v/hookYuan/trunk.svg)](https://jitpack.io/#hookYuan/trunk)
 
 ### 项目主要分为3部分
 #### 1.base部分现已拆分，core 与 depend 两个模块，目的是为了减少模块之间的项目依赖。

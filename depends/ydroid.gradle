@@ -1,5 +1,5 @@
 //github 发布配置
-group = 'com.github.hookYuan'
+group = 'yuan.depend'
 
 publish {
     userOrg = 'ydroid'      //bintray注册的用户名

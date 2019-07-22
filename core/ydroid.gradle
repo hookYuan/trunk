@@ -1,5 +1,5 @@
 //github 发布配置
-group = 'com.github.hookYuan'
+group = 'yuan.core'
 
 //bintray 发布配置
 publish {

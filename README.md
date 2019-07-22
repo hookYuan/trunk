@@ -1,8 +1,43 @@
 [![](https://jitpack.io/v/hookYuan/trunk.svg)](https://jitpack.io/#hookYuan/trunk)
 
-## trunk简介
+## trun简介
 
-工程为原生Android项目，项目内容为我这些年在Android开发中使用到的一些常用基础工具类，以及自己根据对mvp的和模块化一些理解实现的编码以及分包结构。项目中所有的代码结构、包结构和实现方式均来自我现在的实际项目开发。本项目是一个长期维护并更新版本，当然由于项目涉及的知识点和代码较多，对于以前旧版本的支持可能不是那么好。本项目最初创建于2017年，由我的另一个项目truck（truck最早参考了XDroidMvp这个项目）分离而来。项目的目的是提供Android开发中开发效率，提升开发质量，减少bug率。
+工程为原生Android项目，是一个长期维护并更新版本，当然由于项目涉及的知识点和代码较多，对于以前旧版本的支持可能不是那么好。本项目最初创建于2017年，由我的另一个项目truck（truck最早参考了XDroidMvp这个项目）分离而来。 
+
+* 收集Android开发中使用到的一些常用基础工具类
+* 实际开发中我对mvp的理解和实现方式
+* 实际开发中的编码规范以及项目分包结构
+* 提供Android开发中开发效率，提升开发质量，减少bug率
+
+## 工程结构
+
+工程结构主要分为3大模块core、depends、expand。依赖关系为core只依赖AndroidX;depands依赖core和三方常用lib;expand依赖core.
+
+## core模块
+使用方式： 
+  * 下载源码，修改需要依赖模块下的build.gradle文件。优点：可以修改源码，实现高度自定义；缺点：版本库升级项目不能平滑升级，编译时间长
+  ...
+    dependencies{
+      implementation project(':base')
+    }
+  ...
+  * jitpack在线依赖，修改需要依赖模块和工程下的build.gradle文件。优点：依赖简单；缺点：发现基础库bug会增大修改难度
+  ...
+    //项目根目录下build.gradle文件
+    repositories{
+       maven { url 'https://jitpack.io' }
+    }
+  ...
+  
+  ...
+    //需要依赖模块下的build.gradle文件
+    dependencies{
+       implementation 'com.github.hookYuan:Trunk-Java-MVP:develop-1.0.2'
+    }
+  ...
+  
+  
+
 
 #### 1.base部分现已拆分，core 与 depend 两个模块，目的是为了减少模块之间的项目依赖。
 其中core模块提供基本库（只依赖AndroidX包下lib）和常用方法.提高开发效率

@@ -198,6 +198,18 @@ public class RouteUtil {
      * @param mContext    上下文
      * @param clazz       目标Activity
      * @param param       参数传递，通过getIntent()获取参数
+     * @param listener    返回结果监听
+     */
+    public static void openResult(Context mContext, Class clazz, RouteParam param, OnActivityResultListener listener) {
+        openResult(mContext, getIntent(mContext, clazz, param), REQUESTCODE, listener);
+    }
+
+    /**
+     * 跳转Activity并获取返回结果
+     *
+     * @param mContext    上下文
+     * @param clazz       目标Activity
+     * @param param       参数传递，通过getIntent()获取参数
      * @param requestCode 请求码
      * @param listener    返回结果监听
      */

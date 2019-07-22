@@ -1,3 +1,6 @@
+//github 发布配置
+group = 'com.github.hookYuan'
+
 publish {
     userOrg = 'ydroid'      //bintray注册的用户名
     groupId = 'yuan.expand'         //compile引用时的第1部分groupId

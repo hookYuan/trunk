@@ -7,11 +7,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/size_16"
-        android:layout_marginTop="@dimen/size_4"
-        android:layout_marginBottom="@dimen/size_8"
         android:layout_marginLeft="@dimen/size_8"
-        app:cardElevation="@dimen/size_8">
+        android:layout_marginTop="@dimen/size_4"
+        android:layout_marginRight="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_8">
 
         <ListView
             android:id="@+id/pop_listView"

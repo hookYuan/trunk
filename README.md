@@ -85,28 +85,25 @@
   #### 对于三方库，我的态度一直是能自己实现，尽量少依赖，能简单就不要复杂化
   
    #### depend模块包含以下基础包（后期可能会有修改和扩展）：
-  * glide:
-  * imagepicker:
-  * okhttp:
-  * refresh:
-  * tablayout:
-  * ui:
+  * glide: 统一Glide加载风格，简化加载图片标准流程
+  * imagepicker: 采用模仿微信风格的图片选择器，不依赖任何第三方框架
+  * okhttp: 传统网络加载最全面的框架，封装在开发中遇到的各种问题以及简化使用流程
+  * refresh: smartRefreshLayout,可能是目前使用最多的下拉刷新框架
+  * tablayout: 简化ViewPager和Tablayou的使用，一行代码搞定Fragment嵌套ViewPager
+  * ui: 类似一个公共包，综合以上多种框架实现的快速解决方案
+  
+  ## expand模块
+  * expand模块设计是为了扩展以下优秀的实现方式，但是不一定常用的解决方案
+  * expand模块依赖core模块，对一些其中的一些内容做高度个性化扩展
+  * 使用简单，依赖单一
+  * 为了增强开发的可复用性，模块下的代码只依赖相同包下文件，大部分为单一文件无依赖。
+  
+  #### 对于三方库，我的态度一直是能自己实现，尽量少依赖，能简单就不要复杂化
+  
+   #### depend模块包含以下基础包（后期可能会有修改和扩展）：
+  * adapter: 扩展Adapter，例如多类型等
+  * database: 采用SQLiteHeple加上反射实现的数据库操作类，由于扩展性有待提高，又不想放弃，只能放置于depend中
+  * dialog : 完全自定义Dialog控件，此Dialog可以自定义动画等
+  * gestureview: 手势操作，检查点击、长按、滑动、快速滑动、双击等等常用手势。由于使用场景待定，现置于depend中
+  
 
-#### 1.base部分现已拆分，core 与 depend 两个模块，目的是为了减少模块之间的项目依赖。
-其中core模块提供基本库（只依赖AndroidX包下lib）和常用方法.提高开发效率
-depend模块依赖常用三方lib,例如依赖okhttp,glide等
-#### 2.autobuild模块为单纯java模块，里面包含常用java脚本，项目可以不用直接依赖。作用例如：创建开发模板
-#### 3.app模块 ，主要包含core和depend的使用案例
-
-## 依赖/使用
-
-### 第一步：由于所有模块均只上传maven,未同步到jcenter,所以需要在项目根目录下添加
-maven { url 'https://dl.bintray.com/ydroid/maven' }
-
-### 第二步：正常引用
-
-#### depend 版本引用
-compile 'yuan.depend:depend:1.0.1'
-
-#### core 版本引用
-compile 'yuan.core:core:1.0.4'

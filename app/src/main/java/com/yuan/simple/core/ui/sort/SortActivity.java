@@ -69,7 +69,7 @@ public class SortActivity extends BaseActivity<SortPresenter>
     @Override
     public void initData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new GridDivider(mContext));
+        recyclerView.addItemDecoration(new GridDivider());
         recyclerView.setAdapter(new SortAdapter(data));
         sideBar.setRecyclerView(recyclerView, data);
         sideBar.setSortData(data);

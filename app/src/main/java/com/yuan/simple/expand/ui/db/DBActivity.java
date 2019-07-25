@@ -41,7 +41,7 @@ public class DBActivity extends RecyclerViewActivity<DBPresenter, String>
         implements MainContract {
 
     @Override
-    protected int getItemLayoutId() {
+    protected int getItemLayoutId(int position) {
         return android.R.layout.simple_list_item_1;
     }
 

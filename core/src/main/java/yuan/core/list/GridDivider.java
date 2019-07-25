@@ -5,11 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import android.view.View;
 
 /**
@@ -19,6 +22,16 @@ import android.view.View;
  */
 public class GridDivider extends RecyclerView.ItemDecoration {
 
+    private final static String TAG = "GridDivider";
+
+    /**
+     * 默认分割线颜色
+     */
+    private final static int defaultSeparatorColor = Color.parseColor("#dddddd");
+    /**
+     * 默认分割线高度 ，单位为dp
+     */
+    private final static float defaultSeparatorHeight = 0.8f;
     /**
      * 画笔
      */
@@ -26,41 +39,59 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * 分割线宽度
      */
-    private int mDividerWidth;
+    private int mDividerHeight = -1;
 
     /**
      * 背景颜色
      */
-    private
-    @ColorInt
-    int bgColor;
+    private int bgColor;
 
-    public GridDivider(Context context) {
-        mDividerWidth = (int) (0.8 * context.getResources().getDisplayMetrics().density);
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(Color.parseColor("#dddddd"));
-        mPaint.setStyle(Paint.Style.FILL);
+
+    public GridDivider() {
+        this(-1, defaultSeparatorColor);
     }
 
+    /**
+     * @param height
+     */
+    public GridDivider(int height) {
+        this(height, defaultSeparatorColor);
+    }
+
+    /**
+     * @param height
+     * @param color
+     */
     public GridDivider(int height, @ColorInt int color) {
-        mDividerWidth = height;
+        this(height, color, 0);
+    }
+
+    /**
+     * @param height          分割线高度
+     * @param separatorColor  分割线颜色
+     * @param backgroundColor RecyclerView背景颜色
+     */
+    public GridDivider(int height, @ColorInt int separatorColor, @ColorInt int backgroundColor) {
+        mDividerHeight = height;
+        this.bgColor = backgroundColor;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(color);
+        mPaint.setColor(separatorColor);
         mPaint.setStyle(Paint.Style.FILL);
     }
 
-    public GridDivider(int height, @ColorInt int color, @ColorInt int bgColor) {
-        mDividerWidth = height;
-        this.bgColor = bgColor;
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(color);
-        mPaint.setStyle(Paint.Style.FILL);
-    }
 
-
+    /**
+     * 设置item偏移量，通过outRect.set(0, 0, 0, 100);设置
+     *
+     * @param outRect
+     * @param view
+     * @param parent
+     * @param state
+     */
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
+
         int itemPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
         int spanCount = getSpanCount(parent);
         int childCount = parent.getAdapter().getItemCount();
@@ -72,35 +103,63 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         int left;
         int right;
         int bottom;
-        int eachWidth = (spanCount - 1) * mDividerWidth / spanCount;
-        int dl = mDividerWidth - eachWidth;
+        int eachWidth = (spanCount - 1) * mDividerHeight / spanCount;
+        int dl = mDividerHeight - eachWidth;
 
         left = itemPosition % spanCount * dl;
         right = eachWidth - left;
-        bottom = mDividerWidth;
+        bottom = mDividerHeight;
         //Log.e("zzz", "itemPosition:" + itemPosition + " |left:" + left + " right:" + right + " bottom:" + bottom);
 //        if (isLastRow) { //控制是否绘制底部分割线
 //            bottom = 0;
 //        }
         if (isfirstRow) { //控制是否绘制顶部分割线
-            top = (spanCount - 1) * mDividerWidth / spanCount;
+            top = (spanCount - 1) * mDividerHeight / spanCount;
         } else {
             top = 0;
         }
         outRect.set(left, top, right, bottom);
-
     }
 
 
+    /**
+     * 绘制item同级别
+     *
+     * @param c
+     * @param parent
+     * @param state
+     */
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
-        draw(c, parent);
+        //设置默认分割线高度度
+        if (mDividerHeight < 0) {
+            mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * defaultSeparatorHeight);
+        }
+        drawSeparator(c, parent);
         parent.setBackgroundColor(bgColor);
     }
 
-    //绘制横向 item 分割线
-    private void draw(Canvas canvas, RecyclerView parent) {
+    /**
+     * 绘制在item顶层
+     *
+     * @param c
+     * @param parent
+     * @param state
+     */
+    @Override
+    public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+        super.onDrawOver(c, parent, state);
+    }
+
+    /**
+     * 绘制分割线
+     * 此分割线可能被item背景覆盖，可以设置相应的分割线偏移量
+     *
+     * @param canvas
+     * @param parent
+     */
+    private void drawSeparator(Canvas canvas, RecyclerView parent) {
         int childSize = parent.getChildCount();
         for (int i = 0; i < childSize; i++) {
             View child = parent.getChildAt(i);
@@ -110,15 +169,16 @@ public class GridDivider extends RecyclerView.ItemDecoration {
             int left = child.getLeft();
             int right = child.getRight();
             int top = child.getBottom() + layoutParams.bottomMargin;
-            int bottom = top + mDividerWidth;
+            int bottom = top + mDividerHeight;
             if (mPaint != null) {
                 canvas.drawRect(left, top, right, bottom, mPaint);
             }
+
             //画垂直分割线
             top = child.getTop();
-            bottom = child.getBottom() + mDividerWidth;
+            bottom = child.getBottom() + mDividerHeight;
             left = child.getRight() + layoutParams.rightMargin;
-            right = left + mDividerWidth;
+            right = left + mDividerHeight;
             if (mPaint != null) {
                 canvas.drawRect(left, top, right, bottom, mPaint);
             }

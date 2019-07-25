@@ -87,15 +87,25 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * @param layoutResId
      */
     public RecyclerAdapter(List<T> data, @LayoutRes int layoutResId) {
-        init();
-        this.mData = data;
-        /*如需设置多种不同类型，只需要调用类型注册即可，ViewType 从0开始递增 */
-        registerMultiType(new OnMultiType() {
+        this(data, new OnMultiType() {
             @Override
             public int getLayoutResId(int position) {
                 return layoutResId;
             }
         });
+    }
+
+    /**
+     * 绑定绑定数据/多种类型布局
+     *
+     * @param data
+     * @param multiType
+     */
+    public RecyclerAdapter(List<T> data, OnMultiType multiType) {
+        init();
+        this.mData = data;
+        /*如需设置多种不同类型，只需要调用类型注册即可，ViewType 从0开始递增 */
+        registerMultiType(multiType);
     }
 
     /**

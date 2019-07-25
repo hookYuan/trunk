@@ -25,13 +25,15 @@ import yuan.core.list.BaseViewHolder;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yuan.simple.core.presenter.FoldPresenter;
 import com.yuan.simple.R;
+import com.yuan.simple.main.contract.MainContract;
 
 import yuan.core.title.ActionBarUtil;
 import yuan.core.widget.FoldTextView;
 import yuan.core.widget.StateLayout;
 import yuan.depends.ui.RecyclerViewActivity;
 
-public class FoldActivity extends RecyclerViewActivity<FoldPresenter, String> {
+public class FoldActivity extends RecyclerViewActivity<FoldPresenter, String>
+    implements MainContract {
 
     /**
      * 用于记录是否展开的状态
@@ -39,7 +41,7 @@ public class FoldActivity extends RecyclerViewActivity<FoldPresenter, String> {
     private SparseBooleanArray collapsedStatus = new SparseBooleanArray();
 
     @Override
-    protected int getItemLayoutId() {
+    protected int getItemLayoutId(int position) {
         return R.layout.item_fold;
     }
 
@@ -64,5 +66,13 @@ public class FoldActivity extends RecyclerViewActivity<FoldPresenter, String> {
     @Override
     public void setListener() {
 
+    }
+
+    @Override
+    public void notifyDataChange(boolean isSuccess) {
+        mAdapter.notifyDataSetChanged();
+        //状态显示控制
+        if (isSuccess) mStateLayout.showContent();
+        else mStateLayout.showEmpty();
     }
 }

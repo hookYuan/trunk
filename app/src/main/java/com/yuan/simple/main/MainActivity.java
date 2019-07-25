@@ -62,7 +62,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initData() {
         addFragmentReflex(R.id.content, CoreFragment.class, DependsFragment.class, ExpandFragment.class);
-//        requestPermission();
+        ActionBarUtil.create(MainActivity.this)
+                .setTitleText("core");
     }
 
     @Override

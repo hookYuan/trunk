@@ -59,7 +59,7 @@ public abstract class RecyclerViewActivity<T extends Presenter, D> extends BaseA
      *
      * @return
      */
-    protected abstract int getItemLayoutId();
+    protected abstract int getItemLayoutId(int position);
 
     /**
      * 绑定数据
@@ -96,11 +96,19 @@ public abstract class RecyclerViewActivity<T extends Presenter, D> extends BaseA
                         SmartRefreshLayout smartRefreshLayout,
                         StateLayout mStateLayout) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new GridDivider(mContext));
+        recyclerView.addItemDecoration(new GridDivider());
     }
 
+    /**
+     * 创建Adapter
+     */
     protected void createAdapter() {
-        mAdapter = new RecyclerAdapter<D>(mData, getItemLayoutId()) {
+        mAdapter = new RecyclerAdapter<D>(mData, new RecyclerAdapter.OnMultiType() {
+            @Override
+            public int getLayoutResId(int position) {
+                return getItemLayoutId(position);
+            }
+        }) {
             @Override
             public void onBindHolder(BaseViewHolder holder, D item, int position) {
                 RecyclerViewActivity.this.onBindHolder(holder, item, position);

@@ -48,17 +48,17 @@ public class CoreFragment extends RecyclerViewFragment<CorePresenter, CoreFuncti
         implements MainContract {
 
     @Override
-    protected int getItemLayoutId() {
-        return android.R.layout.simple_list_item_1;
-    }
-
-    @Override
     protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         recyclerView.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
                 ContextCompat.getColor(mContext, R.color.colorDivider)));
         getPresenter().loadData(mData);
         mStateLayout.showLoading();
+    }
+
+    @Override
+    protected int getItemLayoutId(int position) {
+        return android.R.layout.simple_list_item_1;
     }
 
     @Override

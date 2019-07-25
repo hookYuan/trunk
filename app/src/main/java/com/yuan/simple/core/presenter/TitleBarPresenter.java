@@ -47,15 +47,14 @@ public class TitleBarPresenter extends Presenter<MainContract> {
                         mData.add(new SubjectBean("系统状态栏", 1000));
                         mData.add(new SubjectBean("黑色文字", 1001));
                         mData.add(new SubjectBean("白色文字", 1002));
-                        mData.add(new SubjectBean("系统状态栏背景色", 1003));
+                        mData.add(new SubjectBean("设置背景色", 1003));
                         mData.add(new SubjectBean("隐藏状态栏", 1004));
                         mData.add(new SubjectBean("显示状态栏", 10041));
-                        mData.add(new SubjectBean("透明状态栏", 1005));
                         mData.add(new SubjectBean("悬浮状态栏", 1006));
 
-                        mData.add(new SubjectBean("Toolbar", 2000));
+                        mData.add(new SubjectBean("TitleBar", 2000));
                         mData.add(new SubjectBean("背景图片", 2001));
-                        mData.add(new SubjectBean("颜色背景", 2002));
+                        mData.add(new SubjectBean("背景颜色", 2002));
                         mData.add(new SubjectBean("左边文字", 2003));
                         mData.add(new SubjectBean("左边图标", 2004));
                         mData.add(new SubjectBean("主标题", 2005));

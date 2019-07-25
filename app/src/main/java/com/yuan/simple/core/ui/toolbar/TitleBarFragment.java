@@ -18,13 +18,14 @@ package com.yuan.simple.core.ui.toolbar;
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
-import yuan.core.title.ActionBarUtil;
 import yuan.core.title.StatusUtil;
 import yuan.core.title.TitleBar;
 import yuan.core.tool.RouteUtil;
 import yuan.core.tool.ToastUtil;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yuan.simple.R;
 import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.TitleBarPresenter;
@@ -33,10 +34,8 @@ import com.yuan.simple.main.contract.MainContract;
 import yuan.core.tool.Kits;
 import yuan.core.widget.StateLayout;
 import yuan.depends.glide.GlideUtil;
-import yuan.depends.ui.RecyclerViewActivity;
 import yuan.depends.ui.RecyclerViewFragment;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,13 +62,14 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
     }
 
     @Override
-    protected int getItemLayoutId() {
-        return android.R.layout.simple_list_item_2;
-    }
-
-    @Override
     protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
         titleBar = findViewById(R.id.title_bar);
+        titleBar.setLeftIcon(R.drawable.ic_base_back_white)
+                .setTitleText("TitleBar")
+                .setTextColor(getColor2(R.color.white))
+                .setLeftClickFinish()
+                .setBackgroundColor(getColor2(R.color.colorPrimary));
+
         GridLayoutManager manager = new GridLayoutManager(mContext, 2);
         //动态更改列数
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -86,15 +86,27 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
         });
         recyclerView.setLayoutManager(manager);
         //add divider.
-        recyclerView.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f)
-                , ContextCompat.getColor(mContext, R.color.colorDivider)));
+        recyclerView.addItemDecoration(new GridDivider());
 
         mStateLayout.showLoading();
         getPresenter().loadData(mData);
+
+    }
+
+    @Override
+    protected int getItemLayoutId(int position) {
+        return android.R.layout.simple_list_item_1;
     }
 
     @Override
     public void onBindHolder(BaseViewHolder holder, SubjectBean item, int position) {
+        int code = item.getType();
+        if (code == 1000 || code == 2000 || code == 3000
+                || code == 4000) {
+            holder.setBackgroundColor(android.R.id.text1, getColor2(R.color.lightblue100));
+        } else {
+            holder.setBackgroundColor(android.R.id.text1,getColor2(R.color.white));
+        }
         holder.setText(android.R.id.text1, mData.get(position).getName());
     }
 
@@ -118,10 +130,6 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                         break;
                     case 10041:
                         StatusUtil.showBar(mContext);
-                        break;
-                    case 1005:
-                        StatusUtil.setStatusBarColor(mContext,
-                                ContextCompat.getColor(mContext, android.R.color.transparent));
                         break;
                     case 1006:
                         StatusUtil.setFloat(mContext);
@@ -157,11 +165,11 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                         menuData.add("选项二");
                         menuData.add("选项三");
                         titleBar.setRightMenu(menuData, new TitleBar.OnMenuItemClickListener() {
-                                    @Override
-                                    public void onItemClick(int position) {
-                                        ToastUtil.showShort(mContext, menuData.get(position));
-                                    }
-                                });
+                            @Override
+                            public void onItemClick(int position) {
+                                ToastUtil.showShort(mContext, menuData.get(position));
+                            }
+                        });
                         break;
                     case 2009:
                         titleBar.setAnimationIn();
@@ -176,6 +184,14 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                         RouteUtil.open(mContext, TitleFullScreenActivity.class);
                         break;
                 }
+            }
+        });
+
+        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                mData.clear();
+                getPresenter().loadData(mData);
             }
         });
     }

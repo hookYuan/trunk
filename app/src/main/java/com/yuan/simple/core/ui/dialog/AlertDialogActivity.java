@@ -59,7 +59,7 @@ public class AlertDialogActivity extends RecyclerViewActivity<DialogPresenter, S
     }
 
     @Override
-    protected int getItemLayoutId() {
+    protected int getItemLayoutId(int position) {
         return android.R.layout.simple_list_item_1;
     }
 

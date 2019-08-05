@@ -3,6 +3,7 @@ package yuan.core.tool;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.io.File;
 import java.io.Serializable;
@@ -25,7 +27,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
 /**
- * 描述：
+ * 描述：路由辅助跳转
+ * <p>
  * 1.Activity跳转辅助类（跳转参数携带一律从getIntent（）获取 open
  * 2.系统设置调整辅助  openSetting
  * 3.系统播放文件跳转  openPlay
@@ -35,6 +38,8 @@ import androidx.core.content.ContextCompat;
  * @date 2019/4/4 9:13
  */
 public class RouteUtil {
+
+    private final static String TAG = "RouteUtil";
     /**
      * 系统设置
      */
@@ -102,11 +107,11 @@ public class RouteUtil {
     /**
      * 提供的默认请求码
      */
-    public static final int REQUESTCODE = 10021;
+    public static final int REQUEST_CODE = 10021;
     /**
      * 启动等待时间，200毫秒内只启动一次
      */
-    private static final long SPACETIME = 50;
+    private static final long SPACE_TIME = 50;
     /**
      * 上次启动时间，用于就判断重复启动
      */
@@ -158,12 +163,16 @@ public class RouteUtil {
      * @param finishSelf 是否结束当前Activity
      */
     public static void open(Context mContext, Class clazz, RouteParam param, boolean finishSelf) {
-        //取消重复跳转，200毫秒内只跳转一次
-        if (System.currentTimeMillis() - lastStartTime > SPACETIME) {
-            mContext.startActivity(getIntent(mContext, clazz, param));
-            if (mContext instanceof Activity && finishSelf) {
-                Activity activity = (Activity) mContext;
-                activity.finish();
+        /*取消重复跳转，200毫秒内只跳转一次*/
+        if (System.currentTimeMillis() - lastStartTime > SPACE_TIME) {
+            Intent intent = createIntent(mContext, clazz, param);
+            if (intent == null) return;
+            mContext.startActivity(intent);
+
+            /*跳转前的Activity,是否结束*/
+            Activity fromActivity = Activity.class.cast(mContext);
+            if (fromActivity != null && finishSelf) {
+                fromActivity.finish();
             }
             lastStartTime = System.currentTimeMillis();
         }
@@ -172,13 +181,13 @@ public class RouteUtil {
     /**
      * 跳转Activity并获取返回结果
      *
-     * @param mContext    上下文
-     * @param clazz       目标Activity
-     * @param requestCode 请求码
-     * @param listener    返回结果监听
+     * @param mContext     上下文
+     * @param clazz        目标Activity
+     * @param REQUEST_CODE 请求码
+     * @param listener     返回结果监听
      */
-    public static void openResult(Context mContext, Class clazz, int requestCode, OnActivityResultListener listener) {
-        openResult(mContext, clazz, null, requestCode, listener);
+    public static void openResult(Context mContext, Class clazz, int REQUEST_CODE, OnActivityResultListener listener) {
+        openResult(mContext, clazz, null, REQUEST_CODE, listener);
     }
 
     /**
@@ -189,32 +198,36 @@ public class RouteUtil {
      * @param listener 返回结果监听
      */
     public static void openResult(Context mContext, Class clazz, OnActivityResultListener listener) {
-        openResult(mContext, clazz, REQUESTCODE, listener);
+        openResult(mContext, clazz, REQUEST_CODE, listener);
     }
 
     /**
      * 跳转Activity并获取返回结果
      *
-     * @param mContext    上下文
-     * @param clazz       目标Activity
-     * @param param       参数传递，通过getIntent()获取参数
-     * @param listener    返回结果监听
+     * @param mContext 上下文
+     * @param clazz    目标Activity
+     * @param param    参数传递，通过getIntent()获取参数
+     * @param listener 返回结果监听
      */
     public static void openResult(Context mContext, Class clazz, RouteParam param, OnActivityResultListener listener) {
-        openResult(mContext, getIntent(mContext, clazz, param), REQUESTCODE, listener);
+        Intent intent = createIntent(mContext, clazz, param);
+        if (intent == null) return;
+        openResult(mContext, intent, REQUEST_CODE, listener);
     }
 
     /**
      * 跳转Activity并获取返回结果
      *
-     * @param mContext    上下文
-     * @param clazz       目标Activity
-     * @param param       参数传递，通过getIntent()获取参数
-     * @param requestCode 请求码
-     * @param listener    返回结果监听
+     * @param mContext     上下文
+     * @param clazz        目标Activity
+     * @param param        参数传递，通过getIntent()获取参数
+     * @param REQUEST_CODE 请求码
+     * @param listener     返回结果监听
      */
-    public static void openResult(Context mContext, Class clazz, RouteParam param, int requestCode, OnActivityResultListener listener) {
-        openResult(mContext, getIntent(mContext, clazz, param), requestCode, listener);
+    public static void openResult(Context mContext, Class clazz, RouteParam param, int REQUEST_CODE, OnActivityResultListener listener) {
+        Intent intent = createIntent(mContext, clazz, param);
+        if (intent == null) return;
+        openResult(mContext, intent, REQUEST_CODE, listener);
     }
 
     /**
@@ -223,12 +236,14 @@ public class RouteUtil {
      * @param mContext        上下文
      * @param clazz           目标Activity
      * @param param           参数传递，通过getIntent()获取参数
-     * @param requestCode     请求码
+     * @param REQUEST_CODE    请求码
      * @param listener        返回结果监听
      * @param ignoreSpaceTime 是否忽略连续点击时间间隔
      */
-    public static void openResult(Context mContext, Class clazz, RouteParam param, int requestCode, OnActivityResultListener listener, boolean ignoreSpaceTime) {
-        openResult(mContext, getIntent(mContext, clazz, param), requestCode, listener, ignoreSpaceTime);
+    public static void openResult(Context mContext, Class clazz, RouteParam param, int REQUEST_CODE, OnActivityResultListener listener, boolean ignoreSpaceTime) {
+        Intent intent = createIntent(mContext, clazz, param);
+        if (intent == null) return;
+        openResult(mContext, intent, REQUEST_CODE, listener, ignoreSpaceTime);
     }
 
     /**
@@ -239,20 +254,20 @@ public class RouteUtil {
      * @param listener 返回结果监听
      */
     public static void openResult(Context mContext, Intent intent, OnActivityResultListener listener) {
-        openResult(mContext, intent, REQUESTCODE, listener);
+        openResult(mContext, intent, REQUEST_CODE, listener);
     }
 
     /**
      * 跳转Activity并获取返回结果
      *
-     * @param mContext    上下文
-     * @param intent      intent
-     * @param requestCode 请求码
-     * @param listener    返回结果监听
+     * @param mContext     上下文
+     * @param intent       intent
+     * @param REQUEST_CODE 请求码
+     * @param listener     返回结果监听
      */
-    public static void openResult(Context mContext, Intent intent, int requestCode, OnActivityResultListener listener) {
+    public static void openResult(Context mContext, Intent intent, int REQUEST_CODE, OnActivityResultListener listener) {
         //取消重复跳转，200毫秒内只跳转一次
-        openResult(mContext, intent, requestCode, listener, false);
+        openResult(mContext, intent, REQUEST_CODE, listener, false);
     }
 
     /**
@@ -260,15 +275,15 @@ public class RouteUtil {
      *
      * @param mContext        上下文
      * @param intent          intent
-     * @param requestCode     请求码
+     * @param REQUEST_CODE    请求码
      * @param listener        返回结果监听
      * @param ignoreSpaceTime 是否忽略连续点击时间间隔
      */
-    public static void openResult(Context mContext, Intent intent, int requestCode, OnActivityResultListener listener, boolean ignoreSpaceTime) {
+    public static void openResult(Context mContext, Intent intent, int REQUEST_CODE, OnActivityResultListener listener, boolean ignoreSpaceTime) {
         //取消重复跳转，200毫秒内只跳转一次
-        if ((System.currentTimeMillis() - lastStartTime > SPACETIME) || ignoreSpaceTime) {
+        if ((System.currentTimeMillis() - lastStartTime > SPACE_TIME) || ignoreSpaceTime) {
             ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
-            jumpResult.getFragment().startForResult(intent, requestCode, listener);
+            jumpResult.getFragment().startForResult(intent, REQUEST_CODE, listener);
             lastStartTime = System.currentTimeMillis();
         }
     }
@@ -368,14 +383,14 @@ public class RouteUtil {
      * 申请打开权限
      *
      * @param mContext
-     * @param permissions 申请权限数组
-     * @param requestCode 请求码
-     * @param listener    返回监听
+     * @param permissions  申请权限数组
+     * @param REQUEST_CODE 请求码
+     * @param listener     返回监听
      */
-    public static void openPermission(Context mContext, String[] permissions, int requestCode, OnPermissionListener listener) {
+    public static void openPermission(Context mContext, String[] permissions, int REQUEST_CODE, OnPermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ResultFragmentManager jumpResult = new ResultFragmentManager(mContext);
-            jumpResult.getFragment().startPermission(permissions, requestCode, listener);
+            jumpResult.getFragment().startPermission(permissions, REQUEST_CODE, listener);
         }
     }
 
@@ -388,7 +403,7 @@ public class RouteUtil {
      */
     public static void openPermission(Context mContext, String[] permissions, OnPermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            openPermission(mContext, permissions, REQUESTCODE, listener);
+            openPermission(mContext, permissions, REQUEST_CODE, listener);
         }
     }
 
@@ -417,15 +432,36 @@ public class RouteUtil {
 
     /**
      * 构造Intent
+     *
+     * @param mContext
+     * @param activityClazz
+     * @param param
+     * @return
      */
-    private static Intent getIntent(Context mContext, Class clazz, @Nullable RouteParam param) {
-        Intent intent = new Intent(mContext, clazz);
+    private static Intent createIntent(Context mContext, Class activityClazz, @Nullable RouteParam param) {
+        return createIntent(mContext, activityClazz.getName(), param);
+    }
+
+    /**
+     * 构造Intent
+     *
+     * @param mContext            上下文
+     * @param activityPackageName 目标调整Activity类名
+     * @param param               参数
+     * @return intent
+     */
+    private static Intent createIntent(Context mContext, String activityPackageName, @Nullable RouteParam param) {
+
+        /*创建Intent对象*/
+        Intent intent = new Intent();
+        intent.setClassName(mContext, activityPackageName);
+
+        /*向Intent中添加参数*/
         if (param != null) {
-            //向Intent中添加参数
             HashMap<String, Object> map = param.getAttr();
-            Iterator iter = map.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
+            Iterator iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
                 String key = (String) entry.getKey();
                 Object val = entry.getValue();
                 if (val instanceof String) {
@@ -467,6 +503,13 @@ public class RouteUtil {
                 intent.putParcelableArrayListExtra(param.getParcelableKey(), param.getParcelableList());
             }
         }
+
+        /*判断Intent是否有效，即是否在Manifest种注册*/
+        ComponentName componentName = intent.resolveActivity(mContext.getPackageManager());
+        if (componentName == null) {//如果为null，表示匹配失败,异常提示避免崩溃
+            Log.e(TAG, "请检查目标Activity是否存在，如果存在请检查Manifest文件是否注册");
+            return null;
+        }
         return intent;
     }
 
@@ -477,7 +520,7 @@ public class RouteUtil {
      * @date 2018/12/11
      */
     public interface OnActivityResultListener {
-        void onActivityResult(int requestCode, int resultCode, @Nullable Intent data);
+        void onActivityResult(int REQUEST_CODE, int resultCode, @Nullable Intent data);
     }
 
     /**
@@ -488,12 +531,17 @@ public class RouteUtil {
         /**
          * 权限请求结果
          *
-         * @param requestCode 请求码
-         * @param result      对应的权限请求结果，true--有权限，false--没有权限
+         * @param REQUEST_CODE 请求码
+         * @param result       对应的权限请求结果，true--有权限，false--没有权限
          */
-        void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result);
+        void onResult(int REQUEST_CODE, @NonNull String[] permissions, @NonNull boolean[] result);
     }
 
+    /**
+     * 构建Intent参数
+     *
+     * @return
+     */
     public static RouteParam buildParam() {
         param = new RouteParam();
         return param;
@@ -657,34 +705,34 @@ public class RouteUtil {
          * 执行启动
          *
          * @param intent
-         * @param requestCode
+         * @param REQUEST_CODE
          * @param listener
          */
-        public void startForResult(Intent intent, int requestCode, OnActivityResultListener listener) {
-            if (listener != null) resultListeners.put(requestCode, listener);
-            startActivityForResult(intent, requestCode);
+        public void startForResult(Intent intent, int REQUEST_CODE, OnActivityResultListener listener) {
+            if (listener != null) resultListeners.put(REQUEST_CODE, listener);
+            startActivityForResult(intent, REQUEST_CODE);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
-        public void startPermission(String[] permissions, int requestCode, OnPermissionListener listener) {
-            if (listener != null) permissionListeners.put(requestCode, listener);
-            requestPermissions(permissions, requestCode);
+        public void startPermission(String[] permissions, int REQUEST_CODE, OnPermissionListener listener) {
+            if (listener != null) permissionListeners.put(REQUEST_CODE, listener);
+            requestPermissions(permissions, REQUEST_CODE);
         }
 
         @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
+        public void onActivityResult(int REQUEST_CODE, int resultCode, Intent data) {
+            super.onActivityResult(REQUEST_CODE, resultCode, data);
             //callback方式的处理
-            OnActivityResultListener listener = resultListeners.remove(requestCode);
+            OnActivityResultListener listener = resultListeners.remove(REQUEST_CODE);
             if (listener != null) {
-                listener.onActivityResult(requestCode, resultCode, data);
+                listener.onActivityResult(REQUEST_CODE, resultCode, data);
             }
         }
 
         @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            OnPermissionListener listener = permissionListeners.remove(requestCode);
+        public void onRequestPermissionsResult(int REQUEST_CODE, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            super.onRequestPermissionsResult(REQUEST_CODE, permissions, grantResults);
+            OnPermissionListener listener = permissionListeners.remove(REQUEST_CODE);
             if (listener != null) {
                 boolean[] results = new boolean[permissions.length];
                 for (int i = 0; i < grantResults.length; i++) {
@@ -694,7 +742,7 @@ public class RouteUtil {
                         results[i] = false;
                     }
                 }
-                listener.onResult(requestCode, permissions, results);
+                listener.onResult(REQUEST_CODE, permissions, results);
             }
         }
     }

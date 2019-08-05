@@ -69,7 +69,7 @@ public class ImagePickerUtil {
                     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
                         if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-                            if (data != null && requestCode == RouteUtil.REQUESTCODE) {
+                            if (data != null && requestCode == RouteUtil.REQUEST_CODE) {
                                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                                 listener.onSelected(images);
                             } else {

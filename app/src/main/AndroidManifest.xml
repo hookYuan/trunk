@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".core.ui.toolbar.TitleBarActivity" />
-        <activity android:name=".core.ui.toolbar.TitleFullScreenActivity" />
+        <activity android:name=".core.ui.title.TitleBarActivity" />
+        <activity android:name=".core.ui.title.TitleFullScreenActivity" />
         <activity android:name=".core.ui.roundview.RoundTextActivity" />
         <activity android:name=".core.ui.foldtext.FoldActivity"></activity>
         <activity android:name=".core.ui.sort.SortActivity" />

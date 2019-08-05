@@ -30,7 +30,7 @@ import com.yuan.simple.expand.ui.multi.MultiActivity;
 import com.yuan.simple.core.ui.roundview.RoundTextActivity;
 import com.yuan.simple.core.ui.picker.PickerActivity;
 import com.yuan.simple.core.ui.sort.SortActivity;
-import com.yuan.simple.core.ui.toolbar.TitleBarActivity;
+import com.yuan.simple.core.ui.title.TitleBarActivity;
 
 import java.util.List;
 

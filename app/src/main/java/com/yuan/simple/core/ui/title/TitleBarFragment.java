@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuan.simple.core.ui.toolbar;
+package com.yuan.simple.core.ui.title;
 
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
@@ -31,7 +31,6 @@ import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.TitleBarPresenter;
 import com.yuan.simple.main.contract.MainContract;
 
-import yuan.core.tool.Kits;
 import yuan.core.widget.StateLayout;
 import yuan.depends.glide.GlideUtil;
 import yuan.depends.ui.RecyclerViewFragment;
@@ -190,7 +189,6 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                mData.clear();
                 getPresenter().loadData(mData);
             }
         });

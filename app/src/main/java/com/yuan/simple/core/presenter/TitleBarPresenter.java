@@ -44,6 +44,7 @@ public class TitleBarPresenter extends Presenter<MainContract> {
                 .postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mData.clear();
                         mData.add(new SubjectBean("系统状态栏", 1000));
                         mData.add(new SubjectBean("黑色文字", 1001));
                         mData.add(new SubjectBean("白色文字", 1002));

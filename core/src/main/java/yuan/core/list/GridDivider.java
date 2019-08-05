@@ -38,15 +38,14 @@ import android.view.View;
 public class GridDivider extends RecyclerView.ItemDecoration {
 
     private final static String TAG = "GridDivider";
-
     /**
-     * 默认分割线颜色
+     * 默认分割线颜色,透明颜色，系统不会绘制
      */
-    private final static int defaultSeparatorColor = Color.parseColor("#dddddd");
+    private final static int DEFAULT_SEPARATOR_COLOR = Color.parseColor("#dddddd");
     /**
      * 默认分割线高度 ，单位为dp
      */
-    private final static float defaultSeparatorHeight = 15f;
+    private final static float DEFAULT_SEPARATOR_HEIGHT = 15f;
     /**
      * 画笔
      */
@@ -57,43 +56,37 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     private int mDividerHeight = -1;
 
     /**
-     * 背景颜色
+     * 两边的边距
      */
-    private int bgColor;
-
+    private int mEdgeSpace;
 
     public GridDivider() {
-        this(-1, defaultSeparatorColor);
+        this(-1, DEFAULT_SEPARATOR_COLOR);
     }
 
     /**
      * @param height
      */
     public GridDivider(int height) {
-        this(height, defaultSeparatorColor);
+        this(height, DEFAULT_SEPARATOR_COLOR);
     }
 
     /**
-     * @param height
-     * @param color
+     * @param height         分割线高度
+     * @param separatorColor 分割线颜色
      */
-    public GridDivider(int height, @ColorInt int color) {
-        this(height, color, 0);
-    }
-
-    /**
-     * @param height          分割线高度
-     * @param separatorColor  分割线颜色
-     * @param backgroundColor RecyclerView背景颜色
-     */
-    public GridDivider(int height, @ColorInt int separatorColor, @ColorInt int backgroundColor) {
+    public GridDivider(int height, @ColorInt int separatorColor) {
         mDividerHeight = height;
-        this.bgColor = backgroundColor;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(separatorColor);
         mPaint.setStyle(Paint.Style.FILL);
     }
 
+
+    /**
+     * 一行中可见的长度，当达到或将超过一行最大显示数量后，重置为开始
+     */
+    private int mRowLookSize;
 
     /**
      * 设置item偏移量，通过outRect.set(0, 0, 0, 100);设置
@@ -108,38 +101,29 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state);
         //item的顺序位置
         ItemInfo itemInfo = getItemInfo(parent, view, state);
-        //获取最大列数
-        int spanCount = itemInfo.getSpanSizeLookup();
-        //item的总数量
-        int childCount = itemInfo.getItemCount();
 
-        //是否是第一个
-        boolean lastRow = itemInfo.isLastRow();
-        //是否是最后一个
-        boolean firstRow = itemInfo.isFirstRow();
+        int top = mDividerHeight;
+        int left = 0;
+        int right = 0;
+        int bottom = mDividerHeight;
+        //分割线的数量
+//        int eachSpace = itemInfo.getSpanCount()
 
-        int top = 0;
-        int left;
-        int right;
-        int bottom;
+        if (!itemInfo.isLastInRow()) {
+            right = mDividerHeight;
+        } else {
+            right = 0;
+        }
 
-        int eachWidth = (spanCount - 1) * mDividerHeight / spanCount;
-        int dl = mDividerHeight - eachWidth;
 
-        left = mDividerHeight;
-        right = mDividerHeight;
-        bottom = mDividerHeight;
-        top = mDividerHeight;
-
-        if (itemInfo.isFirstInRow()) left = 0;
-        if (itemInfo.isLastInRow()) right = 0;
-
-        Log.e(TAG, " spanCount:" + spanCount + " childCount:" + childCount +
-                " lastRow:" + lastRow + " firstRow:" + firstRow +
-                " |left:" + left + " right:" + right + " bottom:" + bottom);
+        Log.e(TAG,
+                " position:" + itemInfo.position +
+//                        " spanCount:" + spanCount + " childCount:" + childCount +
+//                        " lastRow:" + lastRow + " firstRow:" + firstRow +
+                        " isFirstInRow:" + itemInfo.isFirstInRow() + " isLastInRow:" + itemInfo.isLastInRow() +
+                        " |left:" + left + " right:" + right + " bottom:" + bottom);
         outRect.set(left, top, right, bottom);
     }
-
 
     /**
      * 绘制item同级别
@@ -153,10 +137,9 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         super.onDraw(c, parent, state);
         //设置默认分割线高度度
         if (mDividerHeight < 0) {
-            mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * defaultSeparatorHeight);
+            mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
         }
         drawSeparator(c, parent);
-        parent.setBackgroundColor(bgColor);
     }
 
     /**
@@ -172,7 +155,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * 绘制分割线
+     * 绘制分割线,只有设置偏移量之后，分割线才会显示
      * 此分割线可能被item背景覆盖，可以设置相应的分割线偏移量
      *
      * @param canvas
@@ -203,8 +186,8 @@ public class GridDivider extends RecyclerView.ItemDecoration {
             }
 
             //画垂直Item右侧分割线
-            top = child.getTop();
-            bottom = child.getBottom() + mDividerHeight;
+            top = child.getTop() - layoutParams.topMargin;
+            bottom = child.getBottom() + layoutParams.bottomMargin;
             left = child.getRight() + layoutParams.rightMargin;
             right = left + mDividerHeight;
             if (mPaint != null) {
@@ -212,8 +195,8 @@ public class GridDivider extends RecyclerView.ItemDecoration {
             }
 
             //画垂直Item左侧分割线
-            top = child.getTop();
-            bottom = child.getBottom() + mDividerHeight;
+            top = child.getTop() - layoutParams.topMargin;
+            bottom = child.getBottom() + layoutParams.bottomMargin;
             left = child.getLeft() - layoutParams.leftMargin - mDividerHeight;
             right = left + mDividerHeight;
             if (mPaint != null) {
@@ -286,15 +269,14 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         }
 
         /*判断是否是一行中的第一个、一行中的最后一个*/
-        if (layoutManager.getWidth() == 0) {
+        if (mRowLookSize == 0) {
             itemInfo.setFirstInRow(true);
         }
-//        if () {
-//            itemInfo.setLastInRow(true);
-//        }
-
-        Log.i(TAG, "------l-----" + layoutManager.getLeftDecorationWidth(itemView));
-        Log.i(TAG, "------r-----" + layoutManager.getRightDecorationWidth(itemView));
+        mRowLookSize += itemInfo.getSpanSizeLookup();
+        if (mRowLookSize >= itemInfo.getSpanCount()) {
+            itemInfo.setLastInRow(true);
+            mRowLookSize = 0;
+        }
         return itemInfo;
     }
 

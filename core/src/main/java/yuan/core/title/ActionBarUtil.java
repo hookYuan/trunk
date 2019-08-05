@@ -18,6 +18,8 @@ package yuan.core.title;
 import android.annotation.SuppressLint;
 import android.view.Gravity;
 
+import java.lang.ref.WeakReference;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -32,10 +34,13 @@ import yuan.core.tool.Views;
  * @date 2019/7/18 13:36
  */
 public class ActionBarUtil {
+
+    private final static String TAG = "ActionBarUtil";
     /**
-     * 标题
+     * TitleBar
+     * 避免内存泄漏
      */
-    private TitleBar titleBar;
+    private WeakReference<TitleBar> mTitleBar;
 
     /**
      * 全局主题样式
@@ -60,7 +65,8 @@ public class ActionBarUtil {
      * @param activity
      */
     private void init(AppCompatActivity activity) {
-        titleBar = Views.inflate(activity, R.layout.action_bar_title_bar_layout);
+        TitleBar titleBar = Views.inflate(activity, R.layout.action_bar_title_bar_layout);
+        mTitleBar = new WeakReference<>(titleBar);
 
         ActionBar actionBar = activity.getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
@@ -94,9 +100,9 @@ public class ActionBarUtil {
         ActionBarUtilsInstance.instance.init(activity);
         if (ActionBarUtilsInstance.instance.mDefaultTheme != null) {
             ActionBarUtilsInstance.instance.mDefaultTheme
-                    .defaultTheme(ActionBarUtilsInstance.instance.titleBar);
+                    .defaultTheme(ActionBarUtilsInstance.instance.mTitleBar.get());
         }
-        return ActionBarUtilsInstance.instance.titleBar;
+        return ActionBarUtilsInstance.instance.mTitleBar.get();
     }
 
     /**

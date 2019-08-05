@@ -17,10 +17,7 @@ package yuan.core.title;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -32,7 +29,6 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 /**
  * 如果需要自定义Title,可以继承AbsTitle
@@ -40,7 +36,7 @@ import androidx.annotation.RequiresApi;
  * @author YuanYe
  * @date 2018/8/4  10:33
  */
-abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements ITitle {
+abstract class BaseTitle<T extends BaseTitle> extends RelativeLayout implements ITitle {
 
     public static final int EMPTY_RES = -1;
     public static final String EMPTY_TEXT = "";
@@ -54,13 +50,13 @@ abstract class AbsTitle<T extends AbsTitle> extends RelativeLayout implements IT
     private int defaultHeight = 50; //默认高度，单位dp
     private ImageView background; //背景图片
 
-    public AbsTitle(Context context) {
+    public BaseTitle(Context context) {
         super(context);
         this.context = context;
         init(null);
     }
 
-    public AbsTitle(Context context, @Nullable AttributeSet attrs) {
+    public BaseTitle(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         init(attrs);

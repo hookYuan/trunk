@@ -19,7 +19,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -56,7 +55,7 @@ import yuan.core.R;
  * 右侧支持菜单
  * 如果需要放置多个图标，可以动态添加图标
  */
-public class TitleBar extends AbsTitle<TitleBar> {
+public class TitleBar extends BaseTitle<TitleBar> {
 
     private static final String TAG = "TitleBar";
 

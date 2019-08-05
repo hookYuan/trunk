@@ -109,6 +109,15 @@ public class DialogUtil {
     }
 
     /**
+     * 设置Dialog Style
+     *
+     * @param themeResId
+     */
+    public static void setStyle(int themeResId) {
+        DialogUtilInstance.util.themeResId = themeResId;
+    }
+
+    /**
      * 设置当前进度
      *
      * @param current
@@ -117,7 +126,7 @@ public class DialogUtil {
         if (DialogUtilInstance.util.mDialog != null &&
                 DialogUtilInstance.util.mDialog.get() != null &&
                 DialogUtilInstance.util.mDialog.get() instanceof ProgressDialog) {
-            ProgressDialog dialog = (ProgressDialog) DialogUtilInstance.util.mDialog.get();
+            ProgressDialog dialog = ProgressDialog.class.cast(DialogUtilInstance.util.mDialog.get());
             dialog.setProgress(current);
         } else {
             Log.e(TAG, "设置进度失败");

@@ -30,6 +30,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by YuanYe on 2017/12/4.
  * recyclerView
@@ -60,6 +65,11 @@ public class GridDivider extends RecyclerView.ItemDecoration {
      */
     private int mEdgeSpace;
 
+    /**
+     * 缓存Item信息
+     */
+    private Map<Integer, ItemInfo> mCacheInfo;
+
     public GridDivider() {
         this(-1, DEFAULT_SEPARATOR_COLOR);
     }
@@ -80,6 +90,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(separatorColor);
         mPaint.setStyle(Paint.Style.FILL);
+        mCacheInfo = new HashMap<>();
     }
 
 
@@ -119,7 +130,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         Log.e(TAG,
                 " position:" + itemInfo.position +
 //                        " spanCount:" + spanCount + " childCount:" + childCount +
-//                        " lastRow:" + lastRow + " firstRow:" + firstRow +
+//                        " lastRow:" + itemInfo.isLastInRow() + " firstRow:" + itemInfo.isFirstRow() +
                         " isFirstInRow:" + itemInfo.isFirstInRow() + " isLastInRow:" + itemInfo.isLastInRow() +
                         " |left:" + left + " right:" + right + " bottom:" + bottom);
         outRect.set(left, top, right, bottom);
@@ -214,17 +225,19 @@ public class GridDivider extends RecyclerView.ItemDecoration {
      * @return
      */
     private ItemInfo getItemInfo(RecyclerView parent, View itemView, RecyclerView.State state) {
-        ItemInfo itemInfo = new ItemInfo();
-
         int position = ((RecyclerView.LayoutParams) itemView.getLayoutParams()).getViewLayoutPosition();
 
+        //从缓存中读取
+        if (mCacheInfo.get(position) != null)
+            return mCacheInfo.get(position);
+
+        ItemInfo itemInfo = new ItemInfo();
         int itemCount = parent.getAdapter().getItemCount();
         itemInfo.setItemCount(itemCount);
         itemInfo.setPosition(position);
 
         /*保存每行列数信息*/
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-
 
         if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = GridLayoutManager.class.cast(layoutManager);
@@ -242,7 +255,6 @@ public class GridDivider extends RecyclerView.ItemDecoration {
                     itemInfo.setFirstRow(true);
                 }
             }
-
             /*判断是否是最后一行*/
 //            if (position < )
 
@@ -277,6 +289,9 @@ public class GridDivider extends RecyclerView.ItemDecoration {
             itemInfo.setLastInRow(true);
             mRowLookSize = 0;
         }
+
+        //添加缓存集合
+        mCacheInfo.put(position, itemInfo);
         return itemInfo;
     }
 

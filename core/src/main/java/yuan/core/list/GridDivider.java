@@ -30,9 +30,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,7 +48,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * 默认分割线高度 ，单位为dp
      */
-    private final static float DEFAULT_SEPARATOR_HEIGHT = 15f;
+    private final static float DEFAULT_SEPARATOR_HEIGHT = 8f;
     /**
      * 画笔
      */
@@ -58,7 +56,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * 分割线宽度
      */
-    private int mDividerHeight = -1;
+    private int mDividerHeight = 0;
 
     /**
      * 两边的边距
@@ -113,26 +111,18 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         //item的顺序位置
         ItemInfo itemInfo = getItemInfo(parent, view, state);
 
-        int top = mDividerHeight;
+        int top = 0;
         int left = 0;
         int right = 0;
         int bottom = mDividerHeight;
-        //分割线的数量
-//        int eachSpace = itemInfo.getSpanCount()
+        //判断是否绘制最顶部
 
+        //判断右侧是否绘制
         if (!itemInfo.isLastInRow()) {
             right = mDividerHeight;
         } else {
             right = 0;
         }
-
-
-        Log.e(TAG,
-                " position:" + itemInfo.position +
-//                        " spanCount:" + spanCount + " childCount:" + childCount +
-//                        " lastRow:" + itemInfo.isLastInRow() + " firstRow:" + itemInfo.isFirstRow() +
-                        " isFirstInRow:" + itemInfo.isFirstInRow() + " isLastInRow:" + itemInfo.isLastInRow() +
-                        " |left:" + left + " right:" + right + " bottom:" + bottom);
         outRect.set(left, top, right, bottom);
     }
 
@@ -163,6 +153,29 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
+    }
+
+
+    /**
+     * 只执行一次
+     */
+    private boolean executeinit = true;
+
+    /**
+     * 初始化RecyclerView
+     *
+     * @param recyclerView
+     */
+    private void initRecyclerView(RecyclerView recyclerView) {
+        if (executeinit) {
+            recyclerView.getAdapter()
+                    .registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                        @Override
+                        public void onChanged() {
+
+                        }
+                    });
+        }
     }
 
     /**

@@ -34,9 +34,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by YuanYe on 2017/12/4.
- * recyclerView
- * Grid布局样式分割线
+ * 描述： 重写Recycler通用分割线
+ * 支持LinearLayoutManager
+ * GridLayoutManager
+ *
+ * @author yuanye
+ * @date 2019/8/27 17:29
  */
 public class GridDivider extends RecyclerView.ItemDecoration {
 

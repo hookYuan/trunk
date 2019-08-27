@@ -48,7 +48,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * 默认分割线高度 ，单位为dp
      */
-    private final static float DEFAULT_SEPARATOR_HEIGHT = 8f;
+    private final static float DEFAULT_SEPARATOR_HEIGHT = 0.8f;
     /**
      * 画笔
      */
@@ -56,13 +56,17 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * 分割线宽度
      */
-    private int mDividerHeight = 0;
+    private float mDividerHeight = 0;
 
     /**
-     * 两边的边距
+     * 一行中的当前下标计数器
      */
-    private int mEdgeSpace;
+    private int indexInRow;
 
+    /**
+     * 单次执行
+     */
+    private boolean singleTime = true;
     /**
      * 缓存Item信息
      */
@@ -75,7 +79,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * @param height
      */
-    public GridDivider(int height) {
+    public GridDivider(float height) {
         this(height, DEFAULT_SEPARATOR_COLOR);
     }
 
@@ -83,19 +87,13 @@ public class GridDivider extends RecyclerView.ItemDecoration {
      * @param height         分割线高度
      * @param separatorColor 分割线颜色
      */
-    public GridDivider(int height, @ColorInt int separatorColor) {
+    public GridDivider(float height, @ColorInt int separatorColor) {
         mDividerHeight = height;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(separatorColor);
         mPaint.setStyle(Paint.Style.FILL);
         mCacheInfo = new HashMap<>();
     }
-
-
-    /**
-     * 一行中可见的长度，当达到或将超过一行最大显示数量后，重置为开始
-     */
-    private int mRowLookSize;
 
     /**
      * 设置item偏移量，通过outRect.set(0, 0, 0, 100);设置
@@ -108,19 +106,33 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        //item的顺序位置
+        /*获取item的顺序位置信息*/
         ItemInfo itemInfo = getItemInfo(parent, view, state);
-
         int top = 0;
         int left = 0;
         int right = 0;
-        int bottom = mDividerHeight;
-        //判断是否绘制最顶部
-
-        //判断右侧是否绘制
-        if (!itemInfo.isLastInRow()) {
-            right = mDividerHeight;
+        int bottom = (int) mDividerHeight;
+        /*设置分割线偏移量*/
+        if (itemInfo.isFirstInRow()) {
+            left = 0;
+            right = (int) (mDividerHeight / 2);
+        } else if (itemInfo.isLastInRow()) {
+            left = (int) (mDividerHeight / 2);
+            right = 0;
+            if (itemInfo.getPosition() + 1 == itemInfo.getItemCount()) {
+                left = (int) (mDividerHeight / 2);
+                if (indexInRow < itemInfo.getSpanCount()) {
+                    right = (int) (mDividerHeight / 2);
+                }
+            }
         } else {
+            left = (int) (mDividerHeight / 2);
+            right = (int) (mDividerHeight / 2);
+        }
+
+        /*独立一行取消分割线*/
+        if (itemInfo.getSpanSizeLookup() == itemInfo.getSpanCount()) {
+            left = 0;
             right = 0;
         }
         outRect.set(left, top, right, bottom);
@@ -136,9 +148,14 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
-        //设置默认分割线高度度
-        if (mDividerHeight < 0) {
-            mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
+        if (singleTime) {
+            //设置默认分割线高度度
+            if (mDividerHeight < 0) {
+                mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
+            } else {
+                mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * mDividerHeight);
+            }
+            singleTime = false;
         }
         drawSeparator(c, parent);
     }
@@ -155,29 +172,6 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         super.onDrawOver(c, parent, state);
     }
 
-
-    /**
-     * 只执行一次
-     */
-    private boolean executeinit = true;
-
-    /**
-     * 初始化RecyclerView
-     *
-     * @param recyclerView
-     */
-    private void initRecyclerView(RecyclerView recyclerView) {
-        if (executeinit) {
-            recyclerView.getAdapter()
-                    .registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                        @Override
-                        public void onChanged() {
-
-                        }
-                    });
-        }
-    }
-
     /**
      * 绘制分割线,只有设置偏移量之后，分割线才会显示
      * 此分割线可能被item背景覆盖，可以设置相应的分割线偏移量
@@ -189,46 +183,67 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         int childSize = parent.getChildCount();
         for (int i = 0; i < childSize; i++) {
             View child = parent.getChildAt(i);
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
+            ItemInfo itemInfo = getItemInfo(parent, child, null);
 
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
             //画水平Item底部分隔线
-            int left = child.getLeft() - mDividerHeight;
-            int right = child.getRight() + mDividerHeight;
+            int left = (int) (child.getLeft() - mDividerHeight);
+            int right = (int) (child.getRight() + mDividerHeight);
             int top = child.getBottom() + layoutParams.bottomMargin;
-            int bottom = top + mDividerHeight;
-            if (mPaint != null) {
-                canvas.drawRect(left, top, right, bottom, mPaint);
-            }
+            int bottom = (int) (top + mDividerHeight);
+            Log.i(TAG, "底部分割线：" + top + "," + bottom + "," + left + "," + right);
+
+            canvas.drawRect(left, top, right, bottom, mPaint);
 
             //画水平Item顶部分隔线
-            left = child.getLeft() - mDividerHeight;
-            right = child.getRight() + mDividerHeight;
-            top = child.getTop() - layoutParams.bottomMargin - mDividerHeight;
-            bottom = top + mDividerHeight;
-            if (mPaint != null) {
-                canvas.drawRect(left, top, right, bottom, mPaint);
-            }
+            left = (int) (child.getLeft() - mDividerHeight);
+            right = (int) (child.getRight() + mDividerHeight);
+            top = (int) (child.getTop() - layoutParams.bottomMargin - mDividerHeight);
+            bottom = (int) (top + mDividerHeight);
+            canvas.drawRect(left, top, right, bottom, mPaint);
+            Log.i(TAG, "顶部分割线：" + top + "," + bottom + "," + left + "," + right);
 
             //画垂直Item右侧分割线
+            if (itemInfo.isFirstInRow()) {
+                left = child.getRight();
+                right = (int) (left + mDividerHeight / 2);
+                if (itemInfo.isLastInRow()) {
+                    right = (int) (left + mDividerHeight);
+                }
+            } else if (itemInfo.isLastInRow()) {
+                left = child.getRight();
+                right = left;
+            } else {
+                left = child.getRight();
+                right = (int) (left + mDividerHeight / 2);
+            }
+
+            if (itemInfo.isLastInRow()
+                    && itemInfo.getPosition() + 1 == itemInfo.getItemCount()) {
+                right = (int) (left + mDividerHeight);
+            }
             top = child.getTop() - layoutParams.topMargin;
             bottom = child.getBottom() + layoutParams.bottomMargin;
-            left = child.getRight() + layoutParams.rightMargin;
-            right = left + mDividerHeight;
-            if (mPaint != null) {
-                canvas.drawRect(left, top, right, bottom, mPaint);
-            }
+            canvas.drawRect(left, top, right, bottom, mPaint);
+            Log.i(TAG, "右侧分割线：" + top + "," + bottom + "," + left + "," + right);
 
             //画垂直Item左侧分割线
+            if (itemInfo.isFirstInRow()) {
+                right = child.getLeft();
+                left = child.getLeft();
+            } else if (itemInfo.isLastInRow()) {
+                right = child.getLeft();
+                left = (int) (right - mDividerHeight / 2);
+            } else {
+                right = child.getLeft();
+                left = (int) (right - mDividerHeight / 2);
+            }
             top = child.getTop() - layoutParams.topMargin;
             bottom = child.getBottom() + layoutParams.bottomMargin;
-            left = child.getLeft() - layoutParams.leftMargin - mDividerHeight;
-            right = left + mDividerHeight;
-            if (mPaint != null) {
-                canvas.drawRect(left, top, right, bottom, mPaint);
-            }
+            canvas.drawRect(left, top, right, bottom, mPaint);
+            Log.i(TAG, "左侧分割线：" + top + "," + bottom + "," + left + "," + right);
         }
     }
-
 
     /**
      * 获取RecyclerView 一行显示的列数
@@ -251,26 +266,29 @@ public class GridDivider extends RecyclerView.ItemDecoration {
 
         /*保存每行列数信息*/
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-
         if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = GridLayoutManager.class.cast(layoutManager);
             GridLayoutManager.SpanSizeLookup sizeLookup = gridLayoutManager.getSpanSizeLookup();
             itemInfo.setSpanSizeLookup(sizeLookup.getSpanSize(position));
             itemInfo.setSpanCount(gridLayoutManager.getSpanCount());
 
-            /*判断是否是第一行*/
-            if (position < itemInfo.getSpanCount()) {
-                int lookItemCount = 0;
-                for (int i = 0; i <= position; i++) {
-                    lookItemCount += sizeLookup.getSpanSize(i);
-                }
-                if (lookItemCount <= itemInfo.getSpanCount()) {
-                    itemInfo.setFirstRow(true);
-                }
+            /*判断是否是一行中的第一个*/
+            if (indexInRow + itemInfo.getSpanSizeLookup() <= itemInfo.getSpanCount()) {
+                indexInRow += itemInfo.getSpanSizeLookup();
+            } else { //换行
+                indexInRow = itemInfo.getSpanSizeLookup();
             }
-            /*判断是否是最后一行*/
-//            if (position < )
+            if (indexInRow == itemInfo.getSpanSizeLookup()) {
+                itemInfo.setFirstInRow(true);
+            }
 
+            /*判断是否是最后一个*/
+            if (itemCount <= position + 1) {
+                itemInfo.setLastInRow(true);
+            } else if (itemCount > position + 1 && indexInRow + sizeLookup.getSpanSize(position + 1)
+                    > itemInfo.getSpanCount()) {
+                itemInfo.setLastInRow(true);
+            }
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             StaggeredGridLayoutManager staggeredGridLayoutManager =
                     StaggeredGridLayoutManager.class.cast(layoutManager);
@@ -278,31 +296,18 @@ public class GridDivider extends RecyclerView.ItemDecoration {
             itemInfo.setSpanSizeLookup(spanCount);
             itemInfo.setSpanCount(spanCount);
 
-            /*判断是否是第一行*/
-            if (position < itemInfo.getSpanCount()) {
-                itemInfo.setFirstRow(true);
+            /*判断是否是一行中的第一个*/
+            if (position % spanCount == 1) {
+                itemInfo.setFirstInRow(true);
+            } else if (position % spanCount == 0) {
+                itemInfo.setLastInRow(true);
             }
-
         } else if (layoutManager instanceof LinearLayoutManager) {
             itemInfo.setSpanSizeLookup(1);
             itemInfo.setSpanCount(1);
-
-            /*判断是否是第一行*/
-            if (position < itemInfo.getSpanCount()) {
-                itemInfo.setFirstRow(true);
-            }
-        }
-
-        /*判断是否是一行中的第一个、一行中的最后一个*/
-        if (mRowLookSize == 0) {
             itemInfo.setFirstInRow(true);
-        }
-        mRowLookSize += itemInfo.getSpanSizeLookup();
-        if (mRowLookSize >= itemInfo.getSpanCount()) {
             itemInfo.setLastInRow(true);
-            mRowLookSize = 0;
         }
-
         //添加缓存集合
         mCacheInfo.put(position, itemInfo);
         return itemInfo;
@@ -338,21 +343,6 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         private int position;
 
         /**
-         * true: 是第一行，false:不是
-         */
-        private boolean firstRow = false;
-
-        /**
-         * true: 是最后一行  false:不是
-         */
-        private boolean lastRow = false;
-
-        /**
-         * true：是最后一列 false:不是
-         */
-        private boolean lastColumn = false;
-
-        /**
          * 一行中的第一个
          */
         private boolean firstInRow = false;
@@ -361,6 +351,15 @@ public class GridDivider extends RecyclerView.ItemDecoration {
          * 一行中的最后一个
          */
         private boolean lastInRow = false;
+
+        /**
+         * 是否是单行
+         */
+        private boolean singleRow = false;
+
+        public boolean isSingleRow() {
+            return isFirstInRow() && isLastInRow();
+        }
 
         public boolean isLastInRow() {
             return lastInRow;
@@ -410,28 +409,17 @@ public class GridDivider extends RecyclerView.ItemDecoration {
             this.position = position;
         }
 
-        public boolean isFirstRow() {
-            return firstRow;
-        }
-
-        public void setFirstRow(boolean firstRow) {
-            this.firstRow = firstRow;
-        }
-
-        public boolean isLastRow() {
-            return lastRow;
-        }
-
-        public void setLastRow(boolean lastRow) {
-            this.lastRow = lastRow;
-        }
-
-        public boolean isLastColumn() {
-            return lastColumn;
-        }
-
-        public void setLastColumn(boolean lastColumn) {
-            this.lastColumn = lastColumn;
+        @Override
+        public String toString() {
+            return "ItemInfo{" +
+                    "spanSizeLookup=" + spanSizeLookup +
+                    ", spanCount=" + spanCount +
+                    ", itemCount=" + itemCount +
+                    ", position=" + position +
+                    ", firstInRow=" + firstInRow +
+                    ", lastInRow=" + lastInRow +
+                    ", singleRow=" + singleRow +
+                    '}';
         }
     }
 }

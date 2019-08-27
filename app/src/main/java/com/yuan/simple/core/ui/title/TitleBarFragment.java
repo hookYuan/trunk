@@ -94,7 +94,7 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
 
     @Override
     protected int getItemLayoutId(int position) {
-        return android.R.layout.simple_list_item_1;
+        return R.layout.simple_item;
     }
 
     @Override
@@ -102,9 +102,7 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
         int code = item.getType();
         if (code == 1000 || code == 2000 || code == 3000
                 || code == 4000) {
-//            holder.setBackgroundColor(android.R.id.text1, getColor2(R.color.lightblue100));
-        } else {
-//            holder.setBackgroundColor(android.R.id.text1,getColor2(R.color.green50));
+            holder.setBackgroundColor(android.R.id.text1, getColor2(R.color.lightblue100));
         }
         holder.setText(android.R.id.text1, mData.get(position).getName());
     }

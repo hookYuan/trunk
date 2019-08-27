@@ -52,15 +52,14 @@ public class AlertDialogActivity extends RecyclerViewActivity<DialogPresenter, S
                 .setBackgroundColor(getColor2(R.color.colorPrimary));
 
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerView.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
-                ContextCompat.getColor(mContext, R.color.colorDivider)));
+        recyclerView.addItemDecoration(new GridDivider(0.8f));
         getPresenter().loadData(mData);
         mStateLayout.showLoading();
     }
 
     @Override
     protected int getItemLayoutId(int position) {
-        return android.R.layout.simple_list_item_1;
+        return R.layout.simple_item;
     }
 
     @Override

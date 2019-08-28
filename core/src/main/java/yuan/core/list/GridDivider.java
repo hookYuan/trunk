@@ -15,6 +15,7 @@
  */
 package yuan.core.list;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -35,8 +36,7 @@ import java.util.Map;
 
 /**
  * 描述： 重写Recycler通用分割线
- * 支持LinearLayoutManager
- * GridLayoutManager
+ * 支持 LinearLayoutManager、GridLayoutManager
  *
  * @author yuanye
  * @date 2019/8/27 17:29
@@ -109,6 +109,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
+        initDividerHeight(parent.getContext());
         /*获取item的顺序位置信息*/
         ItemInfo itemInfo = getItemInfo(parent, view, state);
         int top = 0;
@@ -122,6 +123,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         } else if (itemInfo.isLastInRow()) {
             left = (int) (mDividerHeight / 2);
             right = 0;
+            //设置最后一个Item偏移量
             if (itemInfo.getPosition() + 1 == itemInfo.getItemCount()) {
                 left = (int) (mDividerHeight / 2);
                 if (indexInRow < itemInfo.getSpanCount()) {
@@ -151,16 +153,8 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
-        if (singleTime) {
-            //设置默认分割线高度度
-            if (mDividerHeight < 0) {
-                mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
-            } else {
-                mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * mDividerHeight);
-            }
-            singleTime = false;
-        }
-        drawSeparator(c, parent);
+        initDividerHeight(parent.getContext());
+        drawDivider(c, parent);
     }
 
     /**
@@ -175,6 +169,24 @@ public class GridDivider extends RecyclerView.ItemDecoration {
         super.onDrawOver(c, parent, state);
     }
 
+
+    /**
+     * 初始化分割线高度
+     *
+     * @param context
+     */
+    private void initDividerHeight(Context context) {
+        if (singleTime) {
+            //设置默认分割线高度度
+            if (mDividerHeight < 0) {
+                mDividerHeight = (int) (context.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
+            } else {
+                mDividerHeight = (int) (context.getResources().getDisplayMetrics().density * mDividerHeight);
+            }
+            singleTime = false;
+        }
+    }
+
     /**
      * 绘制分割线,只有设置偏移量之后，分割线才会显示
      * 此分割线可能被item背景覆盖，可以设置相应的分割线偏移量
@@ -182,7 +194,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
      * @param canvas
      * @param parent
      */
-    private void drawSeparator(Canvas canvas, RecyclerView parent) {
+    private void drawDivider(Canvas canvas, RecyclerView parent) {
         int childSize = parent.getChildCount();
         for (int i = 0; i < childSize; i++) {
             View child = parent.getChildAt(i);
@@ -323,7 +335,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
      * @author yuanye
      * @date 2019/8/5 13:24
      */
-    class ItemInfo {
+    private class ItemInfo {
         /**
          * 一行中可以显示item所占比例
          * 例如：一行最多3等分，其中一份值为1，当一行一份时，此时值为3
@@ -423,6 +435,111 @@ public class GridDivider extends RecyclerView.ItemDecoration {
                     ", lastInRow=" + lastInRow +
                     ", singleRow=" + singleRow +
                     '}';
+        }
+    }
+
+
+    /**
+     * 分割线样式参数
+     * TODO 待完成 （根据参数设置分割线的各种样式，增强分割线的可定制性）
+     */
+    public static class Params {
+        /**
+         * 画笔
+         */
+        private Paint paint;
+
+        /**
+         * 分割线宽度
+         */
+        private float dividerHeight = 0;
+
+        /**
+         * 分割线颜色
+         */
+        private int dividerColor = 0;
+
+        /**
+         * 左间距
+         */
+        private int marginLeft = 0;
+
+        /**
+         * 右间距
+         */
+        private int marginRight = 0;
+
+        /**
+         * 是否绘制第一条顶部线条： true-绘制，false-不绘制
+         */
+        private boolean drawTopLine = false;
+
+        /**
+         * 是否绘制最后一条底部分割线： true-绘制，false-不绘制
+         */
+        private boolean drawBottomLine = true;
+
+        /**
+         * 是否绘制最左侧分割线： true-绘制，false-不绘制
+         */
+        private boolean drawLeftLine = false;
+        /**
+         * 是否绘制最右侧分割线： true-绘制，false-不绘制
+         */
+        private boolean drawRightLine = false;
+
+        private Params(Builder builder) {
+            this.paint = builder.paint;
+            this.dividerHeight = builder.dividerHeight;
+            this.dividerColor = builder.dividerColor;
+            this.marginLeft = builder.marginLeft;
+            this.marginRight = builder.marginRight;
+        }
+
+        public static class Builder {
+            private Paint paint;
+            private float dividerHeight;
+            private int dividerColor;
+            private int marginLeft;
+            private int marginRight;
+
+            public Builder paint(Paint paint) {
+                this.paint = paint;
+                return this;
+            }
+
+            public Builder dividerHeight(float dividerHeight) {
+                this.dividerHeight = dividerHeight;
+                return this;
+            }
+
+            public Builder dividerColor(int dividerColor) {
+                this.dividerColor = dividerColor;
+                return this;
+            }
+
+            public Builder marginLeft(int marginLeft) {
+                this.marginLeft = marginLeft;
+                return this;
+            }
+
+            public Builder marginRight(int marginRight) {
+                this.marginRight = marginRight;
+                return this;
+            }
+
+            public Builder fromPrototype(Params prototype) {
+                paint = prototype.paint;
+                dividerHeight = prototype.dividerHeight;
+                dividerColor = prototype.dividerColor;
+                marginLeft = prototype.marginLeft;
+                marginRight = prototype.marginRight;
+                return this;
+            }
+
+            public Params build() {
+                return new Params(this);
+            }
         }
     }
 }

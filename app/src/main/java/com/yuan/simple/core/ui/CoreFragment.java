@@ -49,16 +49,15 @@ public class CoreFragment extends RecyclerViewFragment<CorePresenter, CoreFuncti
 
     @Override
     protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
-        recyclerView.addItemDecoration(new GridDivider((int) Kits.Dimens.dpToPx(mContext, 0.8f),
-                ContextCompat.getColor(mContext, R.color.colorDivider)));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
+        recyclerView.addItemDecoration(new GridDivider());
         getPresenter().loadData(mData);
         mStateLayout.showLoading();
     }
 
     @Override
     protected int getItemLayoutId(int position) {
-        return android.R.layout.simple_list_item_1;
+        return R.layout.simple_item;
     }
 
     @Override

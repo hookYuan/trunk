@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
@@ -52,7 +53,7 @@ public class AlertDialogActivity extends RecyclerViewActivity<DialogPresenter, S
                 .setBackgroundColor(getColor2(R.color.colorPrimary));
 
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerView.addItemDecoration(new GridDivider(0.8f));
+        recyclerView.addItemDecoration(new GridDivider());
         getPresenter().loadData(mData);
         mStateLayout.showLoading();
     }

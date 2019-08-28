@@ -75,7 +75,7 @@ public class OKHttpActivity extends RecyclerViewActivity<OkHttpPresenter, String
 
     @Override
     protected int getItemLayoutId(int position) {
-        return android.R.layout.simple_list_item_1;
+        return R.layout.simple_item;
     }
 
     @Override

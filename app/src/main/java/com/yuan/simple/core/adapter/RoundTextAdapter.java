@@ -31,7 +31,6 @@ import yuan.core.list.ListAdapter;
  * @date 2019/7/21
  */
 public class RoundTextAdapter extends ListAdapter<String> {
-
     /**
      * 当前选中的Position
      */

@@ -54,7 +54,7 @@ public class SwipeBackUtil {
     /**
      * 需绑定生命周期
      *
-     * @param activity Activity
+     * @param activity Adapter
      */
     public static void bindOnCreate(@NonNull Activity activity) {
         SwipeBackHelper.onPostCreate(activity);

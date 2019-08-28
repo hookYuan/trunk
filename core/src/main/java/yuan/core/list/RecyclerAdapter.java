@@ -64,21 +64,14 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      */
     private List<T> mData;
 
-    /**
-     * 绑定布局文件
-     *
-     * @param layoutResId
-     */
-    public RecyclerAdapter(@LayoutRes int layoutResId) {
-        this(null, layoutResId);
-    }
 
     /**
-     * 绑定数据
+     * 无参构造方法
+     * 必须通过{@link #setData(List)}设置数据源
+     * 必须通过{@link #registerMultiType(OnMultiType)}设置布局
      */
     public RecyclerAdapter(List<T> data) {
-        init();
-        this.mData = data;
+        this(data, android.R.layout.simple_list_item_1);
     }
 
     /**
@@ -87,7 +80,9 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * @param layoutResId
      */
     public RecyclerAdapter(List<T> data, @LayoutRes int layoutResId) {
-        this(data, new OnMultiType() {
+        init();
+        this.mData = data;
+        registerMultiType(new OnMultiType() {
             @Override
             public int getLayoutResId(int position) {
                 return layoutResId;
@@ -96,23 +91,19 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     }
 
     /**
-     * 绑定绑定数据/多种类型布局
-     *
-     * @param data
-     * @param multiType
-     */
-    public RecyclerAdapter(List<T> data, OnMultiType multiType) {
-        init();
-        this.mData = data;
-        /*如需设置多种不同类型，只需要调用类型注册即可，ViewType 从0开始递增 */
-        registerMultiType(multiType);
-    }
-
-    /**
      * 初始化
      */
     private void init() {
         mLayoutCache = new HashMap<>();
+    }
+
+    /**
+     * 设置数据源
+     *
+     * @param mData
+     */
+    public void setData(List<T> mData) {
+        this.mData = mData;
     }
 
     /**
@@ -180,7 +171,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     }
 
     @Override
-    public final void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(BaseViewHolder holder, int position) {
         T item = null;//绑定数据，可能为空
         if (mData != null) item = mData.get(position);
         onBindHolder(holder, item, position);

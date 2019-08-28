@@ -27,17 +27,19 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yuan.simple.R;
+import com.yuan.simple.core.adapter.TextAdapter;
 import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.TitleBarPresenter;
 import com.yuan.simple.main.contract.MainContract;
 
+import yuan.core.ui.Adapter;
+import yuan.core.ui.RecyclerFragment;
+import yuan.core.ui.Title;
 import yuan.core.widget.StateLayout;
 import yuan.depends.glide.GlideUtil;
-import yuan.depends.ui.RecyclerViewFragment;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 
@@ -50,25 +52,19 @@ import java.util.ArrayList;
  * @author YuanYe
  * @date 2019/7/19  23:55
  */
-public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, SubjectBean>
+@Adapter(adapter = TextAdapter.class)
+public class TitleBarFragment extends RecyclerFragment<TitleBarPresenter, SubjectBean>
         implements MainContract {
 
     private TitleBar titleBar;
 
     @Override
     public int getLayoutId() {
-        return yuan.depends.R.layout.base_title_bar_recycler_refresh_layout;
+        return R.layout.base_title_bar_recycler_refresh_layout;
     }
 
     @Override
-    protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
-        titleBar = findViewById(R.id.title_bar);
-        titleBar.setLeftIcon(R.drawable.ic_base_back_white)
-                .setTitleText("TitleBar")
-                .setTextColor(getColor2(R.color.white))
-                .setLeftClickFinish()
-                .setBackgroundColor(getColor2(R.color.colorPrimary));
-
+    protected void initRecyclerView() {
         GridLayoutManager manager = new GridLayoutManager(mContext, 3);
         //动态更改列数
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -83,29 +79,22 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                 }
             }
         });
-        recyclerView.setLayoutManager(manager);
-        //add divider.
-        recyclerView.addItemDecoration(new GridDivider());
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.addItemDecoration(new GridDivider());
+    }
 
-        mStateLayout.showLoading();
+    @Override
+    public void initData() {
+        titleBar = findViewById(R.id.title_bar);
+        titleBar.setLeftIcon(R.drawable.ic_base_back_white)
+                .setTitleText("TitleBar")
+                .setTextColor(getColor2(R.color.white))
+                .setLeftClickFinish()
+                .setBackgroundColor(getColor2(R.color.colorPrimary));
+
         getPresenter().loadData(mData);
-
     }
 
-    @Override
-    protected int getItemLayoutId(int position) {
-        return R.layout.simple_item;
-    }
-
-    @Override
-    public void onBindHolder(BaseViewHolder holder, SubjectBean item, int position) {
-        int code = item.getType();
-        if (code == 1000 || code == 2000 || code == 3000
-                || code == 4000) {
-            holder.setBackgroundColor(android.R.id.text1, getColor2(R.color.lightblue100));
-        }
-        holder.setText(android.R.id.text1, mData.get(position).getName());
-    }
 
     @Override
     public void setListener() {
@@ -183,20 +172,10 @@ public class TitleBarFragment extends RecyclerViewFragment<TitleBarPresenter, Su
                 }
             }
         });
-
-        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                getPresenter().loadData(mData);
-            }
-        });
     }
 
     @Override
     public void notifyDataChange(boolean isSuccess) {
         mAdapter.notifyDataSetChanged();
-        //状态显示控制
-        if (isSuccess) mStateLayout.showContent();
-        else mStateLayout.showEmpty();
     }
 }

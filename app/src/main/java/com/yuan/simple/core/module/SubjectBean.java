@@ -28,10 +28,24 @@ public class SubjectBean {
      * 标题对应的类型
      */
     private int type;
+    /**
+     * 对应的Activity
+     */
+    private Class clazz;
+
+
+    public SubjectBean(String name) {
+        this.name = name;
+    }
 
     public SubjectBean(String name, int type) {
         this.name = name;
         this.type = type;
+    }
+
+    public SubjectBean(String name, Class clazz) {
+        this.name = name;
+        this.clazz = clazz;
     }
 
     public String getName() {
@@ -48,5 +62,13 @@ public class SubjectBean {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
     }
 }

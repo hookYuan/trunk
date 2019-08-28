@@ -15,19 +15,16 @@
  */
 package com.yuan.simple.core.ui.input;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.ViewGroup;
-
-import yuan.core.mvp.BaseActivity;
+import yuan.core.ui.Title;
+import yuan.core.ui.TitleActivity;
 
 import com.yuan.simple.R;
 
 /**
  * 解决键盘弹出引起的布局上窜
  */
-public class InputActivity extends BaseActivity {
+@Title(titleStr = "input")
+public class InputActivity extends TitleActivity {
 
     @Override
     public int getLayoutId() {

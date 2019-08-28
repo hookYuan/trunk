@@ -17,6 +17,8 @@ package com.yuan.simple.core.ui.http;
 
 import android.os.Environment;
 
+import com.yuan.simple.core.module.SubjectBean;
+
 import java.util.List;
 
 import yuan.core.mvp.Presenter;
@@ -33,13 +35,13 @@ public class OkHttpPresenter extends Presenter<OKHttpActivity> {
      *
      * @param mData
      */
-    public void createData(List<String> mData) {
-        mData.add("Get请求");
-        mData.add("Post请求");
-        mData.add("上传文件");
-        mData.add("下载文件");
-        mData.add("获取缓存文件大小");
-        mData.add("删除缓存文件");
+    public void createData(List<SubjectBean> mData) {
+        mData.add(new SubjectBean("Get请求"));
+        mData.add(new SubjectBean("Post请求"));
+        mData.add(new SubjectBean("上传文件"));
+        mData.add(new SubjectBean("下载文件"));
+        mData.add(new SubjectBean("获取缓存文件大小"));
+        mData.add(new SubjectBean("删除缓存文件"));
     }
 
     /**

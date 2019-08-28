@@ -15,13 +15,8 @@
  */
 package com.yuan.simple.core.ui.sort;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import yuan.core.list.GridDivider;
-import yuan.core.mvp.BaseActivity;
 import yuan.core.sort.SideBar;
-import yuan.core.tool.Views;
 
 import com.yuan.simple.R;
 import com.yuan.simple.core.adapter.SortAdapter;
@@ -30,25 +25,18 @@ import com.yuan.simple.core.presenter.SortPresenter;
 import com.yuan.simple.main.contract.MainContract;
 
 import yuan.core.sort.ChineseSortUtil;
-
-import java.util.ArrayList;
+import yuan.core.ui.Adapter;
+import yuan.core.ui.RecyclerActivity;
+import yuan.core.ui.Title;
 
 
 /**
  * 按照汉字排序
  */
-public class SortActivity extends BaseActivity<SortPresenter>
+@Adapter(adapter = SortAdapter.class)
+@Title(titleStr = "拼音排序")
+public class SortActivity extends RecyclerActivity<SortPresenter, ChineseBean>
         implements MainContract {
-
-    /**
-     * 数据源
-     */
-    private ArrayList<ChineseBean> data = new ArrayList<>();
-
-    /**
-     * recyclerView
-     */
-    private RecyclerView recyclerView;
 
     /**
      * 侧边栏
@@ -60,19 +48,12 @@ public class SortActivity extends BaseActivity<SortPresenter>
         return R.layout.activity_sort;
     }
 
-    @Override
-    public void findViews() {
-        recyclerView = Views.find(this, R.id.rlv_list);
-        sideBar = findViewById(R.id.sideBar);
-    }
 
     @Override
     public void initData() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new GridDivider());
-        recyclerView.setAdapter(new SortAdapter(data));
-        sideBar.setRecyclerView(recyclerView, data);
-        sideBar.setSortData(data);
+        mRecyclerView.addItemDecoration(new GridDivider());
+        getPresenter().loadData(mData);
+        sideBar = findViewById(R.id.sideBar);
     }
 
     @Override
@@ -82,7 +63,8 @@ public class SortActivity extends BaseActivity<SortPresenter>
 
     @Override
     public void notifyDataChange(boolean isSuccess) {
-        ChineseSortUtil.sortData(data);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        ChineseSortUtil.sortData(mData);
+        sideBar.setRecyclerView(mRecyclerView, mData);
+        mAdapter.notifyDataSetChanged();
     }
 }

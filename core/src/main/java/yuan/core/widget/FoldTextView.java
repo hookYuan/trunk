@@ -156,6 +156,7 @@ public class FoldTextView extends AppCompatTextView implements View.OnClickListe
             mTipsClickable = typed.getBoolean(R.styleable.FoldTextView_ctv_tipsClickable, true);
             typed.recycle();
         }
+        mCollapsedStatus = new SparseBooleanArray();
     }
 
 
@@ -264,18 +265,20 @@ public class FoldTextView extends AppCompatTextView implements View.OnClickListe
         this.mTipsClickable = tipsClickable;
     }
 
-    SparseBooleanArray mCollapsedStatus;
+    /**
+     * 缓存list的展开情况
+     */
+    private SparseBooleanArray mCollapsedStatus;
+
     int mListPosition;//list中item的位置
 
     /**
      * ListView中使用，用于记录状态
      *
      * @param text
-     * @param collapsedStatus
      * @param position
      */
-    public void setTextList(@Nullable CharSequence text, @NonNull SparseBooleanArray collapsedStatus, int position) {
-        this.mCollapsedStatus = collapsedStatus;
+    public void setTextList(@Nullable CharSequence text, int position) {
         this.mListPosition = position;
         if (mCollapsedStatus != null)
             mIsExpanded = mCollapsedStatus.get(position);//是否展开

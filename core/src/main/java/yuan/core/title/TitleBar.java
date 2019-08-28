@@ -220,9 +220,7 @@ public class TitleBar extends BaseTitle<TitleBar> {
         setLeftOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (context != null && context instanceof Activity) {
-                    ((Activity) context).finish();
-                }
+                Activity.class.cast(context).finish();
             }
         });
         return this;

@@ -103,16 +103,16 @@ public abstract class RecyclerViewActivity<T extends Presenter, D> extends BaseA
      * 创建Adapter
      */
     protected void createAdapter() {
-        mAdapter = new RecyclerAdapter<D>(mData, new RecyclerAdapter.OnMultiType() {
-            @Override
-            public int getLayoutResId(int position) {
-                return getItemLayoutId(position);
-            }
-        }) {
-            @Override
-            public void onBindHolder(BaseViewHolder holder, D item, int position) {
-                RecyclerViewActivity.this.onBindHolder(holder, item, position);
-            }
-        };
+//        mAdapter = new RecyclerAdapter<D>(mData, new RecyclerAdapter.OnMultiType() {
+//            @Override
+//            public int getLayoutResId(int position) {
+//                return getItemLayoutId(position);
+//            }
+//        }) {
+//            @Override
+//            public void onBindHolder(BaseViewHolder holder, D item, int position) {
+//                RecyclerViewActivity.this.onBindHolder(holder, item, position);
+//            }
+//        };
     }
 }

@@ -17,26 +17,20 @@ package com.yuan.simple.core.ui;
 
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.yuan.simple.R;
+import com.yuan.simple.core.adapter.TextAdapter;
+import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.main.contract.MainContract;
-import com.yuan.simple.main.module.CoreFunctionInfo;
 import com.yuan.simple.core.presenter.CorePresenter;
 
-import yuan.core.tool.Kits;
 import yuan.core.tool.RouteUtil;
-import yuan.core.widget.StateLayout;
-import yuan.depends.ui.RecyclerViewFragment;
+import yuan.core.ui.Adapter;
+import yuan.core.ui.RecyclerFragment;
 
 /**
  * core 示例首页
@@ -44,25 +38,19 @@ import yuan.depends.ui.RecyclerViewFragment;
  * @author YuanYe
  * @date 2019/7/19  12:26
  */
-public class CoreFragment extends RecyclerViewFragment<CorePresenter, CoreFunctionInfo>
+@Adapter(adapter = TextAdapter.class)
+public class CoreFragment extends RecyclerFragment<CorePresenter, SubjectBean>
         implements MainContract {
 
     @Override
-    protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerView.addItemDecoration(new GridDivider());
+    protected void initRecyclerView() {
+        mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+        mRecyclerView.addItemDecoration(new GridDivider());
+    }
+
+    @Override
+    public void initData() {
         getPresenter().loadData(mData);
-        mStateLayout.showLoading();
-    }
-
-    @Override
-    protected int getItemLayoutId(int position) {
-        return R.layout.simple_item;
-    }
-
-    @Override
-    public void onBindHolder(BaseViewHolder holder, CoreFunctionInfo item, int position) {
-        holder.setText(android.R.id.text1, mData.get(position).getName());
     }
 
     @Override
@@ -73,20 +61,10 @@ public class CoreFragment extends RecyclerViewFragment<CorePresenter, CoreFuncti
                 RouteUtil.open(mContext, mData.get(position).getClazz());
             }
         });
-
-        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-
-            }
-        });
     }
 
     @Override
     public void notifyDataChange(boolean isSuccess) {
         mAdapter.notifyDataSetChanged();
-        //状态显示控制
-        if (isSuccess) mStateLayout.showContent();
-        else mStateLayout.showEmpty();
     }
 }

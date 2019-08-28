@@ -18,6 +18,7 @@ package com.yuan.simple.core.presenter;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.main.contract.MainContract;
 import com.yuan.simple.main.module.CoreFunctionInfo;
 import com.yuan.simple.core.ui.callback.CallbackActivity;
@@ -50,22 +51,22 @@ public class CorePresenter extends Presenter<MainContract> {
      *
      * @param mData Recycler集合
      */
-    public void loadData(List<CoreFunctionInfo> mData) {
+    public void loadData(List<SubjectBean> mData) {
         new Handler(Looper.myLooper())
                 .postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mData.add(new CoreFunctionInfo("titleBar", TitleBarActivity.class));
-                        mData.add(new CoreFunctionInfo("roundView", RoundTextActivity.class));
-                        mData.add(new CoreFunctionInfo("foldTextView", FoldActivity.class));
-                        mData.add(new CoreFunctionInfo("sortChinese", SortActivity.class));
-                        mData.add(new CoreFunctionInfo("input", InputActivity.class));
-                        mData.add(new CoreFunctionInfo("okHttp", OKHttpActivity.class));
-                        mData.add(new CoreFunctionInfo("alertDialog", AlertDialogActivity.class));
-                        mData.add(new CoreFunctionInfo("multiAdapter", MultiActivity.class));
-                        mData.add(new CoreFunctionInfo("DBUtil", DBActivity.class));
-                        mData.add(new CoreFunctionInfo("PickerUtil", PickerActivity.class));
-                        mData.add(new CoreFunctionInfo("CallbackManager", CallbackActivity.class));
+                        mData.add(new SubjectBean("titleBar", TitleBarActivity.class));
+                        mData.add(new SubjectBean("roundView", RoundTextActivity.class));
+                        mData.add(new SubjectBean("foldTextView", FoldActivity.class));
+                        mData.add(new SubjectBean("sortChinese", SortActivity.class));
+                        mData.add(new SubjectBean("input", InputActivity.class));
+                        mData.add(new SubjectBean("okHttp", OKHttpActivity.class));
+                        mData.add(new SubjectBean("alertDialog", AlertDialogActivity.class));
+                        mData.add(new SubjectBean("multiAdapter", MultiActivity.class));
+                        mData.add(new SubjectBean("DBUtil", DBActivity.class));
+                        mData.add(new SubjectBean("PickerUtil", PickerActivity.class));
+                        mData.add(new SubjectBean("CallbackManager", CallbackActivity.class));
                         //更新列表
                         getView().notifyDataChange(true);
                     }

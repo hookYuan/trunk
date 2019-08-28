@@ -23,6 +23,8 @@ import yuan.core.function.CallbackManager;
 import yuan.core.function.CallbackNoParamNoResult;
 import yuan.core.mvp.BaseActivity;
 import yuan.core.tool.ToastUtil;
+import yuan.core.ui.Title;
+import yuan.core.ui.TitleActivity;
 
 /**
  * 描述：
@@ -32,7 +34,8 @@ import yuan.core.tool.ToastUtil;
  * @author yuanye
  * @date 2019/7/11 15:06
  */
-public class CallbackActivity extends BaseActivity {
+@Title(titleStr = "CallbackManager")
+public class CallbackActivity extends TitleActivity {
 
     private static final String TAG = "CallbackActivity";
 

@@ -15,57 +15,37 @@
  */
 package com.yuan.simple.core.ui.dialog;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
-import yuan.core.title.ActionBarUtil;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.yuan.simple.core.adapter.TextAdapter;
 import com.yuan.simple.core.module.SubjectBean;
-import com.yuan.simple.R;
 import com.yuan.simple.core.presenter.DialogPresenter;
 import com.yuan.simple.main.contract.MainContract;
 
-import yuan.core.tool.Kits;
-import yuan.core.widget.StateLayout;
-import yuan.depends.ui.RecyclerViewActivity;
+import yuan.core.ui.Adapter;
+import yuan.core.ui.RecyclerActivity;
+import yuan.core.ui.Title;
 
 /**
  * AlertDialog使用示例
  */
-public class AlertDialogActivity extends RecyclerViewActivity<DialogPresenter, SubjectBean>
+@Adapter(adapter = TextAdapter.class)
+@Title(titleStr = "AlertDialog")
+public class AlertDialogActivity extends RecyclerActivity<DialogPresenter, SubjectBean>
         implements MainContract {
 
 
     @Override
-    protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
-
-        ActionBarUtil.create(this).setTitleText("AlertDialog")
-                .setLeftClickFinish()
-                .setTitleTextColor(getColor2(R.color.white))
-                .setLeftIcon(getDrawable2(R.drawable.ic_base_back_white))
-                .setBackgroundColor(getColor2(R.color.colorPrimary));
-
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerView.addItemDecoration(new GridDivider());
+    public void initData() {
+        mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+        mRecyclerView.addItemDecoration(new GridDivider());
         getPresenter().loadData(mData);
-        mStateLayout.showLoading();
-    }
-
-    @Override
-    protected int getItemLayoutId(int position) {
-        return R.layout.simple_item;
-    }
-
-    @Override
-    public void onBindHolder(BaseViewHolder holder, SubjectBean item, int position) {
-        holder.setText(android.R.id.text1, mData.get(position).getName());
     }
 
     @Override
@@ -135,9 +115,6 @@ public class AlertDialogActivity extends RecyclerViewActivity<DialogPresenter, S
     @Override
     public void notifyDataChange(boolean isSuccess) {
         mAdapter.notifyDataSetChanged();
-        //状态显示控制
-        if (isSuccess) mStateLayout.showContent();
-        else mStateLayout.showEmpty();
     }
 
 

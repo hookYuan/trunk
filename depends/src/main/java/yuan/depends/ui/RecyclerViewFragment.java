@@ -95,16 +95,16 @@ public abstract class RecyclerViewFragment<T extends Presenter, D> extends BaseF
      * 创建Adapter
      */
     protected void createAdapter() {
-        mAdapter = new RecyclerAdapter<D>(mData, new RecyclerAdapter.OnMultiType() {
-            @Override
-            public int getLayoutResId(int position) {
-                return getItemLayoutId(position);
-            }
-        }) {
-            @Override
-            public void onBindHolder(BaseViewHolder holder, D item, int position) {
-                RecyclerViewFragment.this.onBindHolder(holder, item, position);
-            }
-        };
+//        mAdapter = new RecyclerAdapter<D>(mData, new RecyclerAdapter.OnMultiType() {
+//            @Override
+//            public int getLayoutResId(int position) {
+//                return getItemLayoutId(position);
+//            }
+//        }) {
+//            @Override
+//            public void onBindHolder(BaseViewHolder holder, D item, int position) {
+//                RecyclerViewFragment.this.onBindHolder(holder, item, position);
+//            }
+//        };
     }
 }

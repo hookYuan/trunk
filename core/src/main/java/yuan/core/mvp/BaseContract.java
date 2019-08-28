@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 public class BaseContract {
 
     /**
-     * 约束 Activity/Fragment 中的方法
+     * 约束 Adapter/Fragment 中的方法
      */
     public interface View {
         /**

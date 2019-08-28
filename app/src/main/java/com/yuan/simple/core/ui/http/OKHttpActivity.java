@@ -15,36 +15,31 @@
  */
 package com.yuan.simple.core.ui.http;
 
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 
 import yuan.core.list.BaseViewHolder;
+import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
-import yuan.core.title.ActionBarUtil;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.yuan.simple.R;
+import com.yuan.simple.core.adapter.TextAdapter;
+import com.yuan.simple.core.module.SubjectBean;
 
-import yuan.core.widget.StateLayout;
-import yuan.depends.ui.RecyclerViewActivity;
+import yuan.core.ui.Adapter;
+import yuan.core.ui.RecyclerActivity;
+import yuan.core.ui.Title;
 
 /**
  * 使用OKHttpUtil的一个事例
  */
-public class OKHttpActivity extends RecyclerViewActivity<OkHttpPresenter, String> {
+@Title(titleStr = "OKUtil")
+@Adapter(adapter = TextAdapter.class)
+public class OKHttpActivity extends RecyclerActivity<OkHttpPresenter, SubjectBean> {
 
     @Override
-    protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout, StateLayout mStateLayout) {
-        ActionBarUtil.create(this).setTitleText("OKUtil")
-                .setLeftClickFinish()
-                .setTextColor(getResources().getColor(R.color.white))
-                .setLeftIcon(getResources().getDrawable(R.drawable.ic_base_back_white))
-                .setBackgroundColor(
-                        getResources().getColor(R.color.colorPrimary));
-
+    public void initData() {
+        mRecyclerView.addItemDecoration(new GridDivider());
         getPresenter().createData(mData);
-        super.init(recyclerView, smartRefreshLayout, mStateLayout);
     }
 
     @Override
@@ -71,15 +66,5 @@ public class OKHttpActivity extends RecyclerViewActivity<OkHttpPresenter, String
                 }
             }
         });
-    }
-
-    @Override
-    protected int getItemLayoutId(int position) {
-        return R.layout.simple_item;
-    }
-
-    @Override
-    public void onBindHolder(BaseViewHolder holder, String item, int position) {
-        holder.setText(android.R.id.text1, mData.get(position));
     }
 }

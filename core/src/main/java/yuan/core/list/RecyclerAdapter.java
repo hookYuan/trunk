@@ -131,6 +131,14 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
         return viewType;
     }
 
+//    /**
+//     * @param position
+//     * @return
+//     */
+//    public int getItemViewId(int position) {
+//
+//    }
+
     /**
      * 根据 position 获取对应 layoutId
      *

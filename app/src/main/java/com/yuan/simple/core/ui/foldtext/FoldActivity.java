@@ -20,6 +20,7 @@ import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.FoldPresenter;
 import com.yuan.simple.main.contract.MainContract;
 
+import yuan.core.list.GridDivider;
 import yuan.core.ui.Adapter;
 import yuan.core.ui.RecyclerActivity;
 import yuan.core.ui.Title;
@@ -31,6 +32,7 @@ public class FoldActivity extends RecyclerActivity<FoldPresenter, SubjectBean>
 
     @Override
     public void initData() {
+        mRecyclerView.addItemDecoration(new GridDivider());
         getPresenter().loadData(mData);
     }
 

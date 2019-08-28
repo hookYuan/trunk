@@ -15,6 +15,7 @@
  */
 package yuan.core.title;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -41,14 +42,19 @@ abstract class BaseTitle<T extends BaseTitle> extends RelativeLayout implements 
     public static final int EMPTY_RES = -1;
     public static final String EMPTY_TEXT = "";
 
+    private static final int DEFAULT_HEIGHT = 50; //默认高度，单位dp
+
     protected Context context;
 
     protected LinearLayout leftRoot;//左侧根布局
     protected LinearLayout centerRoot;//中间根布局
     protected LinearLayout rightRoot;//右侧根布局
 
-    private int defaultHeight = 50; //默认高度，单位dp
+
     private ImageView background; //背景图片
+
+    //title测量后的实际高度
+    private float realHeight = -0xff322;
 
     public BaseTitle(Context context) {
         super(context);
@@ -78,9 +84,12 @@ abstract class BaseTitle<T extends BaseTitle> extends RelativeLayout implements 
         int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
         if (heightSpecMode == MeasureSpec.AT_MOST) {
-            heightSpecSize = (int) (defaultHeight * context.getResources().getDisplayMetrics().density);
+            heightSpecSize = (int) (DEFAULT_HEIGHT * context.getResources().getDisplayMetrics().density);
         }
         //更新子控件的高度
+        if (realHeight == -0xff322) {
+            realHeight = heightSpecSize;
+        }
         setTitleBarHeight(heightSpecSize);
         setMeasuredDimension(widthSpecSize, heightSpecSize);
     }
@@ -206,11 +215,20 @@ abstract class BaseTitle<T extends BaseTitle> extends RelativeLayout implements 
      * @return
      */
     public T setAnimationIn() {
-        TranslateAnimation animation = new TranslateAnimation(0, 0, -this.getHeight(), 0);
-        animation.setDuration(200);//设置动画持续时间
-        this.setAnimation(animation);
-        animation.startNow();
-        this.setVisibility(View.VISIBLE);
+        if (this.getHeight()<=0){
+            ValueAnimator animator = ValueAnimator.ofInt(0, (int) realHeight);
+            animator.setDuration(200);//设置动画持续时间
+            animator.setRepeatCount(0);//重放次数
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    //获取改变后的值
+                    int currentValue = (int) animation.getAnimatedValue();
+                    setTitleBarHeight(currentValue);
+                }
+            });
+            animator.start();//启动动画
+        }
         return (T) this;
     }
 
@@ -220,23 +238,19 @@ abstract class BaseTitle<T extends BaseTitle> extends RelativeLayout implements 
      * @return
      */
     public T setAnimationOut() {
-        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -this.getHeight());
-        animation.setDuration(200);//设置动画持续时间
-        this.setAnimation(animation);
-        animation.startNow();
-        this.setVisibility(View.GONE);
-        return (T) this;
-    }
-
-    /**
-     * 重置动画
-     *
-     * @return
-     */
-    public T restoreAnimation() {
-        if (this.getVisibility() == View.GONE) {
-            //显示title
-            this.setVisibility(VISIBLE);
+        if (this.getHeight()>=realHeight){
+            ValueAnimator animator = ValueAnimator.ofInt((int) realHeight, 0);
+            animator.setDuration(200);//设置动画持续时间
+            animator.setRepeatCount(0);//重放次数
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    //获取改变后的值
+                    int currentValue = (int) animation.getAnimatedValue();
+                    setTitleBarHeight(currentValue);
+                }
+            });
+            animator.start();//启动动画
         }
         return (T) this;
     }

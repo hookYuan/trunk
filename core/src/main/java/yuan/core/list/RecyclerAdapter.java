@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-import java.util.List;
-
 import androidx.annotation.LayoutRes;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 描述：新版RecyclerView适配器，简化使用
@@ -62,7 +62,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     /**
      * 数据源
      */
-    private List<T> mData;
+    protected List<T> mData;
 
 
     /**
@@ -79,7 +79,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      *
      * @param layoutResId
      */
-    public RecyclerAdapter(List<T> data, @LayoutRes int layoutResId) {
+    public RecyclerAdapter(List<T> data, @LayoutRes final int layoutResId) {
         init();
         this.mData = data;
         registerMultiType(new OnMultiType() {
@@ -153,7 +153,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         View itemView = LayoutInflater.from(mContext).inflate(mLayoutCache.get(viewType), parent, false);
-        BaseViewHolder viewHolder = new BaseViewHolder(itemView);
+        final BaseViewHolder viewHolder = new BaseViewHolder(itemView);
 
         /* 统一处理Item点击事件 */
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +181,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         T item = null;//绑定数据，可能为空
-        if (mData != null) item = mData.get(position);
+        if (mData != null && mData.size() > position) item = mData.get(position);
         onBindHolder(holder, item, position);
     }
 

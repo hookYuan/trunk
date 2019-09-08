@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -64,6 +65,14 @@ public class DialogUtil {
      * 配置参数
      */
     private Params mParams;
+    /**
+     * alertDialog 构造器
+     */
+    private AlertDialog.Builder mBuilder;
+
+    private DialogInterface.OnClickListener neutralListener;
+    private DialogInterface.OnClickListener negativeListener;
+
 
     private static class DialogUtilInstance {
         private static DialogUtil util = new DialogUtil();
@@ -75,8 +84,7 @@ public class DialogUtil {
     }
 
     public static DialogUtil create(Context context) {
-        DialogUtilInstance.util.init(context, null);
-        return DialogUtilInstance.util;
+        return create(context, null);
     }
 
     private DialogUtil() {
@@ -91,10 +99,15 @@ public class DialogUtil {
      */
     private void init(Context context, Params params) {
         //释放Context
-        releaseContext();
-        mContext = new WeakReference<>(context);
-        if (params == null) mParams = new Params.Builder().build();
-        else mParams = params;
+        if (mContext == null || mContext.get() == null || mContext.get() != context) {
+            releaseContext();
+            mContext = new WeakReference<>(context);
+        }
+        if (params != null) {
+            mParams = params;
+        } else if (mParams == null) {
+            mParams = new Params.Builder().build();
+        }
     }
 
     /**
@@ -192,64 +205,45 @@ public class DialogUtil {
             , DialogInterface.OnClickListener neutralListener
             , DialogInterface.OnClickListener negativeListener
             , boolean isCancel) {
-        checkContext();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(),
-                themeResId);
+
+        if (!checkContext()) return;
         //可以通过R.style.MaterialDialog修改Dialog颜色等
-        if (!TextUtils.isEmpty(title)) builder.setTitle(title);
-        if (!TextUtils.isEmpty(message)) builder.setMessage(message);
+        if (!TextUtils.isEmpty(title)) mBuilder.setTitle(title);
+        if (!TextUtils.isEmpty(message)) mBuilder.setMessage(message);
         if (!TextUtils.isEmpty(POSITIVE_TEXT))
-            builder.setPositiveButton(POSITIVE_TEXT, positiveListener);
+            mBuilder.setPositiveButton(POSITIVE_TEXT, positiveListener);
         if (!TextUtils.isEmpty(neutralText))
-            builder.setNeutralButton(neutralText, neutralListener);
+            mBuilder.setNeutralButton(neutralText, neutralListener);
         if (!TextUtils.isEmpty(NEGATIVE_TEXT))
-            builder.setNegativeButton(NEGATIVE_TEXT, negativeListener);
-        builder.setCancelable(isCancel);
+            mBuilder.setNegativeButton(NEGATIVE_TEXT, negativeListener);
+        mBuilder.setCancelable(isCancel);
         // 显示
-        mDialog = new WeakReference(builder.create());
+        mDialog = new WeakReference(mBuilder.create());
         initWindow(mParams, mDialog.get().getWindow());
         show();
     }
 
-    public void alertText(String message, boolean isCancel, DialogInterface.OnClickListener positiveListener) {
-        alertText(TITLE_TEXT, message, POSITIVE_TEXT, "", NEGATIVE_TEXT, positiveListener, null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+    public void alertText(String title, String message, DialogInterface.OnClickListener positiveListener, boolean isCancel) {
+        createNegativeListener();
+        alertText(title, message, POSITIVE_TEXT, "", "", positiveListener,
+                null, negativeListener, isCancel);
+    }
 
-            }
-        }, isCancel);
+    public void alertText(String message, DialogInterface.OnClickListener positiveListener, boolean isCancel) {
+        alertText(TITLE_TEXT, message, positiveListener, isCancel);
     }
 
     public void alertText(String message, DialogInterface.OnClickListener positiveListener) {
-        alertText(message, false, positiveListener);
+        alertText(message, positiveListener, false);
     }
 
 
     public void alertText(String title, String message, DialogInterface.OnClickListener positiveListener) {
-        alertText(title, message, POSITIVE_TEXT, "", "", positiveListener, null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }, false);
-    }
-
-    public void alertText(String title, String message, DialogInterface.OnClickListener positiveListener, boolean isCancel) {
-        alertText(title, message, POSITIVE_TEXT, "", "", positiveListener, null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }, isCancel);
+        alertText(title, message, positiveListener, false);
     }
 
     public void alertText(String message, boolean isCancel) {
-        alertText(TITLE_TEXT, message, POSITIVE_TEXT, "", "", null, null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }, isCancel);
+        alertText(message, null, isCancel);
     }
 
     public void alertText(String message) {
@@ -265,13 +259,12 @@ public class DialogUtil {
      * ************************列表Dialog*****************************************************************
      */
     public void alertList(String title, String[] mData, boolean isCancel, DialogInterface.OnClickListener listener) {
-        checkContext();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
-        if (!TextUtils.isEmpty(title)) builder.setTitle(title);
-        builder.setItems(mData, listener);
-        builder.setCancelable(isCancel);
+        if (!checkContext()) return;
+        if (!TextUtils.isEmpty(title)) mBuilder.setTitle(title);
+        mBuilder.setItems(mData, listener);
+        mBuilder.setCancelable(isCancel);
         // 显示
-        mDialog = new WeakReference(builder.create());
+        mDialog = new WeakReference(mBuilder.create());
         initWindow(mParams, mDialog.get().getWindow());
         show();
     }
@@ -312,12 +305,11 @@ public class DialogUtil {
      * @param listener      监听
      */
     public void alertSingle(String title, String[] mData, final String POSITIVE_TEXT, int defPosition, boolean isCancel, final DialogInterface.OnClickListener listener) {
-        checkContext();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
-        if (!TextUtils.isEmpty(title)) builder.setTitle(title);
+        if (!checkContext()) return;
+        if (!TextUtils.isEmpty(title)) mBuilder.setTitle(title);
         defPos = defPosition;
         //点击Item按钮
-        builder.setSingleChoiceItems(mData, defPosition, new DialogInterface.OnClickListener() {
+        mBuilder.setSingleChoiceItems(mData, defPosition, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 defPos = which;
@@ -325,16 +317,16 @@ public class DialogUtil {
         });
         //点击确定按钮
         if (!TextUtils.isEmpty(POSITIVE_TEXT)) {
-            builder.setPositiveButton(POSITIVE_TEXT, new DialogInterface.OnClickListener() {
+            mBuilder.setPositiveButton(POSITIVE_TEXT, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     listener.onClick(dialog, defPos);
                 }
             });
         }
-        builder.setCancelable(isCancel);
+        mBuilder.setCancelable(isCancel);
         // 显示
-        mDialog = new WeakReference(builder.create());
+        mDialog = new WeakReference(mBuilder.create());
         initWindow(mParams, mDialog.get().getWindow());
         show();
     }
@@ -366,9 +358,8 @@ public class DialogUtil {
     public <T extends MultiItem> void alertMulti(String title, final List<T> data,
                                                  boolean isCancel,
                                                  final OnMultiListener positiveListener) {
-        checkContext();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
-        if (!TextUtils.isEmpty(title)) builder.setTitle(title);
+        if (!checkContext()) return;
+        if (!TextUtils.isEmpty(title)) mBuilder.setTitle(title);
         //解析数据源
         String[] strData = new String[data.size()];
         boolean[] choiceItem = new boolean[data.size()];
@@ -379,7 +370,7 @@ public class DialogUtil {
             bean.setPosition(i);
             i++;
         }
-        builder.setMultiChoiceItems(strData, choiceItem,
+        mBuilder.setMultiChoiceItems(strData, choiceItem,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which,
@@ -391,7 +382,7 @@ public class DialogUtil {
                         }
                     }
                 });
-        builder.setPositiveButton(POSITIVE_TEXT,
+        mBuilder.setPositiveButton(POSITIVE_TEXT,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -404,9 +395,9 @@ public class DialogUtil {
                         positiveListener.onClick(dialog, list);
                     }
                 });
-        builder.setCancelable(isCancel);
+        mBuilder.setCancelable(isCancel);
         // 显示
-        mDialog = new WeakReference(builder.create());
+        mDialog = new WeakReference(mBuilder.create());
         initWindow(mParams, mDialog.get().getWindow());
         show();
     }
@@ -501,11 +492,11 @@ public class DialogUtil {
      */
     public void alertView(final String title, View view, boolean isCancel) {
         checkContext();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext.get(), themeResId);
-        if (!TextUtils.isEmpty(title)) builder.setTitle(title);
-        builder.setView(view);
-        builder.setCancelable(isCancel);
-        mDialog = new WeakReference(builder.create());
+        if (!checkContext()) return;
+        if (!TextUtils.isEmpty(title)) mBuilder.setTitle(title);
+        mBuilder.setView(view);
+        mBuilder.setCancelable(isCancel);
+        mDialog = new WeakReference(mBuilder.create());
         initWindow(mParams, mDialog.get().getWindow());
         show();
     }
@@ -596,14 +587,33 @@ public class DialogUtil {
 
     /**
      * 创建Dialog时，校验上下文
+     *
+     * @return 是否包含上下文对象
      */
-    private void checkContext() {
+    private boolean checkContext() {
         if (mContext.get() == null) {
             Log.e(TAG, "请检查Context是否已经被回收");
-            return;
+            return false;
         }
-        //释放资源
-        releaseDialog();
+        if (mBuilder == null) {
+            mBuilder = new AlertDialog.Builder(mContext.get(),
+                    themeResId);
+        }
+        return true;
+    }
+
+    /**
+     * 检查取消按钮是否设置点击事件
+     */
+    private void createNegativeListener() {
+        if (negativeListener == null) {
+            negativeListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            };
+        }
     }
 
     /**
@@ -659,16 +669,25 @@ public class DialogUtil {
         windowParams.dimAmount = params.getDialogBehindAlpha();
         //设置Window的进出场动画
         windowParams.windowAnimations = params.getWindowAnimations();
-        windowParams.rotationAnimation = params.getRotationAnimation();
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            windowParams.rotationAnimation = params.getRotationAnimation();
+            window.setWindowAnimations(params.getWindowAnimations());
+        }
         window.setAttributes(windowParams);
         window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        window.setWindowAnimations(params.getWindowAnimations());
 
         //反射设置AlertDialog属性
         if (mDialog.get() instanceof AlertDialog) {
             reflexAlert((AlertDialog) mDialog.get(), params, true);
         }
+
+        /*设置移除监听*/
+        mDialog.get().setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                releaseDialog();
+            }
+        });
     }
 
 

@@ -74,8 +74,7 @@ public class DialogUtil {
     }
 
     public static DialogUtil create(Context context) {
-        DialogUtilInstance.util.init(context, null);
-        return DialogUtilInstance.util;
+        return create(context,null);
     }
 
     private DialogUtil() {

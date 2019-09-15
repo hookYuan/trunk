@@ -167,5 +167,6 @@
     <orderEntry type="library" name="Gradle: com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.0.0@jar" level="project" />
     <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="core" />
   </component>
 </module>

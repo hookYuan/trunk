@@ -186,5 +186,8 @@
     <orderEntry type="module" module-name="core" />
     <orderEntry type="module" module-name="depends" />
     <orderEntry type="module" module-name="expand" />
+    <orderEntry type="module" module-name="core" />
+    <orderEntry type="module" module-name="depends" />
+    <orderEntry type="module" module-name="expand" />
   </component>
 </module>

@@ -15,23 +15,19 @@
  */
 package com.yuan.simple.core.module;
 
-import yuan.core.dialog.DialogUtil;
+import yuan.core.dialog.DialogUtils;
 
 /**
  * @author yuanye
  * @date 2019/7/19
  */
-public class MultiBean extends DialogUtil.MultiItem {
+public class MultiBean extends DialogUtils.MultipleItem {
 
     private String name;
 
     public MultiBean(String name) {
+        super(name);
         this.name = name;
-    }
-
-    @Override
-    public String getText() {
-        return name;
     }
 
     @Override

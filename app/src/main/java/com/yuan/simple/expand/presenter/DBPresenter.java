@@ -24,7 +24,7 @@ import com.yuan.simple.main.contract.MainContract;
 import java.util.ArrayList;
 import java.util.List;
 
-import yuan.core.dialog.DialogUtil;
+import yuan.core.dialog.DialogUtils;
 import yuan.core.mvp.Presenter;
 import yuan.expand.database.DBUtil;
 
@@ -105,6 +105,6 @@ public class DBPresenter extends Presenter<MainContract> {
      */
     public void searchTable() {
         List<UserBean> list2 = DBUtil.getDB(getContext()).querySQL("SELECT * FROM UserBean", null, UserBean.class);
-        DialogUtil.create(getContext()).alertText(list2.toString());
+        DialogUtils.alertText(list2.toString()).create(getContext());
     }
 }

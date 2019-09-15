@@ -35,7 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
-import yuan.core.dialog.DialogUtil;
+
+import yuan.core.dialog.DialogUtils;
 
 /**
  * 采用系统启动方式：
@@ -56,7 +57,7 @@ public class PickerUtil {
      */
     public static void startCameraAlbum(Context context, SelectBack selectBack) {
         String[] menu = {"图库", "拍照"};
-        DialogUtil.create(context)
+        DialogUtils
                 .alertList(menu, new DialogInterface.OnClickListener() {
 
                     @Override
@@ -67,7 +68,7 @@ public class PickerUtil {
                             startCamera(context, selectBack);
                         }
                     }
-                });
+                }).create(context);
     }
 
     /**
@@ -113,13 +114,13 @@ public class PickerUtil {
                 public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {
                     for (boolean check : result) {
                         if (check == true) continue;
-                        DialogUtil.create(context)
+                        DialogUtils
                                 .alertText("请在设置中开启相机和存储权限", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         RouteUtil.openSetting(context, RouteUtil.APPLICATION3);
                                     }
-                                });
+                                }).create(context);
                         return;
                     }
                     //将要保存图片的路径
@@ -180,13 +181,12 @@ public class PickerUtil {
                 @Override
                 public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {
                     if (result.length > 0 && result[0] == false) {
-                        DialogUtil.create(context)
-                                .alertText("请在设置中开启存储权限", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        RouteUtil.openSetting(context, RouteUtil.APPLICATION3);
-                                    }
-                                });
+                        DialogUtils.alertText("请在设置中开启存储权限", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                RouteUtil.openSetting(context, RouteUtil.APPLICATION3);
+                            }
+                        }).create(context);
                     } else if (result.length > 0) {
                         //打开图库
                         Intent albumIntent = new Intent(Intent.ACTION_PICK);
@@ -247,13 +247,12 @@ public class PickerUtil {
                 @Override
                 public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {
                     if (result.length > 0 && result[0] == false) {
-                        DialogUtil.create(context)
-                                .alertText("请在设置中开启通讯录权限", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        RouteUtil.openSetting(context, RouteUtil.APPLICATION3);
-                                    }
-                                });
+                        DialogUtils.alertText("请在设置中开启通讯录权限", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                RouteUtil.openSetting(context, RouteUtil.APPLICATION3);
+                            }
+                        }).create(context);
                     } else if (result.length > 0) {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startAddressBook(context, intent, contactBack);

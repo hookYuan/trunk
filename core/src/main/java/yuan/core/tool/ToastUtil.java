@@ -215,11 +215,13 @@ public final class ToastUtil {
     }
 
     private static void show(@NonNull Context context, @StringRes final int resId, final int duration) {
-        show(context.getResources().getText(resId).toString(), duration);
+        final WeakReference<Context> weakContext = new WeakReference(context);
+        show(weakContext.get().getResources().getText(resId).toString(), duration);
     }
 
     private static void show(@NonNull Context context, @StringRes final int resId, final int duration, final Object... args) {
-        show(String.format(context.getResources().getString(resId), args), duration);
+        final WeakReference<Context> weakContext = new WeakReference(context);
+        show(String.format(weakContext.get().getResources().getString(resId), args), duration);
     }
 
     private static void show(final String format, final int duration, final Object... args) {
@@ -236,12 +238,12 @@ public final class ToastUtil {
     }
 
     private static void show(@NonNull Context context, final CharSequence text, final int duration) {
+        final WeakReference<Context> weakContext = new WeakReference(context);
         HANDLER.post(new Runnable() {
             @SuppressLint("ShowToast")
             @Override
             public void run() {
-                if (context == null) return;
-                WeakReference<Context> weakContext = new WeakReference(context);
+                if (weakContext == null || weakContext.get() == null) return;
                 cancel();
                 sToast = Toast.makeText(weakContext.get(), text, duration);
                 final TextView tvMessage = sToast.getView().findViewById(android.R.id.message);
@@ -261,11 +263,11 @@ public final class ToastUtil {
     }
 
     private static void show(@NonNull Context context, final View view, final int duration) {
+        final WeakReference<Context> weakContext = new WeakReference(context);
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
-                if (context == null) return;
-                WeakReference<Context> weakContext = new WeakReference(context);
+                if (weakContext == null || weakContext.get() == null) return;
                 cancel();
                 sToast = new Toast(weakContext.get());
                 sToast.setView(view);
@@ -281,11 +283,12 @@ public final class ToastUtil {
 
     private static void showToast(@NonNull Context context) {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) {
+            final WeakReference<Context> weakContext = new WeakReference(context);
             try {
                 //noinspection JavaReflectionMemberAccess
                 Field field = View.class.getDeclaredField("mContext");
                 field.setAccessible(true);
-                field.set(sToast.getView(), new ApplicationContextWrapperForApi25(context));
+                field.set(sToast.getView(), new ApplicationContextWrapperForApi25(weakContext.get()));
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }

@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuItem;
 
-import yuan.core.dialog.DialogUtil;
+import yuan.core.dialog.DialogUtils;
 import yuan.core.mvp.BaseActivity;
 import yuan.core.title.ActionBarUtil;
 import yuan.core.tool.RouteUtil;
@@ -107,13 +107,14 @@ public class MainActivity extends BaseActivity {
             public void onResult(int requestCode, @NonNull String[] permissions, @NonNull boolean[] result) {
                 for (boolean isSuccess : result) {
                     if (!isSuccess) {
-                        DialogUtil.create(mContext)
+                        DialogUtils
                                 .alertText(getString2(R.string.main_permission_dialog), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         RouteUtil.openSetting(mContext, RouteUtil.APPLICATION1);
                                     }
-                                });
+                                })
+                                .create(mContext);
                         return;
                     }
                 }

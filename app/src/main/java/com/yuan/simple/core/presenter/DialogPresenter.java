@@ -16,6 +16,7 @@
 package com.yuan.simple.core.presenter;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -33,7 +34,7 @@ import com.yuan.simple.main.contract.MainContract;
 import java.util.ArrayList;
 import java.util.List;
 
-import yuan.core.dialog.DialogUtil;
+import yuan.core.dialog.DialogUtils;
 import yuan.core.mvp.Presenter;
 import yuan.core.tool.Kits;
 import yuan.core.tool.ToastUtil;
@@ -90,14 +91,14 @@ public class DialogPresenter extends Presenter<MainContract> {
      * 默认弹窗,可以全局配置
      */
     public void showDialog1() {
-        DialogUtil.create(getContext()).alertText("这是一个简单提示");
+        DialogUtils.alertText("这是一个简单提示").create(getContext());
     }
 
     /**
      * 最大宽度
      */
     public void showDialog2() {
-        DialogUtil.Params params1 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params1 = new DialogUtils.Params.Builder()
                 .matchHeight(false)
                 .matchWidth(true)
                 .paddingTop(0)
@@ -107,61 +108,65 @@ public class DialogPresenter extends Presenter<MainContract> {
                 .gravity(Gravity.BOTTOM)
                 .windowBackground(getColor2(R.color.white))
                 .build();
-        DialogUtil.create(getContext(), params1).alertText("最大宽度的Dialog");
+        DialogUtils.alertText("最大宽度的Dialog").create(getContext(), params1);
     }
 
     /**
      * 相对位置
      */
     public void showDialog3() {
-        DialogUtil.Params params2 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params2 = new DialogUtils.Params.Builder()
                 .gravity(Gravity.BOTTOM)
                 .build();
-        DialogUtil.create(getContext(), params2).alertText("Dialog居下显示");
+        DialogUtils.alertText("Dialog居下显示")
+                .create(getContext(), params2);
     }
 
     /**
      * 背景颜色
      */
     public void showDialog4() {
-        DialogUtil.Params params3 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params3 = new DialogUtils.Params.Builder()
                 .windowBackground(getColor2(R.color.colorPrimary))
                 .build();
-        DialogUtil.create(getContext(), params3)
-                .alertText("Dialog背景透明");
+        DialogUtils.alertText("Dialog背景透明")
+                .create(getContext(), params3);
     }
 
     /**
      * 灰色背景透明度
      */
     public void showDialog5() {
-        DialogUtil.Params params4 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params4 = new DialogUtils.Params.Builder()
                 .dialogBehindAlpha(0.8f)
                 .build();
-        DialogUtil.create(getContext(), params4).alertText("灰色背景透明度");
+        DialogUtils.alertText("灰色背景透明度")
+                .create(getContext(), params4);
     }
 
     /**
      * 前景透明度
      */
     public void showDialog6() {
-        DialogUtil.Params params5 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params5 = new DialogUtils.Params.Builder()
                 .dialogFrontAlpha(0.5f)
                 .build();
-        DialogUtil.create(getContext(), params5).alertText("前景背景透明度");
+        DialogUtils.alertText("前景背景透明度")
+                .create(getContext(), params5);
     }
 
     /**
      * 字体颜色大小
      */
     public void showDialog7() {
-        DialogUtil.Params params6 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params6 = new DialogUtils.Params.Builder()
                 .titleColor(getColor2(R.color.colorPrimary))
                 .titleSize(20)
                 .contentSize(16)
                 .positiveColor(getColor2(R.color.colorPrimary))
                 .build();
-        DialogUtil.create(getContext(), params6).alertText("字体颜色大小");
+        DialogUtils.alertText("字体颜色大小")
+                .create(getContext(), params6);
     }
 
     /**
@@ -169,43 +174,45 @@ public class DialogPresenter extends Presenter<MainContract> {
      */
     public void showDialog8() {
         View dialogView = Views.inflate(getContext(), R.layout.my_dialog_view);
-        DialogUtil.Params params7 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params7 = new DialogUtils.Params.Builder()
                 .height(Kits.Dimens.dpToPxInt(getContext(), 200))
                 .width(Kits.Dimens.dpToPxInt(getContext(), 250))
                 .windowBackground(getColor2(R.color.transparent))
                 .build();
-        DialogUtil.create(getContext(), params7).alertView(dialogView);
+        DialogUtils.alertView(dialogView)
+                .create(getContext(), params7);
     }
 
     /**
      * 日期选择弹窗
      */
     public void showDialog9() {
-        DialogUtil.create(getContext()).alertDate(2019, 4, 23, new DatePickerDialog.OnDateSetListener() {
+        DialogUtils.alertDate(2019, 4, 23, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 showToast(year + "--" + month + "--" + dayOfMonth);
             }
-        });
+        }).create(getContext());
     }
 
     /**
      * 时间选择弹窗
      */
     public void showDialog10() {
-        DialogUtil.create(getContext()).alertTime(13, 23, new TimePickerDialog.OnTimeSetListener() {
+        DialogUtils.alertTime(13, 23, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 showToast(hourOfDay + "--" + minute);
             }
-        });
+        }).create(getContext());
     }
 
     /**
      * 加载中弹窗
      */
     public void showDialog11() {
-        DialogUtil.create(getContext()).alertWait("提示", "加载中...");
+        DialogUtils.alertWait("提示", "加载中...")
+                .create(getContext());
     }
 
     /**
@@ -213,25 +220,26 @@ public class DialogPresenter extends Presenter<MainContract> {
      */
     public void showDialog12() {
         if (mCurrentPercent >= 100) {
-            DialogUtil.create(getContext()).alertText("已经下载完成，是否重新下载？", new DialogInterface.OnClickListener() {
+            DialogUtils.alertText("已经下载完成，是否重新下载？", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int pos) {
                     mCurrentPercent = 0;
                 }
-            });
+            }).create(getContext());
             return;
         }
-        DialogUtil.create(getContext()).alertProgress("下载", 100);
+        DialogUtils.alertProgress("下载", 100)
+                .create(getContext());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     if (mCurrentPercent >= 100) {
-                        DialogUtil.dismiss();
+                        DialogUtils.dismiss();
                         return;
                     }
-                    DialogUtil.setProgressCurrent(mCurrentPercent);
+                    DialogUtils.setProgressCurrent(mCurrentPercent);
                     mCurrentPercent = mCurrentPercent + 1;
                     try {
                         Thread.sleep(100);
@@ -248,34 +256,40 @@ public class DialogPresenter extends Presenter<MainContract> {
      */
     public void showDialog13() {
         final String[] singleData = {"长春", "重庆", "北京", "上海", "成都"};
-        DialogUtil.create(getContext()).
-                alertSingle("城市", singleData, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ToastUtil.showShort(getContext(), "您选择的是" + singleData[i]);
-                    }
-                });
+        DialogUtils.alertSingle("城市", singleData, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ToastUtil.showShort(getContext(), "您选择的是" + singleData[i]);
+            }
+        }).create(getContext());
     }
+
+    private Dialog multiDailog;
 
     /**
      * 多选弹窗
      */
     public void showDialog14() {
-        List<MultiBean> mData = new ArrayList<>();
-        MultiBean bean = new MultiBean("长春");
-        bean.setSelect(true);
-        mData.add(bean);
-        mData.add(new MultiBean("重庆"));
-        mData.add(new MultiBean("北京"));
-        mData.add(new MultiBean("上海"));
-        mData.add(new MultiBean("成都"));
+        if (multiDailog == null) {
+            List<MultiBean> mData = new ArrayList<>();
+            MultiBean bean = new MultiBean("长春");
+            bean.setSelect(true);
+            mData.add(bean);
+            mData.add(new MultiBean("重庆"));
+            mData.add(new MultiBean("北京"));
+            mData.add(new MultiBean("上海"));
+            mData.add(new MultiBean("成都"));
+            multiDailog = DialogUtils.alertMulti("城市", mData, new DialogUtils.OnMultipleListener() {
+                @Override
+                public <T extends DialogUtils.MultipleItem> void onClick(DialogInterface dialog, List<T> selects) {
+                    showToast("选中的有" + selects.toString());
+                }
+            }).create(getContext());
+        } else {
+            multiDailog.show();
+        }
 
-        DialogUtil.create(getContext()).alertMulti("城市", mData, new DialogUtil.OnMultiListener() {
-            @Override
-            public <T extends DialogUtil.MultiItem> void onClick(DialogInterface dialog, List<T> selects) {
-                showToast("选中的有" + selects.toString());
-            }
-        });
+
     }
 
     /**
@@ -284,29 +298,28 @@ public class DialogPresenter extends Presenter<MainContract> {
     public void showDialog15() {
         final String[] listData = {"长春", "重庆", "北京", "上海", "成都", "开封", "广东",
                 "长春", "重庆", "北京", "上海", "成都", "开封"};
-        DialogUtil.create(getContext()).
-                alertList("城市", listData, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        showToast("您选择了" + listData[i]);
-                    }
-                });
+        DialogUtils.alertList("城市", listData, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showToast("您选择了" + listData[i]);
+            }
+        }).create(getContext());
     }
 
     /**
      * 取消弹窗
      */
     public void showDialog16() {
-        DialogUtil.dismiss();
+        DialogUtils.dismiss();
     }
 
     /**
      * 平移动画
      */
     public void showDialog17() {
-        DialogUtil.Params params17 = new DialogUtil.Params.Builder()
+        DialogUtils.Params params17 = new DialogUtils.Params.Builder()
                 .windowAnimations(R.anim.dialog_in)
                 .build();
-        DialogUtil.create(getContext(), params17).alertText("动画弹窗");
+        DialogUtils.alertText("动画弹窗").create(getContext(), params17);
     }
 }

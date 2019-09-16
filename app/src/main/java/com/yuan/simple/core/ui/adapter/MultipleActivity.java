@@ -1,7 +1,9 @@
 package com.yuan.simple.core.ui.adapter;
 
+import android.view.LayoutInflater;
 import android.view.View;
 
+import com.yuan.simple.R;
 import com.yuan.simple.core.adapter.MultiTypeAdapter;
 import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.AdapterPresenter;
@@ -44,8 +46,9 @@ public class MultipleActivity extends RecyclerActivity<AdapterPresenter, Subject
         mRecyclerView.addItemDecoration(new StickyHelper(new StickyHelper.StickyCallback() {
             @Override
             public View getStickyView() {
-
-                return null;
+                View view = LayoutInflater.from(mContext)
+                        .inflate(R.layout.simple_item2, mRecyclerView, false);
+                return view;
             }
         }));
 

@@ -1,14 +1,18 @@
 package yuan.core.list;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import yuan.core.R;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,18 +24,16 @@ import java.util.List;
  */
 public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
-    public static final int HEADER_VIEW = 0x00000111;
-    public static final int LOADING_VIEW = 0x00000222;
-    public static final int ERROR_VIEW = 0x00000333;
-    public static final int FOOTER_VIEW = 0x00000444;
-    public static final int EMPTY_VIEW = 0x00000555;
+    public static final String TAG = "RecyclerAdapter";
+    public static final int HEADER_VIEW = 0x1001;
+    public static final int FOOTER_VIEW = 0x1002;
+    public static final int LOADING_VIEW = 0x1003;
+    public static final int ERROR_VIEW = 0x1004;
+    public static final int EMPTY_VIEW = 0x1005;
+
     //header footer
     private View mHeaderLayout;
     private View mFooterLayout;
-    //empty
-    private View mEmptyLayout;
-    private View mErrorLayout;
-    private View mLoadingLayout;
     /*以上内容待完成*/
 
     /**
@@ -39,6 +41,10 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      */
     protected Context mContext;
 
+    /**
+     * recyclerView 多个RecyclerView可能使用同一个Adapter
+     */
+    protected RecyclerView mRecyclerView;
     /**
      * item click listener
      */
@@ -49,26 +55,42 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      */
     private OnItemLongClickListener mItemLongClickListener;
     /**
-     * Item布局文件缓存<viewType,LayoutRes></>
-     * viewType :从0开始递增，由系统维护
-     * LayoutRes： 不同ViewType对应的布局文件
-     */
-    private HashMap<Integer, Integer> mLayoutCache;
-    /**
      * 多类型设置器
      */
-    private OnMultiType mMultiType;
-
+    private MultipleType mMultipleType;
     /**
      * 数据源
      */
     protected List<T> mData;
-
+    /**
+     * 是否启用自定义View：emptyView,errorView,loadingView
+     */
+    protected boolean enableFullView;
+    /**
+     * 全屏View
+     */
+    private View fullView;
+    /**
+     * 全屏View类型
+     */
+    private int fullType;
+    /**
+     * 空布局
+     */
+    private View mEmptyLayout;
+    /**
+     * 失败布局
+     */
+    private View mErrorLayout;
+    /**
+     * 加载中布局
+     */
+    private View mLoadingLayout;
 
     /**
      * 无参构造方法
      * 必须通过{@link #setData(List)}设置数据源
-     * 必须通过{@link #registerMultiType(OnMultiType)}设置布局
+     * 必须通过{@link #setMultipleType(MultipleType)}}设置布局
      */
     public RecyclerAdapter(List<T> data) {
         this(data, android.R.layout.simple_list_item_1);
@@ -80,21 +102,108 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * @param layoutResId
      */
     public RecyclerAdapter(List<T> data, @LayoutRes final int layoutResId) {
-        init();
+        init(layoutResId);
         this.mData = data;
-        registerMultiType(new OnMultiType() {
-            @Override
-            public int getLayoutResId(int position) {
-                return layoutResId;
-            }
-        });
     }
 
     /**
      * 初始化
      */
-    private void init() {
-        mLayoutCache = new HashMap<>();
+    private void init(@LayoutRes final int layoutResId) {
+
+        /*默认类型设置器*/
+        setMultipleType(new MultipleType() {
+            @Override
+            public int getItemLayoutId(int position) {
+                return layoutResId;
+            }
+        });
+
+        /*数据发生改变时监听*/
+        registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+
+            }
+        });
+    }
+
+    /**
+     * 设置绑定空布局
+     *
+     * @param mEmptyLayout
+     */
+    public void setEmptyLayout(View mEmptyLayout) {
+        this.mEmptyLayout = mEmptyLayout;
+    }
+
+    /**
+     * 设置加载失败布局
+     *
+     * @param mErrorLayout
+     */
+    public void setErrorLayout(View mErrorLayout) {
+        this.mErrorLayout = mErrorLayout;
+    }
+
+    /**
+     * 设置加载中布局
+     *
+     * @param mLoadingLayout
+     */
+    public void setLoadingLayout(View mLoadingLayout) {
+        this.mLoadingLayout = mLoadingLayout;
+    }
+
+
+    /**
+     * 显示空布局
+     */
+    public void showEmptyView() {
+        if (mEmptyLayout == null) {
+            Log.e(TAG, "请先指定Empty布局");
+            return;
+        }
+        this.fullType = EMPTY_VIEW;
+        this.enableFullView = true;
+        this.fullView = mEmptyLayout;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 显示加载失败布局
+     */
+    public void showErrorLayout() {
+        if (mErrorLayout == null) {
+            Log.e(TAG, "请先指定Empty布局");
+            return;
+        }
+        this.fullType = ERROR_VIEW;
+        this.enableFullView = true;
+        this.fullView = mErrorLayout;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 显示加载中布局
+     */
+    public void showLoadingLayout() {
+        if (mLoadingLayout == null) {
+            Log.e(TAG, "请先指定Empty布局");
+            return;
+        }
+        this.fullType = LOADING_VIEW;
+        this.enableFullView = true;
+        this.fullView = mLoadingLayout;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 显示数据
+     */
+    public void showContent() {
+        this.enableFullView = false;
+        notifyDataSetChanged();
     }
 
     /**
@@ -109,50 +218,68 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     /**
      * 注册多类型布局，必须在Adapter初始化之前注册才能生效
      *
-     * @param multiType
+     * @param multipleType
      */
-    public void registerMultiType(OnMultiType multiType) {
-        this.mMultiType = multiType;
+    public void setMultipleType(MultipleType multipleType) {
+        this.mMultipleType = multipleType;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        mContext = recyclerView.getContext();
+        mRecyclerView = recyclerView;
+        /* 设置默认 emptyView、errorView、loadingView */
+        if (mEmptyLayout == null) {
+            View emptyView = LayoutInflater.from(mContext).inflate(R.layout.empty_view_layout, recyclerView, false);
+            setEmptyLayout(emptyView);
+        }
+        if (mErrorLayout == null) {
+            View errorView = LayoutInflater.from(mContext).inflate(R.layout.error_view_layout, recyclerView, false);
+            setErrorLayout(errorView);
+        }
+        if (mLoadingLayout == null) {
+            View loadingView = LayoutInflater.from(mContext).inflate(R.layout.loading_view_layout, recyclerView, false);
+            setLoadingLayout(loadingView);
+        }
+
+        /* 当 emptyView、errorView、loadingView布局时设置显示一行  */
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            final GridLayoutManager.SpanSizeLookup oldSpanSizeLookup = gridManager.getSpanSizeLookup();
+            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (enableFullView) {
+                        return gridManager.getSpanCount();
+                    }
+                    return oldSpanSizeLookup.getSpanSize(position);
+                }
+            });
+        }
     }
 
     @Override
     public final int getItemViewType(int position) {
-        int resLayout = mMultiType.getLayoutResId(position);
-        if (!mLayoutCache.containsValue(resLayout)) {
-            mLayoutCache.put(mLayoutCache.size(), resLayout);
+        //针对全屏自定义View,控制类型
+        if (enableFullView) {
+            return fullType;
         }
         //缓存布局类型，同时也是缓存的布局类型编号，递增，从0开始,type是无序的
-        int viewType = 0;
-        for (Integer key : mLayoutCache.keySet()) {
-            if (mLayoutCache.get(key) == resLayout) {
-                viewType = key;
-            }
-        }
-        return viewType;
-    }
-
-//    /**
-//     * @param position
-//     * @return
-//     */
-//    public int getItemViewId(int position) {
-//
-//    }
-
-    /**
-     * 根据 position 获取对应 layoutId
-     *
-     * @param position
-     * @return
-     */
-    public int getLayoutResIdType(int position) {
-        return mMultiType.getLayoutResId(position);
+        Integer itemLayoutId = mMultipleType.getItemLayoutId(position);
+        return itemLayoutId;
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        mContext = parent.getContext();
-        View itemView = LayoutInflater.from(mContext).inflate(mLayoutCache.get(viewType), parent, false);
+        View itemView = null;
+        if (enableFullView) {
+            /* 全屏布局  emptyView、loadingView、errorView*/
+            itemView = fullView;
+        } else {
+            /* 加载item布局 */
+            itemView = LayoutInflater.from(mContext).inflate(viewType, parent, false);
+        }
         final BaseViewHolder viewHolder = new BaseViewHolder(itemView);
 
         /* 统一处理Item点击事件 */
@@ -180,6 +307,10 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
+        if (enableFullView) {
+            onBindFullViewHolder(holder, position);
+            return;
+        }
         T item = null;//绑定数据，可能为空
         if (mData != null && mData.size() > position) item = mData.get(position);
         onBindHolder(holder, item, position);
@@ -187,7 +318,22 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
 
     @Override
     public int getItemCount() {
+        //启用全屏自定义View，返回数据集合为1
+        if (enableFullView) return 1;
         return mData != null ? mData.size() : 0;
+    }
+
+    /**
+     * 设置全屏
+     *
+     * @param holder
+     */
+    protected void setFullSpan(RecyclerView.ViewHolder holder) {
+        if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder
+                    .itemView.getLayoutParams();
+            params.setFullSpan(true);
+        }
     }
 
     /**
@@ -197,6 +343,14 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * @param position
      */
     public abstract void onBindHolder(BaseViewHolder holder, T item, int position);
+
+    /**
+     * 绑定全屏数据项
+     *
+     * @param holder
+     */
+    public void onBindFullViewHolder(BaseViewHolder holder, int position) {
+    }
 
     /**
      * 提供外部设置点击事件
@@ -233,8 +387,8 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     /**
      * 根据position注册多类型
      */
-    public interface OnMultiType {
+    public interface MultipleType {
         @LayoutRes
-        int getLayoutResId(int position);
+        int getItemLayoutId(int position);
     }
 }

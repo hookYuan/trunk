@@ -20,6 +20,7 @@ import com.yuan.simple.core.module.SubjectBean;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.RecyclerAdapter;
 
@@ -33,21 +34,23 @@ public class MultiTypeAdapter extends RecyclerAdapter<SubjectBean> {
 
     public MultiTypeAdapter(List<SubjectBean> data) {
         super(data);
-        registerMultiType(new OnMultiType() {
-            @Override
-            public int getLayoutResId(int position) {
-                if (position % 4 == 0) {
-                    return R.layout.simple_item;
-                }
-                return R.layout.item_simple_image;
+        setMultipleType(position -> {
+            if (position % 5 == 0) {
+                return R.layout.simple_item2;
             }
+            return R.layout.simple_item;
         });
     }
 
     @Override
     public void onBindHolder(BaseViewHolder holder, SubjectBean item, int position) {
-        switch (holder.getItemViewType()) {
-
+        switch (getItemViewType(position)) {
+            case R.layout.simple_item:
+                holder.setText(android.R.id.text1, item.getName());
+                break;
+            case R.layout.simple_item2:
+                holder.setText(android.R.id.text1, "标题");
+                break;
         }
     }
 }

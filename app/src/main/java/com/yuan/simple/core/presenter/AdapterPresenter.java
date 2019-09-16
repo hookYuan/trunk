@@ -44,6 +44,7 @@ public class AdapterPresenter extends Presenter<MainContract> {
                 .postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        if (getView() == null) return;
                         mData.clear();
                         for (int i = 0; i < 30; i++) {
                             mData.add(new SubjectBean("数据" + i));

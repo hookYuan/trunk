@@ -35,7 +35,7 @@ public class DependsFragment extends BaseFragment {
 
     @Override
     public void initData() {
-
+        
     }
 
     @Override

@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.yuan.simple">
+	xmlns:tools="http://schemas.android.com/tools"
+	package="com.yuan.simple">
 
-    <application
-        android:name=".TrunkApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:hardwareAccelerated="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".core.ui.callback.CallbackActivity"></activity>
-        <activity android:name=".main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+	<application
+		android:name=".TrunkApplication"
+		android:allowBackup="true"
+		android:hardwareAccelerated="true"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:supportsRtl="true"
+		android:theme="@style/AppTheme">
+		<activity android:name=".core.ui.callback.CallbackActivity"></activity>
+		<activity android:name=".main.MainActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".core.ui.title.TitleBarActivity" />
-        <activity android:name=".core.ui.title.TitleFullScreenActivity" />
-        <activity android:name=".core.ui.roundview.RoundTextActivity" />
-        <activity android:name=".core.ui.foldtext.FoldActivity"></activity>
-        <activity android:name=".core.ui.sort.SortActivity" />
-        <activity
-            android:name=".core.ui.input.InputActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".core.ui.http.OKHttpActivity" />
-        <activity android:name=".core.ui.dialog.AlertDialogActivity" />
-        <activity android:name=".expand.ui.multi.MultiActivity" />
-        <activity android:name=".expand.ui.db.DBActivity" />
-        <activity android:name=".core.ui.picker.PickerActivity" />
-    </application>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".core.ui.title.TitleBarActivity" />
+		<activity android:name=".core.ui.title.TitleFullScreenActivity" />
+		<activity android:name=".core.ui.roundview.RoundTextActivity" />
+		<activity android:name=".core.ui.foldtext.FoldActivity"></activity>
+		<activity android:name=".core.ui.sort.SortActivity" />
+		<activity
+			android:name=".core.ui.input.InputActivity"
+			android:windowSoftInputMode="stateHidden|adjustResize" />
+		<activity android:name=".core.ui.http.OKHttpActivity" />
+		<activity android:name=".core.ui.dialog.AlertDialogActivity" />
+		<activity android:name=".expand.ui.multi.MultiActivity" />
+		<activity android:name=".expand.ui.db.DBActivity" />
+		<activity android:name=".core.ui.picker.PickerActivity" />
+		<activity android:name=".core.ui.adapter.MultipleActivity"></activity>
+	</application>
 
 </manifest>

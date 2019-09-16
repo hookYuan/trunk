@@ -52,10 +52,10 @@ public class DialogUtils {
     private static final int DIALOG_PROGRESS = 7;
     private static final int DIALOG_DATE = 8;
     private static final int DIALOG_TIME = 9;
-    private final static String POSITIVE_TEXT = "确定";
-    private final static String NEGATIVE_TEXT = "取消";
-    private final static String TITLE_TEXT = "提示";
-    private final static String EMPTY_TEXT = "";
+    private static final String POSITIVE_TEXT = "确定";
+    private static final String NEGATIVE_TEXT = "取消";
+    private static final String TITLE_TEXT = "提示";
+    private static final String EMPTY_TEXT = "";
     /**
      * Dialog
      */
@@ -297,6 +297,7 @@ public class DialogUtils {
                                                                    final OnMultipleListener positiveListener) {
         CreateDialog createDialog = new CreateDialog(DIALOG_MULTIPLE);
         createDialog.title = title;
+        createDialog.positiveText = POSITIVE_TEXT;
         createDialog.multipleData = (List<MultipleItem>) multipleData;
         createDialog.isCancel = isCancel;
         createDialog.multipleListener = positiveListener;
@@ -613,6 +614,7 @@ public class DialogUtils {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    choiceData.clear();
                                     for (MultipleItem bean : multipleData) {
                                         if (bean.isSelect()) {
                                             choiceData.add(bean);
@@ -1180,7 +1182,7 @@ public class DialogUtils {
         <T extends MultipleItem> void onClick(DialogInterface dialog, List<T> selects);
     }
 
-    public static abstract class MultipleItem {
+    public static class MultipleItem {
         /**
          * 是否选中
          */

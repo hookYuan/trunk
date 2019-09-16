@@ -15,7 +15,6 @@
  */
 package yuan.core.list;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -109,7 +108,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        initDividerHeight(parent.getContext());
+        initDividerHeight(parent);
         /*获取item的顺序位置信息*/
         ItemInfo itemInfo = getItemInfo(parent, view, state);
         int top = 0;
@@ -153,7 +152,7 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
-        initDividerHeight(parent.getContext());
+        initDividerHeight(parent);
         drawDivider(c, parent);
     }
 
@@ -173,15 +172,24 @@ public class GridDivider extends RecyclerView.ItemDecoration {
     /**
      * 初始化分割线高度
      *
-     * @param context
+     * @param parent
      */
-    private void initDividerHeight(Context context) {
+    private void initDividerHeight(RecyclerView parent) {
         if (singleTime) {
+            parent.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    //刷新时重置数据集合
+                    indexInRow = 0;
+                    mCacheInfo.clear();
+                }
+            });
+
             //设置默认分割线高度度
             if (mDividerHeight < 0) {
-                mDividerHeight = (int) (context.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
+                mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * DEFAULT_SEPARATOR_HEIGHT);
             } else {
-                mDividerHeight = (int) (context.getResources().getDisplayMetrics().density * mDividerHeight);
+                mDividerHeight = (int) (parent.getResources().getDisplayMetrics().density * mDividerHeight);
             }
             singleTime = false;
         }

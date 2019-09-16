@@ -251,17 +251,23 @@ public class DialogPresenter extends Presenter<MainContract> {
         }).start();
     }
 
+    private Dialog multiSingle;
+
     /**
      * 单选弹窗
      */
     public void showDialog13() {
-        final String[] singleData = {"长春", "重庆", "北京", "上海", "成都"};
-        DialogUtils.alertSingle("城市", singleData, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ToastUtil.showShort(getContext(), "您选择的是" + singleData[i]);
-            }
-        }).create(getContext());
+        if (multiSingle == null) {
+            final String[] singleData = {"长春", "重庆", "北京", "上海", "成都"};
+            multiSingle = DialogUtils.alertSingle("城市", singleData, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ToastUtil.showShort(getContext(), "您选择的是" + singleData[i]);
+                }
+            }).create(getContext());
+        } else {
+            multiSingle.show();
+        }
     }
 
     private Dialog multiDailog;

@@ -19,15 +19,14 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.yuan.simple.core.module.SubjectBean;
+import com.yuan.simple.core.ui.adapter.MultipleActivity;
 import com.yuan.simple.main.contract.MainContract;
-import com.yuan.simple.main.module.CoreFunctionInfo;
 import com.yuan.simple.core.ui.callback.CallbackActivity;
 import com.yuan.simple.expand.ui.db.DBActivity;
 import com.yuan.simple.core.ui.dialog.AlertDialogActivity;
 import com.yuan.simple.core.ui.foldtext.FoldActivity;
 import com.yuan.simple.core.ui.http.OKHttpActivity;
 import com.yuan.simple.core.ui.input.InputActivity;
-import com.yuan.simple.expand.ui.multi.MultiActivity;
 import com.yuan.simple.core.ui.roundview.RoundTextActivity;
 import com.yuan.simple.core.ui.picker.PickerActivity;
 import com.yuan.simple.core.ui.sort.SortActivity;
@@ -63,7 +62,7 @@ public class CorePresenter extends Presenter<MainContract> {
                         mData.add(new SubjectBean("input", InputActivity.class));
                         mData.add(new SubjectBean("okHttp", OKHttpActivity.class));
                         mData.add(new SubjectBean("alertDialog", AlertDialogActivity.class));
-                        mData.add(new SubjectBean("multiAdapter", MultiActivity.class));
+                        mData.add(new SubjectBean("multiAdapter", MultipleActivity.class));
                         mData.add(new SubjectBean("DBUtil", DBActivity.class));
                         mData.add(new SubjectBean("PickerUtil", PickerActivity.class));
                         mData.add(new SubjectBean("CallbackManager", CallbackActivity.class));

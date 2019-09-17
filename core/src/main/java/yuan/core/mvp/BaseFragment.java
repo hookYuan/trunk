@@ -260,6 +260,14 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     }
 
     /**
+     * 初始化完成
+     */
+    @Override
+    public void initComplete() {
+
+    }
+
+    /**
      * 获取Presenter
      *
      * @return presenter实例
@@ -295,6 +303,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
         findViews();
         parseBundle(getArguments());
         initData();
+        initComplete();
         setListener();
         if (mPresenter != null) mPresenter.onResume();
     }
@@ -425,6 +434,5 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
             isPrepared = true;
         }
     }
-
 
 }

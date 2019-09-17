@@ -43,13 +43,9 @@ public class CoreFragment extends RecyclerFragment<CorePresenter, SubjectBean>
         implements MainContract {
 
     @Override
-    protected void initRecyclerView() {
+    public void initData() {
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         mRecyclerView.addItemDecoration(new GridDivider());
-    }
-
-    @Override
-    public void initData() {
         getPresenter().loadData(mData);
     }
 

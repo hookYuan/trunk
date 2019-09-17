@@ -52,7 +52,6 @@ public class MultipleActivity extends RecyclerActivity<AdapterPresenter, Subject
             }
         }));
 
-        mAdapter.showLoadingLayout();
         getPresenter().loadData(mData);
         List<String> menu = new ArrayList<>();
         menu.add("数据");
@@ -63,18 +62,19 @@ public class MultipleActivity extends RecyclerActivity<AdapterPresenter, Subject
                 .setRightMenu(menu, new TitleBar.OnMenuItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
+                        mAdapter.setAutoSwitch(false);
                         switch (position) {
                             case 0:
                                 mAdapter.showContent();
                                 break;
                             case 1:
-                                mAdapter.showEmptyView();
+                                mAdapter.showEmpty();
                                 break;
                             case 2:
-                                mAdapter.showErrorLayout();
+                                mAdapter.showError();
                                 break;
                             case 3:
-                                mAdapter.showLoadingLayout();
+                                mAdapter.showLoading();
                                 break;
                         }
                     }
@@ -88,6 +88,6 @@ public class MultipleActivity extends RecyclerActivity<AdapterPresenter, Subject
 
     @Override
     public void notifyDataChange(boolean isSuccess) {
-        mAdapter.showContent();
+        mAdapter.notifyDataSetChanged();
     }
 }

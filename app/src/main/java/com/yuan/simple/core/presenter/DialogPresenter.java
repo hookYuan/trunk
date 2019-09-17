@@ -84,7 +84,7 @@ public class DialogPresenter extends Presenter<MainContract> {
                         //更新列表
                         getView().notifyDataChange(true);
                     }
-                }, 200);
+                }, 2000);
     }
 
     /**

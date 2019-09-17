@@ -116,8 +116,8 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
         findViews();
         parseBundle(savedInstanceState);
         initData();
+        initComplete();
         setListener();
-
         if (presenter != null) presenter.onCreate(savedInstanceState);
     }
 
@@ -133,6 +133,11 @@ public abstract class BaseActivity<presenter extends Presenter> extends AppCompa
 
     @Override
     public void parseBundle(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void initComplete() {
 
     }
 

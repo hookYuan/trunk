@@ -5,6 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -30,6 +34,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     public static final int LOADING_VIEW = 0x1003;
     public static final int ERROR_VIEW = 0x1004;
     public static final int EMPTY_VIEW = 0x1005;
+    public static final int DATA_VIEW = 0x1006;
 
     //header footer
     private View mHeaderLayout;
@@ -73,7 +78,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     /**
      * 全屏View类型
      */
-    private int fullType;
+    private int fullType = DATA_VIEW;
     /**
      * 空布局
      */
@@ -86,6 +91,11 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * 加载中布局
      */
     private View mLoadingLayout;
+
+    /**
+     * 自动切换加载中/空布局等状态
+     */
+    private boolean autoSwitch = true;
 
     /**
      * 无参构造方法
@@ -110,7 +120,6 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * 初始化
      */
     private void init(@LayoutRes final int layoutResId) {
-
         /*默认类型设置器*/
         setMultipleType(new MultipleType() {
             @Override
@@ -123,9 +132,34 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
         registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
-
+                //显示空布局
+                if (mData.size() == 0 && enableFullView && autoSwitch) {
+                    showEmpty(false);
+                }
+                //显示数据
+                if (mData.size() >= 0 && autoSwitch) {
+                    showContent(false);
+                }
             }
         });
+    }
+
+    /**
+     * 设置是否可以自动数据切换空布局
+     *
+     * @param autoSwitch
+     */
+    public void setAutoSwitch(boolean autoSwitch) {
+        this.autoSwitch = autoSwitch;
+    }
+
+    /**
+     * 是否启用 emptyView,errorView,loadingView
+     *
+     * @param enableFullView
+     */
+    public void setEnableFullView(boolean enableFullView) {
+        this.enableFullView = enableFullView;
     }
 
     /**
@@ -157,54 +191,106 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
 
 
     /**
-     * 显示空布局
+     * 显示空布局并自动刷新
      */
-    public void showEmptyView() {
+    public void showEmpty() {
+        showEmpty(true);
+    }
+
+    /**
+     * 显示空布局
+     *
+     * @param refresh 是否刷新
+     */
+    public void showEmpty(boolean refresh) {
         if (mEmptyLayout == null) {
             Log.e(TAG, "请先指定Empty布局");
             return;
         }
-        this.fullType = EMPTY_VIEW;
+        //避免重复设置相同布局
+        if (fullType == EMPTY_VIEW) return;
         this.enableFullView = true;
+        this.fullType = EMPTY_VIEW;
         this.fullView = mEmptyLayout;
-        notifyDataSetChanged();
+        if (refresh) notifyDataSetChanged();
+    }
+
+    /**
+     * 显示加载失败布局，默认刷新
+     */
+    public void showError() {
+        showError(true);
     }
 
     /**
      * 显示加载失败布局
+     *
+     * @param refresh 是否刷新
      */
-    public void showErrorLayout() {
+    public void showError(boolean refresh) {
         if (mErrorLayout == null) {
             Log.e(TAG, "请先指定Empty布局");
             return;
         }
-        this.fullType = ERROR_VIEW;
+        //避免重复设置相同布局
+        if (fullType == ERROR_VIEW) return;
+
         this.enableFullView = true;
+        this.fullType = ERROR_VIEW;
         this.fullView = mErrorLayout;
-        notifyDataSetChanged();
+        if (refresh) notifyDataSetChanged();
     }
 
     /**
      * 显示加载中布局
      */
-    public void showLoadingLayout() {
+    public void showLoading() {
+        showLoading(true);
+    }
+
+    /**
+     * 显示加载中布局
+     *
+     * @param refresh 设置加载中后是否刷新
+     */
+    public void showLoading(boolean refresh) {
         if (mLoadingLayout == null) {
             Log.e(TAG, "请先指定Empty布局");
             return;
         }
+        //避免重复设置相同布局
+        if (fullType == LOADING_VIEW) return;
+
         this.fullType = LOADING_VIEW;
         this.enableFullView = true;
         this.fullView = mLoadingLayout;
-        notifyDataSetChanged();
+        ImageView image = mLoadingLayout.findViewById(R.id.image_loading);
+        Animation rotateAnimation = AnimationUtils.loadAnimation(mLoadingLayout.getContext(), R.anim.anim_circle_rotate);
+        LinearInterpolator interpolator = new LinearInterpolator();
+        rotateAnimation.setInterpolator(interpolator);
+        image.startAnimation(rotateAnimation);
+        if (refresh) notifyDataSetChanged();
     }
 
     /**
      * 显示数据
      */
     public void showContent() {
-        this.enableFullView = false;
-        notifyDataSetChanged();
+        showContent(true);
     }
+
+    /**
+     * 显示数据
+     *
+     * @param refresh 是否刷新
+     */
+    public void showContent(boolean refresh) {
+        if (fullType == DATA_VIEW) return;
+        this.enableFullView = false;
+        this.fullType = DATA_VIEW;
+        if (refresh) notifyDataSetChanged();
+    }
+
 
     /**
      * 设置数据源
@@ -241,9 +327,13 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
             View loadingView = LayoutInflater.from(mContext).inflate(R.layout.loading_view_layout, recyclerView, false);
             setLoadingLayout(loadingView);
         }
+        /*自动显示加载中动画*/
+        if (autoSwitch) {
+            showLoading(false);
+        }
 
         /* 当 emptyView、errorView、loadingView布局时设置显示一行  */
-        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
             final GridLayoutManager.SpanSizeLookup oldSpanSizeLookup = gridManager.getSpanSizeLookup();
@@ -260,6 +350,11 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     }
 
     @Override
+    public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+    }
+
+    @Override
     public final int getItemViewType(int position) {
         //针对全屏自定义View,控制类型
         if (enableFullView) {
@@ -272,6 +367,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.i("landglag", "-------onCreateViewHolder");
         View itemView = null;
         if (enableFullView) {
             /* 全屏布局  emptyView、loadingView、errorView*/

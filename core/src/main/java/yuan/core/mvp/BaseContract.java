@@ -47,6 +47,11 @@ public class BaseContract {
         void initData();
 
         /**
+         * 初始化完成
+         */
+        void initComplete();
+
+        /**
          * 设置监听
          */
         void setListener();

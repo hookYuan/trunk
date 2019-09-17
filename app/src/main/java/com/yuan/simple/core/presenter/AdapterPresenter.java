@@ -52,6 +52,6 @@ public class AdapterPresenter extends Presenter<MainContract> {
                         //更新列表
                         getView().notifyDataChange(true);
                     }
-                }, 200);
+                }, 2000);
     }
 }

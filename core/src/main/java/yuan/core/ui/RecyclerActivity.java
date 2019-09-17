@@ -37,15 +37,25 @@ public abstract class RecyclerActivity<presenter extends Presenter, Model extend
         return R.layout.base_recycler_layout;
     }
 
+
+    @Override
+    public void findViews() {
+        //设置RecyclerView
+        mRecyclerView = findViewById(R.id.recyclerView);
+    }
+
     @Override
     public void parseBundle(@Nullable Bundle bundle) {
         super.parseBundle(bundle);
         Adapter annotation = this.getClass().getAnnotation(Adapter.class);
-        //设置RecyclerView
-        mRecyclerView = findViewById(R.id.recyclerView);
         mData = new ArrayList<Model>();
         mAdapter = createAdapter(annotation);
         initRecyclerView();
+    }
+
+
+    @Override
+    public void initComplete() {
         mRecyclerView.setAdapter(mAdapter);
     }
 

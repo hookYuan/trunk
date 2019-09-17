@@ -40,6 +40,10 @@ import yuan.core.ui.Title;
 public class AlertDialogActivity extends RecyclerActivity<DialogPresenter, SubjectBean>
         implements MainContract {
 
+    @Override
+    protected void initRecyclerView() {
+        super.initRecyclerView();
+    }
 
     @Override
     public void initData() {

@@ -239,7 +239,7 @@ public class DialogPresenter extends Presenter<MainContract> {
                         DialogUtils.dismiss();
                         return;
                     }
-                    DialogUtils.setProgressCurrent(mCurrentPercent);
+                    DialogUtils.setProgressLastDialog(mCurrentPercent);
                     mCurrentPercent = mCurrentPercent + 1;
                     try {
                         Thread.sleep(100);

@@ -23,15 +23,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import yuan.core.list.BaseViewHolder;
+import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
 import yuan.core.title.ActionBarUtil;
 import yuan.core.tool.PickerUtil;
 import yuan.core.tool.ToastUtil;
+import yuan.core.ui.Adapter;
+import yuan.core.ui.RecyclerActivity;
+import yuan.core.ui.Title;
 import yuan.core.widget.StateLayout;
 import yuan.depends.ui.RecyclerViewActivity;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yuan.simple.R;
+import com.yuan.simple.core.adapter.TextAdapter;
+import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.PickerPresenter;
 import com.yuan.simple.main.contract.MainContract;
 
@@ -44,30 +50,15 @@ import com.yuan.simple.main.contract.MainContract;
  * @author YuanYe
  * @date 2019/7/19  23:59
  */
-public class PickerActivity extends RecyclerViewActivity<PickerPresenter, String>
+@Title(titleStr = "PickerUtil")
+@Adapter(adapter = TextAdapter.class)
+public class PickerActivity extends RecyclerActivity<PickerPresenter, SubjectBean>
         implements MainContract {
 
     @Override
-    protected int getItemLayoutId(int position) {
-        return android.R.layout.simple_list_item_1;
-    }
-
-    @Override
-    protected void init(RecyclerView recyclerView, SmartRefreshLayout smartRefreshLayout
-            , StateLayout mStateLayout) {
-        ActionBarUtil.create(this)
-                .setTitleText("PickerUtil")
-                .setLeftClickFinish()
-                .setTitleTextColor(getColor2(R.color.white))
-                .setLeftIcon(getDrawable2(R.drawable.ic_base_back_white))
-                .setBackgroundColor(getColor2(R.color.colorPrimary));
-        super.init(recyclerView, smartRefreshLayout, mStateLayout);
-        mStateLayout.showContent();
-    }
-
-    @Override
-    public void onBindHolder(BaseViewHolder holder, String item, int position) {
-        holder.setText(android.R.id.text1, mData.get(position));
+    public void initData() {
+        mRecyclerView.addItemDecoration(new GridDivider());
+        getPresenter().loadData(mData);
     }
 
     @Override
@@ -116,8 +107,5 @@ public class PickerActivity extends RecyclerViewActivity<PickerPresenter, String
     @Override
     public void notifyDataChange(boolean isSuccess) {
         mAdapter.notifyDataSetChanged();
-        //状态显示控制
-        if (isSuccess) mStateLayout.showContent();
-        else mStateLayout.showEmpty();
     }
 }

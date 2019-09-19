@@ -34,7 +34,8 @@ import java.util.List;
  * <p>
  * Dialog根布局是一个PhoneWindow
  * <p>
- * DialogUtil采用单例模式，属性设置时需要注意
+ * DialogUtil采用静态方法，属性设置时需要注意
+ * 
  *
  * @author yuanye
  * @modify 2019/6/27 解决Context容易引起的内存泄露,使用单例节约内存
@@ -57,14 +58,21 @@ public class DialogUtils {
     private static final String TITLE_TEXT = "提示";
     private static final String EMPTY_TEXT = "";
     /**
-     * Dialog
-     */
-    private static WeakReference<Dialog> mDialog;
-    /**
      * 全局属性设置
      * Activity的生命周期有效
      */
     private static WeakReference<Params> mParams;
+    /**
+     * 创建过的 Dialog 集合
+     */
+    private static List<WeakReference<Dialog>> mDialogs;
+
+    /**
+     * 全局初始化
+     */
+    static {
+        mDialogs = new ArrayList<>();
+    }
 
     /**
      * 全局设置Dialog属性，全局生效
@@ -72,22 +80,23 @@ public class DialogUtils {
      * @param params
      */
     public static void setParams(Params params) {
+        releaseEmptyDialog();
         mParams = new WeakReference<>(params);
     }
 
     /**
-     * 设置当前进度
+     * 设置最近创建Dialog 的进度
      *
      * @param current
      */
-    public static void setProgressCurrent(int current) {
-        if (mDialog != null &&
-                mDialog.get() != null &&
-                mDialog.get() instanceof ProgressDialog) {
-            ProgressDialog dialog = ProgressDialog.class.cast(mDialog.get());
-            dialog.setProgress(current);
-        } else {
-            Log.e(TAG, "设置进度失败");
+    public static void setProgressLastDialog(int current) {
+        releaseEmptyDialog();
+        for (int i = mDialogs.size() - 1; i >= 0; i--) {
+            Dialog dialog = mDialogs.get(i).get();
+            if (dialog instanceof ProgressDialog) {
+                ProgressDialog progressDialog = ProgressDialog.class.cast(mDialogs.get(i).get());
+                progressDialog.setProgress(current);
+            }
         }
     }
 
@@ -97,9 +106,10 @@ public class DialogUtils {
      *
      * @return 是否显示成功
      */
-    public static boolean show() {
-        if (mDialog != null && mDialog.get() != null) {
-            mDialog.get().show();
+    public static boolean showLastDialog() {
+        releaseEmptyDialog();
+        if (mDialogs.size() > 0) {
+            mDialogs.get(mDialogs.size() - 1).get().show();
             return true;
         }
         return false;
@@ -112,9 +122,11 @@ public class DialogUtils {
      * @return 是否隐藏成功
      */
     public static boolean dismiss() {
-        if (mDialog != null && mDialog.get() != null) {
-            mDialog.get().dismiss();
-            return true;
+        releaseEmptyDialog();
+        for (WeakReference<Dialog> mDialog : mDialogs) {
+            if (mDialog != null && mDialog.get() != null) {
+                mDialog.get().dismiss();
+            }
         }
         return false;
     }
@@ -123,24 +135,41 @@ public class DialogUtils {
      * 销毁持有的对象,释放资源
      */
     public static void destroy() {
-        //始放Dialog
-        if (mDialog != null && mDialog.get() != null) {
-            mDialog.get().dismiss();
-            mDialog.clear();
-            mDialog = null;
+        for (WeakReference<Dialog> mDialog : mDialogs) {
+            if (mDialog != null && mDialog.get() != null) {
+                mDialog.get().dismiss();
+                mDialog.clear();
+            }
         }
+        mDialogs.clear();
         System.gc();
+    }
+
+    /**
+     * 移除已经 释放内存的 Dialog
+     */
+    private static void releaseEmptyDialog() {
+        for (WeakReference<Dialog> dialog : mDialogs) {
+            if (dialog.get() == null) {
+                mDialogs.remove(dialog);
+                releaseEmptyDialog();
+                return;
+            }
+        }
     }
 
     /**
      * 获取Dialog
      *
      * @param <T>
-     * @return
+     * @return 返回最近一次创建的Dialog
      */
-    public static <T extends Dialog> T getDialog() {
-        if (mDialog == null) return null;
-        return (T) mDialog.get();
+    public static <T extends Dialog> T getLastDialog() {
+        releaseEmptyDialog();
+        if (mDialogs.size() > 1) {
+            return (T) mDialogs.get(mDialogs.size() - 1).get();
+        }
+        return null;
     }
 
     /**
@@ -525,22 +554,21 @@ public class DialogUtils {
          * Time Dialog 时间点击监听
          */
         private TimePickerDialog.OnTimeSetListener timeListener;
+        /**
+         * Dialog
+         */
+        private Dialog dialog;
 
         public CreateDialog(int dialogType) {
             this.dialogType = dialogType;
-
-            if (mDialog != null && mDialog.get() != null) {
-                mDialog.get().dismiss();
-                mDialog.clear();
-                mDialog = null;
-            }
+            releaseEmptyDialog();
         }
 
         public <T extends Dialog> T create(Context context) {
             if (mParams == null || mParams.get() == null) {
                 mParams = new WeakReference<>(new Params.Builder().build());
             }
-            return create(context, mParams.get());
+            return create(context, new Params.Builder().build());
         }
 
         public <T extends Dialog> T create(Context context, Params params) {
@@ -553,7 +581,7 @@ public class DialogUtils {
                     textBuilder.setNeutralButton(neutralText, neutralListener);
                     textBuilder.setNegativeButton(negativeText, negativeListener);
                     textBuilder.setCancelable(isCancel);
-                    mDialog = new WeakReference<Dialog>(textBuilder.create());
+                    dialog = textBuilder.create();
                     break;
                 case DIALOG_LIST:
                     if (listData == null) return null;
@@ -561,7 +589,7 @@ public class DialogUtils {
                     if (!TextUtils.isEmpty(title)) listBuilder.setTitle(title);
                     listBuilder.setItems(listData, listListener);
                     listBuilder.setCancelable(isCancel);
-                    mDialog = new WeakReference<Dialog>(listBuilder.create());
+                    dialog = listBuilder.create();
                     break;
                 case DIALOG_SINGLE:
                     AlertDialog.Builder singleBuilder = new AlertDialog.Builder(context);
@@ -582,7 +610,7 @@ public class DialogUtils {
                             }
                         });
                     }
-                    mDialog = new WeakReference<Dialog>(singleBuilder.create());
+                    dialog = singleBuilder.create();
                     break;
                 case DIALOG_MULTIPLE:
                     AlertDialog.Builder multipleBuilder = new AlertDialog.Builder(context);
@@ -623,27 +651,27 @@ public class DialogUtils {
                                     multipleListener.onClick(dialog, choiceData);
                                 }
                             });
-                    mDialog = new WeakReference<Dialog>(multipleBuilder.create());
+                    dialog = multipleBuilder.create();
                     break;
                 case DIALOG_VIEW:
                     if (view == null || view.get() == null) return null;
                     AlertDialog.Builder viewBuilder = new AlertDialog.Builder(context);
                     viewBuilder.setView(view.get());
                     viewBuilder.setCancelable(isCancel);
-                    mDialog = new WeakReference<Dialog>(viewBuilder.create());
+                    dialog = viewBuilder.create();
                     break;
                 case DIALOG_WAIT:
                     ProgressDialog waitDialog = new ProgressDialog(context);
-                    mDialog = new WeakReference<Dialog>(waitDialog);
+                    dialog = waitDialog;
                     if (!TextUtils.isEmpty(title)) waitDialog.setTitle(title);
                     waitDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     waitDialog.setIndeterminate(true);
                     if (!TextUtils.isEmpty(message)) waitDialog.setMessage(message);
-                    mDialog.get().setCancelable(isCancel);
+                    dialog.setCancelable(isCancel);
                     break;
                 case DIALOG_PROGRESS:
                     ProgressDialog progressDialog = new ProgressDialog(context);
-                    mDialog = new WeakReference(progressDialog);
+                    dialog = progressDialog;
                     progressDialog.setTitle(title);
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                     progressDialog.setProgress(current);
@@ -653,21 +681,22 @@ public class DialogUtils {
                 case DIALOG_DATE:
                     DatePickerDialog dateDialog = new DatePickerDialog(context,
                             dateListener, year, month, dayOfMonth);
-                    mDialog = new WeakReference(dateDialog);
+                    dialog = dateDialog;
                     dateDialog.updateDate(year, month, dayOfMonth);
                     dateDialog.setCancelable(isCancel);
                     break;
                 case DIALOG_TIME:
                     TimePickerDialog timeDialog = new TimePickerDialog(context, timeListener,
                             hourOfDay, minute, is24HourView);
-                    mDialog = new WeakReference(timeDialog);
+                    dialog = timeDialog;
                     timeDialog.updateTime(hourOfDay, minute);
                     timeDialog.setCancelable(isCancel);
                     break;
             }
-            initWindow(params, mDialog.get().getWindow());
-            show();
-            return (T) mDialog.get();
+            initWindow(params, dialog.getWindow());
+            dialog.show();
+            mDialogs.add(new WeakReference<>(dialog));
+            return (T) dialog;
         }
 
         /**
@@ -731,8 +760,8 @@ public class DialogUtils {
             window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
             //反射设置AlertDialog属性
-            if (mDialog.get() instanceof AlertDialog) {
-                reflexAlert((AlertDialog) mDialog.get(), params, true);
+            if (dialog instanceof AlertDialog) {
+                reflexAlert((AlertDialog) dialog, params, true);
             }
         }
 

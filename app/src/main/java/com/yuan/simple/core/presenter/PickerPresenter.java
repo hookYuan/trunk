@@ -18,6 +18,7 @@ package com.yuan.simple.core.presenter;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.main.contract.MainContract;
 
 import java.util.List;
@@ -38,15 +39,15 @@ public class PickerPresenter extends Presenter<MainContract> {
      *
      * @param data Recycler集合
      */
-    public void loadData(List<String> data) {
+    public void loadData(List<SubjectBean> data) {
         new Handler(Looper.myLooper())
                 .postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        data.add("启动相机");
-                        data.add("启动图库");
-                        data.add("启动相机和图库");
-                        data.add("启动通讯录");
+                        data.add(new SubjectBean("启动相机"));
+                        data.add(new SubjectBean("启动图库"));
+                        data.add(new SubjectBean("启动相机和图库"));
+                        data.add(new SubjectBean("启动通讯录"));
                         //更新列表
                         getView().notifyDataChange(true);
                     }

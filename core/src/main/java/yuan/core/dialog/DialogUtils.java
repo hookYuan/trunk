@@ -35,7 +35,7 @@ import java.util.List;
  * Dialog根布局是一个PhoneWindow
  * <p>
  * DialogUtil采用静态方法，属性设置时需要注意
- * 
+ *
  *
  * @author yuanye
  * @modify 2019/6/27 解决Context容易引起的内存泄露,使用单例节约内存

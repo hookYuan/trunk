@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/hookYuan/trunk.svg)](https://jitpack.io/#hookYuan/trunk)
 
-## 版本号为4位为support支持库版本，版本为三位为androidx版本，版本详情请参考tag
+### 版本号4位是support版本，版本为3位是androidx版本，版本详情参考tag
 
 ## trun简介
 

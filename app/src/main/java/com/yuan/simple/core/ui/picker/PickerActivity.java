@@ -15,31 +15,21 @@
  */
 package com.yuan.simple.core.ui.picker;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
+
+import com.yuan.simple.core.adapter.TextAdapter;
+import com.yuan.simple.core.module.SubjectBean;
+import com.yuan.simple.core.presenter.PickerPresenter;
+import com.yuan.simple.main.contract.MainContract;
 
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
-import yuan.core.title.ActionBarUtil;
 import yuan.core.tool.PickerUtil;
 import yuan.core.tool.ToastUtil;
 import yuan.core.ui.Adapter;
 import yuan.core.ui.RecyclerActivity;
 import yuan.core.ui.Title;
-import yuan.core.widget.StateLayout;
-import yuan.depends.ui.RecyclerViewActivity;
-
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.yuan.simple.R;
-import com.yuan.simple.core.adapter.TextAdapter;
-import com.yuan.simple.core.module.SubjectBean;
-import com.yuan.simple.core.presenter.PickerPresenter;
-import com.yuan.simple.main.contract.MainContract;
 
 /**
  * 系统常用选择器

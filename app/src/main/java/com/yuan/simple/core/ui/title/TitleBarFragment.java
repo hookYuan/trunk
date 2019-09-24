@@ -15,6 +15,18 @@
  */
 package com.yuan.simple.core.ui.title;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.view.View;
+
+import com.yuan.simple.R;
+import com.yuan.simple.core.adapter.TextAdapter;
+import com.yuan.simple.core.module.SubjectBean;
+import com.yuan.simple.core.presenter.TitleBarPresenter;
+import com.yuan.simple.main.contract.MainContract;
+
+import java.util.ArrayList;
+
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
@@ -22,28 +34,9 @@ import yuan.core.title.StatusUtil;
 import yuan.core.title.TitleBar;
 import yuan.core.tool.RouteUtil;
 import yuan.core.tool.ToastUtil;
-
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.yuan.simple.R;
-import com.yuan.simple.core.adapter.TextAdapter;
-import com.yuan.simple.core.module.SubjectBean;
-import com.yuan.simple.core.presenter.TitleBarPresenter;
-import com.yuan.simple.main.contract.MainContract;
-
 import yuan.core.ui.Adapter;
 import yuan.core.ui.RecyclerFragment;
-import yuan.core.ui.Title;
-import yuan.core.widget.StateLayout;
 import yuan.depends.glide.GlideUtil;
-
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-
-import android.view.View;
-
-import java.util.ArrayList;
 
 /**
  * create by Yuan ye.

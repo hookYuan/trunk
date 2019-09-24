@@ -5,26 +5,26 @@
     <style name="w_line">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.8dp</item>
-        <item name="android:background">@color/colorDivider</item>
+        <item name="background">@color/colorDivider</item>
     </style>
     <!-- 纵向线条 -->
     <style name="h_line">
         <item name="android:layout_width">0.8dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/colorDivider</item>
+        <item name="background">@color/colorDivider</item>
     </style>
 
     <!-- 横向白色线条 -->
     <style name="w_whiteLine">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.8dp</item>
-        <item name="android:background">@color/colorDivider</item>
+        <item name="background">@color/colorDivider</item>
     </style>
     <!-- 纵向白色线条 -->
     <style name="h_whiteLine">
         <item name="android:layout_width">0.8dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/colorDivider</item>
+        <item name="background">@color/colorDivider</item>
     </style>
 
 

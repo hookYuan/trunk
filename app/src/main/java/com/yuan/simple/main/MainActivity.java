@@ -17,23 +17,21 @@ package com.yuan.simple.main;
 
 import android.Manifest;
 import android.content.DialogInterface;
-
-import androidx.annotation.NonNull;
-
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
+
+import com.yuan.simple.R;
+import com.yuan.simple.core.ui.CoreFragment;
+import com.yuan.simple.depends.DependsFragment;
+import com.yuan.simple.expand.ui.ExpandFragment;
 
 import yuan.core.dialog.DialogUtils;
 import yuan.core.mvp.BaseActivity;
 import yuan.core.title.ActionBarUtil;
 import yuan.core.tool.RouteUtil;
 import yuan.core.tool.Views;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.yuan.simple.R;
-import com.yuan.simple.core.ui.CoreFragment;
-import com.yuan.simple.depends.DependsFragment;
-import com.yuan.simple.expand.ui.ExpandFragment;
 
 /**
  * 启动Activity

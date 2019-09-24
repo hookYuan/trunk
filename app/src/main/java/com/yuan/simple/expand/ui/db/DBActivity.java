@@ -15,11 +15,15 @@
  */
 package com.yuan.simple.expand.ui.db;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.yuan.simple.R;
+import com.yuan.simple.expand.presenter.DBPresenter;
+import com.yuan.simple.main.contract.MainContract;
 
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
@@ -28,11 +32,6 @@ import yuan.core.title.ActionBarUtil;
 import yuan.core.tool.Kits;
 import yuan.core.widget.StateLayout;
 import yuan.depends.ui.RecyclerViewActivity;
-
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.yuan.simple.R;
-import com.yuan.simple.expand.presenter.DBPresenter;
-import com.yuan.simple.main.contract.MainContract;
 
 /**
  * 数据库操作

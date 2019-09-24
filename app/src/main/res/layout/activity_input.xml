@@ -1,186 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".core.ui.input.InputActivity">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context=".core.ui.input.InputActivity">
 
-    <!--<com.yuan.base.widget.input.InputScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:visibility="visible">-->
+	<!--<com.yuan.base.widget.input.InputScrollView-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="match_parent"-->
+	<!--android:layout_weight="1"-->
+	<!--android:visibility="visible">-->
 
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
+	<!--<LinearLayout-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:orientation="vertical">-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@mipmap/ic_launcher" />-->
-
-
-    <!--<EditText-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="@dimen/size_50"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:hint="输入用户名" />-->
+	<!--<ImageView-->
+	<!--android:layout_width="wrap_content"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:background="@mipmap/ic_launcher" />-->
 
 
-    <!--<EditText-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="@dimen/size_50"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:hint="输入密码" />-->
-
-    <!--</LinearLayout>-->
-
-    <!--</com.yuan.base.widget.input.InputScrollView>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/size_90">-->
-
-    <!--<Button-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:focusable="true"-->
-    <!--android:text="登录" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@drawable/test"></View>-->
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_50"
-        android:layout_margin="@dimen/size_60"
-        android:translationZ="@dimen/size_8">
-
-    </androidx.cardview.widget.CardView>
+	<!--<EditText-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="@dimen/size_50"-->
+	<!--android:layout_alignParentBottom="true"-->
+	<!--android:hint="输入用户名" />-->
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+	<!--<EditText-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="@dimen/size_50"-->
+	<!--android:layout_alignParentBottom="true"-->
+	<!--android:hint="输入密码" />-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入密码">
+	<!--</LinearLayout>-->
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+	<!--</com.yuan.base.widget.input.InputScrollView>-->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+	<!--<LinearLayout-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:layout_marginBottom="@dimen/size_90">-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入用户名">
+	<!--<Button-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="wrap_content"-->
+	<!--android:focusable="true"-->
+	<!--android:text="登录" />-->
+	<!--</LinearLayout>-->
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+	<!--<View-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="match_parent"-->
+	<!--android:layout_weight="1"-->
+	<!--android:background="@drawable/test"></View>-->
+
+	<android.support.design.widget.TextInputLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<android.support.design.widget.TextInputEditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="请输入密码">
+
+		</android.support.design.widget.TextInputEditText>
+	</android.support.design.widget.TextInputLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rlv_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone">
+	<android.support.v7.widget.CardView
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/size_50"
+		android:layout_margin="@dimen/size_60"
+		android:translationZ="@dimen/size_8">
 
-    </androidx.recyclerview.widget.RecyclerView>
+	</android.support.v7.widget.CardView>
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/rlv_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:visibility="gone">
+
+	</android.support.v7.widget.RecyclerView>
+
+
+	<android.support.design.widget.TextInputLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<android.support.design.widget.TextInputEditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="请输入用户名">
+
+		</android.support.design.widget.TextInputEditText>
+	</android.support.design.widget.TextInputLayout>
 
 
 </LinearLayout>

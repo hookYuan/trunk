@@ -1,10 +1,11 @@
 package yuan.core.tool;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -12,9 +13,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-
 import java.lang.reflect.Field;
+
 
 /**
  * <pre>
@@ -40,9 +40,9 @@ public final class KeyboardUtil {
      *
      * @param activity The activity.
      */
-    public static void showSoftInput(final Activity activity) {
+    public static void showSoftInput(final AppCompatActivity activity) {
         InputMethodManager imm =
-                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                (InputMethodManager) activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         View view = activity.getCurrentFocus();
         if (view == null) {
@@ -74,9 +74,9 @@ public final class KeyboardUtil {
      *
      * @param activity The activity.
      */
-    public static void hideSoftInput(final Activity activity) {
+    public static void hideSoftInput(final AppCompatActivity activity) {
         InputMethodManager imm =
-                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                (InputMethodManager) activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         View view = activity.getCurrentFocus();
         if (view == null) view = new View(activity);
@@ -112,7 +112,7 @@ public final class KeyboardUtil {
      * @param activity The activity.
      * @return {@code true}: yes<br>{@code false}: no
      */
-    public static boolean isSoftInputVisible(final Activity activity) {
+    public static boolean isSoftInputVisible(final AppCompatActivity activity) {
         return isSoftInputVisible(activity, 200);
     }
 
@@ -123,12 +123,12 @@ public final class KeyboardUtil {
      * @param minHeightOfSoftInput The minimum height of soft input.
      * @return {@code true}: yes<br>{@code false}: no
      */
-    public static boolean isSoftInputVisible(final Activity activity,
+    public static boolean isSoftInputVisible(final AppCompatActivity activity,
                                              final int minHeightOfSoftInput) {
         return getContentViewInvisibleHeight(activity) >= minHeightOfSoftInput;
     }
 
-    private static int getContentViewInvisibleHeight(final Activity activity) {
+    private static int getContentViewInvisibleHeight(final AppCompatActivity activity) {
         final FrameLayout contentView = activity.findViewById(android.R.id.content);
         final View contentViewChild = contentView.getChildAt(0);
         final Rect outRect = new Rect();
@@ -144,7 +144,7 @@ public final class KeyboardUtil {
      * @param activity The activity.
      * @param listener The soft input changed listener.
      */
-    public static void registerSoftInputChangedListener(final Activity activity,
+    public static void registerSoftInputChangedListener(final AppCompatActivity activity,
                                                         final OnSoftInputChangedListener listener) {
         final int flags = activity.getWindow().getAttributes().flags;
         if ((flags & WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS) != 0) {
@@ -175,7 +175,7 @@ public final class KeyboardUtil {
      * @param activity The activity.
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static void unregisterSoftInputChangedListener(final Activity activity) {
+    public static void unregisterSoftInputChangedListener(final AppCompatActivity activity) {
         final View contentView = activity.findViewById(android.R.id.content);
         contentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
         onSoftInputChangedListener = null;
@@ -187,7 +187,7 @@ public final class KeyboardUtil {
      *
      * @param activity The activity.
      */
-    public static void fixAndroidBug5497(final Activity activity) {
+    public static void fixAndroidBug5497(final AppCompatActivity activity) {
         final int flags = activity.getWindow().getAttributes().flags;
         if ((flags & WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS) != 0) {
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -216,7 +216,7 @@ public final class KeyboardUtil {
 
     /**
      * Fix the leaks of soft input.
-     * <p>Call the function in {@link Activity#onDestroy()}.</p>
+     * <p>Call the function in {@link AppCompatActivity#onDestroy()}.</p>
      *
      * @param context The context.
      */

@@ -1,23 +1,9 @@
 package com.yuan.simple.expand.ui.multi;
 
-import androidx.annotation.Nullable;
-
-import android.os.Bundle;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.View;
-
-import yuan.core.mvp.BaseActivity;
-import yuan.core.title.TitleBar;
 
 import com.yuan.simple.R;
-import com.yuan.simple.core.module.MultiBean;
-import com.yuan.simple.expand.module.MultiItemBean;
 
-import java.util.ArrayList;
-import java.util.List;
+import yuan.core.mvp.BaseActivity;
 
 /**
  * @author yuanye

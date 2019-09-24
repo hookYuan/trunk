@@ -32,7 +32,7 @@
     </yuan.core.title.TitleBar>
 
 
-    <androidx.core.widget.NestedScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,5 +48,5 @@
             android:text="@string/QHC"
             android:textColor="@color/white"
             android:textSize="@dimen/size_16" />
-    </androidx.core.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

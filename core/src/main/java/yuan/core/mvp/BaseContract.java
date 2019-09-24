@@ -2,9 +2,9 @@ package yuan.core.mvp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
 
 /**
  * 该接口主要用于约束Activity和Fragment的基本方法

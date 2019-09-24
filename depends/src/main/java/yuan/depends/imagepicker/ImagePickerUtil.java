@@ -3,6 +3,7 @@ package yuan.depends.imagepicker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,7 +18,6 @@ import com.lzy.imagepicker.view.CropImageView;
 
 import java.util.ArrayList;
 
-import androidx.core.content.ContextCompat;
 import yuan.core.tool.RouteUtil;
 import yuan.depends.R;
 

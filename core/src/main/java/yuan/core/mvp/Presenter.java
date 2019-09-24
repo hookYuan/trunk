@@ -1,24 +1,24 @@
 package yuan.core.mvp;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
-
 import java.lang.ref.WeakReference;
+
 
 /**
  * 描述：Presenter
@@ -98,8 +98,8 @@ public class Presenter<view extends BaseContract.View> implements BaseContract.I
             }
         }
 
-        if (mView.get() instanceof androidx.fragment.app.Fragment) {
-            return ((androidx.fragment.app.Fragment) mView.get()).getContext();
+        if (mView.get() instanceof Fragment) {
+            return ((Fragment) mView.get()).getContext();
         }
         return null;
     }

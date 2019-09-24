@@ -27,14 +27,14 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import androidx.annotation.NonNull;
 
 import yuan.core.dialog.DialogUtils;
 
@@ -98,9 +98,9 @@ public class PickerUtil {
      * @param path       需要保存的拍照文件的路径
      */
     public static void startCamera(Context context, final String path, SelectBack selectBack) {
-        if (!RouteUtil.checkPermission((Activity) context, Manifest.permission.CAMERA)
-                || !RouteUtil.checkPermission((Activity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                || !RouteUtil.checkPermission((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (!RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.CAMERA)
+                || !RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                || !RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 return;
@@ -171,7 +171,7 @@ public class PickerUtil {
      * @param selectBack
      */
     public static void startAlbum(Context context, SelectBack selectBack) {
-        if (!(Boolean) RouteUtil.checkPermission((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (!(Boolean) RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 return;
             }
@@ -233,7 +233,7 @@ public class PickerUtil {
      *
      * @param context
      */
-    public static void startAddressBook(Activity context, final ContactBack contactBack) {
+    public static void startAddressBook(AppCompatActivity context, final ContactBack contactBack) {
         if (RouteUtil.checkPermission(context, Manifest.permission.READ_CONTACTS)) {
             Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
             startAddressBook(context, intent, contactBack);

@@ -6,13 +6,13 @@
 	android:layout_height="match_parent"
 	android:orientation="horizontal">
 
-	<androidx.recyclerview.widget.RecyclerView
+	<android.support.v7.widget.RecyclerView
 		android:id="@+id/recyclerView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_weight="1">
 
-	</androidx.recyclerview.widget.RecyclerView>
+	</android.support.v7.widget.RecyclerView>
 
 	<yuan.core.sort.SideBar
 		android:id="@+id/sideBar"

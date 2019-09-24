@@ -20,7 +20,6 @@ import com.yuan.simple.core.module.SubjectBean;
 
 import java.util.List;
 
-import androidx.recyclerview.widget.DividerItemDecoration;
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.RecyclerAdapter;
 

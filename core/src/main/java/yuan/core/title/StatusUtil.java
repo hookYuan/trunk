@@ -16,10 +16,13 @@
 package yuan.core.title;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.support.annotation.ColorInt;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -30,9 +33,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 /**
  * Created by YuanYe on 2018/8/5.
@@ -56,7 +56,7 @@ public class StatusUtil {
     /**
      * 设置状态栏darkMode,字体颜色及icon变黑(目前支持MIUI6以上,Flyme4以上,Android M以上)
      */
-    public static void darkMode(Activity activity, boolean isDark) {
+    public static void darkMode(AppCompatActivity activity, boolean isDark) {
         Window window = activity.getWindow();
         if (isFlyme4Later()) {
             darkModeForFlyme4(window, isDark);
@@ -166,14 +166,14 @@ public class StatusUtil {
      *
      * @param activity
      */
-    public static void hideBar(Activity activity) {
+    public static void hideBar(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= 16) {
             Window window = activity.getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN); //隐藏状态栏
         }
     }
 
-    public static void showBar(Activity activity) {
+    public static void showBar(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= 16) {
             Window window = activity.getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN); //隐藏状态栏
@@ -187,7 +187,7 @@ public class StatusUtil {
      * @param activity
      */
     @TargetApi(19)
-    public static void setFloat(Activity activity) {
+    public static void setFloat(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -201,7 +201,7 @@ public class StatusUtil {
      * @param activity
      * @param colorId
      */
-    public static void setStatusBarColor(Activity activity, @ColorInt int colorId) {
+    public static void setStatusBarColor(AppCompatActivity activity, @ColorInt int colorId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             //取消设置悬浮透明状态栏,ContentView便不会进入状态栏的下方了
@@ -214,7 +214,7 @@ public class StatusUtil {
      *
      * @param activity
      */
-    public static void setTransparent(Activity activity) {
+    public static void setTransparent(AppCompatActivity activity) {
         setStatusBarColor(activity,
                 ContextCompat.getColor(activity, android.R.color.transparent));
     }

@@ -17,12 +17,9 @@ package com.yuan.simple.expand.ui;
 
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.yuan.simple.R;
 
 import yuan.core.mvp.BaseFragment;
-import yuan.core.title.ActionBarUtil;
-
-import com.yuan.simple.R;
 
 /**
  * Created by YuanYe on 2018/4/13.

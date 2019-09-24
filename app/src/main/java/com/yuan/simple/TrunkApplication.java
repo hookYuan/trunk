@@ -17,12 +17,11 @@ package com.yuan.simple;
 
 import android.app.Application;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 
-import androidx.core.content.ContextCompat;
-
+import com.squareup.leakcanary.LeakCanary;
 import com.yuan.simple.main.MainActivity;
 
-import leakcanary.LeakSentry;
 import yuan.core.title.ActionBarUtil;
 import yuan.core.title.TitleBar;
 import yuan.depends.refresh.RefreshUtil;
@@ -33,10 +32,12 @@ public class TrunkApplication extends Application {
     public void onCreate() {
         super.onCreate();
         //调试检查内存泄漏
-        LeakSentry.INSTANCE.getConfig().copy(true,
-                true,
-                true,
-                true, 5000);
+        LeakCanary.install(this);
+        LeakCanary.installedRefWatcher();
+//        LeakSentry.INSTANCE.getConfig().copy(true,
+//                true,
+//                true,
+//                true, 5000);
 
         //设置全局Title样式
         ActionBarUtil.setDefaultTheme(new ActionBarUtil.DefaultTheme() {

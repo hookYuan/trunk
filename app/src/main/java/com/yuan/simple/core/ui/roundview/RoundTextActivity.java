@@ -15,20 +15,14 @@
  */
 package com.yuan.simple.core.ui.roundview;
 
-import android.util.Log;
-import android.view.View;
 import android.widget.GridView;
-import android.widget.ImageView;
-
-import androidx.core.content.ContextCompat;
-
-import yuan.core.mvp.BaseActivity;
-import yuan.core.title.ActionBarUtil;
-import yuan.core.title.TitleBar;
 
 import com.yuan.simple.R;
 import com.yuan.simple.core.adapter.RoundTextAdapter;
 import com.yuan.simple.core.presenter.RoundTextPresenter;
+
+import yuan.core.mvp.BaseActivity;
+import yuan.core.title.ActionBarUtil;
 
 /**
  * 通过RoundView 实现各种常见按钮的各种样式

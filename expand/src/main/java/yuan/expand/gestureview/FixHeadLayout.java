@@ -2,6 +2,9 @@ package yuan.expand.gestureview;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.view.NestedScrollingParent2;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -10,9 +13,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.NestedScrollingParent2;
-import androidx.core.view.ViewCompat;
 
 /**
  * 自定义固定头部

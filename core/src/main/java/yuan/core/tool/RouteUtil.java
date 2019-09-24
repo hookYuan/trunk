@@ -15,9 +15,6 @@
  */
 package yuan.core.tool;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +24,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.File;
@@ -36,10 +40,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 /**
  * 描述：路由辅助跳转
@@ -185,7 +185,7 @@ public class RouteUtil {
             mContext.startActivity(intent);
 
             /*跳转前的Activity,是否结束*/
-            Activity fromActivity = Activity.class.cast(mContext);
+            AppCompatActivity fromActivity = AppCompatActivity.class.cast(mContext);
             if (fromActivity != null && finishSelf) {
                 fromActivity.finish();
             }
@@ -370,7 +370,7 @@ public class RouteUtil {
      *
      * @param file 需要打开的文件
      */
-    public static void openPlay(@NonNull Activity activity, @NonNull File file) {
+    public static void openPlay(@NonNull AppCompatActivity activity, @NonNull File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String type = getMIMEType(file);
         Uri uri = Uri.fromFile(file);
@@ -664,20 +664,20 @@ public class RouteUtil {
         private ResultFragment resultFragment;
 
 
-        public ResultFragmentManager(Activity activity) {
+        public ResultFragmentManager(AppCompatActivity activity) {
             resultFragment = getFragment(activity);
         }
 
         public ResultFragmentManager(Context context) {
-            this((Activity) context);
+            this((AppCompatActivity) context);
         }
 
 
-        private ResultFragment getFragment(Activity activity) {
-            ResultFragment fragment = (ResultFragment) activity.getFragmentManager().findFragmentByTag(TAG);
+        private ResultFragment getFragment(AppCompatActivity activity) {
+            ResultFragment fragment = (ResultFragment) activity.getSupportFragmentManager().findFragmentByTag(TAG);
             if (fragment == null) {
                 fragment = new ResultFragment();
-                FragmentManager fragmentManager = activity.getFragmentManager();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .add(fragment, TAG)

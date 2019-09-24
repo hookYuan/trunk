@@ -1,5 +1,7 @@
 package com.yuan.simple.core.ui.adapter;
 
+import android.support.v7.widget.GridLayoutManager;
+
 import com.yuan.simple.core.adapter.MultiTypeAdapter;
 import com.yuan.simple.core.module.SubjectBean;
 import com.yuan.simple.core.presenter.AdapterPresenter;
@@ -8,7 +10,6 @@ import com.yuan.simple.main.contract.MainContract;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.GridLayoutManager;
 import yuan.core.list.GridDivider;
 import yuan.core.title.TitleBar;
 import yuan.core.ui.Adapter;

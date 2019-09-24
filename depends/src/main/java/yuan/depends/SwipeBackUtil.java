@@ -1,12 +1,12 @@
 package yuan.depends;
 
-import android.app.Activity;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 import com.jude.swipbackhelper.SwipeListener;
 
-import androidx.annotation.NonNull;
 
 /**
  * Created by YuanYe on 2017/7/12.
@@ -23,7 +23,7 @@ public class SwipeBackUtil {
 
     }
 
-    public static void init(Activity context) {
+    public static void init(AppCompatActivity context) {
         SwipeBackHelper.onCreate(context);
         SwipeBackHelper.getCurrentPage(context)//获取当前页面
                 .setSwipeBackEnable(true)//设置是否可滑动
@@ -56,14 +56,14 @@ public class SwipeBackUtil {
      *
      * @param activity Adapter
      */
-    public static void bindOnCreate(@NonNull Activity activity) {
+    public static void bindOnCreate(@NonNull AppCompatActivity activity) {
         SwipeBackHelper.onPostCreate(activity);
     }
 
     /**
      * 销毁
      */
-    public static void bindOnDestroy(Activity activity) {
+    public static void bindOnDestroy(AppCompatActivity activity) {
         SwipeBackHelper.onDestroy(activity);
     }
 }

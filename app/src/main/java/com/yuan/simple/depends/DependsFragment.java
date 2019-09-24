@@ -15,12 +15,10 @@
  */
 package com.yuan.simple.depends;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.yuan.simple.R;
 
 import yuan.core.mvp.BaseFragment;
-import yuan.core.title.ActionBarUtil;
 
 /**
  * Created by YuanYe on 2018/4/13.

@@ -23,6 +23,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,17 +43,6 @@ import android.widget.Toast;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 /**
  * 描述：Fragment的基础封装
@@ -71,7 +71,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     /**
      * 防止getActivity()空指针
      */
-    protected Activity mContext;
+    protected AppCompatActivity mContext;
     /**
      * 切换到主线程
      */
@@ -105,7 +105,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         //反射获取Presenter
         mPresenter = createPresenter();
         if (mPresenter != null) {
@@ -129,7 +129,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layoutView = getLayoutView();
         int layoutId = getLayoutId();
         if (layoutId != 0) mView = inflater.inflate(layoutId, container, false);
@@ -155,7 +155,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.mContext = (Activity) context;
+        this.mContext = (AppCompatActivity) context;
     }
 
     @SuppressWarnings("deprecation")
@@ -163,13 +163,13 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            this.mContext = activity;
+            this.mContext = (AppCompatActivity) activity;
         }
     }
 
     @Override
     public void onResume() {
-        this.mContext = this.getActivity();
+        this.mContext = (AppCompatActivity) this.getActivity();
         super.onResume();
         if (isFirstResume) {
             isFirstResume = false;
@@ -216,7 +216,7 @@ public abstract class BaseFragment<presenter extends Presenter> extends Fragment
     public void onDestroy() {
         if (mContext != null) {//关闭键盘
             InputMethodManager imm = (InputMethodManager) mContext
-                    .getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    .getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
             if (imm != null) {
                 View view = mContext.getCurrentFocus();
                 if (view == null) view = new View(mContext);

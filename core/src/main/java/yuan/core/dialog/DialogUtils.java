@@ -9,6 +9,9 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.annotation.AnimRes;
+import android.support.annotation.ColorInt;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,10 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.annotation.AnimRes;
-import androidx.annotation.ColorInt;
-import androidx.appcompat.app.AlertDialog;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;

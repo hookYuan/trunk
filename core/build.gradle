@@ -3,7 +3,7 @@ apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.github.dcendents.android-maven'
 apply from: 'ydroid.gradle'
 
-ext.support = '1.0.0-beta01'
+ext.support = '28.0.0'
 
 android {
     compileSdkVersion 28
@@ -13,8 +13,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0.1"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //增加对vector文件的支持
         vectorDrawables.useSupportLibrary = true
     }
@@ -47,8 +45,8 @@ android {
 }
 
 dependencies {
-    api "androidx.appcompat:appcompat:$support"
-    api "androidx.recyclerview:recyclerview:$support"
-    api "androidx.cardview:cardview:$support"
-    api "androidx.legacy:legacy-support-v4:$support"
+    api "com.android.support:appcompat-v7:$support"
+    api "com.android.support:support-v4:$support"
+    api "com.android.support:recyclerview-v7:$support"
+    api "com.android.support:cardview-v7:$support"
 }

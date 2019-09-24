@@ -1,8 +1,8 @@
 package yuan.core.ui;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
-import androidx.annotation.Nullable;
 import yuan.core.R;
 import yuan.core.mvp.BaseActivity;
 import yuan.core.mvp.Presenter;

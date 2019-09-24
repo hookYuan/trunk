@@ -15,19 +15,17 @@
  */
 package com.yuan.simple.core.ui;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 
-import androidx.recyclerview.widget.GridLayoutManager;
+import com.yuan.simple.core.adapter.TextAdapter;
+import com.yuan.simple.core.module.SubjectBean;
+import com.yuan.simple.core.presenter.CorePresenter;
+import com.yuan.simple.main.contract.MainContract;
 
 import yuan.core.list.BaseViewHolder;
 import yuan.core.list.GridDivider;
 import yuan.core.list.RecyclerAdapter;
-
-import com.yuan.simple.core.adapter.TextAdapter;
-import com.yuan.simple.core.module.SubjectBean;
-import com.yuan.simple.main.contract.MainContract;
-import com.yuan.simple.core.presenter.CorePresenter;
-
 import yuan.core.tool.RouteUtil;
 import yuan.core.ui.Adapter;
 import yuan.core.ui.RecyclerFragment;

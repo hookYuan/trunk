@@ -1,9 +1,12 @@
 package yuan.expand.dialog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.annotation.ColorRes;
+import android.support.annotation.LayoutRes;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -12,10 +15,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import androidx.annotation.ColorRes;
-import androidx.annotation.LayoutRes;
-import androidx.core.content.ContextCompat;
 
 import yuan.core.tool.Views;
 import yuan.expand.R;
@@ -30,7 +29,7 @@ public class RxDialog {
 
     private RxDialogParams dialogParams;
 
-    private Activity activity;
+    private AppCompatActivity activity;
 
     private LinearLayout parent; //自定义Dialog的父布局样式
     private View dialogView;
@@ -44,7 +43,7 @@ public class RxDialog {
     public RxDialog(View view, RxDialogParams.Builder builder) {
         //RxDialog默认设置选项
         this.dialogView = view;
-        activity = (Activity) view.getContext();
+        activity = (AppCompatActivity) view.getContext();
         this.builder = builder;
     }
 
@@ -55,7 +54,7 @@ public class RxDialog {
      */
     public RxDialog(View view) {
         this.dialogView = view;
-        activity = (Activity) view.getContext();
+        activity = (AppCompatActivity) view.getContext();
         builder = new RxDialogParams.Builder();
         builder.backgroundDrawable(ContextCompat.getDrawable(activity, R.color.halfTransparent));
         builder.outsideCancle(true);
@@ -64,7 +63,7 @@ public class RxDialog {
 
     public RxDialog(Context context, @LayoutRes int dialogID) {
         this.dialogID = dialogID;
-        activity = (Activity) context;
+        activity = (AppCompatActivity) context;
         builder = new RxDialogParams.Builder();
         builder.backgroundDrawable(ContextCompat.getDrawable(activity, R.color.halfTransparent));
         builder.outsideCancle(true);

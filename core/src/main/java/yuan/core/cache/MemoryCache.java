@@ -15,9 +15,9 @@
  */
 package yuan.core.cache;
 
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 
-import androidx.collection.LruCache;
 
 /**
  * Created by wanglei on 2016/11/28.

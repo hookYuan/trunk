@@ -1,5 +1,7 @@
 [![](https://jitpack.io/v/hookYuan/trunk.svg)](https://jitpack.io/#hookYuan/trunk)
 
+## 版本号为4位为support支持库版本，版本为三位为androidx版本，版本详情请参考tag
+
 ## trun简介
 
 工程为原生Android项目，是一个长期维护并更新版本，当然由于项目涉及的知识点和代码较多，对于以前旧版本的支持可能不是那么好。本项目最初创建于2017年，由我的另一个项目truck（truck最早参考了XDroidMvp这个项目）分离而来。 

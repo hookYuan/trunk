@@ -26,7 +26,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ListPopupWindow;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -87,7 +86,7 @@ public class TitleBar extends BaseTitle<TitleBar> {
     public TitleBar(@NonNull Context _context, @Nullable AttributeSet attrs) {
         super(_context, attrs);
         this.context = _context;
-        DEFAULTCOLOR = ContextCompat.getColor(getContext(), R.color.colorFont33);
+        DEFAULTCOLOR = ContextCompat.getColor(getContext(), R.color.white);
         obtainAttributes(_context, attrs);
     }
 
@@ -95,7 +94,7 @@ public class TitleBar extends BaseTitle<TitleBar> {
     public TitleBar(Context _context) {
         super(_context);
         this.context = _context;
-        DEFAULTCOLOR = ContextCompat.getColor(getContext(), R.color.colorFont33);
+        DEFAULTCOLOR = ContextCompat.getColor(getContext(), R.color.white);
         drawTitle();
     }
 
@@ -188,19 +187,21 @@ public class TitleBar extends BaseTitle<TitleBar> {
      * ------------------------------------左侧内容设置----------------------------------------
      **/
     public TitleBar setLeftText(@NonNull CharSequence text) {
-        if (leftTextView != null && text != null) {
-            leftTextView.setText(text);
-            leftTextView.setVisibility(VISIBLE);
-        }
+        if (leftTextView == null) return this;
+        leftTextView.setText(text);
+        leftTextView.setVisibility(VISIBLE);
         return this;
     }
 
     public TitleBar setLeftIcon(@NonNull Drawable icon) {
-        if (icon != null) {
-            leftTextView.setVisibility(VISIBLE);
-            icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
-            leftTextView.setCompoundDrawables(icon, null, null, null);//画在左边
+        if (leftTextView == null) return this;
+        if (icon == null) {
+            leftTextView.setCompoundDrawables(null, null, null, null);
+            return this;
         }
+        leftTextView.setVisibility(VISIBLE);
+        icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
+        leftTextView.setCompoundDrawables(icon, null, null, null);//画在左边
         return this;
     }
 
@@ -211,7 +212,7 @@ public class TitleBar extends BaseTitle<TitleBar> {
     }
 
     public TitleBar setLeftOnClickListener(View.OnClickListener listener) {
-        if (leftTextView != null && listener != null) leftTextView.setOnClickListener(listener);
+        if (leftTextView != null) leftTextView.setOnClickListener(listener);
         return this;
     }
 
@@ -219,7 +220,9 @@ public class TitleBar extends BaseTitle<TitleBar> {
         setLeftOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Activity.class.cast(context).finish();
+                if (context instanceof Activity) {
+                    Activity.class.cast(context).finish();
+                }
             }
         });
         return this;
@@ -229,18 +232,16 @@ public class TitleBar extends BaseTitle<TitleBar> {
      * ------------------------------------中间toolbar按钮设置----------------------------------------
      **/
     public TitleBar setTitleText(@NonNull CharSequence text) {
-        if (titleTextView != null && text != null) {
-            titleTextView.setText(text);
-        }
+        if (titleTextView == null) return this;
+        titleTextView.setText(text);
         return this;
     }
 
     //设置二级标题
     public TitleBar setSubtitleText(@NonNull CharSequence text) {
-        if (subtitleTextView != null && text != null) {
-            subtitleTextView.setText(text);
-            subtitleTextView.setVisibility(VISIBLE);
-        }
+        if (subtitleTextView == null) return this;
+        subtitleTextView.setText(text);
+        subtitleTextView.setVisibility(VISIBLE);
         return this;
     }
 
@@ -248,11 +249,14 @@ public class TitleBar extends BaseTitle<TitleBar> {
      * ------------------------------------右侧toolbar按钮设置----------------------------------------
      **/
     public TitleBar setRightIcon(@NonNull Drawable icon) {
-        if (rightTextView != null && icon != null) {
-            icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
-            rightTextView.setCompoundDrawables(icon, null, null, null);//画在左边
-            rightTextView.setVisibility(VISIBLE);
+        if (rightTextView == null) return this;
+        if (icon == null) {
+            rightTextView.setCompoundDrawables(null, null, null, null);
+            return this;
         }
+        icon.setBounds(0, 0, icon.getMinimumWidth(), icon.getMinimumHeight()); //设置边界
+        rightTextView.setCompoundDrawables(icon, null, null, null);//画在左边
+        rightTextView.setVisibility(VISIBLE);
         return this;
     }
 
@@ -262,17 +266,14 @@ public class TitleBar extends BaseTitle<TitleBar> {
     }
 
     public TitleBar setRightText(@NonNull CharSequence text) {
-        if (!TextUtils.isEmpty(text)) {
-            rightTextView.setText(text);
-            rightTextView.setVisibility(VISIBLE);
-        }
+        if (rightTextView == null) return this;
+        rightTextView.setText(text);
+        rightTextView.setVisibility(VISIBLE);
         return this;
     }
 
     public TitleBar setRightOnClickListener(@NonNull View.OnClickListener listener) {
-        if (listener != null) {
-            rightTextView.setOnClickListener(listener);
-        }
+        rightTextView.setOnClickListener(listener);
         return this;
     }
 

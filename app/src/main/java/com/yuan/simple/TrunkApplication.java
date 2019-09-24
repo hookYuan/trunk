@@ -44,7 +44,9 @@ public class TrunkApplication extends Application {
             @Override
             public void defaultTheme(TitleBar titleBar) {
                 titleBar.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white))
+                        .setLeftIcon(R.drawable.ic_arrow_back)
                         .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+
             }
         });
 

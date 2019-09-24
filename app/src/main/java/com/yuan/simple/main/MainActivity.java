@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity {
     public void initData() {
         addFragmentReflex(R.id.content, CoreFragment.class, DependsFragment.class, ExpandFragment.class);
         ActionBarUtil.create(MainActivity.this)
+                .setLeftIcon(null)
                 .setTitleText("core");
     }
 

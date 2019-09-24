@@ -39,7 +39,6 @@ public abstract class TitleActivity<presenter extends Presenter> extends BaseAct
             //设置返回
             if (annotation.finish()) {
                 titleBar.setLeftIcon(R.drawable.ic_base_back_white)
-                        .setTextColor(getColor2(R.color.white))
                         .setLeftClickFinish();
             }
         }

@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:textAppearance="?attr/textAppearanceListItemSmall"
     android:gravity="center_vertical"
+	android:paddingLeft="@dimen/size_16"
     android:minHeight="?attr/listPreferredItemHeightSmall" />

@@ -16,12 +16,12 @@
 package com.yuan.simple.core.module;
 
 
-import yuan.core.sort.IChineseSort;
+import yuan.core.sort.ChineseSort;
 
 /**
  * Created by YuanYe on 2018/8/11.
  */
-public class ChineseBean implements IChineseSort {
+public class ChineseBean extends ChineseSort {
 
     /**
      * 需要排序的字段

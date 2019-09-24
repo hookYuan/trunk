@@ -166,7 +166,7 @@ public class SideBar extends View {
      * @param <T>  实现排序的接口
      * @return
      */
-    public <T extends IChineseSort> void setSortData(ArrayList<T> data) {
+    public <T extends ChineseSort> void setSortData(ArrayList<T> data) {
         this.mData.clear();
         for (T t : data) {
             if (!mData.contains(t.getFirstLetters())) {
@@ -233,7 +233,7 @@ public class SideBar extends View {
      *
      * @param recyclerView
      */
-    public <T extends IChineseSort> void setRecyclerView(RecyclerView recyclerView, ArrayList<T> data) {
+    public <T extends ChineseSort> void setRecyclerView(final RecyclerView recyclerView, final ArrayList<T> data) {
         if (recyclerView == null || data == null) return;
         //监听RecyclerView的滑动事件、更新SideBar
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

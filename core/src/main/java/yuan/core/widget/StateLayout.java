@@ -171,7 +171,7 @@ public class StateLayout extends FrameLayout {
     }
 
 
-    private void notifyStateChange(int oldState, int newState, View enterView) {
+    private void notifyStateChange(final int oldState, final int newState, final View enterView) {
 
         handler.postDelayed(new Runnable() {
             @Override

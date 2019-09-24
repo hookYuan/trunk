@@ -55,7 +55,7 @@ public class PickerUtil {
      *
      * @param context
      */
-    public static void startCameraAlbum(Context context, SelectBack selectBack) {
+    public static void startCameraAlbum(final Context context, final SelectBack selectBack) {
         String[] menu = {"图库", "拍照"};
         DialogUtils
                 .alertList(menu, new DialogInterface.OnClickListener() {
@@ -97,7 +97,7 @@ public class PickerUtil {
      * @param selectBack
      * @param path       需要保存的拍照文件的路径
      */
-    public static void startCamera(Context context, final String path, SelectBack selectBack) {
+    public static void startCamera(final Context context, final String path, final SelectBack selectBack) {
         if (!RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.CAMERA)
                 || !RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 || !RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -170,7 +170,7 @@ public class PickerUtil {
      * @param context
      * @param selectBack
      */
-    public static void startAlbum(Context context, SelectBack selectBack) {
+    public static void startAlbum(final Context context, final SelectBack selectBack) {
         if (!(Boolean) RouteUtil.checkPermission((AppCompatActivity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 return;
@@ -209,7 +209,7 @@ public class PickerUtil {
      * @param context
      * @param intent
      */
-    private static void handlerResult(Context context, final Intent intent, final Uri saveUri, final SelectBack selectBack) {
+    private static void handlerResult(final Context context, final Intent intent, final Uri saveUri, final SelectBack selectBack) {
         RouteUtil.openResult(context, intent, new RouteUtil.OnActivityResultListener() {
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -233,7 +233,7 @@ public class PickerUtil {
      *
      * @param context
      */
-    public static void startAddressBook(AppCompatActivity context, final ContactBack contactBack) {
+    public static void startAddressBook(final AppCompatActivity context, final ContactBack contactBack) {
         if (RouteUtil.checkPermission(context, Manifest.permission.READ_CONTACTS)) {
             Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
             startAddressBook(context, intent, contactBack);
@@ -265,7 +265,7 @@ public class PickerUtil {
     /**
      * 处理通讯录返回结果
      */
-    private static void startAddressBook(Context context, final Intent intent, final ContactBack contactBack) {
+    private static void startAddressBook(final Context context, final Intent intent, final ContactBack contactBack) {
         RouteUtil.openResult(context, intent, new RouteUtil.OnActivityResultListener() {
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {

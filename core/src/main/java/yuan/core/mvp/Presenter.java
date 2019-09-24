@@ -160,7 +160,7 @@ public class Presenter<view extends BaseContract.View> implements BaseContract.I
      *
      * @param msg 提示内容
      */
-    protected final void showToast(String msg) {
+    protected final void showToast(final String msg) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -2,7 +2,7 @@ package yuan.core.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.lang.reflect.Constructor;
@@ -49,20 +49,13 @@ public abstract class RecyclerFragment<presenter extends Presenter, Model extend
         Adapter annotation = this.getClass().getAnnotation(Adapter.class);
         mData = new ArrayList<Model>();
         mAdapter = createAdapter(annotation);
-        initRecyclerView();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
     }
 
 
     @Override
     public void initComplete() {
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    /**
-     * 初始化RecyclerView
-     */
-    protected void initRecyclerView() {
-        mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,1));
     }
 
     /**

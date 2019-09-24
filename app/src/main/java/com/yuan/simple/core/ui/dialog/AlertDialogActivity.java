@@ -40,14 +40,10 @@ public class AlertDialogActivity extends RecyclerActivity<DialogPresenter, Subje
         implements MainContract {
 
     @Override
-    protected void initRecyclerView() {
-        super.initRecyclerView();
-    }
-
-    @Override
     public void initData() {
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         mRecyclerView.addItemDecoration(new GridDivider());
+        mAdapter.showLoading();
         getPresenter().loadData(mData);
     }
 

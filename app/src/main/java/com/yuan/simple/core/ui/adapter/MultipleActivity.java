@@ -22,7 +22,7 @@ public class MultipleActivity extends RecyclerActivity<AdapterPresenter, Subject
         implements MainContract {
 
     @Override
-    protected void initRecyclerView() {
+    public void initData() {
         GridLayoutManager manager = new GridLayoutManager(mContext, 3);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -34,10 +34,6 @@ public class MultipleActivity extends RecyclerActivity<AdapterPresenter, Subject
             }
         });
         mRecyclerView.setLayoutManager(manager);
-    }
-
-    @Override
-    public void initData() {
         mRecyclerView.addItemDecoration(new GridDivider());
 
         getPresenter().loadData(mData);

@@ -28,19 +28,24 @@ import yuan.core.R;
  */
 public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
-    public static final String TAG = "RecyclerAdapter";
+    private static final String TAG = "RecyclerAdapter";
+    //加载中动画控件id
+    private static final int PROGRESS_ID = R.id.image_loading;
+    private static final int PROGRESS_ANIM_ID = R.anim.anim_circle_rotate;
+    private static final int PROGRESS_TAG_ID = R.id.adapter_default_tag;
+
     public static final int HEADER_VIEW = 0x1001;
     public static final int FOOTER_VIEW = 0x1002;
-    public static final int LOADING_VIEW = 0x1003;
-    public static final int ERROR_VIEW = 0x1004;
-    public static final int EMPTY_VIEW = 0x1005;
+
+    public static final int LOADING_VIEW = R.layout.loading_view_layout;
+    public static final int ERROR_VIEW = R.layout.error_view_layout;
+    public static final int EMPTY_VIEW = R.layout.empty_view_layout;
     public static final int DATA_VIEW = 0x1006;
 
     //header footer
     private View mHeaderLayout;
     private View mFooterLayout;
     /*以上内容待完成*/
-
     /**
      * context
      */
@@ -60,6 +65,10 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      */
     private OnItemLongClickListener mItemLongClickListener;
     /**
+     * 状态布局点击事件
+     */
+    private OnStateViewClickListener mStateViewClickListener;
+    /**
      * 多类型设置器
      */
     private MultipleType mMultipleType;
@@ -70,15 +79,15 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     /**
      * 是否启用自定义View：emptyView,errorView,loadingView
      */
-    protected boolean enableFullView;
+    protected boolean isFullScreen;
     /**
      * 全屏View
      */
-    private View fullView;
+    private View fullScreenView;
     /**
      * 全屏View类型
      */
-    private int fullType = DATA_VIEW;
+    private int fullScreenType = DATA_VIEW;
     /**
      * 空布局
      */
@@ -133,7 +142,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
             @Override
             public void onChanged() {
                 //显示空布局
-                if (mData.size() == 0 && enableFullView && autoSwitch) {
+                if (mData.size() == 0 && isFullScreen && autoSwitch) {
                     showEmpty(false);
                 }
                 //显示数据
@@ -156,10 +165,10 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     /**
      * 是否启用 emptyView,errorView,loadingView
      *
-     * @param enableFullView
+     * @param isFullScreen
      */
-    public void setEnableFullView(boolean enableFullView) {
-        this.enableFullView = enableFullView;
+    public void setEnableFullView(boolean isFullScreen) {
+        this.isFullScreen = isFullScreen;
     }
 
     /**
@@ -208,10 +217,10 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
             return;
         }
         //避免重复设置相同布局
-        if (fullType == EMPTY_VIEW) return;
-        this.enableFullView = true;
-        this.fullType = EMPTY_VIEW;
-        this.fullView = mEmptyLayout;
+        if (fullScreenType == EMPTY_VIEW) return;
+        this.isFullScreen = true;
+        this.fullScreenType = EMPTY_VIEW;
+        this.fullScreenView = mEmptyLayout;
         if (refresh) notifyDataSetChanged();
     }
 
@@ -233,11 +242,11 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
             return;
         }
         //避免重复设置相同布局
-        if (fullType == ERROR_VIEW) return;
+        if (fullScreenType == ERROR_VIEW) return;
 
-        this.enableFullView = true;
-        this.fullType = ERROR_VIEW;
-        this.fullView = mErrorLayout;
+        this.isFullScreen = true;
+        this.fullScreenType = ERROR_VIEW;
+        this.fullScreenView = mErrorLayout;
         if (refresh) notifyDataSetChanged();
     }
 
@@ -259,16 +268,19 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
             return;
         }
         //避免重复设置相同布局
-        if (fullType == LOADING_VIEW) return;
-
-        this.fullType = LOADING_VIEW;
-        this.enableFullView = true;
-        this.fullView = mLoadingLayout;
-        ImageView image = mLoadingLayout.findViewById(R.id.image_loading);
-        Animation rotateAnimation = AnimationUtils.loadAnimation(mLoadingLayout.getContext(), R.anim.anim_circle_rotate);
-        LinearInterpolator interpolator = new LinearInterpolator();
-        rotateAnimation.setInterpolator(interpolator);
-        image.startAnimation(rotateAnimation);
+        if (fullScreenType == LOADING_VIEW) return;
+        this.fullScreenType = LOADING_VIEW;
+        this.isFullScreen = true;
+        this.fullScreenView = mLoadingLayout;
+        //默认加载中布局时，开启动画
+        if (mLoadingLayout.getTag(PROGRESS_TAG_ID) != null
+                && mLoadingLayout.getTag(PROGRESS_TAG_ID) == TAG) {
+            ImageView image = mLoadingLayout.findViewById(PROGRESS_ID);
+            Animation rotateAnimation = AnimationUtils.loadAnimation(mLoadingLayout.getContext(), PROGRESS_ANIM_ID);
+            LinearInterpolator interpolator = new LinearInterpolator();
+            rotateAnimation.setInterpolator(interpolator);
+            image.startAnimation(rotateAnimation);
+        }
         if (refresh) notifyDataSetChanged();
     }
 
@@ -285,9 +297,9 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      * @param refresh 是否刷新
      */
     public void showContent(boolean refresh) {
-        if (fullType == DATA_VIEW) return;
-        this.enableFullView = false;
-        this.fullType = DATA_VIEW;
+        if (fullScreenType == DATA_VIEW) return;
+        this.isFullScreen = false;
+        this.fullScreenType = DATA_VIEW;
         if (refresh) notifyDataSetChanged();
     }
 
@@ -316,17 +328,22 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
         mRecyclerView = recyclerView;
         /* 设置默认 emptyView、errorView、loadingView */
         if (mEmptyLayout == null) {
-            View emptyView = LayoutInflater.from(mContext).inflate(R.layout.empty_view_layout, recyclerView, false);
+            View emptyView = LayoutInflater.from(mContext).inflate(EMPTY_VIEW, recyclerView, false);
+            //标记为默认设置布局
+            emptyView.setTag(PROGRESS_TAG_ID, TAG);
             setEmptyLayout(emptyView);
         }
         if (mErrorLayout == null) {
-            View errorView = LayoutInflater.from(mContext).inflate(R.layout.error_view_layout, recyclerView, false);
+            View errorView = LayoutInflater.from(mContext).inflate(ERROR_VIEW, recyclerView, false);
+            errorView.setTag(PROGRESS_TAG_ID, TAG);
             setErrorLayout(errorView);
         }
         if (mLoadingLayout == null) {
-            View loadingView = LayoutInflater.from(mContext).inflate(R.layout.loading_view_layout, recyclerView, false);
+            View loadingView = LayoutInflater.from(mContext).inflate(LOADING_VIEW, recyclerView, false);
+            loadingView.setTag(PROGRESS_TAG_ID, TAG);
             setLoadingLayout(loadingView);
         }
+
         /*自动显示加载中动画*/
         if (autoSwitch) {
             showLoading(false);
@@ -340,7 +357,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (enableFullView) {
+                    if (isFullScreen) {
                         return gridManager.getSpanCount();
                     }
                     return oldSpanSizeLookup.getSpanSize(position);
@@ -357,8 +374,8 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     @Override
     public final int getItemViewType(int position) {
         //针对全屏自定义View,控制类型
-        if (enableFullView) {
-            return fullType;
+        if (isFullScreen) {
+            return fullScreenType;
         }
         //缓存布局类型，同时也是缓存的布局类型编号，递增，从0开始,type是无序的
         Integer itemLayoutId = mMultipleType.getItemLayoutId(position);
@@ -367,29 +384,33 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i("landglag", "-------onCreateViewHolder");
         View itemView = null;
-        if (enableFullView) {
+        if (isFullScreen) {
             /* 全屏布局  emptyView、loadingView、errorView*/
-            itemView = fullView;
+            itemView = fullScreenView;
         } else {
             /* 加载item布局 */
             itemView = LayoutInflater.from(mContext).inflate(viewType, parent, false);
         }
         final BaseViewHolder viewHolder = new BaseViewHolder(itemView);
 
+
         /* 统一处理Item点击事件 */
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //ItemClick 处理
-                if (mItemClickListener != null)
+                if (mItemClickListener != null && !isFullScreen)
                     mItemClickListener.onItemClick(viewHolder, v, viewHolder.getAdapterPosition());
+
+                if (mStateViewClickListener != null) {
+                    mStateViewClickListener.onStateViewClick(viewHolder, v, fullScreenType);
+                }
             }
         });
 
         /*统一处理长按事件*/
-        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        if (!isFullScreen) itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (mItemLongClickListener != null) {
@@ -403,7 +424,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        if (enableFullView) {
+        if (isFullScreen) {
             onBindFullViewHolder(holder, position);
             return;
         }
@@ -415,7 +436,7 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
     @Override
     public int getItemCount() {
         //启用全屏自定义View，返回数据集合为1
-        if (enableFullView) return 1;
+        if (isFullScreen) return 1;
         return mData != null ? mData.size() : 0;
     }
 
@@ -464,6 +485,27 @@ public abstract class RecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHo
      */
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.mItemLongClickListener = listener;
+    }
+
+    /**
+     * 设置状态布局点击事件
+     *
+     * @param listener
+     */
+    public void setStateViewClickListener(OnStateViewClickListener listener) {
+        this.mStateViewClickListener = listener;
+    }
+
+    /**
+     * 状态View点击事件
+     * 不同布局对应对应不同的state值
+     * <p>
+     * 空布局
+     * 加载中
+     * 加载失败
+     */
+    public interface OnStateViewClickListener {
+        void onStateViewClick(BaseViewHolder holder, View view, int state);
     }
 
     /**

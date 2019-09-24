@@ -57,7 +57,7 @@ public class TitleBarFragment extends RecyclerFragment<TitleBarPresenter, Subjec
     }
 
     @Override
-    protected void initRecyclerView() {
+    public void initData() {
         GridLayoutManager manager = new GridLayoutManager(mContext, 3);
         //动态更改列数
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -72,12 +72,12 @@ public class TitleBarFragment extends RecyclerFragment<TitleBarPresenter, Subjec
                 }
             }
         });
+
+
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new GridDivider());
-    }
 
-    @Override
-    public void initData() {
+
         titleBar = findViewById(R.id.title_bar);
         titleBar.setLeftIcon(R.drawable.ic_base_back_white)
                 .setTitleText("TitleBar")

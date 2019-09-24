@@ -158,5 +158,4 @@
         <attr name="android:background"></attr>
         <attr name="android:textColor"></attr>
     </declare-styleable>
-
 </resources>

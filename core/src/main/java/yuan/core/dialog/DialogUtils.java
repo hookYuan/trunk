@@ -1,24 +1,27 @@
 package yuan.core.dialog;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.annotation.AnimRes;
-import android.support.annotation.ColorInt;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -34,7 +37,6 @@ import java.util.List;
  * Dialog根布局是一个PhoneWindow
  * <p>
  * DialogUtil采用静态方法，属性设置时需要注意
- *
  *
  * @author yuanye
  * @modify 2019/6/27 解决Context容易引起的内存泄露,使用单例节约内存
@@ -571,6 +573,8 @@ public class DialogUtils {
         }
 
         public <T extends Dialog> T create(Context context, Params params) {
+            /*根布局，用于设置动画*/
+            View rootView = null;
             switch (dialogType) {
                 case DIALOG_TEXT:
                     AlertDialog.Builder textBuilder = new AlertDialog.Builder(context);
@@ -581,6 +585,7 @@ public class DialogUtils {
                     textBuilder.setNegativeButton(negativeText, negativeListener);
                     textBuilder.setCancelable(isCancel);
                     dialog = textBuilder.create();
+                    rootView = AlertDialog.class.cast(dialog).getListView();
                     break;
                 case DIALOG_LIST:
                     if (listData == null) return null;
@@ -589,6 +594,7 @@ public class DialogUtils {
                     listBuilder.setItems(listData, listListener);
                     listBuilder.setCancelable(isCancel);
                     dialog = listBuilder.create();
+                    rootView = AlertDialog.class.cast(dialog).getListView();
                     break;
                 case DIALOG_SINGLE:
                     AlertDialog.Builder singleBuilder = new AlertDialog.Builder(context);
@@ -610,6 +616,7 @@ public class DialogUtils {
                         });
                     }
                     dialog = singleBuilder.create();
+                    rootView = AlertDialog.class.cast(dialog).getListView();
                     break;
                 case DIALOG_MULTIPLE:
                     AlertDialog.Builder multipleBuilder = new AlertDialog.Builder(context);
@@ -651,13 +658,15 @@ public class DialogUtils {
                                 }
                             });
                     dialog = multipleBuilder.create();
+                    rootView = AlertDialog.class.cast(dialog).getListView();
                     break;
                 case DIALOG_VIEW:
                     if (view == null || view.get() == null) return null;
-                    AlertDialog.Builder viewBuilder = new AlertDialog.Builder(context);
-                    viewBuilder.setView(view.get());
-                    viewBuilder.setCancelable(isCancel);
-                    dialog = viewBuilder.create();
+                    dialog = new Dialog(context);
+                    dialog.setContentView(view.get(), new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT
+                            , RelativeLayout.LayoutParams.WRAP_CONTENT));
+                    dialog.setCancelable(isCancel);
+                    rootView = view.get();
                     break;
                 case DIALOG_WAIT:
                     ProgressDialog waitDialog = new ProgressDialog(context);
@@ -667,6 +676,7 @@ public class DialogUtils {
                     waitDialog.setIndeterminate(true);
                     if (!TextUtils.isEmpty(message)) waitDialog.setMessage(message);
                     dialog.setCancelable(isCancel);
+                    rootView = waitDialog.getListView();
                     break;
                 case DIALOG_PROGRESS:
                     ProgressDialog progressDialog = new ProgressDialog(context);
@@ -676,6 +686,7 @@ public class DialogUtils {
                     progressDialog.setProgress(current);
                     progressDialog.setMax(max);
                     progressDialog.setCancelable(isCancel);
+                    rootView = progressDialog.getListView();
                     break;
                 case DIALOG_DATE:
                     DatePickerDialog dateDialog = new DatePickerDialog(context,
@@ -683,6 +694,7 @@ public class DialogUtils {
                     dialog = dateDialog;
                     dateDialog.updateDate(year, month, dayOfMonth);
                     dateDialog.setCancelable(isCancel);
+                    rootView = dateDialog.getListView();
                     break;
                 case DIALOG_TIME:
                     TimePickerDialog timeDialog = new TimePickerDialog(context, timeListener,
@@ -690,9 +702,12 @@ public class DialogUtils {
                     dialog = timeDialog;
                     timeDialog.updateTime(hourOfDay, minute);
                     timeDialog.setCancelable(isCancel);
+                    rootView = timeDialog.getListView();
                     break;
             }
-            initWindow(params, dialog.getWindow());
+//            rootView = dialog.getWindow().findViewById(com.android.internal.R.id.parentPanel);
+            rootView = dialog.getWindow().findViewById(Resources.getSystem().getIdentifier("parentPanel", "id", "com.android.internal.R"));
+            initWindow(params, dialog.getWindow(), rootView);
             dialog.show();
             mDialogs.add(new WeakReference<>(dialog));
             return (T) dialog;
@@ -711,53 +726,72 @@ public class DialogUtils {
          * @param params
          * @param window
          */
-        private void initWindow(Params params, Window window) {
-            //设置背景颜色，通常为透明
-            if (params.getWindowBackground() != null) {
-                window.setBackgroundDrawable(params.getWindowBackground());
-            }
-            //设置Dialog相对于屏幕的位置
-            window.setGravity(params.getGravity());
-            //设置padding
-            int paddingLeft = params.getPaddingLeft() != -1 ? params.getPaddingLeft()
-                    : window.getDecorView().getPaddingLeft();
-            int paddingTop = params.getPaddingTop() != -1 ? params.getPaddingTop()
-                    : window.getDecorView().getPaddingTop();
-            int paddingRight = params.getPaddingRight() != -1 ? params.getPaddingRight()
-                    : window.getDecorView().getPaddingRight();
-            int paddingBottom = params.getPaddingBottom() != -1 ? params.getPaddingBottom()
-                    : window.getDecorView().getPaddingBottom();
-            window.getDecorView().setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+        private void initWindow(Params params, Window window, View rootView) {
+            Animation translateAnimation = new TranslateAnimation(0, 0, 0, 1000);//设置平移的起点和终点
+            translateAnimation.setDuration(10000);//动画持续的时间为10s
+            translateAnimation.setFillEnabled(true);//使其可以填充效果从而不回到原地
+            translateAnimation.setFillAfter(true);//不回到起始位置
+            //如果不添加setFillEnabled和setFillAfter则动画执行结束后会自动回到远点
+            rootView.setAnimation(translateAnimation);//给imageView添加的动画效果
+            translateAnimation.startNow();//动画开始执行 放在最后即可
 
+
+            /*设置背景颜色，通常为透明*/
+            if (params.foregroundColor != null)
+                window.setBackgroundDrawable(params.foregroundColor);
+            /*设置Dialog相对于屏幕的位置*/
+            window.setGravity(params.foregroundGravity);
+            /*设置padding*/
+            int paddingLeft = params.paddingLeft != -1 ? params.paddingLeft : window.getDecorView().getPaddingLeft();
+            int paddingTop = params.paddingTop != -1 ? params.paddingTop : window.getDecorView().getPaddingTop();
+            int paddingRight = params.paddingRight != -1 ? params.paddingRight : window.getDecorView().getPaddingRight();
+            int paddingBottom = params.paddingBottom != -1 ? params.paddingBottom : window.getDecorView().getPaddingBottom();
+            window.getDecorView().setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
             WindowManager.LayoutParams windowParams = window.getAttributes();
-            //最大高度
-            if (params.isMatchHeight()) {
-                windowParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-            } else if (params.getHeight() > 0) {
-                windowParams.height = params.getHeight();
+            /*设置Window显示的位置*/
+            if (params.targetView != null) {
+                int[] location = new int[2];
+                params.targetView.getLocationInWindow(location);
+                switch (params.targetViewGravity) {
+                    case Gravity.TOP:
+                        windowParams.x = location[0];
+                        windowParams.y = location[1] - getStatusBarHeight(dialog.getContext())
+                                - windowParams.height;
+                        break;
+                    case Gravity.BOTTOM:
+                        windowParams.x = location[0];
+                        windowParams.y = location[1] - getStatusBarHeight(dialog.getContext())
+                                + params.targetView.getHeight();
+                        break;
+                    case Gravity.LEFT:
+                        windowParams.x = location[0] - windowParams.width;
+                        windowParams.y = location[1] - getStatusBarHeight(dialog.getContext());
+                        break;
+                    case Gravity.RIGHT:
+                        windowParams.x = location[0] + params.targetView.getWidth();
+                        windowParams.y = location[1] - getStatusBarHeight(dialog.getContext());
+                        break;
+                }
+            } else {
+                windowParams.x = params.x;
+                windowParams.y = params.y;
             }
-            //最大宽度
-            if (params.isMatchWidth()) {
-                windowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-            } else if (params.getWidth() > 0) {
-                windowParams.width = params.getWidth();
-            }
-            /*实例化Window*/
-            windowParams.x = params.getPosX();
-            windowParams.y = params.getPosY();
-            //弹窗布局的alpha值  1.0表示完全不透明，0.0表示没有变暗。
-            windowParams.alpha = params.getDialogFrontAlpha();
-            // 当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。1.0表示完全不透明，0.0表示没有变暗。
-            windowParams.dimAmount = params.getDialogBehindAlpha();
-            //设置Window的进出场动画
-            windowParams.windowAnimations = params.getWindowAnimations();
+            /*设置前景Dialog高度*/
+            windowParams.height = params.matchHeight ? WindowManager.LayoutParams.MATCH_PARENT : windowParams.height;
+            windowParams.height = params.height > 0 ? params.height : windowParams.height;
+            /*设置前景Dialog宽度*/
+            windowParams.width = params.matchWidth ? WindowManager.LayoutParams.MATCH_PARENT : windowParams.width;
+            windowParams.width = params.width > 0 ? params.width : windowParams.width;
+            /*弹窗布局的alpha值  1.0表示完全不透明，0.0表示没有变暗*/
+            windowParams.alpha = params.foregroundAlpha;
+            /*当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。1.0表示完全不透明，0.0表示没有变暗*/
+            windowParams.dimAmount = params.backgroundAlpha;
+            /*设置Window的进出场动画*/
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                windowParams.rotationAnimation = params.getRotationAnimation();
-                window.setWindowAnimations(params.getWindowAnimations());
+                window.setWindowAnimations(params.windowAnimations);
             }
             window.setAttributes(windowParams);
             window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
             //反射设置AlertDialog属性
             if (dialog instanceof AlertDialog) {
                 reflexAlert((AlertDialog) dialog, params, true);
@@ -791,47 +825,41 @@ public class DialogUtils {
                 mPositive.setAccessible(true);
                 mNegative.setAccessible(true);
 
-                //设置title
+                /*设置title*/
                 if (mTitle != null) {
                     TextView titleView = (TextView) mTitle.get(mAlertController);
                     if (titleView != null) {
-                        if (params.getTitleColor() != 0)
-                            titleView.setTextColor(params.getTitleColor());
-                        if (params.getTitleSize() != 0)
-                            titleView.setTextSize(params.getTitleSize());
+                        if (params.titleColor != 0) titleView.setTextColor(params.titleColor);
+                        if (params.titleSize != 0) titleView.setTextSize(params.titleSize);
                     }
                 }
 
-                //设置Message
+                /*设置content内容*/
                 if (mMessage != null) {
                     TextView tvMessage = (TextView) mMessage.get(mAlertController);
                     if (tvMessage != null) {
-                        if (params.getContentColor() != 0)
-                            tvMessage.setTextColor(params.getContentColor());
-                        if (params.getContentSize() != 0)
-                            tvMessage.setTextSize(params.getContentSize());
+                        if (params.contentColor != 0) tvMessage.setTextColor(params.contentColor);
+                        if (params.contentSize != 0) tvMessage.setTextSize(params.contentSize);
                     }
                 }
 
-                //设置 positive(左侧)按钮
+                /*设置 positive(左侧)按钮*/
                 if (mPositive != null) {
                     Button btnPositive = (Button) mPositive.get(mAlertController);
                     if (btnPositive != null) {
-                        if (params.getPositiveColor() != 0)
-                            btnPositive.setTextColor(params.getPositiveColor());
-                        if (params.getPositiveSize() != 0)
-                            btnPositive.setTextSize(params.getPositiveSize());
+                        if (params.positiveColor != 0)
+                            btnPositive.setTextColor(params.positiveColor);
+                        if (params.positiveSize != 0) btnPositive.setTextSize(params.positiveSize);
                     }
                 }
 
-                //设置 negative(右侧)按钮
+                /*设置 negative(右侧)按钮*/
                 if (mNegative != null) {
                     Button btnNegative = (Button) mNegative.get(mAlertController);
                     if (btnNegative != null) {
-                        if (params.getNegativeColor() != 0)
-                            btnNegative.setTextColor(params.getNegativeColor());
-                        if (params.getNegativeSize() != 0)
-                            btnNegative.setTextSize(params.getNegativeSize());
+                        if (params.negativeColor != 0)
+                            btnNegative.setTextColor(params.negativeColor);
+                        if (params.negativeSize != 0) btnNegative.setTextSize(params.negativeSize);
                     }
                 }
             } catch (NoSuchFieldException e) {
@@ -843,357 +871,407 @@ public class DialogUtils {
     }
 
     /**
+     * 获取状态栏高度
+     */
+    private static int getStatusBarHeight(Context context) {
+        int result = 24;
+        int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resId > 0) {
+            result = context.getResources().getDimensionPixelSize(resId);
+        } else {
+            result = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    result, Resources.getSystem().getDisplayMetrics());
+        }
+        return result;
+    }
+
+    /**
      * Created by YuanYe on 2018/1/15.
      * AlertDialog 简单统一配置文件
      */
     public static class Params {
-
-        private int gravity;
-        private Drawable windowBackground;
-
-        private float dialogBehindAlpha;
-        private float dialogFrontAlpha;
-
-        private boolean matchWidth;
-        private boolean matchHeight;
-
+        /**
+         * 前景相对位置（一般为内容相对位置）
+         * 设置为： Gravity.TOP 等
+         */
+        private int foregroundGravity;
+        /**
+         * 前景颜色，及弹窗白色部分背景颜色
+         */
+        private Drawable foregroundColor;
+        /**
+         * 背景景颜色，及弹窗灰色部分背景颜色
+         */
+        private Drawable backgroundColor;
+        /**
+         * 背景透明度，弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
+         */
+        private float backgroundAlpha;
+        /**
+         * 前景透明度，弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
+         */
+        private float foregroundAlpha;
+        /**
+         * 前景最大宽度，true-最大，false-默认
+         */
+        private boolean matchWidth = false;
+        /**
+         * 前景最大高度，true-最大，false-默认
+         */
+        private boolean matchHeight = false;
+        /**
+         * 前景Padding左间隔
+         */
         private int paddingLeft;
+        /**
+         * 前景Padding右间隔
+         */
         private int paddingRight;
+        /**
+         * 前景Padding上间隔
+         */
         private int paddingTop;
+        /**
+         * 前景Padding下间隔
+         */
         private int paddingBottom;
-
+        /**
+         * 前景显示宽度
+         */
         private int width;
+        /**
+         * 前景显示高度
+         */
         private int height;
-        private int posX;
-        private int posY;
-
-        private @ColorInt
-        int titleColor;
+        /**
+         * 前景左上点的x坐标
+         */
+        private int x;
+        /**
+         * 前景左上点的y坐标
+         */
+        private int y;
+        /**
+         * 标题字体颜色
+         */
+        private int titleColor;
+        /**
+         * 标题字体大小
+         */
         private int titleSize;
-
-        private @ColorInt
-        int contentColor;
+        /**
+         * 内容区域文字颜色
+         */
+        private int contentColor;
+        /**
+         * 内容区域文字大小
+         */
         private int contentSize;
-
-        private @ColorInt
-        int positiveColor;
+        /**
+         * 最左侧按钮字体颜色
+         */
+        private int positiveColor;
+        /**
+         * 最左侧按钮字体大小
+         */
         private int positiveSize;
-
-        private @ColorInt
-        int negativeColor;
+        /**
+         * 最右侧按钮字体颜色
+         */
+        private int negativeColor;
+        /**
+         * 最右侧按钮字体大小
+         */
         private int negativeSize;
 
-        private @AnimRes
-        int rotationAnimation;
-        private @AnimRes
-        int windowAnimations;
+        private int rotationAnimation;
+        /**
+         * 前景动画
+         */
+        private int windowAnimations;
+        /**
+         * 指定view,dialog 显示在View的周围，配合targetViewGravity使用
+         */
+        private View targetView;
+        /**
+         * 控制现在targetView的方向，取值 Gravity.TOP
+         */
+        private int targetViewGravity;
 
-        private Params(Params.Builder builder) {
-            gravity = builder.gravity;
-
-            windowBackground = builder.windowBackground;
-            dialogBehindAlpha = builder.dialogBehindAlpha;
-            dialogFrontAlpha = builder.dialogFrontAlpha;
-
+        private Params(Builder builder) {
+            foregroundGravity = builder.foregroundGravity;
+            foregroundColor = builder.foregroundColor;
+            backgroundColor = builder.backgroundColor;
+            backgroundAlpha = builder.backgroundAlpha;
+            foregroundAlpha = builder.foregroundAlpha;
             matchWidth = builder.matchWidth;
             matchHeight = builder.matchHeight;
-
             paddingLeft = builder.paddingLeft;
             paddingRight = builder.paddingRight;
             paddingTop = builder.paddingTop;
             paddingBottom = builder.paddingBottom;
-
             width = builder.width;
             height = builder.height;
-
-            posX = builder.posX;
-            posY = builder.posY;
-
+            x = builder.x;
+            y = builder.y;
             titleColor = builder.titleColor;
             titleSize = builder.titleSize;
-
             contentColor = builder.contentColor;
             contentSize = builder.contentSize;
-
             positiveColor = builder.positiveColor;
             positiveSize = builder.positiveSize;
-
             negativeColor = builder.negativeColor;
             negativeSize = builder.negativeSize;
-
             rotationAnimation = builder.rotationAnimation;
             windowAnimations = builder.windowAnimations;
-        }
-
-        public int getGravity() {
-            return gravity;
-        }
-
-        public Drawable getWindowBackground() {
-            return windowBackground;
-        }
-
-        public float getDialogBehindAlpha() {
-            return dialogBehindAlpha;
-        }
-
-        public float getDialogFrontAlpha() {
-            return dialogFrontAlpha;
-        }
-
-        public boolean isMatchWidth() {
-            return matchWidth;
-        }
-
-        public boolean isMatchHeight() {
-            return matchHeight;
-        }
-
-        public int getPaddingLeft() {
-            return paddingLeft;
-        }
-
-        public int getPaddingRight() {
-            return paddingRight;
-        }
-
-        public int getPaddingTop() {
-            return paddingTop;
-        }
-
-        public int getPaddingBottom() {
-            return paddingBottom;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public int getHeight() {
-            return height;
-        }
-
-        public int getPosX() {
-            return posX;
-        }
-
-        public int getPosY() {
-            return posY;
-        }
-
-        public int getTitleColor() {
-            return titleColor;
-        }
-
-        public int getTitleSize() {
-            return titleSize;
-        }
-
-        public int getContentColor() {
-            return contentColor;
-        }
-
-        public int getContentSize() {
-            return contentSize;
-        }
-
-        public int getPositiveColor() {
-            return positiveColor;
-        }
-
-        public int getPositiveSize() {
-            return positiveSize;
-        }
-
-        public int getNegativeColor() {
-            return negativeColor;
-        }
-
-        public int getNegativeSize() {
-            return negativeSize;
-        }
-
-        public int getRotationAnimation() {
-            return rotationAnimation;
-        }
-
-        public int getWindowAnimations() {
-            return windowAnimations;
+            targetView = builder.targetView;
+            targetViewGravity = builder.targetViewGravity;
         }
 
         public static final class Builder {
-
-            //相对位置
-            private int gravity = Gravity.CENTER;
-            //弹窗白色部分背景
-            private GradientDrawable windowBackground;
-            //弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
-            private float dialogBehindAlpha = 0.5f;
-            //弹窗白色部分背景透明度，范围0.0-1：透明-不透明
-            private float dialogFrontAlpha = 1f;
-            //最大宽度
+            /**
+             * 前景相对位置（一般为内容相对位置）
+             * 设置为： Gravity.TOP 等
+             */
+            private int foregroundGravity = Gravity.CENTER;
+            /**
+             * 前景颜色，及弹窗白色部分背景颜色
+             */
+            private GradientDrawable foregroundColor;
+            /**
+             * 背景景颜色，及弹窗灰色部分背景颜色
+             */
+            private GradientDrawable backgroundColor;
+            /**
+             * 背景透明度，弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
+             */
+            private float backgroundAlpha = 0.5f;
+            /**
+             * 前景透明度，弹窗整个界面黑色背景透明度，范围0.0-1：透明-不透明
+             */
+            private float foregroundAlpha = 1f;
+            /**
+             * 前景最大宽度，true-最大，false-默认
+             */
             private boolean matchWidth = false;
-            //最大高度
+            /**
+             * 前景最大高度，true-最大，false-默认
+             */
             private boolean matchHeight = false;
-
+            /**
+             * 前景Padding左间隔
+             */
             private int paddingLeft = -1;
+            /**
+             * 前景Padding右间隔
+             */
             private int paddingRight = -1;
+            /**
+             * 前景Padding上间隔
+             */
             private int paddingTop = -1;
+            /**
+             * 前景Padding下间隔
+             */
             private int paddingBottom = -1;
+            /**
+             * 前景显示宽度
+             */
+            private int width = 0;
+            /**
+             * 前景显示高度
+             */
+            private int height = 0;
+            /**
+             * 前景左上点的x坐标
+             */
+            private int x = 0;
+            /**
+             * 前景左上点的y坐标
+             */
+            private int y = 0;
+            /**
+             * 标题字体颜色
+             */
+            private int titleColor = 0;
+            /**
+             * 标题字体大小
+             */
+            private int titleSize = 0;
+            /**
+             * 内容区域文字颜色
+             */
+            private int contentColor = 0;
+            /**
+             * 内容区域文字大小
+             */
+            private int contentSize = 0;
+            /**
+             * 最左侧按钮字体颜色
+             */
+            private int positiveColor = 0;
+            /**
+             * 最左侧按钮字体大小
+             */
+            private int positiveSize = 0;
+            /**
+             * 最右侧按钮字体颜色
+             */
+            private int negativeColor = 0;
+            /**
+             * 最右侧按钮字体大小
+             */
+            private int negativeSize = 0;
 
-            private int width = 0; //指定宽度
-            private int height = 0; //指定高度
-
-            private int posX = 0;//Dialog左上角定点横坐标
-            private int posY = 0;//Dialog左上角定点纵坐标(坐标位置与gravity有关)
-
-            private @ColorInt
-            int titleColor = 0; //DialogTitle的字体颜色
-            private int titleSize = 0; //Title的字体大小
-
-            private @ColorInt
-            int contentColor = 0; //内容的字体颜色
-            private int contentSize = 0; //内容的字体大小
-
-            private @ColorInt
-            int positiveColor = 0; //确定按钮颜色
-            private int positiveSize = 0; //确定按钮字体大小
-
-            private @ColorInt
-            int negativeColor = 0; //取消按钮颜色
-            private int negativeSize = 0; //取消按钮字体大小
-
-            private @AnimRes
-            int rotationAnimation; //旋转动画
-            private @AnimRes
-            int windowAnimations; //window动画
+            private int rotationAnimation;
+            /**
+             * 前景动画
+             */
+            private int windowAnimations;
+            /**
+             * 指定view,dialog 显示在View的周围，配合targetViewGravity使用
+             */
+            private View targetView;
+            /**
+             * 控制现在targetView的方向，取值 Gravity.TOP
+             */
+            private int targetViewGravity = Gravity.BOTTOM;
 
             public Builder() {
+
             }
 
-            public Params.Builder gravity(int val) {
-                gravity = val;
+            public Builder boregroundGravity(int foregroundGravity) {
+                this.foregroundGravity = foregroundGravity;
                 return this;
             }
 
-            public Params.Builder windowBackground(GradientDrawable val) {
-                windowBackground = val;
+            public Builder foregroundColor(int foregroundColor) {
+                this.foregroundColor = new GradientDrawable();
+                this.foregroundColor.setColor(foregroundColor);
                 return this;
             }
 
-            public Params.Builder windowBackground(@ColorInt int val) {
-                windowBackground = new GradientDrawable();
-                windowBackground.setColor(val);
+            public Builder backgroundColor(int backgroundColor) {
+                this.backgroundColor = new GradientDrawable();
+                this.backgroundColor.setColor(backgroundColor);
                 return this;
             }
 
-            public Params.Builder dialogBehindAlpha(float val) {
-                dialogBehindAlpha = val;
+            public Builder backgroundAlpha(float backgroundAlpha) {
+                this.backgroundAlpha = backgroundAlpha;
                 return this;
             }
 
-            public Params.Builder dialogFrontAlpha(float val) {
-                dialogFrontAlpha = val;
+            public Builder foregroundAlpha(float foregroundAlpha) {
+                this.foregroundAlpha = foregroundAlpha;
                 return this;
             }
 
-            public Params.Builder matchWidth(boolean val) {
-                matchWidth = val;
+            public Builder matchWidth() {
+                this.matchWidth = true;
                 return this;
             }
 
-            public Params.Builder matchHeight(boolean val) {
-                matchHeight = val;
+            public Builder matchHeight() {
+                this.matchHeight = true;
                 return this;
             }
 
-            public Params.Builder paddingTop(int val) {
-                paddingTop = val;
+            public Builder paddingLeft(int paddingLeft) {
+                this.paddingLeft = paddingLeft;
                 return this;
             }
 
-            public Params.Builder paddingRight(int val) {
-                paddingRight = val;
+            public Builder paddingRight(int paddingRight) {
+                this.paddingRight = paddingRight;
                 return this;
             }
 
-            public Params.Builder paddingLeft(int val) {
-                paddingLeft = val;
+            public Builder paddingTop(int paddingTop) {
+                this.paddingTop = paddingTop;
                 return this;
             }
 
-            public Params.Builder paddingBottom(int val) {
-                paddingBottom = val;
+            public Builder paddingBottom(int paddingBottom) {
+                this.paddingBottom = paddingBottom;
                 return this;
             }
 
-            public Params.Builder width(int val) {
-                width = val;
+            public Builder width(int width) {
+                this.width = width;
                 return this;
             }
 
-            public Params.Builder height(int val) {
-                height = val;
+            public Builder height(int height) {
+                this.height = height;
                 return this;
             }
 
-            public Params.Builder posX(int val) {
-                posX = val;
+            public Builder x(int x) {
+                this.x = x;
                 return this;
             }
 
-            public Params.Builder posY(int val) {
-                posY = val;
+            public Builder y(int y) {
+                this.y = y;
                 return this;
             }
 
-            public Params.Builder titleColor(int val) {
-                titleColor = val;
+            public Builder titleColor(int titleColor) {
+                this.titleColor = titleColor;
                 return this;
             }
 
-            public Params.Builder titleSize(int val) {
-                titleSize = val;
+            public Builder titleSize(int titleSize) {
+                this.titleSize = titleSize;
                 return this;
             }
 
-            public Params.Builder contentColor(int val) {
-                contentColor = val;
+            public Builder contentColor(int contentColor) {
+                this.contentColor = contentColor;
                 return this;
             }
 
-            public Params.Builder contentSize(int val) {
-                contentSize = val;
+            public Builder contentSize(int contentSize) {
+                this.contentSize = contentSize;
                 return this;
             }
 
-            public Params.Builder positiveColor(int val) {
-                positiveColor = val;
+            public Builder positiveColor(int positiveColor) {
+                this.positiveColor = positiveColor;
                 return this;
             }
 
-            public Params.Builder positiveSize(int val) {
-                positiveSize = val;
+            public Builder positiveSize(int positiveSize) {
+                this.positiveSize = positiveSize;
                 return this;
             }
 
-            public Params.Builder negativeColor(int val) {
-                negativeColor = val;
+            public Builder negativeColor(int negativeColor) {
+                this.negativeColor = negativeColor;
                 return this;
             }
 
-            public Params.Builder negativeSize(int val) {
-                negativeSize = val;
+            public Builder negativeSize(int negativeSize) {
+                this.negativeSize = negativeSize;
                 return this;
             }
 
-            public Params.Builder rotationAnimation(int val) {
-                rotationAnimation = val;
+            public Builder rotationAnimation(int rotationAnimation) {
+                this.rotationAnimation = rotationAnimation;
                 return this;
             }
 
-            public Params.Builder windowAnimations(int val) {
-                windowAnimations = val;
+            public Builder windowAnimations(int windowAnimations) {
+                this.windowAnimations = windowAnimations;
+                return this;
+            }
+
+            public Builder relativePosition(View targetView, int targetViewGravity) {
+                this.targetView = targetView;
+                this.targetViewGravity = targetViewGravity;
+                this.foregroundGravity = Gravity.TOP;
                 return this;
             }
 

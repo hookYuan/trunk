@@ -1,7 +1,11 @@
+include ':launch:launch2'
+include ':buildSrc'
 include ':launch:app'
 //*************公共业务*****************
 include ':feature:demo1', ':feature:demo2', ':feature:demo3'
 //*************基础库*****************
-include ':library:rtc', ':library:qrcode', ':library:push', ':library:pay',
-        ':library:oss', ':library:map', ':library:im', ':library:http',
-        ':library:core', ':library:common', ':library:expand'
+include ':library:core', ':library:base', ':library:expand',
+        ':library:rtc', ':library:qrcode', ':library:push',
+        ':library:pay', ':library:oss', ':library:map',
+        ':library:im', ':library:http'
+

@@ -1,37 +1,5 @@
 ext {
 
-    /*********************（最好应根据不同的Launch配置最小导包）*******************************/
-    core = [
-            kotlin,
-            androidx,
-    ]
-
-    depends = [
-            kotlin,
-            androidx,
-            google,
-            retrofit,
-            rx,
-            okhttp,
-            glide,
-            eventbus,
-            arouter,
-            butterknife,
-            websocket,
-            qmui,
-            refresh,
-            greendao,
-            adatper,
-            album,
-            view,
-            media,
-            qrcode,
-            util,
-            media,
-            wechat,
-            profiler,
-    ]
-
     /***********************************************************************************
      ** 依赖关系目前分为一下两种：
      *      1.由依赖库命名，导入方式为api
@@ -126,8 +94,10 @@ ext {
     ]
 
     //下拉刷新 依赖关系(qmui包含下拉刷新,
+    refreshVersion = "1.1.0"
     refresh = [
-            api: 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
+            api   : "com.scwang.smartrefresh:SmartRefreshLayout:$refreshVersion",
+            header: "com.scwang.smartrefresh:SmartRefreshHeader:$refreshVersion"
     ]
 
     //greenDao数据库 依赖关系
@@ -189,5 +159,36 @@ ext {
             timber           : 'com.jakewharton.timber:timber:4.7.1',// 日志库
     ]
 
+    /*********************（最好应根据不同的Launch配置最小导包）*******************************/
+    core = [
+            kotlin,
+            androidx
+    ]
+
+    depends = [
+            kotlin,
+            androidx,
+            google,
+            retrofit,
+            rx,
+            okhttp,
+            glide,
+            eventbus,
+            arouter,
+            butterknife,
+            websocket,
+            qmui,
+            refresh,
+            greendao,
+            adatper,
+            album,
+            view,
+            media,
+            qrcode,
+            util,
+            media,
+            wechat,
+            profiler,
+    ]
 
 }

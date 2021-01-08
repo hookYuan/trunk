@@ -39,9 +39,9 @@ dependencies {
     //内存泄漏检查
     implementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     //material样式
-    implementation 'com.android.support:design:+'
+//    implementation 'com.android.support:design:+'
 //    implementation 'com.google.android.material:material:1.0.0'
     //扩展库，只依赖常用三方库
-    implementation project(':library:common')
+    implementation project(':library:base')
     implementation project(':library:expand')
 }

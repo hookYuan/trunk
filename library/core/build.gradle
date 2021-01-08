@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'kotlin-android'
+apply from: 'ydroid.gradle'
+apply from: "${rootDir.path}/library/depends.gradle"
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.1"
+        //增加对vector文件的支持
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            //混淆
+            minifyEnabled false
+            //Zipalign优化
+            zipAlignEnabled true
+            //混淆文件
+            proguardFile file("proguard-rules.pro")
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    List<Map<String, String>> list = getProject().ext.core
+    for (Map<String, String> map : list) {
+        for (String value : map.values()) {
+            if (value.startsWith("_")) {
+                annotationProcessor value
+            } else {
+                api value
+            }
+        }
+    }
+}

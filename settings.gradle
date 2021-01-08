@@ -1,5 +1,3 @@
-include ':launch:launch2'
-include ':buildSrc'
 include ':launch:app'
 //*************公共业务*****************
 include ':feature:demo1', ':feature:demo2', ':feature:demo3'

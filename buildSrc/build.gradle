@@ -1,7 +1,0 @@
-apply plugin: 'java-library'
-
-
-dependencies {
-    implementation(gradleApi())
-    implementation(localGroovy())
-}

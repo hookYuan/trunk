@@ -1,0 +1,119 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply {
+    from "${rootDir.path}/library/depends.gradle"
+}
+
+String projectName
+
+def config(String name) {
+    projectName = name
+}
+
+
+android {
+
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['src/main/jniLibs']
+            jni.srcDirs = ['src/main/jni', 'src/main/jni/']
+        }
+    }
+
+    publishNonDefault true
+    flavorDimensions "app"
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+
+        //启用annotationProcessor
+        javaCompileOptions {
+            annotationProcessorOptions {
+                for (Project item : project.getChildProjects().values()) {
+                    arguments.put(AROUTER_MODULE_NAME, item.getName())
+                    println("名称：" + item.getName())
+                }
+                includeCompileClasspath = true
+            }
+        }
+
+        //根据so配置NDK
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"//, "arm64-v8a"//, "x86", "x86_64"
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+
+    // 正式版本  buildConfigField "String", "GAO_DE_MAP_SERVER_KEY", "\"5025c2e0f79164048cb1739d59a7c764\""
+    // 测试版本 buildConfigField "String", "GAO_DE_MAP_SERVER_KEY", "\"2c22dd8fd026846c608342c475161ec3\""
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "Boolean", "DEBUG_MODE", "false"
+            buildConfigField "Boolean", "LOGGER_ON", "true"
+            buildTypes.release.buildConfigField "String", "BUCKET_NAME", "\"yundun110\""
+            buildConfigField "String", "WEIXIN_APP_ID", "\"wx7e7cc1df266a891f\""
+            buildConfigField "String", "WEIXIN_SERCRET_ID", "\"355d097d79b285d0d4a99518e2d1210a\""
+            buildConfigField "String", "EZVIZ_APP_KEY", "\"6643d6da9f0341f087a737cb8816c8d8\""
+//            applicationIdSuffix ""
+        }
+
+        debug {
+            buildConfigField "Boolean", "DEBUG_MODE", "true"
+            buildConfigField "Boolean", "LOGGER_ON", "true"
+            buildConfigField "String", "BUCKET_NAME", "\"yundun-test\""
+            buildConfigField "String", "WEIXIN_APP_ID", "\"wx7e7cc1df266a891f\""
+            buildConfigField "String", "WEIXIN_SERCRET_ID", "\"355d097d79b285d0d4a99518e2d1210a\""
+            buildConfigField "String", "EZVIZ_APP_KEY", "\"f7fbd3a52bd54cc1a97233cc134d0305\""
+//            applicationIdSuffix ".debug"
+//            versionName3()
+        }
+    }
+}
+
+//kotlin配置
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
+
+//依赖配置
+dependencies {
+    List<Map<String, String>> list = getProject().ext.core
+    for (Map<String, String> map : list) {
+        for (String value : map.values()) {
+            if (value.startsWith("_")) {
+                annotationProcessor value
+            } else {
+                api value
+            }
+        }
+    }
+}
+
+

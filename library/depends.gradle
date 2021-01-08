@@ -3,7 +3,7 @@ ext {
     /*********************（最好应根据不同的Launch配置最小导包）*******************************/
     core = [
             kotlin,
-            androidx
+            androidx,
     ]
 
     depends = [

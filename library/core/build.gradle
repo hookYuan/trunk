@@ -23,18 +23,20 @@ android {
             //混淆
             minifyEnabled false
             //Zipalign优化
-            zipAlignEnabled true
+            zipAlignEnabled false
             //混淆文件
             proguardFile file("proguard-rules.pro")
         }
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     lintOptions {
-        abortOnError false
+        abortOnError false // true--错误发生后停止gradle构建
     }
 }
 
